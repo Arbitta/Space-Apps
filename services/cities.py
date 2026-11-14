@@ -65,6 +65,11 @@ def load_catalog(catalog_path=CATALOG_PATH):
 def list_cities(province=None, region=None, *, catalog_path=CATALOG_PATH):
     """Lista o filtra por provincia/ID provincial y región; ignora tildes y caso."""
     cities = load_catalog(catalog_path)["cities"]
+    return filter_cities(cities, province=province, region=region)
+
+
+def filter_cities(cities, province=None, region=None):
+    """Aplica los mismos filtros a un catálogo ya leído o al snapshot de un estudio."""
     if province is not None:
         value = normalize_label(province)
         value = {

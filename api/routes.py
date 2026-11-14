@@ -134,3 +134,23 @@ def recommend_variables():
     from services.mission_service import recommendations
     filters = query_parameters(("phenomenon",))
     return success(recommendations(filters.get("phenomenon")))
+
+
+@api.get("/fingerprint/<city_id>")
+def fingerprint(city_id):
+    parameters = query_parameters(("start_year", "end_year"))
+    period = {}
+    for key, value in parameters.items():
+        try:
+            period[key] = int(value)
+        except ValueError:
+            raise ServiceError("invalid_request", "Los años deben ser enteros.") from None
+    profile = current_app.extensions["earthlens_fingerprint"].profile(city_id, **period)
+    return success(profile, meta={"methodology_validated": False})
+
+
+@api.get("/radar")
+def radar():
+    filters = query_parameters(("province", "region", "variable", "direction", "evidence_status"))
+    study = current_app.extensions["earthlens_radar"].query(**filters)
+    return success(study, meta={"count": study["view"]["count"], "methodology_validated": False})

@@ -1,6 +1,7 @@
 """Application Factory de EarthLens: interfaz y API en el mismo origen."""
 
 from flask import Flask
+from pathlib import Path
 
 from api.errors import register_error_handlers
 from api.routes import api
@@ -10,6 +11,8 @@ from services.cache import DEFAULT_CACHE_DIR, JsonCache
 from services.cities import CATALOG_PATH
 from services.analysis_service import AnalysisService
 from web.routes import web
+from services.fingerprint import FingerprintService
+from services.radar import DEFAULT_ARTIFACT_NAME, RadarService
 
 
 def create_app(config=None):
@@ -20,6 +23,7 @@ def create_app(config=None):
         CATALOG_PATH=CATALOG_PATH,
         POWER_REQUEST_DELAY=1.0,
         POWER_CACHE_MAX_AGE_DAYS=None,
+        RADAR_ARTIFACT_PATH=None,
     )
     app.config.from_prefixed_env(prefix="EARTHLENS")
     if config is not None:
@@ -35,6 +39,9 @@ def create_app(config=None):
     )
     app.extensions["earthlens_service"] = EarthLensService(bulk)
     app.extensions["earthlens_analysis"] = AnalysisService(app.extensions["earthlens_service"])
+    app.extensions["earthlens_fingerprint"] = FingerprintService(app.extensions["earthlens_analysis"])
+    radar_path = app.config["RADAR_ARTIFACT_PATH"] or Path(app.config["CACHE_DIR"]).parent / DEFAULT_ARTIFACT_NAME
+    app.extensions["earthlens_radar"] = RadarService(app.extensions["earthlens_analysis"], radar_path)
     app.register_blueprint(api)
     app.register_blueprint(web)
     register_error_handlers(app)

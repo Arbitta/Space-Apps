@@ -270,7 +270,7 @@ class ApiTests(unittest.TestCase):
 
     def test_unknown_routes_and_wrong_methods_are_json_with_allow_header(self):
         self.assert_error(self.client.get("/api/not-found"), 404, "not_found")
-        self.assert_error(self.client.get("/api/fingerprint/mendoza"), 404, "not_found")
+        self.assert_error(self.client.get("/api/fingerprint-not-found/mendoza"), 404, "not_found")
         response = self.client.get("/api/data")
         self.assert_error(response, 405, "method_not_allowed")
         self.assertIn("POST", response.headers["Allow"])

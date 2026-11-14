@@ -2,6 +2,8 @@
 
 from services.api_service import ServiceError, validate_data_request
 from services import trend_analysis as engine
+from services.analysis_results import content_hash, make_result, methodology
+from services.cache import utc_now
 
 
 METHOD = {
@@ -96,6 +98,34 @@ class AnalysisService:
                                  "latest_value": result["series"][-1]["value"]}
         return {"is_mock": False, "location": data["city"], "estimations": estimations,
                 "start_year": data["start_year"], "end_year": data["end_year"], "method": METHOD}, meta
+
+    def results(self, payload, *, cache_only=False):
+        """Seis resultados comunes de una única obtención; errores científicos aislados por variable."""
+        selection = self.selection(payload, summary=True)
+        city = self.data_service.get_city(selection["city_id"])
+        period = {key: selection[key] for key in ("start_year", "end_year")}
+        method = methodology()
+        analyzed_at = utc_now()
+        try:
+            data, meta = self.data_service.get_data(selection, cache_only=cache_only)
+        except ServiceError as error:
+            return [make_result(city, code, period, method=method, error=error, analyzed_at=analyzed_at)
+                    for code in selection["variables"]]
+        records = []
+        for code, row in data["variables"].items():
+            analysis, error = None, None
+            try:
+                analysis = self._analyze(row, data, meta)
+                content_hash(analysis)  # Rechaza números no finitos sin publicar JSON inválido.
+            except ServiceError as exc:
+                error = exc
+            except Exception:
+                # El contrato de producto nunca expone excepciones internas del motor.
+                error = ServiceError("internal_error", "No se pudo analizar esta variable.")
+                analysis = None
+            records.append(make_result(city, code, period, method=method, row=row, meta=meta,
+                                       analysis=analysis, error=error, analyzed_at=analyzed_at))
+        return records
 
     def compare(self, payload):
         if not isinstance(payload, dict) or set(payload) - {"city_id_a", "city_id_b", "variable", "start_year", "end_year"}:

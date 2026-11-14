@@ -1,5 +1,8 @@
 # Integración local de EarthLens
 
+Historial de la integración inicial. La ampliación posterior de Radar y
+Fingerprint está documentada en [products.md](products.md).
+
 Verificación del 14 de noviembre de 2026 en `feature/backend-api`. Los cambios
 permanecen locales, sin commits, push ni modificaciones de `main`.
 

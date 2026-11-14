@@ -14,6 +14,7 @@ Abrir **http://127.0.0.1:5000/**.
 
 - [Ejecución y pruebas en Docker](docs/docker.md)
 - [Contrato de la API](docs/api.md)
+- [Radar y Fingerprint provisionales](docs/products.md)
 - [Diagnóstico e integración entre ramas](docs/integration.md)
 - [Estado y dependencias del backend](BACKEND_TASKS.md)
 

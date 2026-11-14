@@ -16,7 +16,9 @@ pendientes no autorizan avanzar automáticamente. Ver [AGENTS.md](AGENTS.md).
 El backend consulta datos mensuales de NASA POWER y dispone de catálogo argentino,
 caché JSON, obtención masiva y API REST con Flask. El frontend y el motor real del
 equipo están integrados para análisis exploratorio y comparación de ciudades.
-Earth Radar y Earth Fingerprint siguen pendientes.
+Earth Radar y Earth Fingerprint tienen una primera versión de backend provisional,
+con contrato común, API y estudio persistido. La confirmación científica y el ajuste
+múltiple permanecen pendientes de B06; no hay nuevas vistas de producto.
 El entorno de desarrollo Docker está construido, iniciado y verificado, y el lote
 de 25 ciudades 2000–2024 se ejecutó reutilizando íntegramente la caché existente.
 
@@ -34,7 +36,7 @@ de 25 ciudades 2000–2024 se ejecutó reutilizando íntegramente la caché exis
 | **B05 — API REST básica** | Completada y probada con el cliente Flask | `app.py`, Blueprint `api/routes.py`, servicio `services/api_service.py`; seis endpoints documentados. |
 | **B02 — instalación y dependencias** | Instalación limpia verificada en Docker Linux/amd64 | Python 3.12.16, Flask 3.1.3 y Requests 2.34.2 instalados desde `requirements.txt`; `pip check` y suite satisfactorios. Sin lock transitivo. |
 | **B19 — Docker para desarrollo** | Completada para el alcance autorizado | `Dockerfile`, `compose.yaml`, `.dockerignore`, `docs/docker.md`; backend saludable, recarga y caché persistente verificadas. |
-| Pruebas sin red | 103 aprobadas; 71 originales intactas, 7 del motor, 15 del catálogo/misiones y 10 de integración | `tests/`; 104 descubiertas, sólo NASA de red optativa omitida en Docker. |
+| Pruebas sin red | 134 aprobadas: las 103 anteriores más 31 de productos | `tests/`; 135 descubiertas, sólo NASA de red optativa omitida en Docker. Una aserción de ruta inexistente se actualizó por la incorporación de Fingerprint. |
 | Script manual y documentación previa | Conservados | `test_nasa.py`, `docs/nasa-power.md`. |
 | Documentación | Actualizada | `AGENTS.md`, este archivo y contrato para frontend en `docs/api.md`; documentación previa conservada. |
 
@@ -213,19 +215,16 @@ pendiente; no se afirma aprobación del compañero de nuevos métodos. B17 conti
 | ID | Prioridad | Tarea pendiente | Dependencias y criterio de finalización |
 | --- | --- | --- | --- |
 | B18 | P1 | Incorporar adaptador real de límites oficiales de Argentina. | Verificar fuente, geometrías y cobertura. Probar interiores, exteriores, costas y fronteras con procedencia/versionado; nunca usar sólo una caja rectangular. |
-| B06 | P1 | Revisar criterios científicos con el responsable del motor. | Contrato técnico inspeccionado e integrado (`docs/integration.md`). Falta revisión conjunta de estacionalidad, autocorrelación, cobertura, centinelas y comparaciones múltiples antes de ampliar usos científicos. |
-| B08 | P2 | Implementar `services/radar.py`. | B01/B04 y adaptador B07 disponibles; requiere B06 para descubrimientos. Hallazgos argentinos con evidencia y criterios acordados, incluidos datos insuficientes. |
-| B09 | P2 | Implementar `services/fingerprint.py`. | Catálogo/caché y adaptador B07 disponibles; contrato específico de producto pendiente. Tendencias, unidades, cobertura y evidencia; sin puntuaciones arbitrarias. |
-| B10 | P2 | Crear `scripts/generate_radar.py`. | B08 y datos de B04. Artefacto con método, fecha, fuentes y estados; no confundir falta de datos con falta de tendencia. |
-| B11 | P2 | Endpoints `/api/radar` y `/api/fingerprint/{city_id}`. | B05, B08, B09 y artefacto de B10 para Radar. JSON trazable y pruebas de rutas. |
+| B06 | P1 | Revisar criterios científicos con el responsable del motor. | Contrato técnico inspeccionado e integrado (`docs/integration.md`). Falta precisión completa, coherencia p-valor/significancia/slope_tolerance, revisión conjunta de estacionalidad, autocorrelación, cobertura, centinelas, acumulados y comparaciones múltiples. Bloquea confirmación de hallazgos, no el procesamiento provisional explícito autorizado. |
 | B13 | P2 | Evaluar Giovanni/Earthdata, GPM, GLDAS y MERRA-2 directo según necesidad. | Caso de uso argentino y documentación oficial. Verificar acceso, variables, unidades y cobertura; integración completa sólo con cliente y prueba real. |
 | B14 | P3 | Evaluar SWOT/Hydrocron como complemento. | Caso de uso hídrico argentino y documentación oficial. Registrar viabilidad y límites; implementar sólo si aporta. |
 | B16 | P2 | Definir investigaciones guiadas argentinas. | Interfaz original, tres misiones, hipótesis y recomendador incorporados desde `origin/datasets-missions`; falta revisión conjunta de recorridos e interpretación científica. |
 | B17 | P2 — continua | Ampliar integración y CI. | B02 y módulos incorporados. Mantener pruebas sin red separadas de comprobaciones reales optativas; contratos HTTP, motor y flujo de navegador incorporados; falta CI del equipo. |
 
 No iniciar descargas completas automáticamente. El período 2000–2024 se verificó
-con 25 cachés intactas. B18, la revisión científica de B06 y los productos Radar y
-Fingerprint siguen pendientes. El motor y la interfaz se integraron por solicitud
+con 25 cachés intactas. B18 y la revisión científica de B06 siguen pendientes.
+Radar y Fingerprint están implementados como productos provisionales; no se
+presentan descubrimientos confirmados ni se aplica un ajuste aún no acordado. El motor y la interfaz se integraron por solicitud
 explícita del usuario; no se implementan etapas futuras por iniciativa propia.
 
 ## Historial de la etapa Docker inicial y coordinación
@@ -266,3 +265,54 @@ Arranque: `docker compose up -d --build --wait --wait-timeout 60`.
 Navegador: **http://127.0.0.1:5000/**. Guía: `docs/docker.md`.
 Evidencias locales: `data/cache/reports/web/` e
 `data/cache/reports/integrated-cache-audit.json`, ignoradas por Git.
+
+
+## Resultado común, Fingerprint y Radar provisional — 14 de noviembre de 2026
+
+Etapa autorizada por el usuario a partir de la auditoría de `b4093bc`.
+
+| Componente/tarea | Estado del alcance autorizado | Evidencia |
+| --- | --- | --- |
+| Resultado común | Implementado, sin un motor duplicado | `services/analysis_results.py`, `AnalysisService.results()`; indicador, unidad, ubicación, período, cobertura mensual/anual, estadísticas, hashes y metodología. |
+| Precisión y estados | Preparado; entrega completa pendiente del compañero | Estados `valid` (reservado), `provisional`, `insufficient`, `error`; `data_status=valid` no confirma ciencia. Copia las estadísticas actuales y deja `statistics_unrounded=null`; no reconstruye cifras ni cambia el motor. |
+| B09 — Fingerprint | Backend v1 implementado y probado; validación científica pendiente | `services/fingerprint.py`: seis variables, cuatro principales y dos extremos; compatibilidad descriptiva, sin puntajes ni normalizaciones. |
+| B08 — Radar | Backend v1 implementado y probado; descubrimientos confirmados pendientes de B06 | `services/radar.py`: familia completa de 150 pruebas, cobertura, errores y exclusiones; ajuste múltiple preparado pero no aplicado. |
+| B10 — generador | Implementado y piloto completo ejecutado | `scripts/generate_radar.py`; cache-only, dry-run, IDs de estudio/ejecución, fecha UTC, hash de integridad y escritura atómica. |
+| B11 — endpoints de producto | Implementados | `GET /api/fingerprint/{city_id}` y `GET /api/radar`; contratos y ejemplos en `docs/api.md`, `docs/products.md`, `docs/examples/`. |
+| Obtención sin red | Implementada como opción interna explícita | `PowerBulkService.collect_cities(cache_only=True)` y `EarthLensService.get_data(cache_only=True)`; un faltante o caché vencida se informa sin consultar NASA. No se habilita como configuración HTTP. |
+| Filtros de Radar | Implementados sin recalcular | Provincia, región, variable, dirección y evidencia. El manifiesto, la familia y el ajuste pendiente se conservan íntegros al filtrar. |
+| Verificación | 134 aprobadas, una NASA de red omitida | 135 descubiertas en Docker, `pip check` correcto, 31 pruebas nuevas de contrato, caché, errores, compatibilidad, CLI, atomicidad y filtros. Flujos anteriores comprobados en Chrome con cero errores JavaScript. |
+
+Piloto 2000–2024: 25 ciudades, 150 series reales y 45.000 valores mensuales.
+25 aciertos de caché, **150 resultados provisionales**, 48 señales nominales
+provisionales, 102 sin señal nominal, cero errores, cero exclusiones y **cero
+hallazgos confirmados**. Distribución de señales nominales: T2M 13, T2M_MAX 11,
+T2M_MIN 7, PRECTOTCORR 8, RH2M 4 y WS2M 5. No son resultados corregidos por
+comparaciones múltiples ni evidencia causal.
+
+Se ejecutó la generación bloqueando solicitudes externas y `JsonCache.write`.
+Los 150 registros persistidos coincidieron con una segunda ejecución del análisis
+(excluyendo la fecha de ejecución); para Comodoro Rivadavia, Mendoza y Posadas se
+contrastaron estadísticas con el análisis anterior y compatibilidad de perfiles.
+Los 25 JSON originales conservaron sus hashes y fechas. El motor, `static/` y
+`templates/` también conservaron sus hashes.
+
+Artefacto derivado local ignorado por Git: `data/cache/radar/latest.json`.
+Ejemplos reales versionables: tres perfiles completos y Radar Cuyo/T2M en
+`docs/examples/`. Cada resultado incluye coordenadas y enlaces a las páginas
+existentes. No se modificaron frontend, motor estadístico, dependencias, Docker,
+proveedores nuevos ni bases de datos. No se hicieron commits ni push ni cambios
+en `main`.
+
+Pendientes de coordinación: B06 antes de confirmar resultados o aplicar ajuste;
+B18 para coordenadas libres; nuevas interfaces de Radar/Fingerprint y correcciones
+de la interfaz detectadas en la auditoría (respuesta del comparador asociada al
+selector cambiante, ampliación automática de años), sólo con autorización del
+responsable del frontend. B13/B14 y el despliegue productivo permanecen pendientes.
+
+```powershell
+docker compose exec -T backend python -m scripts.generate_radar --dry-run
+docker compose exec -T backend python -m scripts.generate_radar
+Invoke-RestMethod 'http://127.0.0.1:5000/api/fingerprint/mendoza?start_year=2000&end_year=2024'
+Invoke-RestMethod 'http://127.0.0.1:5000/api/radar?region=Cuyo&variable=T2M'
+```

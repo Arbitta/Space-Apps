@@ -2,8 +2,9 @@
 
 API para el equipo de frontend de Patagonia Prime. Alcance exclusivo: **Argentina**.
 Sólo se admiten ciudades del catálogo verificado. El motor del equipo está integrado
-para análisis y comparación; las coordenadas libres, Earth Radar y Earth Fingerprint
-siguen pendientes. La interfaz y la API comparten origen.
+para análisis y comparación; Radar y Fingerprint están disponibles con resultados
+provisionales. Las coordenadas libres y la validación científica siguen pendientes.
+La interfaz y la API comparten origen.
 
 ## Instalación y ejecución local
 
@@ -379,3 +380,44 @@ Errores nuevos: 422 `insufficient_data`, 422 `incompatible_analysis` y
 estados y códigos públicos. No hay reemplazo por datos simulados.
 
 Contrato del motor, criterios de cobertura y limitaciones: [integration.md](integration.md).
+
+## Earth Fingerprint y Earth Radar — versión provisional
+
+| Método | Ruta | Alcance |
+| --- | --- | --- |
+| GET | `/api/fingerprint/{city_id}` | Seis indicadores por ciudad; `start_year` y `end_year` opcionales, por defecto 2000–2024. |
+| GET | `/api/radar` | Lectura de un estudio persistido, con filtros `province`, `region`, `variable`, `direction`, `evidence_status`. |
+
+Contrato completo, estados, metodología, compatibilidad, errores y ejemplos reales:
+[products.md](products.md). El resultado común vive en `services/analysis_results.py`
+y lo produce `AnalysisService.results()` sin duplicar ni modificar el motor.
+
+Los análisis calculados se identifican como `provisional`; `data_status=valid`
+sólo indica disponibilidad. No hay descubrimientos confirmados ni ajuste múltiple
+aplicado. `statistics` conserva la precisión entregada por el motor;
+`statistics_unrounded=null` hasta recibir ese contrato del responsable estadístico.
+La precipitación conserva la tasa media en `mm/day`; los extremos son medias de
+extremos mensuales. No se generan puntuaciones ambientales.
+
+Fingerprint devuelve HTTP 200 con un perfil completo o parcial y estados por
+variable. Validaciones de ciudad/período siguen devolviendo 400/404. Radar devuelve
+503 `radar_unavailable` antes de generar el estudio y 503 `radar_invalid_artifact`
+si el archivo no es válido. Los códigos y respuestas anteriores no cambian.
+
+```powershell
+# Familia completa: 25 ciudades x 6 variables, siempre desde caché y sin red.
+docker compose exec -T backend python -m scripts.generate_radar
+
+Invoke-RestMethod 'http://127.0.0.1:5000/api/fingerprint/mendoza?start_year=2000&end_year=2024'
+Invoke-RestMethod 'http://127.0.0.1:5000/api/radar?region=Cuyo&variable=T2M&evidence_status=provisional_signal'
+```
+
+Los filtros de Radar seleccionan filas del artefacto; no cambian `family`,
+`summary` ni `multiple_testing` y nunca vuelven a ejecutar análisis o correcciones.
+Cada registro tiene coordenadas, procedencia y enlaces a Explorador y Resultados.
+
+Ejemplos JSON completos de la caché real:
+[Comodoro Rivadavia](examples/fingerprint-comodoro-rivadavia.json),
+[Mendoza](examples/fingerprint-mendoza.json),
+[Posadas](examples/fingerprint-posadas.json),
+[Radar Cuyo/T2M](examples/radar-cuyo-t2m.json).

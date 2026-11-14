@@ -34,8 +34,8 @@ y sus limitaciones; la revisión metodológica conjunta sigue pendiente.
 | --- | --- | --- |
 | Explorador ambiental | Consultar variables ambientales por ubicación argentina y período, conservando unidades y procedencia. | Interfaz conectada a catálogo, caché y análisis exploratorio por ciudad. |
 | Tendencias y significancia estadística | Integrar los análisis y evidencias del motor del equipo. | Motor existente integrado; revisión metodológica para ampliar usos pendiente. |
-| Earth Radar | Descubrir automáticamente tendencias ambientales en el catálogo inicial de 25 ciudades argentinas. | Catálogo, obtención y adaptador disponibles; pendientes criterios científicos y servicio de descubrimientos. |
-| Earth Fingerprint | Generar un perfil de tendencias históricas de temperatura, precipitación, humedad y viento por ciudad. | Datos y adaptador disponibles; contrato y servicio del perfil pendientes. |
+| Earth Radar | Descubrir automáticamente tendencias ambientales en el catálogo inicial de 25 ciudades argentinas. | Backend provisional y estudio de 150 pruebas disponibles; validación científica y ajuste pendientes; sin descubrimientos confirmados. |
+| Earth Fingerprint | Generar un perfil de tendencias históricas de temperatura, precipitación, humedad y viento por ciudad. | Perfil provisional de seis indicadores y endpoint disponibles; sin puntajes; validación científica pendiente. |
 | Comparador de regiones | Comparar resultados con períodos, unidades, cobertura y criterios compatibles. | Comparación descriptiva de dos ciudades implementada; comparación de regiones arbitrarias pendiente. |
 | Investigaciones guiadas | Orientar preguntas y recorridos basados en datos y análisis disponibles. | Interfaz y recomendador del equipo conectados; validación científica de recorridos pendiente. |
 
@@ -246,10 +246,10 @@ se incorporarán por etapas autorizadas:
 2. Despliegue productivo de la API y ampliación de rutas cuando existan los servicios
    de análisis y producto. La instalación limpia para desarrollo ya se verificó en Docker.
 3. Revisión metodológica conjunta del motor ya integrado antes de ampliar usos científicos.
-4. `services/radar.py`, `services/fingerprint.py` y `scripts/generate_radar.py`.
+4. Validación científica y futuras vistas para Radar/Fingerprint; sus servicios y generador provisionales ya existen.
 5. CI y ampliación de contratos; el flujo actual del frontend y sus pruebas ya están conectados.
 
-Rutas objetivo **todavía no implementadas**: `/api/radar` y
+Rutas de producto **implementadas con evidencia provisional**: `/api/radar` y
 `/api/fingerprint/{city_id}`. `/api/analyze`, `/api/compare`, `/api/summary`,
 `/api/missions`, `/api/catalog` y `/api/variables/recommend` están integradas.
 Las tres primeras usan el motor real y el proveedor/caché existentes; los
@@ -353,6 +353,31 @@ respaldo. Los scripts `check_cached_integration.py` y `check_web.py` verifican
 respectivamente las cachés reales con NASA bloqueada y el flujo de navegador.
 
 Consultar `docs/integration.md` antes de ampliar métodos, misiones o resultados.
-No se implementaron Earth Radar ni Earth Fingerprint. La falta de corrección de
-autocorrelación y comparaciones múltiples impide tratar este análisis exploratorio
-como un servicio de descubrimientos automáticos validado.
+Earth Radar y Earth Fingerprint tienen backend provisional, según `docs/products.md`.
+La falta de corrección de autocorrelación y comparaciones múltiples impide tratar
+este análisis exploratorio como un servicio de descubrimientos confirmados.
+
+
+## Contrato común y productos provisionales
+
+`services/analysis_results.py` define el contrato común v1 y los indicadores de las
+seis variables; `AnalysisService.results()` reutiliza el motor y la obtención
+existentes. No agregar regresiones alternativas. `statistics` conserva lo recibido;
+`statistics_unrounded` queda reservado para la salida completa del compañero,
+actualmente ausente. Todos los análisis calculados son científicamente
+`provisional`, aunque `data_status` sea `valid`.
+
+`services/fingerprint.py` produce perfiles y verifica compatibilidad descriptiva.
+`services/radar.py` define la familia completa del catálogo x seis variables y
+persiste sus resultados. `scripts/generate_radar.py` es siempre cache-only; nunca
+actualiza observaciones. El artefacto derivado vive en `data/cache/radar/latest.json`
+y se escribe atómicamente con integridad SHA-256, fuera de `power/`.
+
+`GET /api/radar` sólo lee el artefacto y filtra filas: no genera estudios, descarga
+series ni ajusta p-valores. Los filtros no cambian la familia, resumen ni estado
+de ajuste. `GET /api/fingerprint/{city_id}` conserva el período solicitado y las
+seis variables. No habilitar coordenadas libres ni configuración HTTP del motor.
+
+No marcar ninguna señal nominal provisional como descubrimiento confirmado. La
+aprobación metodológica, precisión completa y correcciones científicas continúan
+bajo coordinación de B06. Los perfiles no contienen puntuaciones arbitrarias.

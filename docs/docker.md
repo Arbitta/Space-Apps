@@ -76,8 +76,8 @@ docker compose exec -T backend python -m flask --app app:create_app routes
 docker compose exec -T backend python -m scripts.check_cached_integration
 ```
 
-Resultado verificado el **14 de noviembre de 2026**: **103 pruebas aprobadas**
-(incluidas las **71 originales**, 7 del motor, 15 del catálogo/misiones y 10 de integración), una prueba NASA
+Resultado verificado el **14 de noviembre de 2026**: **134 pruebas aprobadas**
+(las 103 anteriores más 31 de los nuevos productos), una prueba NASA
 optativa omitida y ninguna dependencia rota. La auditoría real procesó 25 ciudades,
 150 series, 45.000 valores mensuales y 150 análisis anuales con cero consultas NASA
 ni cambios en las cachés. No implica una nueva verificación del proveedor remoto.
@@ -109,3 +109,20 @@ docker compose exec -T backend python -m scripts.fetch_power --all --start-year 
 
 No usar `--force` para comprobar el arranque. Contratos: [api.md](api.md).
 Diagnóstico por ramas, inventario Docker y metodología: [integration.md](integration.md).
+
+
+## Radar y Fingerprint provisionales
+
+El mismo servicio sirve los nuevos endpoints; no hay contenedores ni dependencias
+adicionales. El artefacto derivado comparte el montaje `data/cache`, en una carpeta
+separada de las observaciones POWER.
+
+```powershell
+docker compose exec -T backend python -m scripts.generate_radar --dry-run
+docker compose exec -T backend python -m scripts.generate_radar
+Invoke-RestMethod 'http://127.0.0.1:5000/api/fingerprint/mendoza'
+Invoke-RestMethod 'http://127.0.0.1:5000/api/radar?region=Cuyo&variable=T2M'
+```
+
+El generador no consulta NASA y los filtros HTTP no recalculan análisis ni ajustes.
+La ciencia continúa provisional. Contratos, piloto y limitaciones: [products.md](products.md).

@@ -19,6 +19,9 @@ SERVICE_STATUS = {
     "analysis_unavailable": 503,
     "insufficient_data": 422,
     "incompatible_analysis": 422,
+    "cache_unavailable": 503,
+    "radar_unavailable": 503,
+    "radar_invalid_artifact": 503,
 }
 HTTP_ERRORS = {
     400: ("invalid_request", "La solicitud JSON es inválida."),

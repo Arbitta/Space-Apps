@@ -18,6 +18,10 @@ class IncompletePowerResponse(ValueError):
     pass
 
 
+class CacheUnavailable(ValueError):
+    """No hay una copia válida y vigente para una lectura sin red."""
+
+
 def validate_period(start_year, end_year):
     if (type(start_year) is not int or type(end_year) is not int
             or start_year < 1981 or end_year < start_year):
@@ -149,7 +153,10 @@ class PowerBulkService:
         return plans
 
     def collect_cities(self, *, city_id=None, city_ids=None, province=None, region=None,
-                       start_year=DEFAULT_START_YEAR, end_year=DEFAULT_END_YEAR, force=False):
+                       start_year=DEFAULT_START_YEAR, end_year=DEFAULT_END_YEAR, force=False,
+                       cache_only=False):
+        if cache_only and force:
+            raise ValueError("cache_only no admite force")
         started_at = utc_now()
         plans = self.plan_cities(city_id=city_id, city_ids=city_ids, province=province,
                                  region=region, start_year=start_year, end_year=end_year)
@@ -158,7 +165,7 @@ class PowerBulkService:
             if plan["error"]:
                 results.append(failure(plan["location"], ValueError(plan["error"])))
             else:
-                results.append(self._collect(plan["location"], plan["query"], force=force))
+                results.append(self._collect(plan["location"], plan["query"], force=force, cache_only=cache_only))
         return {
             "started_at": started_at, "finished_at": utc_now(),
             "start_year": start_year, "end_year": end_year,
@@ -187,7 +194,7 @@ class PowerBulkService:
             return failure(location, exc)
         return self._collect(location, query, force=force)
 
-    def _collect(self, location, query, *, force):
+    def _collect(self, location, query, *, force, cache_only=False):
         previous = None
         warnings = []
         try:
@@ -203,6 +210,11 @@ class PowerBulkService:
         except (OSError, ValueError) as exc:
             previous = None
             warnings.append(f"Caché descartada para lectura: {exc}")
+
+        if cache_only:
+            return failure(location, CacheUnavailable("No hay caché válida y vigente para este período"),
+                           cache_preserved=previous is not None,
+                           previous_fetched_at=previous["fetched_at"] if previous else None)
 
         try:
             if self._last_request is not None:

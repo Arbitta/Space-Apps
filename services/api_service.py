@@ -55,7 +55,9 @@ def validate_data_request(payload):
 
 def public_provider_error(result):
     error_type = result.get("error", {}).get("type")
-    if error_type in {"Timeout", "ConnectTimeout", "ReadTimeout"}:
+    if error_type == "CacheUnavailable":
+        code, message = "cache_unavailable", "No hay datos válidos en caché para el período solicitado; preparar los datos con el servicio de obtención."
+    elif error_type in {"Timeout", "ConnectTimeout", "ReadTimeout"}:
         code, message = "provider_timeout", "NASA POWER no respondió dentro del tiempo permitido."
     elif error_type in {"ConnectionError", "ProxyError", "SSLError", "RetryError"}:
         code, message = "provider_unavailable", "No se pudo establecer comunicación con NASA POWER."
@@ -99,13 +101,13 @@ class EarthLensService:
         counts = Counter(city["region"] for city in self.list_cities())
         return [{"name": name, "city_count": count} for name, count in counts.items()]
 
-    def get_data(self, payload):
+    def get_data(self, payload, *, cache_only=False):
         selection = validate_data_request(payload)
         self.get_city(selection["city_id"])
         with self._data_lock:
             result = self.bulk.collect_city(
                 selection["city_id"], start_year=selection["start_year"],
-                end_year=selection["end_year"], force=selection["force"],
+                end_year=selection["end_year"], force=selection["force"], cache_only=cache_only,
             )
         if result["status"] != "ok":
             raise public_provider_error(result)
