@@ -16,9 +16,9 @@ pendientes no autorizan avanzar automáticamente. Ver [AGENTS.md](AGENTS.md).
 El backend consulta datos mensuales de NASA POWER y dispone de catálogo argentino,
 caché JSON, obtención masiva y API REST con Flask. El frontend y el motor real del
 equipo están integrados para análisis exploratorio y comparación de ciudades.
-Earth Radar y Earth Fingerprint tienen una primera versión de backend provisional,
-con contrato común, API y estudio persistido. La confirmación científica y el ajuste
-múltiple permanecen pendientes de B06; no hay nuevas vistas de producto.
+Earth Radar y Earth Fingerprint tienen backend provisional, contrato común, API,
+estudio persistido e interfaces completas `/radar` y `/fingerprint` (fase 1).
+La confirmación científica y el ajuste múltiple permanecen pendientes de B06.
 El entorno de desarrollo Docker está construido, iniciado y verificado, y el lote
 de 25 ciudades 2000–2024 se ejecutó reutilizando íntegramente la caché existente.
 
@@ -36,7 +36,7 @@ de 25 ciudades 2000–2024 se ejecutó reutilizando íntegramente la caché exis
 | **B05 — API REST básica** | Completada y probada con el cliente Flask | `app.py`, Blueprint `api/routes.py`, servicio `services/api_service.py`; seis endpoints documentados. |
 | **B02 — instalación y dependencias** | Instalación limpia verificada en Docker Linux/amd64 | Python 3.12.16, Flask 3.1.3 y Requests 2.34.2 instalados desde `requirements.txt`; `pip check` y suite satisfactorios. Sin lock transitivo. |
 | **B19 — Docker para desarrollo** | Completada para el alcance autorizado | `Dockerfile`, `compose.yaml`, `.dockerignore`, `docs/docker.md`; backend saludable, recarga y caché persistente verificadas. |
-| Pruebas sin red | 134 aprobadas: las 103 anteriores más 31 de productos | `tests/`; 135 descubiertas, sólo NASA de red optativa omitida en Docker. Una aserción de ruta inexistente se actualizó por la incorporación de Fingerprint. |
+| Pruebas sin red | 137 aprobadas: las 134 anteriores más tres contratos de interfaces | `tests/`; 138 descubiertas, sólo NASA de red optativa omitida en Docker. |
 | Script manual y documentación previa | Conservados | `test_nasa.py`, `docs/nasa-power.md`. |
 | Documentación | Actualizada | `AGENTS.md`, este archivo y contrato para frontend en `docs/api.md`; documentación previa conservada. |
 
@@ -316,3 +316,97 @@ docker compose exec -T backend python -m scripts.generate_radar
 Invoke-RestMethod 'http://127.0.0.1:5000/api/fingerprint/mendoza?start_year=2000&end_year=2024'
 Invoke-RestMethod 'http://127.0.0.1:5000/api/radar?region=Cuyo&variable=T2M'
 ```
+
+## FASE 1 — interfaces Radar y Fingerprint verificadas
+
+Autorización posterior del usuario para implementar ambas interfaces y compartir
+la navegación. Se inspeccionaron arquitectura, contratos, documentación y estado
+Git antes de editar. Rama: `feature/backend-api`, base `87db1b4`; no se modificó
+`main`, no se hicieron commits ni push. La fase no agrega proveedores científicos.
+
+| Alcance | Estado comprobado | Archivos/evidencia |
+| --- | --- | --- |
+| Earth Radar | Funcional con datos reales | `/radar`, mapa Leaflet con 25 marcadores, cinco filtros, resumen global, tarjetas y orden por ciudad/indicador/p nominal; magnitud sólo con una variable. Enlace a Resultados y leyenda sin puntajes. |
+| Earth Fingerprint | Funcional con datos reales | `/fingerprint`, selector argentino, seis tarjetas/gráficos históricos anuales, principales/extremos, fuentes y metodología. Comparación descriptiva con unidades y compatibilidad estricta; sin gráfico radial. |
+| Navegación | Integrada en todas las páginas | Parcial Jinja único; conserva marca, estilos y el enlace Inicio → Explorador con la ciudad seleccionada. |
+| Selecciones rápidas | Verificadas en Chrome | AbortController y secuencia; respuestas tardías no reemplazan ciudades, filtros, títulos ni gráficos actuales. Probado con y sin cancelación. |
+| Carga/error/vacío | Verificados | Estados visibles, reintentos, ocultación de resultados previos; filtro real de confirmados sin resultados. Fixtures de 503, incompatibilidad e indicador dinámico insuficiente sólo en navegador. |
+| Responsive y enlaces | Verificados | 1440, 1280, 820 y 390 px sin desborde horizontal; menú móvil, comparación móvil, enlaces al Explorador, Resultados y Comparador. |
+| Regresión sin red | 137 aprobadas, una remota optativa omitida | Suite completa: 138 descubiertas en Docker; las 134 anteriores más tres pruebas nuevas. Tras el ajuste final de navegación se repitieron satisfactoriamente los tres contratos de páginas. |
+| Navegador | 9 grupos de verificaciones nuevas y 10 anteriores aprobados | `scripts/check_product_pages.py` y `scripts/check_web.py`, Chrome real, cero errores JavaScript. Capturas inspeccionadas en escritorio y móvil. |
+| Integración científica sin descargas | 25 perfiles, 150 análisis y 45.000 valores mensuales | Cliente Flask dentro de Docker con `requests.sessions.Session.request` y `JsonCache.write` bloqueados. Cero consultas NASA y cero escrituras; estadísticas, series, cobertura, indicador, unidad, IDs y procedencia coinciden con el estudio persistido. |
+| Preservación | Comprobada por SHA-256 | Las 25 cachés, `data/cache/radar/latest.json` y `services/trend_analysis.py` permanecen idénticos. No se regeneró el estudio. |
+| Docker | Reconstruido y saludable | Mismo servicio, puerto y bind mounts; sin cambios en Dockerfile, Compose, volúmenes, dependencias ni motor. |
+
+Resultados reales del estudio **existente** mostrado por la interfaz: 25 ciudades,
+150 resultados provisionales, 48 señales nominales, 102 sin señal nominal,
+cero errores/exclusiones y **cero descubrimientos confirmados**. Son p-valores sin
+ajuste; no se ejecutó un nuevo estudio ni se amplió su familia.
+
+Ejemplos comprobados de T2M para 2000–2024 (unidad NASA `C`; cobertura 25/25 años,
+300/300 meses en cada ciudad):
+
+| Ciudad | Cambio por década (C/década) | IC95% de pendiente (C/año) | p nominal | Evidencia |
+| --- | --- | --- | --- | --- |
+| Comodoro Rivadavia | 0,2464 | [0,00186; 0,04741] | 0,03521 | Señal nominal provisional |
+| Mendoza | 0,3412 | [0,00405; 0,06419] | 0,02787 | Señal nominal provisional |
+| Posadas | 0,267 | [-0,00309; 0,0565] | 0,0766 | Sin señal nominal |
+
+### Archivos de la fase
+
+Creados:
+
+- `templates/_navigation.html`, `templates/_provisional_notice.html`,
+  `templates/radar.html`, `templates/fingerprint.html`.
+- `static/css/products.css`, `static/js/products.js`, `static/js/radar.js`,
+  `static/js/fingerprint.js`.
+- `tests/test_product_pages.py`, `scripts/check_product_pages.py`.
+
+Modificados:
+
+- `web/routes.py`: dos páginas nuevas; `static/js/api.js`: señal de cancelación
+  opcional, conservando las llamadas anteriores.
+- `templates/base.html`, `templates/index.html`, `templates/explorer.html`,
+  `templates/results.html`, `templates/compare.html`: inclusión de navegación
+  compartida; contenido y lógica de las páginas conservados.
+- `static/css/styles.css`: ajuste de la marca en pantallas pequeñas.
+- `AGENTS.md`, `BACKEND_TASKS.md`, `README.md`, `docs/api.md`, `docs/docker.md`,
+  `docs/products.md`: estado, contratos web, limitaciones y ejecución.
+
+Evidencias locales ignoradas, sin reemplazar informes anteriores:
+
+- `data/cache/reports/interfaces-phase1/20261114T212310541717Z/`: informe de
+  nueve grupos de comprobaciones, hashes, origen de los 25 perfiles y capturas
+  reales de ambas interfaces, incluida comparación móvil.
+- `data/cache/reports/interfaces-phase1/20261114T212313856622Z/legacy/`:
+  regresión de los diez recorridos anteriores y sus capturas.
+
+### Ejecución y límites
+
+```powershell
+docker compose up -d --build --wait --wait-timeout 60
+# Abrir http://127.0.0.1:5000/radar
+# Abrir http://127.0.0.1:5000/fingerprint?city_id=comodoro-rivadavia
+# Comparar http://127.0.0.1:5000/fingerprint?city_id=mendoza&city_id_b=posadas
+
+docker compose exec -T -e EARTHLENS_POWER_LIVE=0 backend python -B -m unittest discover -s tests -v
+.\venv\Scripts\python.exe -B scripts/check_product_pages.py
+.\venv\Scripts\python.exe -B scripts/check_web.py
+```
+
+La comprobación de navegador requiere Playwright y Chrome en el host. La aplicación
+no requiere Node ni Playwright. Sus recursos CDN y teselas requieren Internet.
+Si falta el artefacto Radar, la interfaz muestra el error sin generar ni descargar
+datos. Fingerprint usa el período cacheado 2000–2024 y no agrega controles para
+descargas de períodos nuevos. Las tarjetas y gráficos se generan desde el contrato
+recibido para admitir indicadores adicionales en fases futuras.
+
+Pendientes científicos: validación metodológica B06, autocorrelación/supuestos OLS,
+cobertura, ajuste múltiple, entrega de precisión completa y agregación anual
+acordada, especialmente precipitación. No se modificó ninguno de esos criterios.
+La comparación no prueba diferencias significativas entre ciudades. Continúan
+pendientes el adaptador territorial B18 y el despliegue productivo.
+
+**Fases 2–7 no iniciadas**: arquitectura multiproveedor, consultas reales GLDAS,
+MODIS, GPM y SWOT/Hydrocron e integración general se abordarán en ese orden tras
+esta fase. No hay nuevas variables habilitadas ni ampliación automática de Radar.

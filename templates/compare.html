@@ -15,35 +15,7 @@
 </head>
 <body>
   <!-- Navegación principal -->
-  <nav class="navbar navbar-expand-lg navbar-dark el-navbar sticky-top">
-    <div class="container">
-      <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
-        <span>🌍 EarthLens</span>
-        <span class="el-brand-badge">NASA Space Apps</span>
-      </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#earthlensNav"
-        aria-controls="earthlensNav"
-        aria-expanded="false"
-        aria-label="Alternar navegación"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="earthlensNav">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
-          <li class="nav-item"><a class="nav-link" href="explorer.html">Explorador</a></li>
-          <li class="nav-item"><a class="nav-link" href="results.html">Resultados</a></li>
-          <li class="nav-item"><a class="nav-link active fw-semibold" href="compare.html">Comparador</a></li>
-          <li class="nav-item"><a class="nav-link" href="/missions">Modo detective</a></li>
-          <li class="nav-item"><a class="nav-link" href="/about">Nosotros y metodología</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  {% include "_navigation.html" %}
 
   <main class="container py-4 flex-grow-1">
     <!-- Banner de modo de datos -->

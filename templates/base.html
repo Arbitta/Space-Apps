@@ -17,29 +17,7 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark el-navbar sticky-top">
-    <div class="container">
-      <a class="navbar-brand el-brand" href="/">
-        <span>🌍 EarthLens</span>
-        <span class="el-brand-badge">NASA Space Apps 2026</span>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#earthlensNavbar"
-        aria-controls="earthlensNavbar" aria-expanded="false" aria-label="Alternar navegación">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="earthlensNavbar">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-1">
-          <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
-          <li class="nav-item"><a class="nav-link" href="/explorer">Explorador</a></li>
-          <li class="nav-item"><a class="nav-link" href="/results">Resultados</a></li>
-          <li class="nav-item"><a class="nav-link" href="/compare">Comparador</a></li>
-          <li class="nav-item"><a class="nav-link" href="/missions">Modo detective</a></li>
-          <li class="nav-item"><a class="nav-link" href="/about">Nosotros y metodología</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  {% include "_navigation.html" %}
 
   {% block content %}{% endblock %}
 

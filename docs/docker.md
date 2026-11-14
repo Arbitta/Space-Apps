@@ -76,8 +76,8 @@ docker compose exec -T backend python -m flask --app app:create_app routes
 docker compose exec -T backend python -m scripts.check_cached_integration
 ```
 
-Resultado verificado el **14 de noviembre de 2026**: **134 pruebas aprobadas**
-(las 103 anteriores más 31 de los nuevos productos), una prueba NASA
+Resultado verificado el **14 de noviembre de 2026**, tras la fase 1: **137 pruebas aprobadas**
+(las 134 anteriores más tres contratos de páginas/navegación/recursos), una prueba NASA
 optativa omitida y ninguna dependencia rota. La auditoría real procesó 25 ciudades,
 150 series, 45.000 valores mensuales y 150 análisis anuales con cero consultas NASA
 ni cambios en las cachés. No implica una nueva verificación del proveedor remoto.
@@ -126,3 +126,33 @@ Invoke-RestMethod 'http://127.0.0.1:5000/api/radar?region=Cuyo&variable=T2M'
 
 El generador no consulta NASA y los filtros HTTP no recalculan análisis ni ajustes.
 La ciencia continúa provisional. Contratos, piloto y limitaciones: [products.md](products.md).
+
+## Interfaces Radar y Fingerprint — fase 1
+
+```powershell
+docker compose up -d --build --wait --wait-timeout 60
+# http://127.0.0.1:5000/radar
+# http://127.0.0.1:5000/fingerprint
+
+docker compose exec -T -e EARTHLENS_POWER_LIVE=0 backend python -B -m unittest discover -s tests -v
+# En el host, con Playwright y Chrome instalados:
+.\venv\Scripts\python.exe -B scripts/check_product_pages.py
+```
+
+Las dos páginas se sirven con Jinja en el servicio existente. Los montajes de
+`web/`, `templates/` y `static/` incluyen todos los archivos nuevos; no hay otro
+Dockerfile, servicio, volumen, base de datos ni dependencia de producción.
+La caché y el estudio persistido deben estar presentes. Si falta el artefacto,
+Radar muestra un error con reintento: no genera un estudio ni consulta NASA
+automáticamente. El comando cache-only de generación sigue disponible arriba.
+
+El verificador comprueba 25 perfiles reales con origen caché, interacciones y
+gráficos en Chrome, y hashes de las 25 cachés, el artefacto y el motor antes/después.
+Guarda evidencias en una carpeta única bajo `data/cache/reports/interfaces-phase1/`.
+Las respuestas 503, la incompatibilidad de metadatos y el indicador sintético
+insuficiente son fixtures de software interceptados sólo en el navegador.
+Las capturas muestran exclusivamente datos reales. No es una prueba de conexión NASA.
+
+Bootstrap, Leaflet, Chart.js, fuentes y teselas siguen usando los recursos externos
+del proyecto y requieren acceso a Internet. Playwright sólo se necesita para la
+verificación de navegador, no para ejecutar EarthLens.

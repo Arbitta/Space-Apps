@@ -37,3 +37,13 @@ def missions():
 @web.get("/about")
 def about():
     return render_template("about.html")
+
+
+@web.get("/radar")
+def radar():
+    return render_template("radar.html")
+
+
+@web.get("/fingerprint")
+def fingerprint():
+    return render_template("fingerprint.html")

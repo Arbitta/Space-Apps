@@ -421,3 +421,24 @@ Ejemplos JSON completos de la caché real:
 [Mendoza](examples/fingerprint-mendoza.json),
 [Posadas](examples/fingerprint-posadas.json),
 [Radar Cuyo/T2M](examples/radar-cuyo-t2m.json).
+
+### Interfaces de producto (fase 1)
+
+`GET /radar` y `GET /fingerprint` sirven HTML en el mismo origen de la API.
+No modifican los contratos JSON. Radar pasa los cinco filtros documentados a
+`/api/radar`; ordena las filas en el navegador sin recalcular estadísticas.
+Su resumen siempre corresponde al estudio completo. En los enlaces compartidos,
+`variable=` indica todos los indicadores; la vista inicial usa `T2M`.
+
+Fingerprint consume `/api/cities` y uno o dos perfiles, sin parámetros de años
+(2000–2024, período ya cacheado). Sus parámetros **web**, `city_id` y
+`city_id_b`, seleccionan las ciudades; no se agregan al contrato del endpoint
+de perfiles. La superposición histórica exige claves `comparison.key` iguales,
+disponibilidad completa y ausencia de incoherencias de evidencia. Si no se
+cumple, los perfiles y gráficos se muestran separados. No se infieren diferencias
+significativas entre ciudades. La interfaz genera tarjetas desde `results`,
+con nombres, unidades, grupos y enlaces recibidos; no fija seis códigos en JS.
+
+Ambas interfaces descartan respuestas anteriores ante cambios rápidos y ocultan
+resultados previos durante una nueva consulta o error. Las rutas anteriores de
+Explorador, Resultados y Comparador mantienen sus parámetros y comportamiento.

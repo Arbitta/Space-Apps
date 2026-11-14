@@ -1,9 +1,10 @@
 /* Contrato único: mismo origen, ciudades verificadas y errores sin datos inventados. */
 window.EarthLensAPI = (() => {
   let catalog;
-  async function request(url, body) {
+  async function request(url, body, options = {}) {
     const response = await fetch(url, {
       headers: { Accept: 'application/json', ...(body ? { 'Content-Type': 'application/json' } : {}) },
+      signal: options.signal,
       ...(body ? { method: 'POST', body: JSON.stringify(body) } : {})
     });
     const result = await response.json();

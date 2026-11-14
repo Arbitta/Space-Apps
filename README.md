@@ -12,6 +12,10 @@ docker compose up -d --build --wait --wait-timeout 60
 
 Abrir **http://127.0.0.1:5000/**.
 
+Earth Radar: **http://127.0.0.1:5000/radar**. Earth Fingerprint:
+**http://127.0.0.1:5000/fingerprint**. Usan los datos reales de 2000–2024;
+las señales son provisionales y no tienen ajuste por comparaciones múltiples.
+
 - [Ejecución y pruebas en Docker](docs/docker.md)
 - [Contrato de la API](docs/api.md)
 - [Radar y Fingerprint provisionales](docs/products.md)

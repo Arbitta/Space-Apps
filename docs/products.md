@@ -1,8 +1,60 @@
-# Radar y Fingerprint — contratos de backend v1
+# Radar y Fingerprint — contratos v1 e interfaces
 
 Implementación sobre `feature/backend-api`, tomando como referencia la auditoría de
-`b4093bc`. No agrega interfaces, proveedores, bases de datos ni servicios Docker.
+`b4093bc`. La primera etapa incorporó los contratos de backend; la fase 1
+posterior agrega las interfaces, sin proveedores, bases de datos ni servicios Docker.
 Los endpoints anteriores conservan sus solicitudes y respuestas.
+
+## Interfaces funcionales — fase 1
+
+- **`/radar`**: mapa Leaflet con todas las ciudades del estudio; filtros por
+  provincia, región, indicador, dirección y evidencia. Las ciudades fuera de la
+  selección se conservan como marcadores atenuados. Cuando hay varios indicadores,
+  el marcador informa sus resultados individuales, sin resumirlos en un puntaje.
+  Tarjetas con pendiente, cambio por década, IC95% de la pendiente, p nominal,
+  dirección, período, cobertura mensual/anual, fuente y fecha original. El orden
+  por magnitud sólo se habilita con un indicador seleccionado. El resumen global
+  y la familia no cambian al filtrar. «Investigar tendencia» abre Resultados.
+- **`/fingerprint`**: selección de una o dos ciudades, tarjetas dinámicas,
+  distinción de principales/extremos y gráficos Chart.js con las series **anuales
+  del motor**, sin recalcular regresiones ni imputar faltantes. La comparación
+  requiere compatibilidad estricta según el contrato; en otro caso se muestran
+  gráficos separados. Enlaces por indicador al Explorador, Resultados y, cuando
+  son compatibles, al Comparador existente. No hay gráfico radial, normalización
+  ni puntuación ambiental.
+- Navegación compartida en todas las páginas, con menú colapsable y estado activo.
+  Conserva los colores, tipografía, tarjetas, marca y componentes del equipo.
+- Carga explícita, errores con reintento, resultados vacíos y protección frente a
+  respuestas tardías, con cancelación y control de secuencia. Si no carga Leaflet
+  o Chart.js, se informa y se mantienen disponibles las tarjetas y sus enlaces.
+
+La interfaz de perfiles usa por ahora el período cacheado **2000–2024**. No habilita
+selección de nuevos períodos ni fuerza descargas. Radar lee exclusivamente el
+artefacto existente. La comparación es descriptiva y las señales siempre se
+identifican como provisionales. Se informa que POWER representa una grilla, que
+la precipitación es tasa media en `mm/day` y que los extremos no son máximos o
+mínimos absolutos anuales. El motor y su redondeo permanecen intactos.
+
+Ejemplos de navegación:
+
+```text
+http://127.0.0.1:5000/radar?region=Cuyo&variable=T2M
+http://127.0.0.1:5000/radar?variable=&evidence_status=provisional_signal
+http://127.0.0.1:5000/fingerprint?city_id=comodoro-rivadavia
+http://127.0.0.1:5000/fingerprint?city_id=mendoza&city_id_b=posadas
+```
+
+Verificación reproducible: [docker.md](docker.md). `scripts/check_product_pages.py`
+contrasta las respuestas reales, filtros, cambios rápidos de ambos selectores,
+errores/reintento, compatibilidad, extensibilidad de tarjetas, navegación y
+anchos de 1440, 1280, 820 y 390 px. Sus fixtures de errores y contratos son sólo
+pruebas de software interceptadas; no se guardan como observaciones. Las capturas
+usan respuestas reales. Informes/capturas en carpetas únicas ignoradas por Git:
+`data/cache/reports/interfaces-phase1/`. La suite sin red está en `tests/`.
+
+Fases 2–7 pendientes: contrato multiproveedor, pruebas reales y acceso científico
+a GLDAS, MODIS, GPM y SWOT/Hydrocron, e integración posterior. No se habilitó ninguna
+de esas fuentes ni se amplió la familia del estudio Radar.
 
 ## Estado científico y resultado común
 

@@ -17,7 +17,8 @@ completada. Los componentes propuestos en estos documentos no implican que exist
   internacionales. El catálogo inicial contiene 25 ciudades argentinas y puede
   ampliarse; las investigaciones futuras deben admitir cualquier ubicación dentro
   de Argentina, sin limitarse a ese catálogo.
-- El usuario es responsable del backend y del consumo de APIs.
+- El usuario es responsable del backend, consumo de APIs y, desde la fase 1,
+  interfaces de Earth Radar y Earth Fingerprint.
 - El motor estadístico corresponde a otro integrante del equipo. Acordar su contrato
   de entrada y salida antes de integrarlo; no inventar su interfaz ni reemplazarlo
   con cálculos o resultados ficticios.
@@ -34,8 +35,8 @@ y sus limitaciones; la revisión metodológica conjunta sigue pendiente.
 | --- | --- | --- |
 | Explorador ambiental | Consultar variables ambientales por ubicación argentina y período, conservando unidades y procedencia. | Interfaz conectada a catálogo, caché y análisis exploratorio por ciudad. |
 | Tendencias y significancia estadística | Integrar los análisis y evidencias del motor del equipo. | Motor existente integrado; revisión metodológica para ampliar usos pendiente. |
-| Earth Radar | Descubrir automáticamente tendencias ambientales en el catálogo inicial de 25 ciudades argentinas. | Backend provisional y estudio de 150 pruebas disponibles; validación científica y ajuste pendientes; sin descubrimientos confirmados. |
-| Earth Fingerprint | Generar un perfil de tendencias históricas de temperatura, precipitación, humedad y viento por ciudad. | Perfil provisional de seis indicadores y endpoint disponibles; sin puntajes; validación científica pendiente. |
+| Earth Radar | Descubrir automáticamente tendencias ambientales en el catálogo inicial de 25 ciudades argentinas. | Backend provisional, estudio de 150 pruebas e interfaz `/radar` disponibles; validación científica y ajuste pendientes; sin descubrimientos confirmados. |
+| Earth Fingerprint | Generar un perfil de tendencias históricas de temperatura, precipitación, humedad y viento por ciudad. | Perfil provisional, endpoint e interfaz `/fingerprint` con seis indicadores y comparación descriptiva; sin puntajes; validación científica pendiente. |
 | Comparador de regiones | Comparar resultados con períodos, unidades, cobertura y criterios compatibles. | Comparación descriptiva de dos ciudades implementada; comparación de regiones arbitrarias pendiente. |
 | Investigaciones guiadas | Orientar preguntas y recorridos basados en datos y análisis disponibles. | Interfaz y recomendador del equipo conectados; validación científica de recorridos pendiente. |
 
@@ -381,3 +382,24 @@ seis variables. No habilitar coordenadas libres ni configuración HTTP del motor
 No marcar ninguna señal nominal provisional como descubrimiento confirmado. La
 aprobación metodológica, precisión completa y correcciones científicas continúan
 bajo coordinación de B06. Los perfiles no contienen puntuaciones arbitrarias.
+
+## Interfaces de producto — fase 1
+
+El usuario autorizó las interfaces de Radar/Fingerprint y su incorporación a la
+navegación. `templates/_navigation.html` es la navegación compartida; conservar
+el enlace del Inicio al Explorador que mantiene la ciudad seleccionada.
+Las vistas viven en `templates/radar.html`, `templates/fingerprint.html`,
+`static/css/products.css` y `static/js/{products,radar,fingerprint}.js`.
+No calculan estadísticas: presentan el contrato común y sus series anuales.
+La selección rápida utiliza AbortController y un número de secuencia para impedir
+que respuestas anteriores reemplacen la vista actual.
+
+Fingerprint conserva las unidades e indicadores recibidos y agrega tarjetas
+dinámicamente. La superposición de perfiles exige `comparison.key` iguales,
+disponibilidad completa y ausencia de incoherencias. No introducir gráficos
+radiales ni normalizaciones sin metodología acordada. El período de la interfaz
+es el cacheado 2000–2024; Radar no modifica la familia al filtrar.
+
+Ver `docs/products.md`, `tests/test_product_pages.py` y el verificador optativo
+`scripts/check_product_pages.py`. Los proveedores de fases posteriores siguen
+pendientes y requieren documentación oficial y consultas reales antes de habilitarse.
