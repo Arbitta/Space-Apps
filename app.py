@@ -1,7 +1,11 @@
 """
 EarthLens — Servidor Local de Prueba (app.py)
-Permite probar la pantalla de Explorador (/explorer) y el contrato JSON
-de los endpoints /api/variables y /api/analyze localmente.
+Rutas principales:
+  - /               -> templates/index.html (Inicio simple: Ubicación actual + Estimación de todas las variables)
+  - /explorer       -> templates/explorer.html (Explorador completo para cargar y configurar datos)
+  - /api/variables  -> Catálogo de variables NASA POWER
+  - /api/summary    -> Estimación rápida de TODAS las variables para una ubicación (Inicio)
+  - /api/analyze    -> Análisis estadístico individual y regresión lineal (Explorador)
 Soporta Flask (si está instalado) o http.server nativo de Python como respaldo automático.
 """
 
@@ -142,19 +146,8 @@ def compute_linear_regression(series, start_year, end_year, unit):
     }, conclusion
 
 
-def fetch_nasa_power_monthly_to_annual(lat, lon, variable, start_year, end_year):
-    """Consulta el endpoint mensual de NASA POWER y agrega el valor anual (ANN)."""
-    url = (
-        f"https://power.larc.nasa.gov/api/temporal/monthly/point"
-        f"?parameters={variable}&community=RE"
-        f"&longitude={lon}&latitude={lat}"
-        f"&start={start_year}&end={end_year}&format=JSON"
-    )
-    req = Request(url, headers={"User-Agent": "EarthLens-SpaceApps/1.0"})
-    with urlopen(req, timeout=8) as resp:
-        payload = json.loads(resp.read().decode("utf-8"))
-
-    param_data = payload["properties"]["parameter"][variable]
+def extract_annual_series(param_data, start_year, end_year):
+    """Extrae la serie anual de un parámetro en la respuesta mensual de NASA POWER."""
     series = []
     for year in range(start_year, end_year + 1):
         ann_key = f"{year}13"
@@ -169,8 +162,70 @@ def fetch_nasa_power_monthly_to_annual(lat, lon, variable, start_year, end_year)
             ]
             if len(monthly_vals) >= 10:
                 series.append({"year": year, "value": round(sum(monthly_vals) / len(monthly_vals), 2)})
-
     return series
+
+
+def fetch_nasa_power_monthly_to_annual(lat, lon, variable, start_year, end_year):
+    """Consulta el endpoint mensual de NASA POWER para una variable y agrega el valor anual (ANN)."""
+    url = (
+        f"https://power.larc.nasa.gov/api/temporal/monthly/point"
+        f"?parameters={variable}&community=RE"
+        f"&longitude={lon}&latitude={lat}"
+        f"&start={start_year}&end={end_year}&format=JSON"
+    )
+    req = Request(url, headers={"User-Agent": "EarthLens-SpaceApps/1.0"})
+    with urlopen(req, timeout=8) as resp:
+        payload = json.loads(resp.read().decode("utf-8"))
+
+    param_data = payload["properties"]["parameter"][variable]
+    return extract_annual_series(param_data, start_year, end_year)
+
+
+def process_summary_all_variables(lat, lon, start_year=2000, end_year=2024):
+    """Consulta TODAS las variables del catálogo en una sola llamada a NASA POWER para el Inicio."""
+    codes = [v["code"] for v in VARIABLES_CATALOG]
+    params_csv = ",".join(codes)
+    url = (
+        f"https://power.larc.nasa.gov/api/temporal/monthly/point"
+        f"?parameters={params_csv}&community=RE"
+        f"&longitude={lon}&latitude={lat}"
+        f"&start={start_year}&end={end_year}&format=JSON"
+    )
+    try:
+        req = Request(url, headers={"User-Agent": "EarthLens-SpaceApps/1.0"})
+        with urlopen(req, timeout=9) as resp:
+            payload = json.loads(resp.read().decode("utf-8"))
+
+        all_params = payload["properties"]["parameter"]
+        estimations = {}
+        for var_meta in VARIABLES_CATALOG:
+            code = var_meta["code"]
+            p_data = all_params.get(code, {})
+            series = extract_annual_series(p_data, start_year, end_year)
+            if len(series) >= 3:
+                mean_val = round(sum(pt["value"] for pt in series) / len(series), 2)
+                stats, conclusion = compute_linear_regression(series, start_year, end_year, var_meta["unit"])
+                estimations[code] = {
+                    "variable": code,
+                    "unit": var_meta["unit"],
+                    "mean_value": mean_val,
+                    "latest_value": series[-1]["value"],
+                    "statistics": stats,
+                    "conclusion": conclusion
+                }
+        if estimations:
+            return 200, {
+                "is_mock": False,
+                "latitude": lat,
+                "longitude": lon,
+                "start_year": start_year,
+                "end_year": end_year,
+                "estimations": estimations
+            }
+    except (URLError, TimeoutError, KeyError, ValueError, OSError) as exc:
+        return 503, {"error": f"No se pudo conectar con NASA POWER ({exc})."}
+
+    return 503, {"error": "Datos insuficientes de NASA POWER."}
 
 
 def process_analyze_payload(body):
@@ -211,23 +266,36 @@ def process_analyze_payload(body):
         }
 
 
-# Intentar usar Flask si está instalado; de lo contrario, usar http.server estándar
 try:
-    from flask import Flask, jsonify, redirect, render_template, request, url_for
+    from flask import Flask, jsonify, render_template, request
 
     app = Flask(__name__)
 
     @app.route("/")
+    @app.route("/index.html")
     def index():
-        return redirect(url_for("explorer"))
+        return render_template("index.html")
 
     @app.route("/explorer")
+    @app.route("/explorer.html")
     def explorer():
         return render_template("explorer.html")
 
     @app.route("/api/variables", methods=["GET"])
     def get_variables():
         return jsonify(VARIABLES_CATALOG)
+
+    @app.route("/api/summary", methods=["GET"])
+    def summary():
+        try:
+            lat = float(request.args.get("lat", -34.6037))
+            lon = float(request.args.get("lon", -58.3816))
+            start_year = int(request.args.get("start_year", 2000))
+            end_year = int(request.args.get("end_year", 2024))
+        except (TypeError, ValueError):
+            return jsonify({"error": "Coordenadas inválidas"}), 400
+        status, payload = process_summary_all_variables(lat, lon, start_year, end_year)
+        return jsonify(payload), status
 
     @app.route("/api/analyze", methods=["POST"])
     def analyze():
@@ -239,7 +307,7 @@ try:
 except ImportError:
     HAS_FLASK = False
     from http.server import BaseHTTPRequestHandler, HTTPServer
-    from urllib.parse import urlparse
+    from urllib.parse import parse_qs, urlparse
 
     class EarthLensHandler(BaseHTTPRequestHandler):
         def _send_json(self, status, data):
@@ -266,15 +334,32 @@ except ImportError:
             parsed = urlparse(self.path)
             route = parsed.path
 
-            if route in ("/", "/explorer", "/explorer.html"):
+            if route in ("/", "/index", "/index.html"):
+                self._send_file(BASE_DIR / "templates" / "index.html")
+            elif route in ("/explorer", "/explorer.html"):
                 self._send_file(BASE_DIR / "templates" / "explorer.html")
             elif route == "/api/variables":
                 self._send_json(200, VARIABLES_CATALOG)
+            elif route == "/api/summary":
+                qs = parse_qs(parsed.query)
+                try:
+                    lat = float(qs.get("lat", [-34.6037])[0])
+                    lon = float(qs.get("lon", [-58.3816])[0])
+                    start_year = int(qs.get("start_year", [2000])[0])
+                    end_year = int(qs.get("end_year", [2024])[0])
+                except (TypeError, ValueError):
+                    self._send_json(400, {"error": "Parámetros inválidos"})
+                    return
+                status, payload = process_summary_all_variables(lat, lon, start_year, end_year)
+                self._send_json(status, payload)
             elif route.startswith("/static/"):
                 rel = route.lstrip("/")
                 self._send_file(BASE_DIR / rel)
+            elif route == "/favicon.ico":
+                self.send_response(204)
+                self.end_headers()
             else:
-                self.send_error(404, f"Ruta {route} aun no implementada en este modulo")
+                self.send_error(404, f"Ruta {route} no encontrada")
 
         def do_POST(self):
             parsed = urlparse(self.path)
@@ -294,9 +379,9 @@ except ImportError:
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     if HAS_FLASK:
-        print(f"Iniciando EarthLens con Flask en http://127.0.0.1:{port}/explorer")
+        print(f"Iniciando EarthLens con Flask en http://127.0.0.1:{port}/")
         app.run(debug=True, port=port)
     else:
-        print(f"Flask no detectado; iniciando servidor nativo de Python en http://127.0.0.1:{port}/explorer")
+        print(f"Iniciando servidor EarthLens en http://127.0.0.1:{port}/")
         server = HTTPServer(("127.0.0.1", port), EarthLensHandler)
         server.serve_forever()
