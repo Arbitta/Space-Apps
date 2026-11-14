@@ -1,20 +1,21 @@
 """
-EarthLens — Servidor Local de Prueba (app.py)
-Rutas principales:
-  - /               -> templates/index.html (Inicio simple: Ubicación actual + Estimación de todas las variables)
-  - /explorer       -> templates/explorer.html (Explorador completo para cargar y configurar datos)
-  - /api/variables  -> Catálogo de variables NASA POWER
-  - /api/summary    -> Estimación rápida de TODAS las variables para una ubicación (Inicio)
-  - /api/analyze    -> Análisis estadístico individual y regresión lineal (Explorador)
-Soporta Flask (si está instalado) o http.server nativo de Python como respaldo automático.
+EarthLens — Servidor Local (app.py)
+Ejecuta:
+    python app.py
+Y abrirá automáticamente el navegador en http://127.0.0.1:5000/
 """
 
 import json
 import math
 import mimetypes
 import os
+import socket
+import threading
+import webbrowser
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.error import URLError
+from urllib.parse import parse_qs, urlparse
 from urllib.request import Request, urlopen
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -266,122 +267,111 @@ def process_analyze_payload(body):
         }
 
 
-try:
-    from flask import Flask, jsonify, render_template, request
-
-    app = Flask(__name__)
-
-    @app.route("/")
-    @app.route("/index.html")
-    def index():
-        return render_template("index.html")
-
-    @app.route("/explorer")
-    @app.route("/explorer.html")
-    def explorer():
-        return render_template("explorer.html")
-
-    @app.route("/api/variables", methods=["GET"])
-    def get_variables():
-        return jsonify(VARIABLES_CATALOG)
-
-    @app.route("/api/summary", methods=["GET"])
-    def summary():
+class EarthLensHandler(BaseHTTPRequestHandler):
+    def _send_json(self, status, data):
+        raw = json.dumps(data, ensure_ascii=False).encode("utf-8")
         try:
-            lat = float(request.args.get("lat", -34.6037))
-            lon = float(request.args.get("lon", -58.3816))
-            start_year = int(request.args.get("start_year", 2000))
-            end_year = int(request.args.get("end_year", 2024))
-        except (TypeError, ValueError):
-            return jsonify({"error": "Coordenadas inválidas"}), 400
-        status, payload = process_summary_all_variables(lat, lon, start_year, end_year)
-        return jsonify(payload), status
-
-    @app.route("/api/analyze", methods=["POST"])
-    def analyze():
-        body = request.get_json(silent=True) or {}
-        status, payload = process_analyze_payload(body)
-        return jsonify(payload), status
-
-    HAS_FLASK = True
-except ImportError:
-    HAS_FLASK = False
-    from http.server import BaseHTTPRequestHandler, HTTPServer
-    from urllib.parse import parse_qs, urlparse
-
-    class EarthLensHandler(BaseHTTPRequestHandler):
-        def _send_json(self, status, data):
-            raw = json.dumps(data, ensure_ascii=False).encode("utf-8")
             self.send_response(status)
             self.send_header("Content-Type", "application/json; charset=utf-8")
             self.send_header("Content-Length", str(len(raw)))
             self.end_headers()
             self.wfile.write(raw)
+        except (ConnectionAbortedError, BrokenPipeError):
+            pass
 
-        def _send_file(self, filepath):
-            if not filepath.is_file():
-                self.send_error(404, "Archivo no encontrado")
-                return
-            mime, _ = mimetypes.guess_type(str(filepath))
-            content = filepath.read_bytes()
+    def _send_file(self, filepath):
+        if not filepath.is_file():
+            self._send_json(404, {"error": "Archivo no encontrado"})
+            return
+        mime, _ = mimetypes.guess_type(str(filepath))
+        content = filepath.read_bytes()
+        try:
             self.send_response(200)
             self.send_header("Content-Type", (mime or "text/plain") + "; charset=utf-8")
             self.send_header("Content-Length", str(len(content)))
             self.end_headers()
             self.wfile.write(content)
+        except (ConnectionAbortedError, BrokenPipeError):
+            pass
 
-        def do_GET(self):
-            parsed = urlparse(self.path)
-            route = parsed.path
+    def do_GET(self):
+        parsed = urlparse(self.path)
+        route = parsed.path
 
-            if route in ("/", "/index", "/index.html"):
-                self._send_file(BASE_DIR / "templates" / "index.html")
-            elif route in ("/explorer", "/explorer.html"):
-                self._send_file(BASE_DIR / "templates" / "explorer.html")
-            elif route == "/api/variables":
-                self._send_json(200, VARIABLES_CATALOG)
-            elif route == "/api/summary":
-                qs = parse_qs(parsed.query)
-                try:
-                    lat = float(qs.get("lat", [-34.6037])[0])
-                    lon = float(qs.get("lon", [-58.3816])[0])
-                    start_year = int(qs.get("start_year", [2000])[0])
-                    end_year = int(qs.get("end_year", [2024])[0])
-                except (TypeError, ValueError):
-                    self._send_json(400, {"error": "Parámetros inválidos"})
-                    return
-                status, payload = process_summary_all_variables(lat, lon, start_year, end_year)
-                self._send_json(status, payload)
-            elif route.startswith("/static/"):
-                rel = route.lstrip("/")
-                self._send_file(BASE_DIR / rel)
-            elif route == "/favicon.ico":
-                self.send_response(204)
-                self.end_headers()
-            else:
-                self.send_error(404, f"Ruta {route} no encontrada")
+        if route in ("/", "/index", "/index.html"):
+            self._send_file(BASE_DIR / "templates" / "index.html")
+        elif route in ("/explorer", "/explorer.html"):
+            self._send_file(BASE_DIR / "templates" / "explorer.html")
+        elif route in ("/results", "/results.html"):
+            self._send_file(BASE_DIR / "templates" / "results.html")
+        elif route in ("/compare", "/compare.html"):
+            self._send_file(BASE_DIR / "templates" / "compare.html")
+        elif route == "/api/variables":
+            self._send_json(200, VARIABLES_CATALOG)
+        elif route == "/api/summary":
+            qs = parse_qs(parsed.query)
+            try:
+                lat = float(qs.get("lat", [-34.6037])[0])
+                lon = float(qs.get("lon", [-58.3816])[0])
+                start_year = int(qs.get("start_year", [2000])[0])
+                end_year = int(qs.get("end_year", [2024])[0])
+            except (TypeError, ValueError):
+                self._send_json(400, {"error": "Parámetros inválidos"})
+                return
+            status, payload = process_summary_all_variables(lat, lon, start_year, end_year)
+            self._send_json(status, payload)
+        elif route.startswith("/static/"):
+            rel = route.lstrip("/")
+            self._send_file(BASE_DIR / rel)
+        elif route == "/favicon.ico":
+            self.send_response(204)
+            self.end_headers()
+        else:
+            self._send_json(404, {"error": f"Ruta {route} no encontrada"})
 
-        def do_POST(self):
-            parsed = urlparse(self.path)
-            if parsed.path == "/api/analyze":
-                length = int(self.headers.get("Content-Length", 0))
-                raw_body = self.rfile.read(length).decode("utf-8") if length > 0 else "{}"
-                try:
-                    body = json.loads(raw_body)
-                except json.JSONDecodeError:
-                    body = {}
-                status, payload = process_analyze_payload(body)
-                self._send_json(status, payload)
-            else:
-                self.send_error(404, "Endpoint no encontrado")
+    def do_POST(self):
+        parsed = urlparse(self.path)
+        if parsed.path == "/api/analyze":
+            length = int(self.headers.get("Content-Length", 0))
+            raw_body = self.rfile.read(length).decode("utf-8") if length > 0 else "{}"
+            try:
+                body = json.loads(raw_body)
+            except json.JSONDecodeError:
+                body = {}
+            status, payload = process_analyze_payload(body)
+            self._send_json(status, payload)
+        else:
+            self._send_json(404, {"error": "Endpoint no encontrado"})
+
+
+def find_available_port(preferred_port=5000):
+    """Encuentra el puerto 5000 o el siguiente libre si ya está en uso."""
+    for port in (preferred_port, 5001, 5002, 8000, 8080):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            if s.connect_ex(("127.0.0.1", port)) != 0:
+                return port
+    return preferred_port
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    if HAS_FLASK:
-        print(f"Iniciando EarthLens con Flask en http://127.0.0.1:{port}/")
-        app.run(debug=True, port=port)
-    else:
-        print(f"Iniciando servidor EarthLens en http://127.0.0.1:{port}/")
-        server = HTTPServer(("127.0.0.1", port), EarthLensHandler)
+    preferred = int(os.environ.get("PORT", 5000))
+    port = find_available_port(preferred)
+    url = f"http://127.0.0.1:{port}/"
+
+    print("=" * 60)
+    print(f"🌍 Servidor EarthLens activo en: {url}")
+    print(f"   - Inicio:     {url}")
+    print(f"   - Explorador: {url}explorer")
+    print(f"   - Resultados: {url}results")
+    print(f"   - Comparador: {url}compare")
+    print("=" * 60)
+
+    # Abrir automáticamente el navegador tras 0.8 segundos
+    threading.Timer(0.8, lambda: webbrowser.open(url)).start()
+
+    server = ThreadingHTTPServer(("127.0.0.1", port), EarthLensHandler)
+    try:
         server.serve_forever()
+    except KeyboardInterrupt:
+        print("\nServidor detenido.")
+        server.server_close()
