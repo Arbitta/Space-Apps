@@ -1,0 +1,105 @@
+{
+  "_comment": "Casos guiados del Modo detective. Las misiones NO consultan datos por su cuenta: abren el explorador (o el comparador) con los parámetros precargados.",
+  "hypotheses": [
+    {"id": "increasing", "label": "Está aumentando"},
+    {"id": "decreasing", "label": "Está disminuyendo"},
+    {"id": "no_clear_trend", "label": "No hay un cambio claro"}
+  ],
+  "missions": [
+    {
+      "id": "patagonia-cambiante",
+      "number": "01",
+      "title": "Patagonia cambiante",
+      "question": "¿Está aumentando la temperatura en Comodoro Rivadavia?",
+      "context": "La Patagonia tiene clima frío, seco y ventoso. Pequeños cambios en la temperatura media pueden afectar glaciares, ganadería y disponibilidad de agua. Tu tarea: averiguar si los datos muestran una tendencia y cuánto cambió.",
+      "difficulty": "inicial",
+      "mode": "analyze",
+      "locations": [
+        {"name": "Comodoro Rivadavia, Chubut", "latitude": -45.86, "longitude": -67.50}
+      ],
+      "variable": "T2M",
+      "supporting_variables": ["T2M_MIN", "T2M_MAX"],
+      "start_year": 2000,
+      "end_year": 2024,
+      "steps": [
+        "Elegí tu hipótesis antes de ver los datos.",
+        "Analizá la temperatura media (T2M) del período 2000–2024.",
+        "Mirá la pendiente y el cambio por década: ¿cuánto cambió?",
+        "Revisá el p-valor: ¿la tendencia es estadísticamente significativa?",
+        "Extra: repetí con T2M_MIN. ¿Las noches cambian igual que el promedio?"
+      ],
+      "hints": [
+        "Un año caluroso aislado no es una tendencia: fijate en la línea de regresión, no en un punto.",
+        "Probá extender el período desde 1981 para tener más años de evidencia."
+      ],
+      "caveats": [
+        "POWER representa una celda de ~50 km, no la estación del aeropuerto.",
+        "En datos mensuales, T2M_MAX y T2M_MIN son extremos absolutos del período, no promedios."
+      ],
+      "image": "img/missions/patagonia.svg"
+    },
+    {
+      "id": "en-busca-del-agua",
+      "number": "02",
+      "title": "En busca del agua",
+      "question": "¿Están disminuyendo las precipitaciones en Mendoza?",
+      "context": "Mendoza depende del agua de lluvia y nieve de la cordillera. En las últimas décadas se habló de una 'megasequía' en la región andina central. ¿Los datos de precipitación lo muestran sobre la ciudad?",
+      "difficulty": "intermedia",
+      "mode": "analyze",
+      "locations": [
+        {"name": "Mendoza, Mendoza", "latitude": -32.89, "longitude": -68.84}
+      ],
+      "variable": "PRECTOTCORR",
+      "supporting_variables": ["T2M", "RH2M"],
+      "start_year": 2000,
+      "end_year": 2024,
+      "steps": [
+        "Elegí tu hipótesis sobre la lluvia.",
+        "Analizá las precipitaciones (PRECTOTCORR) 2000–2024.",
+        "La lluvia varía mucho entre años: observá cuán dispersos están los puntos alrededor de la línea.",
+        "Repetí con T2M y RH2M. ¿Más calor y aire más seco acompañan la señal?"
+      ],
+      "hints": [
+        "Con mucha variabilidad entre años hacen falta series largas para detectar tendencias.",
+        "Un p-valor mayor a 0,05 no prueba que no haya cambio: solo que la evidencia no alcanza."
+      ],
+      "caveats": [
+        "La humedad relativa (RH2M) es humedad del aire, no humedad del suelo.",
+        "La nieve que alimenta los ríos cae en la cordillera, fuera de esta celda: la ciudad no representa toda la cuenca."
+      ],
+      "image": "img/missions/agua.svg"
+    },
+    {
+      "id": "misterio-del-viento",
+      "number": "03",
+      "title": "El misterio del viento",
+      "question": "¿Está cambiando la velocidad del viento? ¿Igual en la costa patagónica que en Buenos Aires?",
+      "context": "Comodoro Rivadavia es una de las ciudades más ventosas del país y tiene parques eólicos. Comparala con Buenos Aires para ver si el viento cambia de la misma forma en lugares distintos.",
+      "difficulty": "avanzada",
+      "mode": "compare",
+      "locations": [
+        {"name": "Comodoro Rivadavia, Chubut", "latitude": -45.86, "longitude": -67.50},
+        {"name": "Buenos Aires", "latitude": -34.60, "longitude": -58.38}
+      ],
+      "variable": "WS2M",
+      "supporting_variables": [],
+      "start_year": 2000,
+      "end_year": 2024,
+      "steps": [
+        "Elegí tu hipótesis para Comodoro Rivadavia.",
+        "Compará WS2M en ambas ciudades, mismo período.",
+        "¿Cuál tiene más viento en promedio? ¿Cuál cambia más rápido?",
+        "¿Las dos tendencias tienen el mismo signo? ¿Son significativas?"
+      ],
+      "hints": [
+        "Que un lugar tenga más viento no significa que esté cambiando más: son preguntas distintas.",
+        "Compará el cambio por década, no solo el valor promedio."
+      ],
+      "caveats": [
+        "WS2M es un promedio de celda: suaviza ráfagas y efectos locales del relieve y la costa.",
+        "Los cambios en reanálisis pueden reflejar cambios en las observaciones asimiladas, no solo en el clima."
+      ],
+      "image": "img/missions/viento.svg"
+    }
+  ]
+}
