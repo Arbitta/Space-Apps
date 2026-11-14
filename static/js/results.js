@@ -1,47 +1,85 @@
 /**
  * EarthLens — Rol 03: Lógica del Dashboard de Resultados (results.js)
- * Conectado con:
- *  - Explorador (Rol 02): lee query params (?lat, ?lon, ?variable, ?start_year, ?end_year, ?label/?location)
- *    y sessionStorage ('earthlens_analysis_bundle', 'earthlens_last_request', 'earthlens_query_params')
- *  - Backend (Rol 04 / Rol 06): POST /api/analyze con respaldo automático de Datos de Prueba etiquetados.
+ * Incluye correcciones de auditoría:
+ *  - H-01: Validación de particiones de equivalencia y valores límite (1981–2024, span >= 2).
+ *  - H-06: Sincronización bidireccional de #quickLocationSelect con URL/sessionStorage y disparo reactivo.
+ *  - Control de concurrencia asíncrona con AbortController y secuencia de peticiones.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   let currentPayload = null;
-  let currentRequestParams = {
+  let activeAbortController = null;
+  let requestSeq = 0;
+
+  let currentRequestParams = EarthLensCharts.sanitizeRequestParams({
     latitude: -45.86,
     longitude: -67.50,
     locationName: 'Comodoro Rivadavia, Chubut',
     variable: 'T2M',
     start_year: 2000,
     end_year: 2024
-  };
+  });
 
-  const LOCATION_PRESETS = {
+  const LOCATION_PRESETS = Object.freeze({
     comodoro: { name: 'Comodoro Rivadavia, Chubut', latitude: -45.86, longitude: -67.50 },
     bariloche: { name: 'San Carlos de Bariloche, Río Negro', latitude: -41.13, longitude: -71.31 },
     ushuaia: { name: 'Ushuaia, Tierra del Fuego', latitude: -54.80, longitude: -68.30 },
     riogallegos: { name: 'Río Gallegos, Santa Cruz', latitude: -51.62, longitude: -69.22 },
     madryn: { name: 'Puerto Madryn, Chubut', latitude: -42.77, longitude: -65.03 }
-  };
+  });
 
+  /**
+   * Busca si las coordenadas coinciden con algún preset o sincroniza una opción 'custom' en el <select>
+   * (Corrección del hallazgo H-06).
+   */
+  function syncLocationSelectUI(lat, lon, locName) {
+    const locSelect = document.getElementById('quickLocationSelect');
+    if (!locSelect) return;
+
+    let matchedKey = null;
+    for (const [key, preset] of Object.entries(LOCATION_PRESETS)) {
+      if (Math.abs(preset.latitude - lat) < 0.15 && Math.abs(preset.longitude - lon) < 0.15) {
+        matchedKey = key;
+        break;
+      }
+    }
+
+    if (matchedKey) {
+      locSelect.value = matchedKey;
+      return;
+    }
+
+    let customOpt = locSelect.querySelector('option[value="custom"]');
+    if (!customOpt) {
+      customOpt = document.createElement('option');
+      customOpt.value = 'custom';
+      locSelect.prepend(customOpt);
+    }
+    customOpt.textContent = `${locName} (${Number(lat).toFixed(2)}, ${Number(lon).toFixed(2)})`;
+    customOpt.dataset.lat = String(lat);
+    customOpt.dataset.lon = String(lon);
+    customOpt.dataset.name = locName;
+    locSelect.value = 'custom';
+  }
+
+  /**
+   * 1. Lee parámetros desde la URL o sessionStorage y los normaliza con sanitizeRequestParams (H-01).
+   */
   function loadInitialParams() {
     const params = new URLSearchParams(window.location.search);
 
     if (params.has('lat') || params.has('latitude') || params.has('variable')) {
-      currentRequestParams.latitude = parseFloat(params.get('latitude') || params.get('lat') || -45.86);
-      currentRequestParams.longitude = parseFloat(params.get('longitude') || params.get('lon') || -67.50);
-      currentRequestParams.variable = (params.get('variable') || 'T2M').toUpperCase();
-      currentRequestParams.start_year = parseInt(params.get('start_year') || params.get('start') || 2000, 10);
-      currentRequestParams.end_year = parseInt(params.get('end_year') || params.get('end') || 2024, 10);
-      currentRequestParams.locationName =
-        params.get('location') ||
-        params.get('label') ||
-        `Coord (${currentRequestParams.latitude.toFixed(2)}°, ${currentRequestParams.longitude.toFixed(2)}°)`;
+      currentRequestParams = EarthLensCharts.sanitizeRequestParams({
+        latitude: params.get('latitude') || params.get('lat'),
+        longitude: params.get('longitude') || params.get('lon'),
+        variable: params.get('variable'),
+        start_year: params.get('start_year') || params.get('start'),
+        end_year: params.get('end_year') || params.get('end'),
+        locationName: params.get('location') || params.get('label')
+      });
       return;
     }
 
-    // Integración con explorer.js (Rol 02) a través de sessionStorage / localStorage
     try {
       const bundleRaw =
         sessionStorage.getItem('earthlens_analysis_bundle') ||
@@ -49,14 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (bundleRaw) {
         const bundle = JSON.parse(bundleRaw);
         if (bundle && bundle.request) {
-          currentRequestParams.latitude = parseFloat(bundle.request.latitude ?? -45.86);
-          currentRequestParams.longitude = parseFloat(bundle.request.longitude ?? -67.50);
-          currentRequestParams.variable = (bundle.request.variable || 'T2M').toUpperCase();
-          currentRequestParams.start_year = parseInt(bundle.request.start_year ?? 2000, 10);
-          currentRequestParams.end_year = parseInt(bundle.request.end_year ?? 2024, 10);
-          if (bundle.location_label) {
-            currentRequestParams.locationName = bundle.location_label;
-          }
+          currentRequestParams = EarthLensCharts.sanitizeRequestParams({
+            ...bundle.request,
+            locationName: bundle.location_label || bundle.request.locationName
+          });
           return;
         }
       }
@@ -66,23 +100,38 @@ document.addEventListener('DOMContentLoaded', () => {
         sessionStorage.getItem('earthlens_query_params');
       if (savedReq) {
         const parsed = JSON.parse(savedReq);
-        currentRequestParams = { ...currentRequestParams, ...parsed };
+        currentRequestParams = EarthLensCharts.sanitizeRequestParams({
+          ...currentRequestParams,
+          ...parsed
+        });
       }
     } catch (err) {
       console.warn('No se pudo leer sessionStorage:', err);
     }
   }
 
-  async function fetchAnalysisData(reqParams, forceMock = false) {
+  /**
+   * 2. Consulta POST /api/analyze con control de concurrencia (AbortController) y límites saneados.
+   */
+  async function fetchAnalysisData(rawReqParams, forceMock = false) {
+    const cleanParams = EarthLensCharts.sanitizeRequestParams(rawReqParams);
+    currentRequestParams = cleanParams;
+
+    if (activeAbortController) {
+      activeAbortController.abort();
+    }
+    activeAbortController = new AbortController();
+    const mySeq = ++requestSeq;
+
     setLoadingState(true);
 
     const requestBody = {
-      latitude: Number(reqParams.latitude),
-      longitude: Number(reqParams.longitude),
-      variable: reqParams.variable,
-      start_year: Number(reqParams.start_year),
-      end_year: Number(reqParams.end_year),
-      location_name: reqParams.locationName
+      latitude: cleanParams.latitude,
+      longitude: cleanParams.longitude,
+      variable: cleanParams.variable,
+      start_year: cleanParams.start_year,
+      end_year: cleanParams.end_year,
+      location_name: cleanParams.locationName
     };
 
     if (!forceMock) {
@@ -90,35 +139,45 @@ document.addEventListener('DOMContentLoaded', () => {
         const response = await fetch('/api/analyze', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(requestBody)
+          body: JSON.stringify(requestBody),
+          signal: activeAbortController.signal
         });
 
         if (response.ok) {
           const liveData = await response.json();
+          if (mySeq !== requestSeq) return null; // Petición superada por otra más reciente
           liveData.is_mock = Boolean(liveData.is_mock);
           liveData.location = liveData.location || {
-            name: reqParams.locationName,
-            latitude: requestBody.latitude,
-            longitude: requestBody.longitude
+            name: cleanParams.locationName,
+            latitude: cleanParams.latitude,
+            longitude: cleanParams.longitude
           };
           liveData.period = {
-            start_year: requestBody.start_year,
-            end_year: requestBody.end_year
+            start_year: cleanParams.start_year,
+            end_year: cleanParams.end_year
           };
           setLoadingState(false);
           return liveData;
         }
-      } catch (_) {
+      } catch (err) {
+        if (err && err.name === 'AbortError') {
+          return null;
+        }
         console.info('Endpoint /api/analyze no disponible; cargando datos de prueba del contrato JSON.');
       }
     }
 
-    const mockData = EarthLensCharts.buildMockAnalysis(reqParams);
+    if (mySeq !== requestSeq) return null;
+    const mockData = EarthLensCharts.buildMockAnalysis(cleanParams);
     setLoadingState(false);
     return mockData;
   }
 
+  /**
+   * 3. Renderiza todos los indicadores del dashboard, la conclusión, la tabla y el gráfico Chart.js
+   */
   function renderDashboard(data) {
+    if (!data) return;
     currentPayload = data;
     const stats = data.statistics || {};
     const series = data.series || [];
@@ -148,6 +207,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const lon = data.location?.longitude ?? currentRequestParams.longitude;
     const startYr = series[0]?.year ?? currentRequestParams.start_year;
     const endYr = series[series.length - 1]?.year ?? currentRequestParams.end_year;
+
+    // Sincronizar los controles del formulario superior con el estado activo (H-01 y H-06)
+    syncLocationSelectUI(lat, lon, locName);
+    const varSelect = document.getElementById('quickVariableSelect');
+    const startInput = document.getElementById('quickStartYear');
+    const endInput = document.getElementById('quickEndYear');
+    if (varSelect) varSelect.value = data.variable;
+    if (startInput) startInput.value = startYr;
+    if (endInput) endInput.value = endYr;
 
     setText('resLocationTitle', locName);
     setText('resCoordinates', `Lat: ${Number(lat).toFixed(2)}° · Lon: ${Number(lon).toFixed(2)}°`);
@@ -310,6 +378,48 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  async function triggerAnalysisFromControls() {
+    const varSelect = document.getElementById('quickVariableSelect');
+    const locSelect = document.getElementById('quickLocationSelect');
+    const startInput = document.getElementById('quickStartYear');
+    const endInput = document.getElementById('quickEndYear');
+
+    if (locSelect) {
+      const selectedVal = locSelect.value;
+      if (LOCATION_PRESETS[selectedVal]) {
+        const preset = LOCATION_PRESETS[selectedVal];
+        currentRequestParams.latitude = preset.latitude;
+        currentRequestParams.longitude = preset.longitude;
+        currentRequestParams.locationName = preset.name;
+      } else if (selectedVal === 'custom') {
+        const customOpt = locSelect.querySelector('option[value="custom"]');
+        if (customOpt && customOpt.dataset.lat && customOpt.dataset.lon) {
+          currentRequestParams.latitude = parseFloat(customOpt.dataset.lat);
+          currentRequestParams.longitude = parseFloat(customOpt.dataset.lon);
+          currentRequestParams.locationName = customOpt.dataset.name || currentRequestParams.locationName;
+        }
+      }
+    }
+
+    if (varSelect) {
+      currentRequestParams.variable = varSelect.value;
+    }
+
+    if (startInput && endInput) {
+      currentRequestParams.start_year = parseInt(startInput.value, 10);
+      currentRequestParams.end_year = parseInt(endInput.value, 10);
+    }
+
+    currentRequestParams = EarthLensCharts.sanitizeRequestParams(currentRequestParams);
+    if (startInput) startInput.value = currentRequestParams.start_year;
+    if (endInput) endInput.value = currentRequestParams.end_year;
+
+    const data = await fetchAnalysisData(currentRequestParams);
+    if (data) {
+      renderDashboard(data);
+    }
+  }
+
   function bindControls() {
     const varSelect = document.getElementById('quickVariableSelect');
     const locSelect = document.getElementById('quickLocationSelect');
@@ -319,35 +429,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnExportCSV = document.getElementById('btnExportCSV');
     const toggleCI = document.getElementById('toggleConfidenceBand');
 
-    if (varSelect) varSelect.value = currentRequestParams.variable;
+    if (varSelect) {
+      varSelect.value = currentRequestParams.variable;
+      varSelect.addEventListener('change', triggerAnalysisFromControls);
+    }
+
+    if (locSelect) {
+      syncLocationSelectUI(
+        currentRequestParams.latitude,
+        currentRequestParams.longitude,
+        currentRequestParams.locationName
+      );
+      locSelect.addEventListener('change', triggerAnalysisFromControls);
+    }
+
     if (startInput) startInput.value = currentRequestParams.start_year;
     if (endInput) endInput.value = currentRequestParams.end_year;
 
-    if (locSelect) {
-      locSelect.addEventListener('change', () => {
-        const preset = LOCATION_PRESETS[locSelect.value];
-        if (preset) {
-          currentRequestParams.latitude = preset.latitude;
-          currentRequestParams.longitude = preset.longitude;
-          currentRequestParams.locationName = preset.name;
-        }
-      });
-    }
-
     if (btnApply) {
-      btnApply.addEventListener('click', async () => {
-        if (varSelect) currentRequestParams.variable = varSelect.value;
-        if (startInput && endInput) {
-          const s = parseInt(startInput.value, 10) || 2000;
-          const e = parseInt(endInput.value, 10) || 2024;
-          currentRequestParams.start_year = Math.min(s, e - 2);
-          currentRequestParams.end_year = Math.max(s + 2, e);
-          startInput.value = currentRequestParams.start_year;
-          endInput.value = currentRequestParams.end_year;
-        }
-        const data = await fetchAnalysisData(currentRequestParams);
-        renderDashboard(data);
-      });
+      btnApply.addEventListener('click', triggerAnalysisFromControls);
     }
 
     if (toggleCI) {
@@ -369,6 +469,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loadInitialParams();
     bindControls();
     const initialData = await fetchAnalysisData(currentRequestParams);
-    renderDashboard(initialData);
+    if (initialData) {
+      renderDashboard(initialData);
+    }
   })();
 });

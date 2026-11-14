@@ -2,80 +2,127 @@
  * EarthLens — Rol 03: Módulo de Gráficos, Regresión y Utilidades (charts.js)
  * Tecnologías: JavaScript (ES6+), Chart.js
  * Cumple el contrato JSON de POST /api/analyze y POST /api/compare (Página 6 del Plan)
+ * Incluye validaciones de partición de equivalencia, límites (1981–2024) y encapsulamiento OO.
  */
 
 const EarthLensCharts = (() => {
-  // Instancias activas de Chart.js por ID de canvas para destruirlas antes de redibujar
+  const MIN_VALID_YEAR = 1981;
+  const MAX_VALID_YEAR = 2024;
+  const MIN_YEAR_SPAN = 2; // Al menos 3 puntos anuales (ej. 2022, 2023, 2024)
+
+  // Instancias privadas de Chart.js por ID de canvas para destruirlas antes de redibujar
   const chartInstances = {};
 
-  // Catálogo oficial de variables del MVP (Página 4 del PDF)
-  const VARIABLES_META = {
-    T2M: {
+  // Catálogo oficial inmutable de variables del MVP (Página 4 del PDF)
+  const VARIABLES_META = Object.freeze({
+    T2M: Object.freeze({
       code: 'T2M',
       name: 'Temperatura media a 2m',
       unit: '°C',
       apiUnit: 'deg C',
       color: '#fc3d21',
       decimals: 2
-    },
-    PRECTOTCORR: {
+    }),
+    PRECTOTCORR: Object.freeze({
       code: 'PRECTOTCORR',
       name: 'Precipitaciones corregidas',
       unit: 'mm/día',
       apiUnit: 'mm/day',
       color: '#0ea5e9',
       decimals: 2
-    },
-    RH2M: {
+    }),
+    RH2M: Object.freeze({
       code: 'RH2M',
       name: 'Humedad relativa a 2m',
       unit: '%',
       apiUnit: '%',
       color: '#10b981',
       decimals: 1
-    },
-    WS2M: {
+    }),
+    WS2M: Object.freeze({
       code: 'WS2M',
       name: 'Velocidad del viento a 2m',
       unit: 'm/s',
       apiUnit: 'm/s',
       color: '#6366f1',
       decimals: 2
-    },
-    T2M_MAX: {
+    }),
+    T2M_MAX: Object.freeze({
       code: 'T2M_MAX',
       name: 'Temperatura máxima a 2m',
       unit: '°C',
       apiUnit: 'deg C',
       color: '#e11d48',
       decimals: 2
-    },
-    T2M_MIN: {
+    }),
+    T2M_MIN: Object.freeze({
       code: 'T2M_MIN',
       name: 'Temperatura mínima a 2m',
       unit: '°C',
       apiUnit: 'deg C',
       color: '#0284c7',
       decimals: 2
-    }
-  };
+    })
+  });
+
+  /**
+   * Normaliza y valida los parámetros de entrada aplicando partición de equivalencia
+   * y valores límite (lat: [-90, 90], lon: [-180, 180], años: [1981, 2024], span >= 2).
+   */
+  function sanitizeRequestParams(raw = {}) {
+    let lat = parseFloat(raw.latitude ?? raw.lat ?? -45.86);
+    let lon = parseFloat(raw.longitude ?? raw.lon ?? -67.50);
+    if (!Number.isFinite(lat)) lat = -45.86;
+    if (!Number.isFinite(lon)) lon = -67.50;
+    lat = Math.max(-90, Math.min(90, lat));
+    lon = Math.max(-180, Math.min(180, lon));
+
+    const varCandidate = String(raw.variable || 'T2M').trim().toUpperCase();
+    const variable = Object.prototype.hasOwnProperty.call(VARIABLES_META, varCandidate)
+      ? varCandidate
+      : 'T2M';
+
+    let startYear = parseInt(raw.start_year ?? raw.start ?? 2000, 10);
+    let endYear = parseInt(raw.end_year ?? raw.end ?? 2024, 10);
+    if (!Number.isInteger(startYear)) startYear = 2000;
+    if (!Number.isInteger(endYear)) endYear = 2024;
+
+    // Clamping a límites válidos [1981, 2024] con ventana mínima de 3 años (span >= 2)
+    endYear = Math.max(MIN_VALID_YEAR + MIN_YEAR_SPAN, Math.min(MAX_VALID_YEAR, endYear));
+    startYear = Math.max(MIN_VALID_YEAR, Math.min(endYear - MIN_YEAR_SPAN, startYear));
+
+    const locationName =
+      String(raw.locationName || raw.location || raw.label || '').trim() ||
+      `Coord (${lat.toFixed(2)}°, ${lon.toFixed(2)}°)`;
+
+    return {
+      latitude: Number(lat.toFixed(4)),
+      longitude: Number(lon.toFixed(4)),
+      variable,
+      start_year: startYear,
+      end_year: endYear,
+      locationName
+    };
+  }
 
   /**
    * Calcula los puntos de la recta de regresión lineal y el intervalo de confianza (95%)
-   * a partir de la serie [{year, value}] y las estadísticas del contrato JSON.
+   * trabajando sobre una copia defensiva de la serie [{year, value}].
    */
   function computeRegressionLine(series, statistics = {}) {
     if (!Array.isArray(series) || series.length === 0) {
       return { trendPoints: [], upperBand: [], lowerBand: [], slope: 0, intercept: 0 };
     }
 
-    const valid = series.filter(
-      (d) => d && typeof d.year === 'number' && typeof d.value === 'number' && !Number.isNaN(d.value)
-    );
+    // Copia defensiva para preservar encapsulamiento del arreglo original
+    const valid = series
+      .filter((d) => d && typeof d.year === 'number' && typeof d.value === 'number' && !Number.isNaN(d.value))
+      .map((d) => ({ year: Number(d.year), value: Number(d.value) }));
+
     const n = valid.length;
     if (n < 2) {
       return {
-        trendPoints: valid.map((d) => ({ x: d.year, y: d.value })),
+        trendPoints: valid.map((d) => d.value),
         upperBand: [],
         lowerBand: [],
         slope: 0,
@@ -86,7 +133,6 @@ const EarthLensCharts = (() => {
     const meanX = valid.reduce((acc, d) => acc + d.year, 0) / n;
     const meanY = valid.reduce((acc, d) => acc + d.value, 0) / n;
 
-    // Si el backend envía statistics.slope, se respeta; si no, se calcula por mínimos cuadrados (OLS)
     let slope = typeof statistics.slope === 'number' ? statistics.slope : null;
     const ssXX = valid.reduce((acc, d) => acc + Math.pow(d.year - meanX, 2), 0);
 
@@ -98,13 +144,12 @@ const EarthLensCharts = (() => {
     const intercept =
       typeof statistics.intercept === 'number' ? statistics.intercept : meanY - slope * meanX;
 
-    // Error estándar residual para banda de confianza al 95% (~1.96 * SE)
     const residualsSq = valid.reduce((acc, d) => {
       const yHat = intercept + slope * d.year;
       return acc + Math.pow(d.value - yHat, 2);
     }, 0);
     const sErr = n > 2 ? Math.sqrt(residualsSq / (n - 2)) : 0;
-    const tCrit = 2.069; // aprox t_{0.975, 23} para series de 25 años (2000-2024)
+    const tCrit = 2.069;
 
     const trendPoints = [];
     const upperBand = [];
@@ -130,17 +175,18 @@ const EarthLensCharts = (() => {
    */
   function renderTrendChart(canvasId, payload, options = {}) {
     const canvas = document.getElementById(canvasId);
-    if (!canvas) return null;
+    if (!canvas || typeof Chart === 'undefined') return null;
 
     if (chartInstances[canvasId]) {
       chartInstances[canvasId].destroy();
+      delete chartInstances[canvasId];
     }
 
-    const series = payload.series || [];
-    const stats = payload.statistics || {};
-    const varMeta = VARIABLES_META[payload.variable] || {
-      name: payload.variable || 'Variable',
-      unit: payload.unit || '',
+    const series = Array.isArray(payload?.series) ? payload.series : [];
+    const stats = payload?.statistics || {};
+    const varMeta = VARIABLES_META[payload?.variable] || {
+      name: payload?.variable || 'Variable',
+      unit: payload?.unit || '',
       color: '#0b3d91',
       decimals: 2
     };
@@ -150,7 +196,7 @@ const EarthLensCharts = (() => {
     const { trendPoints, upperBand, lowerBand, slope } = computeRegressionLine(series, stats);
 
     const showConfidence = options.showConfidence !== false;
-    const unitLabel = payload.unit === 'deg C' ? '°C' : payload.unit || varMeta.unit;
+    const unitLabel = payload?.unit === 'deg C' ? '°C' : payload?.unit || varMeta.unit;
     const slopeSign = slope >= 0 ? '+' : '';
 
     const datasets = [
@@ -277,20 +323,19 @@ const EarthLensCharts = (() => {
 
   /**
    * Dibuja el gráfico de Comparación entre dos ubicaciones (Ubicación A vs Ubicación B)
-   * Misma variable, misma unidad y mismo período.
    */
   function renderComparisonChart(canvasId, dataA, dataB, labelA = 'Ubicación A', labelB = 'Ubicación B', showTrend = true) {
     const canvas = document.getElementById(canvasId);
-    if (!canvas) return null;
+    if (!canvas || typeof Chart === 'undefined') return null;
 
     if (chartInstances[canvasId]) {
       chartInstances[canvasId].destroy();
+      delete chartInstances[canvasId];
     }
 
-    const seriesA = dataA.series || [];
-    const seriesB = dataB.series || [];
+    const seriesA = Array.isArray(dataA?.series) ? dataA.series : [];
+    const seriesB = Array.isArray(dataB?.series) ? dataB.series : [];
 
-    // Unión ordenada de todos los años presentes en ambas series
     const yearSet = new Set([
       ...seriesA.map((d) => d.year),
       ...seriesB.map((d) => d.year)
@@ -303,17 +348,17 @@ const EarthLensCharts = (() => {
     const valuesA = years.map((yr) => (mapA.has(yr) ? mapA.get(yr) : null));
     const valuesB = years.map((yr) => (mapB.has(yr) ? mapB.get(yr) : null));
 
-    const regA = computeRegressionLine(seriesA, dataA.statistics);
-    const regB = computeRegressionLine(seriesB, dataB.statistics);
+    const regA = computeRegressionLine(seriesA, dataA?.statistics);
+    const regB = computeRegressionLine(seriesB, dataB?.statistics);
 
     const trendMapA = new Map(seriesA.map((d, i) => [d.year, regA.trendPoints[i]]));
     const trendMapB = new Map(seriesB.map((d, i) => [d.year, regB.trendPoints[i]]));
 
-    const varMeta = VARIABLES_META[dataA.variable] || {
-      name: dataA.variable || 'Variable',
-      unit: dataA.unit || ''
+    const varMeta = VARIABLES_META[dataA?.variable] || {
+      name: dataA?.variable || 'Variable',
+      unit: dataA?.unit || ''
     };
-    const unitLabel = dataA.unit === 'deg C' ? '°C' : dataA.unit || varMeta.unit;
+    const unitLabel = dataA?.unit === 'deg C' ? '°C' : dataA?.unit || varMeta.unit;
 
     const datasets = [
       {
@@ -435,7 +480,7 @@ const EarthLensCharts = (() => {
       csvParts.push(formatted.join(','));
     });
 
-    const csvContent = '\uFEFF' + csvParts.join('\n'); // BOM para Excel / acentos
+    const csvContent = '\uFEFF' + csvParts.join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
 
@@ -450,25 +495,15 @@ const EarthLensCharts = (() => {
 
   /**
    * Generador determinístico de datos de prueba (Mock Data) que respeta al 100%
-   * el contrato JSON de la Página 6 del PDF (Comodoro Rivadavia 2000-2024 y otras sedes patagónicas)
-   * Etiquetado claramente como pide el acuerdo de frontend (Página 2).
+   * el contrato JSON de la Página 6 del PDF (Comodoro Rivadavia 2000-2024 y sedes patagónicas)
    */
-  function buildMockAnalysis({
-    latitude = -45.86,
-    longitude = -67.50,
-    locationName = 'Comodoro Rivadavia, Chubut',
-    variable = 'T2M',
-    start_year = 2000,
-    end_year = 2024
-  } = {}) {
+  function buildMockAnalysis(rawParams = {}) {
+    const clean = sanitizeRequestParams(rawParams);
+    const { latitude, longitude, locationName, variable, start_year: start, end_year: end } = clean;
     const varInfo = VARIABLES_META[variable] || VARIABLES_META.T2M;
-    const start = Number(start_year) || 2000;
-    const end = Number(end_year) || 2024;
 
-    // Semilla reproducible según latitud/longitud y variable
     const locSeed = Math.abs(Math.sin(latitude * 12.9898 + longitude * 78.233));
 
-    // Parámetros base realistas para Patagonia (Comodoro Rivadavia y alrededores)
     const presets = {
       T2M: {
         base: 12.4 + (latitude + 45.86) * 0.42,
@@ -513,7 +548,6 @@ const EarthLensCharts = (() => {
 
     for (let yr = start; yr <= end; yr++) {
       const idx = yr - start;
-      // Oscilación cuasi-periódica reproducible (ENSO / variabilidad interanual)
       const wave =
         Math.sin(yr * 1.7 + locSeed * 6) * cfg.noiseAmp * 0.65 +
         Math.cos(yr * 0.85 + locSeed * 3) * cfg.noiseAmp * 0.35;
@@ -521,7 +555,6 @@ const EarthLensCharts = (() => {
       series.push({ year: yr, value: val });
     }
 
-    // Cálculo exacto sobre la serie generada para coherencia matemática total
     const n = series.length;
     const meanX = series.reduce((a, b) => a + b.year, 0) / n;
     const meanY = series.reduce((a, b) => a + b.value, 0) / n;
@@ -581,12 +614,16 @@ const EarthLensCharts = (() => {
     };
   }
 
-  return {
+  return Object.freeze({
+    MIN_VALID_YEAR,
+    MAX_VALID_YEAR,
+    MIN_YEAR_SPAN,
     VARIABLES_META,
+    sanitizeRequestParams,
     computeRegressionLine,
     renderTrendChart,
     renderComparisonChart,
     downloadCSV,
     buildMockAnalysis
-  };
+  });
 })();
