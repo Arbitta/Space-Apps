@@ -104,7 +104,7 @@ const EarthLensCharts = (() => {
       return acc + Math.pow(d.value - yHat, 2);
     }, 0);
     const sErr = n > 2 ? Math.sqrt(residualsSq / (n - 2)) : 0;
-    const tCrit = 2.069; // aprox t_{0.975, 23} para series de 25 años (2000-2024)
+    const tCrit = statistics.t_critical_95; // SciPy, n-2 grados de libertad desde el adaptador.
 
     const trendPoints = [];
     const upperBand = [];
@@ -448,145 +448,12 @@ const EarthLensCharts = (() => {
     URL.revokeObjectURL(url);
   }
 
-  /**
-   * Generador determinístico de datos de prueba (Mock Data) que respeta al 100%
-   * el contrato JSON de la Página 6 del PDF (Comodoro Rivadavia 2000-2024 y otras sedes patagónicas)
-   * Etiquetado claramente como pide el acuerdo de frontend (Página 2).
-   */
-  function buildMockAnalysis({
-    latitude = -45.86,
-    longitude = -67.50,
-    locationName = 'Comodoro Rivadavia, Chubut',
-    variable = 'T2M',
-    start_year = 2000,
-    end_year = 2024
-  } = {}) {
-    const varInfo = VARIABLES_META[variable] || VARIABLES_META.T2M;
-    const start = Number(start_year) || 2000;
-    const end = Number(end_year) || 2024;
-
-    // Semilla reproducible según latitud/longitud y variable
-    const locSeed = Math.abs(Math.sin(latitude * 12.9898 + longitude * 78.233));
-
-    // Parámetros base realistas para Patagonia (Comodoro Rivadavia y alrededores)
-    const presets = {
-      T2M: {
-        base: 12.4 + (latitude + 45.86) * 0.42,
-        slope: 0.035 + (locSeed - 0.5) * 0.014,
-        noiseAmp: 0.28,
-        pValue: 0.012
-      },
-      T2M_MAX: {
-        base: 18.1 + (latitude + 45.86) * 0.45,
-        slope: 0.041 + (locSeed - 0.5) * 0.015,
-        noiseAmp: 0.34,
-        pValue: 0.008
-      },
-      T2M_MIN: {
-        base: 7.2 + (latitude + 45.86) * 0.38,
-        slope: 0.029 + (locSeed - 0.5) * 0.012,
-        noiseAmp: 0.25,
-        pValue: 0.019
-      },
-      PRECTOTCORR: {
-        base: Math.max(0.35, 0.68 - (longitude + 67.5) * 0.18),
-        slope: -0.006 + (locSeed - 0.5) * 0.004,
-        noiseAmp: 0.14,
-        pValue: 0.041
-      },
-      RH2M: {
-        base: Math.min(82, Math.max(42, 54.0 - (latitude + 45.86) * 1.4)),
-        slope: -0.14 + (locSeed - 0.5) * 0.08,
-        noiseAmp: 1.6,
-        pValue: 0.034
-      },
-      WS2M: {
-        base: Math.max(3.5, 6.8 - Math.abs(latitude + 46) * 0.15 + locSeed * 0.8),
-        slope: 0.022 + (locSeed - 0.4) * 0.025,
-        noiseAmp: 0.32,
-        pValue: 0.027
-      }
-    };
-
-    const cfg = presets[variable] || presets.T2M;
-    const series = [];
-
-    for (let yr = start; yr <= end; yr++) {
-      const idx = yr - start;
-      // Oscilación cuasi-periódica reproducible (ENSO / variabilidad interanual)
-      const wave =
-        Math.sin(yr * 1.7 + locSeed * 6) * cfg.noiseAmp * 0.65 +
-        Math.cos(yr * 0.85 + locSeed * 3) * cfg.noiseAmp * 0.35;
-      const val = Number((cfg.base + cfg.slope * idx + wave).toFixed(2));
-      series.push({ year: yr, value: val });
-    }
-
-    // Cálculo exacto sobre la serie generada para coherencia matemática total
-    const n = series.length;
-    const meanX = series.reduce((a, b) => a + b.year, 0) / n;
-    const meanY = series.reduce((a, b) => a + b.value, 0) / n;
-    const ssXX = series.reduce((a, b) => a + Math.pow(b.year - meanX, 2), 0);
-    const ssXY = series.reduce((a, b) => a + (b.year - meanX) * (b.value - meanY), 0);
-    const realSlope = ssXX > 0 ? Number((ssXY / ssXX).toFixed(4)) : 0;
-    const changePerDecade = Number((realSlope * 10).toFixed(3));
-    const totalChange = Number((realSlope * (end - start)).toFixed(2));
-
-    const pValue = Number(cfg.pValue.toFixed(4));
-    const significant = pValue < 0.05;
-    let direction = 'stable';
-    if (Math.abs(realSlope) > 0.0005) {
-      direction = realSlope > 0 ? 'increasing' : 'decreasing';
-    }
-
-    const dirText =
-      direction === 'increasing'
-        ? 'ascendente'
-        : direction === 'decreasing'
-        ? 'descendente'
-        : 'estable';
-
-    const unitDisplay = varInfo.unit;
-    const conclusion = significant
-      ? `Se detectó una tendencia ${dirText} estadísticamente significativa (p = ${pValue} < 0.05) en ${varInfo.name.toLowerCase()} para ${locationName} durante ${start}–${end}, con una tasa de ${changePerDecade >= 0 ? '+' : ''}${changePerDecade} ${unitDisplay}/década y un cambio acumulado estimado de ${totalChange >= 0 ? '+' : ''}${totalChange} ${unitDisplay}.`
-      : `No se encontró evidencia estadística suficiente de una tendencia lineal (p = ${pValue} ≥ 0.05) en ${varInfo.name.toLowerCase()} para ${locationName} entre ${start} y ${end}. La variación observada (${totalChange >= 0 ? '+' : ''}${totalChange} ${unitDisplay}) es compatible con la variabilidad interanual natural.`;
-
-    return {
-      is_mock: true,
-      location: {
-        name: locationName,
-        latitude: Number(latitude),
-        longitude: Number(longitude)
-      },
-      period: {
-        start_year: start,
-        end_year: end
-      },
-      variable,
-      source: 'NASA POWER / MERRA-2 (Datos de prueba — Contrato JSON)',
-      unit: varInfo.apiUnit,
-      series,
-      statistics: {
-        slope: realSlope,
-        change_per_decade: changePerDecade,
-        total_change: totalChange,
-        p_value: pValue,
-        significant,
-        direction,
-        confidence_interval_95: [
-          Number((realSlope - Math.abs(realSlope) * 0.32).toFixed(4)),
-          Number((realSlope + Math.abs(realSlope) * 0.32).toFixed(4))
-        ]
-      },
-      conclusion
-    };
-  }
 
   return {
     VARIABLES_META,
     computeRegressionLine,
     renderTrendChart,
     renderComparisonChart,
-    downloadCSV,
-    buildMockAnalysis
+    downloadCSV
   };
 })();

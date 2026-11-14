@@ -16,6 +16,9 @@ SERVICE_STATUS = {
     "provider_error": 502,
     "provider_invalid_response": 502,
     "internal_error": 500,
+    "analysis_unavailable": 503,
+    "insufficient_data": 422,
+    "incompatible_analysis": 422,
 }
 HTTP_ERRORS = {
     400: ("invalid_request", "La solicitud JSON es inválida."),

@@ -1,25 +1,18 @@
 /**
  * EarthLens — Rol 03: Lógica del Comparador de Dos Ubicaciones (compare.js)
  * Compara dos ubicaciones con la misma variable, misma unidad y mismo período.
- * Soporta POST /api/compare, doble consulta a POST /api/analyze, o Datos de Prueba etiquetados.
+ * Consulta POST /api/compare con ciudades verificadas y muestra errores explícitos.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  const PRESET_COORDS = {
-    comodoro: { name: 'Comodoro Rivadavia, Chubut', latitude: -45.86, longitude: -67.50 },
-    ushuaia: { name: 'Ushuaia, Tierra del Fuego', latitude: -54.80, longitude: -68.30 },
-    bariloche: { name: 'San Carlos de Bariloche, Río Negro', latitude: -41.13, longitude: -71.31 },
-    riogallegos: { name: 'Río Gallegos, Santa Cruz', latitude: -51.62, longitude: -69.22 },
-    madryn: { name: 'Puerto Madryn, Chubut', latitude: -42.77, longitude: -65.03 },
-    neuquen: { name: 'Neuquén Capital, Neuquén', latitude: -38.95, longitude: -68.06 }
-  };
+  let PRESET_COORDS = {};
 
   let state = {
     variable: 'T2M',
     start_year: 2000,
     end_year: 2024,
-    locA: { ...PRESET_COORDS.comodoro },
-    locB: { ...PRESET_COORDS.ushuaia },
+    locA: { id: 'comodoro-rivadavia' },
+    locB: { id: 'ushuaia' },
     dataA: null,
     dataB: null
   };
@@ -40,74 +33,37 @@ document.addEventListener('DOMContentLoaded', () => {
       state.end_year = parseInt(params.get('end_year'), 10) || 2024;
     }
 
-    if (params.get('latA') && params.get('lonA')) {
-      state.locA = {
-        name: params.get('nameA') || `Ubicación A (${params.get('latA')}, ${params.get('lonA')})`,
-        latitude: parseFloat(params.get('latA')),
-        longitude: parseFloat(params.get('lonA'))
-      };
-    }
-
-    if (params.get('latB') && params.get('lonB')) {
-      state.locB = {
-        name: params.get('nameB') || `Ubicación B (${params.get('latB')}, ${params.get('lonB')})`,
-        latitude: parseFloat(params.get('latB')),
-        longitude: parseFloat(params.get('lonB'))
-      };
-    }
+    state.locA = PRESET_COORDS[params.get('city_id_a') || 'comodoro-rivadavia'];
+    state.locB = PRESET_COORDS[params.get('city_id_b') || 'ushuaia'];
   }
 
   /**
    * 2. Obtiene el análisis para una ubicación (vía POST /api/analyze o Mock etiquetado)
    */
-  async function fetchSingleLocation(loc) {
-    const payload = {
-      latitude: Number(loc.latitude),
-      longitude: Number(loc.longitude),
-      variable: state.variable,
-      start_year: Number(state.start_year),
-      end_year: Number(state.end_year)
-    };
-
-    try {
-      const res = await fetch('/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      if (res.ok) {
-        const json = await res.json();
-        json.is_mock = false;
-        json.location = { name: loc.name, latitude: loc.latitude, longitude: loc.longitude };
-        return json;
-      }
-    } catch (_) {
-      // Fallback silencioso a datos de prueba del contrato JSON
-    }
-
-    return EarthLensCharts.buildMockAnalysis({
-      latitude: loc.latitude,
-      longitude: loc.longitude,
-      locationName: loc.name,
-      variable: state.variable,
-      start_year: state.start_year,
-      end_year: state.end_year
-    });
-  }
 
   /**
    * 3. Ejecuta la comparación (intenta POST /api/compare o 2 consultas en paralelo a /api/analyze)
    */
   async function runComparison() {
-    const [resA, resB] = await Promise.all([
-      fetchSingleLocation(state.locA),
-      fetchSingleLocation(state.locB)
-    ]);
-
-    state.dataA = resA;
-    state.dataB = resB;
-
-    renderComparisonUI(resA, resB);
+    const button = document.getElementById('btnRunComparison');
+    const output = document.getElementById('compare-output');
+    button.disabled = true;
+    output.hidden = true;
+    state.dataA = state.dataB = null;
+    try {
+      const result = await window.EarthLensAPI.compare({city_id_a: state.locA?.id, city_id_b: state.locB?.id, variable: state.variable, start_year: Number(state.start_year), end_year: Number(state.end_year)});
+      state.dataA = result.location_a;
+      state.dataB = result.location_b;
+      output.hidden = false;
+      document.getElementById('compareModeText').classList.remove('alert', 'alert-danger');
+      renderComparisonUI(state.dataA, state.dataB);
+      setText('cmpSynthesisText', result.comparison_conclusion);
+      document.getElementById('compare-evidence')?.remove();
+      output.insertAdjacentHTML('beforeend', '<div id="compare-evidence">' + window.EarthLensAPI.evidence(state.dataA) + window.EarthLensAPI.evidence(state.dataB) + '</div>');
+    } catch (error) {
+      document.getElementById('compareModeBanner').classList.remove('is-live');
+      window.EarthLensAPI.showError(document.getElementById('compareModeText'), error);
+    } finally { button.disabled = false; }
   }
 
   /**
@@ -396,7 +352,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  initFromURL();
-  bindEvents();
-  runComparison();
+  (async () => {
+    try {
+      const cities = await window.EarthLensAPI.cities();
+      PRESET_COORDS = Object.fromEntries(cities.map(city => [city.id, city]));
+      initFromURL();
+      window.EarthLensAPI.fillCities(document.getElementById('selectPresetA'), cities, state.locA?.id);
+      window.EarthLensAPI.fillCities(document.getElementById('selectPresetB'), cities, state.locB?.id);
+      bindEvents();
+      await runComparison();
+    } catch (error) { window.EarthLensAPI.showError(document.getElementById('compareModeText'), error); }
+  })();
 });

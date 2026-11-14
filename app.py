@@ -1,4 +1,4 @@
-"""Application Factory de la API de EarthLens."""
+"""Application Factory de EarthLens: interfaz y API en el mismo origen."""
 
 from flask import Flask
 
@@ -8,10 +8,12 @@ from services.api_service import EarthLensService
 from services.bulk import PowerBulkService
 from services.cache import DEFAULT_CACHE_DIR, JsonCache
 from services.cities import CATALOG_PATH
+from services.analysis_service import AnalysisService
+from web.routes import web
 
 
 def create_app(config=None):
-    app = Flask(__name__, static_folder=None)
+    app = Flask(__name__)
     app.config.from_mapping(
         MAX_CONTENT_LENGTH=16384,
         CACHE_DIR=DEFAULT_CACHE_DIR,
@@ -32,7 +34,9 @@ def create_app(config=None):
         max_age_days=app.config["POWER_CACHE_MAX_AGE_DAYS"],
     )
     app.extensions["earthlens_service"] = EarthLensService(bulk)
+    app.extensions["earthlens_analysis"] = AnalysisService(app.extensions["earthlens_service"])
     app.register_blueprint(api)
+    app.register_blueprint(web)
     register_error_handlers(app)
     return app
 

@@ -66,3 +66,71 @@ def data():
         raise UnsupportedMediaType()
     result, meta = service().get_data(request.get_json())
     return success(result, meta=meta)
+
+
+def analysis_service():
+    return current_app.extensions["earthlens_analysis"]
+
+
+@api.post("/analyze")
+def analyze():
+    query_parameters()
+    if not request.is_json:
+        raise UnsupportedMediaType()
+    result, meta = analysis_service().analyze(request.get_json())
+    return success(result, meta=meta)
+
+
+@api.get("/summary")
+def summary():
+    payload = query_parameters(("city_id", "start_year", "end_year"))
+    for key in ("start_year", "end_year"):
+        if key in payload:
+            try:
+                payload[key] = int(payload[key])
+            except ValueError:
+                raise ServiceError("invalid_request", "Los años deben ser enteros.") from None
+    result, meta = analysis_service().summary(payload)
+    return success(result, meta=meta)
+
+
+@api.post("/compare")
+def compare():
+    query_parameters()
+    if not request.is_json:
+        raise UnsupportedMediaType()
+    result, meta = analysis_service().compare(request.get_json())
+    return success(result, meta=meta)
+
+
+@api.get("/missions")
+def missions():
+    from services.guided_missions import list_missions, list_hypotheses
+    query_parameters()
+    result = list_missions()
+    return success(result, meta={"count": len(result), "hypotheses": list_hypotheses()})
+
+
+@api.get("/missions/<mission_id>")
+def mission(mission_id):
+    from services.mission_service import mission_detail
+    from flask import abort
+    query_parameters()
+    result = mission_detail(mission_id, service())
+    if result is None:
+        abort(404)
+    return success(result)
+
+
+@api.get("/catalog")
+def guided_catalog():
+    from services.mission_service import catalog
+    query_parameters()
+    return success(catalog())
+
+
+@api.get("/variables/recommend")
+def recommend_variables():
+    from services.mission_service import recommendations
+    filters = query_parameters(("phenomenon",))
+    return success(recommendations(filters.get("phenomenon")))

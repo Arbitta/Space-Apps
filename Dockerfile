@@ -15,9 +15,14 @@ RUN groupadd --gid 10001 earthlens \
 COPY app.py ./
 COPY api/ ./api/
 COPY services/ ./services/
+COPY web/ ./web/
+COPY templates/ ./templates/
+COPY static/ ./static/
 COPY scripts/ ./scripts/
 COPY tests/ ./tests/
 COPY data/cities.json ./data/cities.json
+COPY data/missions.json data/variables.json ./data/
+COPY data/guided_missions.json data/mission_variables.json ./data/
 RUN mkdir -p /app/data/cache/power \
     && chown -R earthlens:earthlens /app
 

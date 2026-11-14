@@ -1,8 +1,9 @@
 # EarthLens — contrato de API REST, versión 1
 
 API para el equipo de frontend de Patagonia Prime. Alcance exclusivo: **Argentina**.
-Sólo se admiten ciudades del catálogo verificado; no hay coordenadas libres, motor
-estadístico, Earth Radar ni Earth Fingerprint en esta etapa.
+Sólo se admiten ciudades del catálogo verificado. El motor del equipo está integrado
+para análisis y comparación; las coordenadas libres, Earth Radar y Earth Fingerprint
+siguen pendientes. La interfaz y la API comparten origen.
 
 ## Instalación y ejecución local
 
@@ -284,11 +285,10 @@ la ejecución local documentada usa un proceso; el despliegue multiproceso queda
 
 ## Integración desde frontend y CORS
 
-No hay frontend ni orígenes externos configurados en este repositorio, por lo que
-**CORS está desactivado** y no se emite `Access-Control-Allow-Origin`. Usar el mismo
-origen, por ejemplo con un proxy del servidor de desarrollo del frontend para `/api`
-hacia `http://127.0.0.1:5000`. Si el equipo adopta orígenes distintos, acordarlos
-antes de habilitar una lista explícita; no se configuró un comodín ni credenciales.
+El frontend HTML/Jinja se sirve desde la misma aplicación Flask. CORS permanece
+desactivado; `static/js/api.js` usa URLs relativas para `/api`. No se necesita un
+origen externo ni un comodín. Si se separan los servidores en el futuro, acordar
+una lista explícita de orígenes antes de habilitar CORS.
 
 ```javascript
 const response = await fetch('/api/data', {
@@ -333,3 +333,49 @@ La arquitectura sigue las recomendaciones oficiales de Flask para
 [Application Factories](https://flask.palletsprojects.com/en/stable/patterns/appfactories/),
 [Blueprints](https://flask.palletsprojects.com/en/stable/blueprints/) y
 [cliente de pruebas](https://flask.palletsprojects.com/en/stable/testing/).
+
+
+## Análisis y comparación integrados
+
+Los seis endpoints anteriores conservan su contrato. Se agregan:
+
+| Método | Ruta | Entrada |
+| --- | --- | --- |
+| GET | `/api/summary` | Query `city_id`, `start_year` y `end_year` opcionales. Resume seis variables con una única lectura/obtención mensual. |
+| POST | `/api/analyze` | JSON `city_id`, `variable` opcional (T2M por defecto), `start_year` y `end_year` opcionales (2000–2024). |
+| POST | `/api/compare` | JSON `city_id_a`, `city_id_b`, variable y período compartidos opcionales. |
+| GET | `/api/missions` | Catálogo de preguntas de investigación del equipo. |
+| GET | `/api/missions/{mission_id}` | Detalle, hipótesis, pistas y enlace con IDs argentinos o 404. |
+| GET | `/api/catalog` | Variables y fenómenos del recomendador, proyectados al método vigente. |
+| GET | `/api/variables/recommend` | Query `phenomenon`: variables sugeridas por el catálogo curado del equipo. |
+
+Todas las respuestas usan el mismo sobre `status`, `data`, `meta`. Las rutas de
+análisis no aceptan coordenadas libres, `force`, ajustes del motor ni configuración.
+El período debe abarcar al menos tres años. Los campos desconocidos se rechazan.
+Las unidades y la fecha original de obtención se conservan.
+
+```javascript
+const response = await fetch('/api/analyze', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ city_id: 'mendoza', variable: 'T2M', start_year: 2000, end_year: 2024 })
+});
+const payload = await response.json();
+if (!response.ok) throw new Error(payload.error.message);
+const analysis = payload.data;
+// analysis.series: [{year, value}], medias anuales del motor real.
+// analysis.statistics: pendiente, IC95%, p-valor, dirección y evidencia.
+// analysis.unit, metadata, provenance, completeness, method: contexto trazable.
+```
+
+`/api/summary` entrega `data.estimations` por código. Si una variable no cumple la
+cobertura anual, esa entrada lleva `status=insufficient_data` y `completeness`, sin
+estadísticas. `/api/compare` entrega `location_a`, `location_b`, `deltas` y
+`comparison_conclusion` del motor. Exige iguales unidades y años válidos; no prueba
+la significancia de la diferencia entre ciudades.
+
+Errores nuevos: 422 `insufficient_data`, 422 `incompatible_analysis` y
+503 `analysis_unavailable` (falta SciPy). Los errores del proveedor conservan sus
+estados y códigos públicos. No hay reemplazo por datos simulados.
+
+Contrato del motor, criterios de cobertura y limitaciones: [integration.md](integration.md).

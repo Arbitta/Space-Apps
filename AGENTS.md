@@ -26,22 +26,24 @@ completada. Los componentes propuestos en estos documentos no implican que exist
 
 Las siguientes son funcionalidades objetivo. Actualmente existen el proveedor y
 normalizador NASA POWER, el catálogo argentino, la caché local y la obtención masiva;
-también existe la API HTTP básica con Flask. La integración estadística está pendiente.
+también existen la API HTTP, el frontend Flask y la integración del motor del equipo
+para análisis exploratorios. Ver `docs/integration.md` para el contrato inspeccionado
+y sus limitaciones; la revisión metodológica conjunta sigue pendiente.
 
 | Funcionalidad | Alcance previsto | Estado de la funcionalidad completa |
 | --- | --- | --- |
-| Explorador ambiental | Consultar variables ambientales por ubicación argentina y período, conservando unidades y procedencia. | API de catálogo y series disponible; integración con interfaz pendiente. |
-| Tendencias y significancia estadística | Integrar los análisis y evidencias del motor del equipo. | Pendiente de contrato e integración. |
-| Earth Radar | Descubrir automáticamente tendencias ambientales en el catálogo inicial de 25 ciudades argentinas. | Catálogo y obtención disponibles; pendientes motor y servicio de descubrimientos. |
-| Earth Fingerprint | Generar un perfil de tendencias históricas de temperatura, precipitación, humedad y viento por ciudad. | Pendiente de datos, motor y servicio. |
-| Comparador de regiones | Comparar resultados con períodos, unidades, cobertura y criterios compatibles. | Pendiente de contrato e implementación. |
-| Investigaciones guiadas | Orientar preguntas y recorridos basados en datos y análisis disponibles. | Pendiente de definición e integración. |
+| Explorador ambiental | Consultar variables ambientales por ubicación argentina y período, conservando unidades y procedencia. | Interfaz conectada a catálogo, caché y análisis exploratorio por ciudad. |
+| Tendencias y significancia estadística | Integrar los análisis y evidencias del motor del equipo. | Motor existente integrado; revisión metodológica para ampliar usos pendiente. |
+| Earth Radar | Descubrir automáticamente tendencias ambientales en el catálogo inicial de 25 ciudades argentinas. | Catálogo, obtención y adaptador disponibles; pendientes criterios científicos y servicio de descubrimientos. |
+| Earth Fingerprint | Generar un perfil de tendencias históricas de temperatura, precipitación, humedad y viento por ciudad. | Datos y adaptador disponibles; contrato y servicio del perfil pendientes. |
+| Comparador de regiones | Comparar resultados con períodos, unidades, cobertura y criterios compatibles. | Comparación descriptiva de dos ciudades implementada; comparación de regiones arbitrarias pendiente. |
+| Investigaciones guiadas | Orientar preguntas y recorridos basados en datos y análisis disponibles. | Interfaz y recomendador del equipo conectados; validación científica de recorridos pendiente. |
 
 ## Tecnologías y arquitectura actuales
 
-El código actual usa **Python, Flask, Requests y JSON**, con módulos de proveedores
+El código actual usa **Python, Flask, Requests, SciPy y JSON**, con módulos de proveedores
 de datos. `app.py` expone `create_app(config=None)` y registra un Blueprint en
-`/api`. Las dependencias directas verificadas localmente figuran en `requirements.txt`;
+`/api`, además del Blueprint web y los estáticos en el mismo origen. Las dependencias directas verificadas localmente figuran en `requirements.txt`;
 la instalación limpia y las pruebas se verificaron en Docker con Python 3.12.16
 Linux/amd64. El despliegue productivo sigue pendiente.
 
@@ -207,14 +209,15 @@ y `meta`, con estados HTTP y códigos públicos documentados. No devolver mensaj
 crudos de excepciones, rutas locales o advertencias internas. No habilitar
 coordenadas libres ni aceptar parámetros de configuración desde el cuerpo HTTP.
 
-CORS permanece desactivado porque no hay un origen de frontend configurado en este
-repositorio. Usar mismo origen/proxy para `/api`; si el equipo define orígenes
-distintos, acordar una lista explícita antes de habilitarlo. No aplicar un comodín.
+Frontend y API comparten origen; CORS permanece desactivado. Si el equipo define
+orígenes distintos, acordar una lista explícita antes de habilitarlo. No aplicar
+un comodín. `static/js/api.js` consume el contrato documentado en `docs/api.md`.
 
 ## Docker para desarrollo local
 
 `Dockerfile` usa `python:3.12-slim`; `compose.yaml` define un único servicio
-`backend`, sin base de datos ni frontend. La API usa `app:create_app`, se publica en
+`backend`, sin base de datos. Sirve el frontend HTML/Jinja y el motor en el mismo
+proceso; no requiere Node ni otro contenedor. Usa `app:create_app`, se publica en
 `127.0.0.1:5000` y tiene healthcheck sobre `/api/health`. Flask admite recarga de
 código sin habilitar el depurador interactivo. Ejecuta como UID 10001.
 
@@ -223,14 +226,16 @@ El código y el catálogo se montan desde el host con sólo lectura en el conten
 caché original de POWER. No copiar cachés científicas ni credenciales a la imagen.
 No sustituir ese montaje por un volumen vacío que oculte datos ya obtenidos.
 
-Las 71 pruebas sin red y los seis endpoints se verificaron dentro de este entorno.
+Las 71 pruebas originales siguen intactas. La suite ampliada y las páginas se
+verificaron dentro de Docker y con Chrome real; ver `BACKEND_TASKS.md`.
 El lote completo de 25 ciudades para 2000–2024 se ejecutó por indicación explícita
 del usuario: 25 aciertos de caché, 150 series, 45.000 valores mensuales disponibles,
 sin faltantes ni fallos; no se hicieron descargas nuevas. Se verificó que las 25
 cachés anteriores conservaran sus hashes y fechas de obtención.
 
-Guía y comandos: [docs/docker.md](docs/docker.md). El frontend no está en este
-repositorio; no crear un contenedor adicional hasta inspeccionar su implementación.
+Guía y comandos: [docs/docker.md](docs/docker.md). Frontend y motor se incorporaron
+desde las ramas del equipo sin reemplazar el proveedor ni su caché. Diagnóstico e
+inventario Docker: [docs/integration.md](docs/integration.md).
 
 ## Arquitectura prevista — todavía pendiente
 
@@ -240,13 +245,15 @@ se incorporarán por etapas autorizadas:
 1. Adaptador territorial con límites oficiales de Argentina para coordenadas libres.
 2. Despliegue productivo de la API y ampliación de rutas cuando existan los servicios
    de análisis y producto. La instalación limpia para desarrollo ya se verificó en Docker.
-3. Adaptador hacia el motor estadístico del otro integrante, con contrato acordado.
+3. Revisión metodológica conjunta del motor ya integrado antes de ampliar usos científicos.
 4. `services/radar.py`, `services/fingerprint.py` y `scripts/generate_radar.py`.
-5. Integración con el frontend y pruebas de los contratos HTTP.
+5. CI y ampliación de contratos; el flujo actual del frontend y sus pruebas ya están conectados.
 
-Rutas objetivo **todavía no implementadas**: `/api/radar`,
-`/api/fingerprint/{city_id}`, `/api/analyze` y `/api/compare`. No documentarlas como
-disponibles hasta integrar sus servicios reales.
+Rutas objetivo **todavía no implementadas**: `/api/radar` y
+`/api/fingerprint/{city_id}`. `/api/analyze`, `/api/compare`, `/api/summary`,
+`/api/missions`, `/api/catalog` y `/api/variables/recommend` están integradas.
+Las tres primeras usan el motor real y el proveedor/caché existentes; los
+catálogos de misiones y recomendaciones nunca descargan ni fabrican datos.
 
 ## Fuentes científicas
 
@@ -323,3 +330,29 @@ Al completar trabajo autorizado, actualizar el estado y las dependencias en
 `BACKEND_TASKS.md`, citar los archivos que lo respaldan e informar qué se verificó
 y qué quedó pendiente. No marcar una funcionalidad de producto como completada
 por disponer solamente de su proveedor de datos.
+
+
+## Integración de frontend y motor — contrato vigente
+
+`services/trend_analysis.py` conserva el motor de `origin/results-charts` e33c76d;
+`services/analysis_service.py` adapta series mensuales reales a sus entradas y
+mantiene unidades, metadatos, cobertura y fechas. El motor requiere SciPy y aplica
+medias aritméticas anuales con mínimo 9 meses válidos, 3 años y 70% de cobertura.
+La comparación exige idénticas unidades y años válidos. No reemplazar el motor
+ni activar proveedores con respaldo sintético.
+
+Las misiones originales de `origin/datasets-missions` fbd7d0a se conservan en
+`services/guided_missions.py`, catálogos separados y su interfaz. Su agregador
+anual alternativo permanece disponible como código del compañero y pruebas; no
+se usa en el flujo estadístico actual. `services/mission_service.py` proyecta el
+catálogo al método y las unidades vigentes y usa IDs de ciudades verificadas.
+
+`tests/statistics_fixtures/` y `tests/data/` contienen recursos heredados sólo para
+pruebas de software. La aplicación no usa esas muestras ni genera series de
+respaldo. Los scripts `check_cached_integration.py` y `check_web.py` verifican
+respectivamente las cachés reales con NASA bloqueada y el flujo de navegador.
+
+Consultar `docs/integration.md` antes de ampliar métodos, misiones o resultados.
+No se implementaron Earth Radar ni Earth Fingerprint. La falta de corrección de
+autocorrelación y comparaciones múltiples impide tratar este análisis exploratorio
+como un servicio de descubrimientos automáticos validado.

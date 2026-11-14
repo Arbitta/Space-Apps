@@ -14,8 +14,9 @@ pendientes no autorizan avanzar automáticamente. Ver [AGENTS.md](AGENTS.md).
 ## Estado actual comprobado
 
 El backend consulta datos mensuales de NASA POWER y dispone de catálogo argentino,
-caché JSON, obtención masiva y API REST básica con Flask. Todavía no hay motor
-estadístico integrado, Earth Radar ni Earth Fingerprint.
+caché JSON, obtención masiva y API REST con Flask. El frontend y el motor real del
+equipo están integrados para análisis exploratorio y comparación de ciudades.
+Earth Radar y Earth Fingerprint siguen pendientes.
 El entorno de desarrollo Docker está construido, iniciado y verificado, y el lote
 de 25 ciudades 2000–2024 se ejecutó reutilizando íntegramente la caché existente.
 
@@ -33,7 +34,7 @@ de 25 ciudades 2000–2024 se ejecutó reutilizando íntegramente la caché exis
 | **B05 — API REST básica** | Completada y probada con el cliente Flask | `app.py`, Blueprint `api/routes.py`, servicio `services/api_service.py`; seis endpoints documentados. |
 | **B02 — instalación y dependencias** | Instalación limpia verificada en Docker Linux/amd64 | Python 3.12.16, Flask 3.1.3 y Requests 2.34.2 instalados desde `requirements.txt`; `pip check` y suite satisfactorios. Sin lock transitivo. |
 | **B19 — Docker para desarrollo** | Completada para el alcance autorizado | `Dockerfile`, `compose.yaml`, `.dockerignore`, `docs/docker.md`; backend saludable, recarga y caché persistente verificadas. |
-| Pruebas sin red | 71 aprobadas, incluidas las 48 previas | Proveedor, catálogo, constructor GeoRef, geografía, caché, obtención, CLI y 23 pruebas nuevas de API. |
+| Pruebas sin red | 103 aprobadas; 71 originales intactas, 7 del motor, 15 del catálogo/misiones y 10 de integración | `tests/`; 104 descubiertas, sólo NASA de red optativa omitida en Docker. |
 | Script manual y documentación previa | Conservados | `test_nasa.py`, `docs/nasa-power.md`. |
 | Documentación | Actualizada | `AGENTS.md`, este archivo y contrato para frontend en `docs/api.md`; documentación previa conservada. |
 
@@ -190,11 +191,9 @@ de ciudades, obtención, caché y proveedor, sin modificar su implementación.
 | GET | `/api/regions` | Regiones y conteos derivados del catálogo. |
 | POST | `/api/data` | Una ciudad, variables seleccionadas y período; caché prioritaria, `force` opcional. |
 
-CORS no está habilitado porque no hay orígenes de frontend definidos en el repositorio.
-Usar mismo origen o proxy de desarrollo; una configuración entre orígenes requerirá
-acordar una lista explícita. Las coordenadas libres permanecen rechazadas. Los datos
-se serializan dentro del proceso para evitar descargas simultáneas duplicadas;
-el despliegue multiproceso y el frontend real quedan pendientes.
+Frontend y API comparten origen; CORS permanece desactivado. Las coordenadas libres
+siguen rechazadas. La obtención se serializa dentro del proceso; el despliegue
+multiproceso permanece pendiente. Los nuevos contratos están en `docs/api.md`.
 
 Contrato completo, ejemplos JSON, estados HTTP y comandos: [docs/api.md](docs/api.md).
 
@@ -207,32 +206,29 @@ Contrato completo, ejemplos JSON, estados HTTP y comandos: [docs/api.md](docs/ap
 **P1:** base necesaria. **P2:** integración y producto. **P3:** complemento.
 B01, B02, B03, B04, B05 y B19 están completadas para su alcance de desarrollo actual.
 No se afirma un lock de dependencias transitivas ni un despliegue productivo.
-B17 continúa al incorporar módulos.
+B07, B12 y B15 están completadas para análisis exploratorio del catálogo argentino,
+según el contrato técnico existente del motor. B06 conserva revisión metodológica
+pendiente; no se afirma aprobación del compañero de nuevos métodos. B17 continúa.
 
 | ID | Prioridad | Tarea pendiente | Dependencias y criterio de finalización |
 | --- | --- | --- | --- |
 | B18 | P1 | Incorporar adaptador real de límites oficiales de Argentina. | Verificar fuente, geometrías y cobertura. Probar interiores, exteriores, costas y fronteras con procedencia/versionado; nunca usar sólo una caja rectangular. |
-| B06 | P1 | Acordar contrato con el responsable del motor estadístico. | Definir entradas/salidas, métodos, evidencia, unidades, cobertura, faltantes, estacionalidad y comparaciones múltiples con el compañero. |
-| B07 | P2 | Integrar el motor con un adaptador. | B06 y motor real disponible. Validar resultados trazables sin editar archivos ajenos sin autorización. |
-| B08 | P2 | Implementar `services/radar.py`. | B01/B04 disponibles, B07 pendiente. Hallazgos argentinos con evidencia y criterios acordados, incluidos datos insuficientes. |
-| B09 | P2 | Implementar `services/fingerprint.py`. | Catálogo/caché disponibles y B07 pendiente. Tendencias, unidades, cobertura y evidencia; sin puntuaciones arbitrarias. |
+| B06 | P1 | Revisar criterios científicos con el responsable del motor. | Contrato técnico inspeccionado e integrado (`docs/integration.md`). Falta revisión conjunta de estacionalidad, autocorrelación, cobertura, centinelas y comparaciones múltiples antes de ampliar usos científicos. |
+| B08 | P2 | Implementar `services/radar.py`. | B01/B04 y adaptador B07 disponibles; requiere B06 para descubrimientos. Hallazgos argentinos con evidencia y criterios acordados, incluidos datos insuficientes. |
+| B09 | P2 | Implementar `services/fingerprint.py`. | Catálogo/caché y adaptador B07 disponibles; contrato específico de producto pendiente. Tendencias, unidades, cobertura y evidencia; sin puntuaciones arbitrarias. |
 | B10 | P2 | Crear `scripts/generate_radar.py`. | B08 y datos de B04. Artefacto con método, fecha, fuentes y estados; no confundir falta de datos con falta de tendencia. |
 | B11 | P2 | Endpoints `/api/radar` y `/api/fingerprint/{city_id}`. | B05, B08, B09 y artefacto de B10 para Radar. JSON trazable y pruebas de rutas. |
-| B12 | P2 | Endpoints `/api/analyze` y `/api/compare`. | B05, B07, contratos de ubicaciones/regiones argentinas y B18 para coordenadas libres. Validar entradas y comparar coberturas, períodos y unidades compatibles. |
 | B13 | P2 | Evaluar Giovanni/Earthdata, GPM, GLDAS y MERRA-2 directo según necesidad. | Caso de uso argentino y documentación oficial. Verificar acceso, variables, unidades y cobertura; integración completa sólo con cliente y prueba real. |
 | B14 | P3 | Evaluar SWOT/Hydrocron como complemento. | Caso de uso hídrico argentino y documentación oficial. Registrar viabilidad y límites; implementar sólo si aporta. |
-| B15 | P2 | Conectar frontend y verificar flujos completos. | API de catálogo/series y contrato ya disponibles; falta coordinación y prueba desde una interfaz real. Probar datos, errores, faltantes y metadatos; CORS según despliegue acordado. |
-| B16 | P2 | Definir investigaciones guiadas argentinas. | Preguntas de producto, resultados reales de B07/B12 y coordinación con frontend. Recorridos respaldados por evidencias existentes. |
-| B17 | P2 — continua | Ampliar integración y CI. | B02 y módulos incorporados. Mantener pruebas sin red separadas de comprobaciones reales optativas; agregar contratos HTTP y motor cuando existan. |
+| B16 | P2 | Definir investigaciones guiadas argentinas. | Interfaz original, tres misiones, hipótesis y recomendador incorporados desde `origin/datasets-missions`; falta revisión conjunta de recorridos e interpretación científica. |
+| B17 | P2 — continua | Ampliar integración y CI. | B02 y módulos incorporados. Mantener pruebas sin red separadas de comprobaciones reales optativas; contratos HTTP, motor y flujo de navegador incorporados; falta CI del equipo. |
 
-No hay una descarga completa que deba iniciarse automáticamente. `--all` queda
-disponible y el lote autorizado ya terminó con 25 aciertos de caché. La validación
-territorial B18 y la coordinación del contrato B06 siguen pendientes; la API básica
-y Docker ya están disponibles, y el motor se incorporará por indicación del usuario.
-Esta etapa no implementa
-análisis estadístico, Earth Radar ni Earth Fingerprint.
+No iniciar descargas completas automáticamente. El período 2000–2024 se verificó
+con 25 cachés intactas. B18, la revisión científica de B06 y los productos Radar y
+Fingerprint siguen pendientes. El motor y la interfaz se integraron por solicitud
+explícita del usuario; no se implementan etapas futuras por iniciativa propia.
 
-## Archivos de esta etapa y coordinación
+## Historial de la etapa Docker inicial y coordinación
 
 Modificados en la etapa Docker: `AGENTS.md`, `BACKEND_TASKS.md` y `docs/api.md`.
 
@@ -247,3 +243,26 @@ catálogo, scripts, pruebas ni dependencias anteriores. Las 25 cachés existente
 permanecen intactas. No se realizaron
 commits ni push. El motor y el frontend pertenecen a otros integrantes y quedan
 fuera de las modificaciones de esta etapa.
+
+
+## Integración del proyecto completo — 14 de noviembre de 2026
+
+| Tarea | Estado del alcance solicitado | Evidencia |
+| --- | --- | --- |
+| Diagnóstico y comparación de ramas | Completado | `docs/integration.md`: HEAD 9066cdd, main d56d8ae y motor en results-charts e33c76d; inventario de ambos Docker/Compose. |
+| B07 — adaptador al motor existente | Completado para consultas exploratorias | `services/analysis_service.py`; `services/trend_analysis.py` idéntico al del compañero; SciPy 1.18.1. No incluye validación metodológica conjunta pendiente de B06. |
+| B12 — análisis y comparación | Completado para ciudades del catálogo | `api/routes.py`, errores públicos, unidades/cobertura compatibles y `tests/test_web_integration.py`. Coordenadas libres/regiones arbitrarias pendientes de sus contratos y B18. |
+| B15 — frontend conectado | Completado para el flujo actual | `web/routes.py`, `templates/`, `static/js/api.js`; Chrome real mediante `scripts/check_web.py`: datos, gráficos, CSV, comparación y errores sin fallback simulado. |
+| Docker unificado | Completado | `Dockerfile`, `compose.yaml`: un servicio Flask, mismo origen, puerto 5000, caché original persistente, estado healthy. |
+| Regresión backend y motor | Completada | 104 descubiertas, 103 aprobadas, una NASA de red optativa omitida dentro de Docker; `pip check` correcto. Las 71 pruebas originales no se editaron. |
+| Auditoría científica sin nuevas descargas | Completada | `scripts/check_cached_integration.py`: 25 ciudades, 150 series, 45.000 valores y 150 análisis; red NASA bloqueada, hashes y fechas iguales. |
+
+No se modificó `main`, no se hicieron commits ni push ni se eliminaron volúmenes.
+El archivo local sin seguimiento preexistente `e config --services` se conservó.
+Los datos sintéticos heredados quedaron identificados y aislados bajo `tests/`.
+No se habilitaron fuentes distintas de POWER ni coordenadas libres.
+
+Arranque: `docker compose up -d --build --wait --wait-timeout 60`.
+Navegador: **http://127.0.0.1:5000/**. Guía: `docs/docker.md`.
+Evidencias locales: `data/cache/reports/web/` e
+`data/cache/reports/integrated-cache-audit.json`, ignoradas por Git.

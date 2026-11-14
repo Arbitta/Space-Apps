@@ -28,6 +28,24 @@ services:
       - --no-debugger
     volumes:
       - type: bind
+        source: ./web
+        target: /app/web
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./templates
+        target: /app/templates
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./static
+        target: /app/static
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
         source: ./app.py
         target: /app/app.py
         read_only: true

@@ -16,13 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Presets de ubicaciones para probar rápido desde Resultados
-  const LOCATION_PRESETS = {
-    comodoro: { name: 'Comodoro Rivadavia, Chubut', latitude: -45.86, longitude: -67.50 },
-    bariloche: { name: 'San Carlos de Bariloche, Río Negro', latitude: -41.13, longitude: -71.31 },
-    ushuaia: { name: 'Ushuaia, Tierra del Fuego', latitude: -54.80, longitude: -68.30 },
-    riogallegos: { name: 'Río Gallegos, Santa Cruz', latitude: -51.62, longitude: -69.22 },
-    madryn: { name: 'Puerto Madryn, Chubut', latitude: -42.77, longitude: -65.03 }
-  };
+  let LOCATION_PRESETS = {};
 
   /**
    * 1. Lee parámetros desde la URL (?lat=...&lon=...&variable=...&start_year=...&end_year=...)
@@ -30,85 +24,41 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   function loadInitialParams() {
     const params = new URLSearchParams(window.location.search);
-
-    if (params.has('lat') || params.has('latitude') || params.has('variable')) {
-      currentRequestParams.latitude = parseFloat(params.get('latitude') || params.get('lat') || -45.86);
-      currentRequestParams.longitude = parseFloat(params.get('longitude') || params.get('lon') || -67.50);
-      currentRequestParams.variable = (params.get('variable') || 'T2M').toUpperCase();
-      currentRequestParams.start_year = parseInt(params.get('start_year') || params.get('start') || 2000, 10);
-      currentRequestParams.end_year = parseInt(params.get('end_year') || params.get('end') || 2024, 10);
-      currentRequestParams.locationName =
-        params.get('location') ||
-        `Coord (${currentRequestParams.latitude.toFixed(2)}°, ${currentRequestParams.longitude.toFixed(2)}°)`;
-      return;
-    }
-
-    // Revisar si el explorador (Rol 02) guardó una consulta en sessionStorage
-    try {
-      const savedReq = sessionStorage.getItem('earthlens_query_params');
-      if (savedReq) {
-        const parsed = JSON.parse(savedReq);
-        currentRequestParams = { ...currentRequestParams, ...parsed };
-      }
-    } catch (err) {
-      console.warn('No se pudo leer sessionStorage:', err);
+    currentRequestParams.city_id = params.get('city_id') || 'comodoro-rivadavia';
+    for (const key of ['variable', 'start_year', 'end_year']) {
+      if (params.has(key)) currentRequestParams[key] = params.get(key);
     }
   }
 
   /**
    * 2. Consulta al endpoint POST /api/analyze respetando el contrato de la Página 6.
-   *    Si el backend aún no está levantado, usa los datos de prueba etiquetados.
+   *    Los fallos se muestran sin generar datos de reemplazo.
    */
-  async function fetchAnalysisData(reqParams, forceMock = false) {
+  async function fetchAnalysisData(reqParams) {
     setLoadingState(true);
-
-    const requestBody = {
-      latitude: Number(reqParams.latitude),
-      longitude: Number(reqParams.longitude),
-      variable: reqParams.variable,
-      start_year: Number(reqParams.start_year),
-      end_year: Number(reqParams.end_year)
-    };
-
-    if (!forceMock) {
-      try {
-        const response = await fetch('/api/analyze', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(requestBody)
-        });
-
-        if (response.ok) {
-          const liveData = await response.json();
-          liveData.is_mock = false;
-          liveData.location = liveData.location || {
-            name: reqParams.locationName,
-            latitude: requestBody.latitude,
-            longitude: requestBody.longitude
-          };
-          liveData.period = {
-            start_year: requestBody.start_year,
-            end_year: requestBody.end_year
-          };
-          setLoadingState(false);
-          return liveData;
-        }
-      } catch (err) {
-        // Backend Flask no disponible o archivo abierto directamente: usar Mock Data etiquetado
-        console.info('Endpoint /api/analyze no disponible aún; cargando datos de prueba del contrato JSON.');
-      }
-    }
-
-    const mockData = EarthLensCharts.buildMockAnalysis(reqParams);
-    setLoadingState(false);
-    return mockData;
+    document.getElementById('results-output').hidden = true;
+    currentPayload = null;
+    try {
+      const data = await window.EarthLensAPI.analyze(reqParams);
+      Object.assign(currentRequestParams, {latitude: data.location.latitude, longitude: data.location.longitude, locationName: data.location.name});
+      document.getElementById('dataModeText').classList.remove('alert', 'alert-danger');
+      return data;
+    } catch (error) {
+      document.getElementById('dataModeBanner').classList.remove('is-live');
+      window.EarthLensAPI.showError(document.getElementById('dataModeText'), error);
+      return null;
+    } finally { setLoadingState(false); }
   }
 
   /**
    * 3. Renderiza todos los indicadores del dashboard, la conclusión, la tabla y el gráfico Chart.js
    */
   function renderDashboard(data) {
+    if (!data) return;
+    document.getElementById('results-output').hidden = false;
     currentPayload = data;
+    document.getElementById('results-evidence')?.remove();
+    document.getElementById('results-output').insertAdjacentHTML('beforeend', '<div id="results-evidence">' + window.EarthLensAPI.evidence(data) + '</div>');
     const stats = data.statistics || {};
     const series = data.series || [];
     const varMeta = EarthLensCharts.VARIABLES_META[data.variable] || {
@@ -227,7 +177,9 @@ document.addEventListener('DOMContentLoaded', () => {
         start_year: startYr,
         end_year: endYr
       });
-      compareLink.href = `compare.html?${q.toString()}`;
+      q.set('city_id_a', data.location.id);
+      q.set('city_id_b', 'ushuaia');
+      compareLink.href = `/compare?${q.toString()}`;
     }
   }
 
@@ -275,6 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
       `Ubicacion: ${locName} (${currentRequestParams.latitude}, ${currentRequestParams.longitude})`,
       `Variable: ${currentPayload.variable} (${currentPayload.unit})`,
       `Fuente: ${currentPayload.source}`,
+      `Origen: ${currentPayload.provenance.origin} | Obtenido: ${currentPayload.provenance.fetched_at}`,
+      `Agregacion: ${currentPayload.method.regression} | Cobertura: ${currentPayload.completeness.coverage_ratio}`,
       `Pendiente anual: ${stats.slope} | Cambio por decada: ${stats.change_per_decade} | Cambio total: ${stats.total_change}`,
       `p-valor: ${stats.p_value} | Significativo (p<0.05): ${stats.significant} | Direccion: ${stats.direction}`,
       `Conclusion: ${currentPayload.conclusion}`
@@ -332,6 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
       locSelect.addEventListener('change', () => {
         const preset = LOCATION_PRESETS[locSelect.value];
         if (preset) {
+          currentRequestParams.city_id = preset.id;
           currentRequestParams.latitude = preset.latitude;
           currentRequestParams.longitude = preset.longitude;
           currentRequestParams.locationName = preset.name;
@@ -373,6 +328,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Inicialización principal
   (async function init() {
     loadInitialParams();
+    try {
+      const cities = await window.EarthLensAPI.cities();
+      LOCATION_PRESETS = Object.fromEntries(cities.map(city => [city.id, city]));
+      window.EarthLensAPI.fillCities(document.getElementById('quickLocationSelect'), cities, currentRequestParams.city_id);
+    } catch (error) { window.EarthLensAPI.showError(document.getElementById('dataModeText'), error); return; }
     bindControls();
     const initialData = await fetchAnalysisData(currentRequestParams);
     renderDashboard(initialData);
