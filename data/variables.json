@@ -3,113 +3,216 @@
   "variables": [
     {
       "code": "T2M",
-      "name": "Temperatura media del aire (2 m)",
+      "name": "Temperatura media a 2 metros",
+      "shortName": "Temperatura media",
+      "description": "Promedio anual de la temperatura del aire a 2 metros sobre la superficie. Variable principal del MVP.",
+      "unit": "deg C",
+      "display_unit": "°C",
+      "displayUnit": "°C",
+      "aggregation": "mean",
+      "priority": "Primera",
+      "source": "NASA POWER / MERRA-2",
       "short_name": "Temperatura media",
-      "unit": "°C",
       "power_unit": "C",
       "annual_aggregation": "mean",
       "annual_unit": "°C",
-      "source": "NASA POWER / MERRA-2",
       "temporal_start": 1981,
       "spatial_resolution": "0.5° × 0.625° (~50 km)",
-      "valid_range": [-90, 60],
-      "priority": "primera",
-      "phenomena": ["calor", "frio", "calentamiento"],
-      "description": "Temperatura promedio del aire a 2 metros sobre la superficie.",
+      "valid_range": [
+        -90,
+        60
+      ],
+      "phenomena": [
+        "calor",
+        "frio",
+        "calentamiento"
+      ],
       "notes": "Valor de una celda de la grilla, no de una estación meteorológica puntual."
     },
     {
       "code": "PRECTOTCORR",
-      "name": "Precipitación total corregida",
+      "name": "Precipitaciones corregidas",
+      "shortName": "Precipitaciones",
+      "description": "Precipitación total corregida (promedio diario anual en mm/día). Permite analizar sequías o incrementos de lluvias.",
+      "unit": "mm/day",
+      "display_unit": "mm/día",
+      "displayUnit": "mm/día",
+      "aggregation": "mean",
+      "priority": "Alta",
+      "source": "NASA POWER / MERRA-2",
       "short_name": "Precipitaciones",
-      "unit": "mm/día",
       "power_unit": "mm/day",
       "annual_aggregation": "sum",
       "annual_unit": "mm/año",
-      "source": "NASA POWER / MERRA-2 (corregida con observaciones)",
       "temporal_start": 1981,
       "spatial_resolution": "0.5° × 0.625° (~50 km)",
-      "valid_range": [0, 200],
-      "priority": "alta",
-      "phenomena": ["sequia", "lluvia", "agua", "inundacion"],
-      "description": "Lluvia y nieve caídas, expresadas como lámina de agua.",
+      "valid_range": [
+        0,
+        200
+      ],
+      "phenomena": [
+        "sequia",
+        "lluvia",
+        "agua",
+        "inundacion"
+      ],
       "notes": "POWER entrega promedios en mm/día. Para el total anual: sumar (valor mensual × días del mes). El valor anual (mes 13) del endpoint mensual es un promedio en mm/día, no un total."
     },
     {
       "code": "RH2M",
-      "name": "Humedad relativa (2 m)",
-      "short_name": "Humedad relativa",
+      "name": "Humedad relativa a 2 metros",
+      "shortName": "Humedad relativa",
+      "description": "Humedad relativa a 2 metros. Nota: la humedad relativa atmosférica no equivale a la humedad del suelo.",
       "unit": "%",
+      "display_unit": "%",
+      "displayUnit": "%",
+      "aggregation": "mean",
+      "priority": "Alta",
+      "source": "NASA POWER / MERRA-2",
+      "short_name": "Humedad relativa",
       "power_unit": "%",
       "annual_aggregation": "mean",
       "annual_unit": "%",
-      "source": "NASA POWER / MERRA-2",
       "temporal_start": 1981,
       "spatial_resolution": "0.5° × 0.625° (~50 km)",
-      "valid_range": [0, 100],
-      "priority": "alta",
-      "phenomena": ["sequia", "agua", "humedad"],
-      "description": "Vapor de agua en el aire respecto del máximo posible a esa temperatura.",
+      "valid_range": [
+        0,
+        100
+      ],
+      "phenomena": [
+        "sequia",
+        "agua",
+        "humedad"
+      ],
       "notes": "Humedad del AIRE. No equivale a la humedad del suelo (para eso ver GLDAS). Depende de la temperatura: si sube T2M, RH2M puede bajar sin que cambie la cantidad de agua."
     },
     {
       "code": "WS2M",
-      "name": "Velocidad del viento (2 m)",
-      "short_name": "Velocidad del viento",
+      "name": "Velocidad del viento a 2 metros",
+      "shortName": "Velocidad del viento",
+      "description": "Velocidad media del viento a 2 metros de altura. Útil para evaluar cambios en regímenes eólicos.",
       "unit": "m/s",
+      "display_unit": "m/s",
+      "displayUnit": "m/s",
+      "aggregation": "mean",
+      "priority": "Alta",
+      "source": "NASA POWER / MERRA-2",
+      "short_name": "Velocidad del viento",
       "power_unit": "m/s",
       "annual_aggregation": "mean",
       "annual_unit": "m/s",
-      "source": "NASA POWER / MERRA-2",
       "temporal_start": 1981,
       "spatial_resolution": "0.5° × 0.625° (~50 km)",
-      "valid_range": [0, 75],
-      "priority": "alta",
-      "phenomena": ["viento", "erosion", "energia"],
-      "description": "Velocidad media del viento a 2 metros sobre la superficie.",
+      "valid_range": [
+        0,
+        75
+      ],
+      "phenomena": [
+        "viento",
+        "erosion",
+        "energia"
+      ],
       "notes": "Promedio de una celda de ~50 km: suaviza efectos locales (relieve, costa, edificios)."
     },
     {
       "code": "T2M_MAX",
-      "name": "Temperatura máxima (2 m)",
+      "name": "Temperatura máxima a 2 metros",
+      "shortName": "Temperatura máxima",
+      "description": "Temperatura máxima diaria promediada a 2 metros para evaluar extremos cálidos.",
+      "unit": "deg C",
+      "display_unit": "°C",
+      "displayUnit": "°C",
+      "aggregation": "mean",
+      "priority": "Secundaria",
+      "source": "NASA POWER / MERRA-2",
       "short_name": "Temperatura máxima",
-      "unit": "°C",
       "power_unit": "C",
       "annual_aggregation": "max",
       "annual_unit": "°C",
-      "source": "NASA POWER / MERRA-2",
       "temporal_start": 1981,
       "spatial_resolution": "0.5° × 0.625° (~50 km)",
-      "valid_range": [-90, 70],
-      "priority": "secundaria",
-      "phenomena": ["calor", "calentamiento", "olas_de_calor"],
-      "description": "Temperatura más alta registrada en el período.",
+      "valid_range": [
+        -90,
+        70
+      ],
+      "phenomena": [
+        "calor",
+        "calentamiento",
+        "olas_de_calor"
+      ],
       "notes": "ATENCIÓN: en el endpoint mensual, el valor mensual es el MÁXIMO ABSOLUTO del mes y el anual (mes 13) el máximo del año, no el promedio de las máximas diarias. Para 'promedio de máximas' usar el endpoint diario y promediar."
     },
     {
       "code": "T2M_MIN",
-      "name": "Temperatura mínima (2 m)",
+      "name": "Temperatura mínima a 2 metros",
+      "shortName": "Temperatura mínima",
+      "description": "Temperatura mínima diaria promediada a 2 metros para evaluar extremos fríos y heladas.",
+      "unit": "deg C",
+      "display_unit": "°C",
+      "displayUnit": "°C",
+      "aggregation": "mean",
+      "priority": "Secundaria",
+      "source": "NASA POWER / MERRA-2",
       "short_name": "Temperatura mínima",
-      "unit": "°C",
       "power_unit": "C",
       "annual_aggregation": "min",
       "annual_unit": "°C",
-      "source": "NASA POWER / MERRA-2",
       "temporal_start": 1981,
       "spatial_resolution": "0.5° × 0.625° (~50 km)",
-      "valid_range": [-90, 60],
-      "priority": "secundaria",
-      "phenomena": ["frio", "heladas", "calentamiento"],
-      "description": "Temperatura más baja registrada en el período.",
+      "valid_range": [
+        -90,
+        60
+      ],
+      "phenomena": [
+        "frio",
+        "heladas",
+        "calentamiento"
+      ],
       "notes": "ATENCIÓN: en el endpoint mensual, el valor mensual es el MÍNIMO ABSOLUTO del mes y el anual (mes 13) el mínimo del año. Para 'promedio de mínimas' usar el endpoint diario."
     }
   ],
   "phenomena": [
-    {"id": "calentamiento", "label": "¿Hace más calor que antes?", "variables": ["T2M", "T2M_MAX", "T2M_MIN"]},
-    {"id": "sequia", "label": "¿Llueve menos / hay sequía?", "variables": ["PRECTOTCORR", "T2M", "RH2M"]},
-    {"id": "viento", "label": "¿Cambió el viento?", "variables": ["WS2M"]},
-    {"id": "heladas", "label": "¿Hay menos heladas o noches más templadas?", "variables": ["T2M_MIN", "T2M"]},
-    {"id": "humedad", "label": "¿El aire está más seco o más húmedo?", "variables": ["RH2M", "T2M"]}
+    {
+      "id": "calentamiento",
+      "label": "¿Hace más calor que antes?",
+      "variables": [
+        "T2M",
+        "T2M_MAX",
+        "T2M_MIN"
+      ]
+    },
+    {
+      "id": "sequia",
+      "label": "¿Llueve menos / hay sequía?",
+      "variables": [
+        "PRECTOTCORR",
+        "T2M",
+        "RH2M"
+      ]
+    },
+    {
+      "id": "viento",
+      "label": "¿Cambió el viento?",
+      "variables": [
+        "WS2M"
+      ]
+    },
+    {
+      "id": "heladas",
+      "label": "¿Hay menos heladas o noches más templadas?",
+      "variables": [
+        "T2M_MIN",
+        "T2M"
+      ]
+    },
+    {
+      "id": "humedad",
+      "label": "¿El aire está más seco o más húmedo?",
+      "variables": [
+        "RH2M",
+        "T2M"
+      ]
+    }
   ],
   "sources": [
     {
