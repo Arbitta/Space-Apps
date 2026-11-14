@@ -1,0 +1,76 @@
+{
+  "variables": [
+    {
+      "code": "T2M",
+      "name": "Temperatura media a 2 metros",
+      "shortName": "Temperatura media",
+      "description": "Promedio anual de la temperatura del aire a 2 metros sobre la superficie. Variable principal del MVP.",
+      "unit": "deg C",
+      "display_unit": "°C",
+      "displayUnit": "°C",
+      "aggregation": "mean",
+      "priority": "Primera",
+      "source": "NASA POWER / MERRA-2"
+    },
+    {
+      "code": "PRECTOTCORR",
+      "name": "Precipitaciones corregidas",
+      "shortName": "Precipitaciones",
+      "description": "Precipitación total corregida (promedio diario anual en mm/día). Permite analizar sequías o incrementos de lluvias.",
+      "unit": "mm/day",
+      "display_unit": "mm/día",
+      "displayUnit": "mm/día",
+      "aggregation": "mean",
+      "priority": "Alta",
+      "source": "NASA POWER / MERRA-2"
+    },
+    {
+      "code": "RH2M",
+      "name": "Humedad relativa a 2 metros",
+      "shortName": "Humedad relativa",
+      "description": "Humedad relativa a 2 metros. Nota: la humedad relativa atmosférica no equivale a la humedad del suelo.",
+      "unit": "%",
+      "display_unit": "%",
+      "displayUnit": "%",
+      "aggregation": "mean",
+      "priority": "Alta",
+      "source": "NASA POWER / MERRA-2"
+    },
+    {
+      "code": "WS2M",
+      "name": "Velocidad del viento a 2 metros",
+      "shortName": "Velocidad del viento",
+      "description": "Velocidad media del viento a 2 metros de altura. Útil para evaluar cambios en regímenes eólicos.",
+      "unit": "m/s",
+      "display_unit": "m/s",
+      "displayUnit": "m/s",
+      "aggregation": "mean",
+      "priority": "Alta",
+      "source": "NASA POWER / MERRA-2"
+    },
+    {
+      "code": "T2M_MAX",
+      "name": "Temperatura máxima a 2 metros",
+      "shortName": "Temperatura máxima",
+      "description": "Temperatura máxima diaria promediada a 2 metros para evaluar extremos cálidos.",
+      "unit": "deg C",
+      "display_unit": "°C",
+      "displayUnit": "°C",
+      "aggregation": "mean",
+      "priority": "Secundaria",
+      "source": "NASA POWER / MERRA-2"
+    },
+    {
+      "code": "T2M_MIN",
+      "name": "Temperatura mínima a 2 metros",
+      "shortName": "Temperatura mínima",
+      "description": "Temperatura mínima diaria promediada a 2 metros para evaluar extremos fríos y heladas.",
+      "unit": "deg C",
+      "display_unit": "°C",
+      "displayUnit": "°C",
+      "aggregation": "mean",
+      "priority": "Secundaria",
+      "source": "NASA POWER / MERRA-2"
+    }
+  ]
+}

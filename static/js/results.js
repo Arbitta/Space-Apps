@@ -1,10 +1,12 @@
 /**
  * EarthLens — Rol 03: Lógica del Dashboard de Resultados (results.js)
- * Conectado al contrato JSON de POST /api/analyze y con soporte de datos de prueba etiquetados.
+ * Conectado con:
+ *  - Explorador (Rol 02): lee query params (?lat, ?lon, ?variable, ?start_year, ?end_year, ?label/?location)
+ *    y sessionStorage ('earthlens_analysis_bundle', 'earthlens_last_request', 'earthlens_query_params')
+ *  - Backend (Rol 04 / Rol 06): POST /api/analyze con respaldo automático de Datos de Prueba etiquetados.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Estado actual del análisis mostrado en pantalla
   let currentPayload = null;
   let currentRequestParams = {
     latitude: -45.86,
@@ -15,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     end_year: 2024
   };
 
-  // Presets de ubicaciones para probar rápido desde Resultados
   const LOCATION_PRESETS = {
     comodoro: { name: 'Comodoro Rivadavia, Chubut', latitude: -45.86, longitude: -67.50 },
     bariloche: { name: 'San Carlos de Bariloche, Río Negro', latitude: -41.13, longitude: -71.31 },
@@ -24,10 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     madryn: { name: 'Puerto Madryn, Chubut', latitude: -42.77, longitude: -65.03 }
   };
 
-  /**
-   * 1. Lee parámetros desde la URL (?lat=...&lon=...&variable=...&start_year=...&end_year=...)
-   *    o desde sessionStorage (si el Explorador guardó el resultado previamente).
-   */
   function loadInitialParams() {
     const params = new URLSearchParams(window.location.search);
 
@@ -39,13 +36,34 @@ document.addEventListener('DOMContentLoaded', () => {
       currentRequestParams.end_year = parseInt(params.get('end_year') || params.get('end') || 2024, 10);
       currentRequestParams.locationName =
         params.get('location') ||
+        params.get('label') ||
         `Coord (${currentRequestParams.latitude.toFixed(2)}°, ${currentRequestParams.longitude.toFixed(2)}°)`;
       return;
     }
 
-    // Revisar si el explorador (Rol 02) guardó una consulta en sessionStorage
+    // Integración con explorer.js (Rol 02) a través de sessionStorage / localStorage
     try {
-      const savedReq = sessionStorage.getItem('earthlens_query_params');
+      const bundleRaw =
+        sessionStorage.getItem('earthlens_analysis_bundle') ||
+        localStorage.getItem('earthlens_analysis_bundle');
+      if (bundleRaw) {
+        const bundle = JSON.parse(bundleRaw);
+        if (bundle && bundle.request) {
+          currentRequestParams.latitude = parseFloat(bundle.request.latitude ?? -45.86);
+          currentRequestParams.longitude = parseFloat(bundle.request.longitude ?? -67.50);
+          currentRequestParams.variable = (bundle.request.variable || 'T2M').toUpperCase();
+          currentRequestParams.start_year = parseInt(bundle.request.start_year ?? 2000, 10);
+          currentRequestParams.end_year = parseInt(bundle.request.end_year ?? 2024, 10);
+          if (bundle.location_label) {
+            currentRequestParams.locationName = bundle.location_label;
+          }
+          return;
+        }
+      }
+
+      const savedReq =
+        sessionStorage.getItem('earthlens_last_request') ||
+        sessionStorage.getItem('earthlens_query_params');
       if (savedReq) {
         const parsed = JSON.parse(savedReq);
         currentRequestParams = { ...currentRequestParams, ...parsed };
@@ -55,10 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  /**
-   * 2. Consulta al endpoint POST /api/analyze respetando el contrato de la Página 6.
-   *    Si el backend aún no está levantado, usa los datos de prueba etiquetados.
-   */
   async function fetchAnalysisData(reqParams, forceMock = false) {
     setLoadingState(true);
 
@@ -67,7 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
       longitude: Number(reqParams.longitude),
       variable: reqParams.variable,
       start_year: Number(reqParams.start_year),
-      end_year: Number(reqParams.end_year)
+      end_year: Number(reqParams.end_year),
+      location_name: reqParams.locationName
     };
 
     if (!forceMock) {
@@ -80,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (response.ok) {
           const liveData = await response.json();
-          liveData.is_mock = false;
+          liveData.is_mock = Boolean(liveData.is_mock);
           liveData.location = liveData.location || {
             name: reqParams.locationName,
             latitude: requestBody.latitude,
@@ -93,9 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
           setLoadingState(false);
           return liveData;
         }
-      } catch (err) {
-        // Backend Flask no disponible o archivo abierto directamente: usar Mock Data etiquetado
-        console.info('Endpoint /api/analyze no disponible aún; cargando datos de prueba del contrato JSON.');
+      } catch (_) {
+        console.info('Endpoint /api/analyze no disponible; cargando datos de prueba del contrato JSON.');
       }
     }
 
@@ -104,9 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return mockData;
   }
 
-  /**
-   * 3. Renderiza todos los indicadores del dashboard, la conclusión, la tabla y el gráfico Chart.js
-   */
   function renderDashboard(data) {
     currentPayload = data;
     const stats = data.statistics || {};
@@ -118,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     const unitDisplay = data.unit === 'deg C' ? '°C' : data.unit || varMeta.unit;
 
-    // Banner de modo de datos (Prueba vs API Real)
     const banner = document.getElementById('dataModeBanner');
     const bannerText = document.getElementById('dataModeText');
     if (banner && bannerText) {
@@ -129,11 +139,10 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         banner.classList.add('is-live');
         bannerText.innerHTML =
-          '<strong>CONECTADO AL BACKEND NASA POWER:</strong> Datos científicos reales obtenidos desde <code>POST /api/analyze</code>.';
+          '<strong>CONECTADO AL BACKEND NASA POWER:</strong> Datos científicos y análisis estadístico (SciPy) obtenidos desde <code>POST /api/analyze</code>.';
       }
     }
 
-    // Encabezado de contexto
     const locName = data.location?.name || currentRequestParams.locationName;
     const lat = data.location?.latitude ?? currentRequestParams.latitude;
     const lon = data.location?.longitude ?? currentRequestParams.longitude;
@@ -146,7 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setText('resPeriodBadge', `Período: ${startYr} – ${endYr} (${series.length} años)`);
     setText('resSourceText', data.source || 'NASA POWER / MERRA-2');
 
-    // Métrica 1: Pendiente lineal (slope)
     const slope = Number(stats.slope ?? 0);
     const slopeSign = slope >= 0 ? '+' : '';
     setText('metricSlope', `${slopeSign}${slope.toFixed(4)} ${unitDisplay}/año`);
@@ -155,13 +163,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const decadalSign = decadal >= 0 ? '+' : '';
     setText('metricDecade', `Cambio por década: ${decadalSign}${decadal.toFixed(3)} ${unitDisplay}/década`);
 
-    // Métrica 2: Magnitud del cambio total en el período
     const totalChange = Number(stats.total_change ?? slope * (endYr - startYr));
     const totalSign = totalChange >= 0 ? '+' : '';
     setText('metricTotalChange', `${totalSign}${totalChange.toFixed(2)} ${unitDisplay}`);
     setText('metricTotalSub', `Cambio estimado entre ${startYr} y ${endYr}`);
 
-    // Métrica 3: p-valor y significancia estadística (umbral α = 0.05)
     const pVal = Number(stats.p_value ?? 1);
     const isSig = Boolean(stats.significant ?? pVal < 0.05);
     setText('metricPValue', pVal < 0.0001 ? '< 0.0001' : pVal.toFixed(4));
@@ -174,11 +180,11 @@ document.addEventListener('DOMContentLoaded', () => {
         : 'No significativo (p ≥ 0.05)';
     }
 
-    // Métrica 4: Dirección e intervalo de confianza
     const dirMap = {
       increasing: { label: 'Tendencia Ascendente ↑', icon: '📈' },
       decreasing: { label: 'Tendencia Descendente ↓', icon: '📉' },
-      stable: { label: 'Sin tendencia clara →', icon: '➖' }
+      stable: { label: 'Sin tendencia clara →', icon: '➖' },
+      no_clear_trend: { label: 'Sin tendencia clara →', icon: '➖' }
     };
     const dirInfo = dirMap[stats.direction] || dirMap.stable;
     setText('metricDirection', `${dirInfo.icon} ${dirInfo.label}`);
@@ -196,7 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
       setText('metricConfidence', `Promedio del período: ${meanVal} ${unitDisplay}`);
     }
 
-    // Conclusión e interpretación basada en evidencia
     setText('resConclusionText', data.conclusion || 'Análisis completado.');
     const conclusionBox = document.getElementById('resConclusionBox');
     if (conclusionBox) {
@@ -208,15 +213,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Renderizar gráfico con Chart.js
     const showCICheckbox = document.getElementById('toggleConfidenceBand');
     const showConfidence = showCICheckbox ? showCICheckbox.checked : true;
     EarthLensCharts.renderTrendChart('resultsTrendChart', data, { showConfidence });
 
-    // Poblar tabla anual con valores observados y estimados por la regresión
     renderSeriesTable(series, stats, unitDisplay);
 
-    // Actualizar enlace hacia el Comparador pre-cargando la Ubicación A
     const compareLink = document.getElementById('btnGoToCompare');
     if (compareLink) {
       const q = new URLSearchParams({
@@ -227,13 +229,12 @@ document.addEventListener('DOMContentLoaded', () => {
         start_year: startYr,
         end_year: endYr
       });
-      compareLink.href = `compare.html?${q.toString()}`;
+      compareLink.href = window.location.protocol === 'file:'
+        ? `compare.html?${q.toString()}`
+        : `/compare?${q.toString()}`;
     }
   }
 
-  /**
-   * 4. Llena la tabla desplegable de datos anuales + valores ajustados por regresión
-   */
   function renderSeriesTable(series, stats, unitDisplay) {
     const tbody = document.getElementById('seriesTableBody');
     if (!tbody) return;
@@ -259,9 +260,6 @@ document.addEventListener('DOMContentLoaded', () => {
       .join('');
   }
 
-  /**
-   * 5. Exporta la serie actual y sus métricas estadísticas a CSV
-   */
   function handleExportCSV() {
     if (!currentPayload) return;
 
@@ -312,9 +310,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  /**
-   * 6. Sincroniza controles interactivos del panel superior
-   */
   function bindControls() {
     const varSelect = document.getElementById('quickVariableSelect');
     const locSelect = document.getElementById('quickLocationSelect');
@@ -370,7 +365,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Inicialización principal
   (async function init() {
     loadInitialParams();
     bindControls();
