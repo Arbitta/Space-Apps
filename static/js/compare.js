@@ -1,7 +1,7 @@
 /**
  * EarthLens — Rol 03: Lógica del Comparador de Dos Ubicaciones (compare.js)
  * Compara dos ubicaciones con la misma variable, misma unidad y mismo período.
- * Soporta POST /api/compare, doble consulta a POST /api/analyze, o Datos de Prueba etiquetados.
+ * Soporta parámetros desde explorer.js (?lat1, ?lon1) y desde results.js (?latA, ?lonA).
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -24,9 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     dataB: null
   };
 
-  /**
-   * 1. Lee parámetros iniciales desde la URL (ej. si viene desde results.html o missions.html)
-   */
   function initFromURL() {
     const params = new URLSearchParams(window.location.search);
 
@@ -40,33 +37,35 @@ document.addEventListener('DOMContentLoaded', () => {
       state.end_year = parseInt(params.get('end_year'), 10) || 2024;
     }
 
-    if (params.get('latA') && params.get('lonA')) {
+    const latA = params.get('latA') || params.get('lat1');
+    const lonA = params.get('lonA') || params.get('lon1');
+    if (latA && lonA) {
       state.locA = {
-        name: params.get('nameA') || `Ubicación A (${params.get('latA')}, ${params.get('lonA')})`,
-        latitude: parseFloat(params.get('latA')),
-        longitude: parseFloat(params.get('lonA'))
+        name: params.get('nameA') || params.get('label1') || `Ubicación A (${latA}, ${lonA})`,
+        latitude: parseFloat(latA),
+        longitude: parseFloat(lonA)
       };
     }
 
-    if (params.get('latB') && params.get('lonB')) {
+    const latB = params.get('latB') || params.get('lat2');
+    const lonB = params.get('lonB') || params.get('lon2');
+    if (latB && lonB) {
       state.locB = {
-        name: params.get('nameB') || `Ubicación B (${params.get('latB')}, ${params.get('lonB')})`,
-        latitude: parseFloat(params.get('latB')),
-        longitude: parseFloat(params.get('lonB'))
+        name: params.get('nameB') || params.get('label2') || `Ubicación B (${latB}, ${lonB})`,
+        latitude: parseFloat(latB),
+        longitude: parseFloat(lonB)
       };
     }
   }
 
-  /**
-   * 2. Obtiene el análisis para una ubicación (vía POST /api/analyze o Mock etiquetado)
-   */
   async function fetchSingleLocation(loc) {
     const payload = {
       latitude: Number(loc.latitude),
       longitude: Number(loc.longitude),
       variable: state.variable,
       start_year: Number(state.start_year),
-      end_year: Number(state.end_year)
+      end_year: Number(state.end_year),
+      location_name: loc.name
     };
 
     try {
@@ -77,13 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (res.ok) {
         const json = await res.json();
-        json.is_mock = false;
+        json.is_mock = Boolean(json.is_mock);
         json.location = { name: loc.name, latitude: loc.latitude, longitude: loc.longitude };
         return json;
       }
-    } catch (_) {
-      // Fallback silencioso a datos de prueba del contrato JSON
-    }
+    } catch (_) {}
 
     return EarthLensCharts.buildMockAnalysis({
       latitude: loc.latitude,
@@ -95,9 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /**
-   * 3. Ejecuta la comparación (intenta POST /api/compare o 2 consultas en paralelo a /api/analyze)
-   */
   async function runComparison() {
     const [resA, resB] = await Promise.all([
       fetchSingleLocation(state.locA),
@@ -110,9 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
     renderComparisonUI(resA, resB);
   }
 
-  /**
-   * 4. Actualiza las tarjetas comparativas, la síntesis científica, el gráfico y la tabla
-   */
   function renderComparisonUI(dataA, dataB) {
     const varMeta = EarthLensCharts.VARIABLES_META[state.variable] || {
       name: state.variable,
@@ -120,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     const unitDisplay = dataA.unit === 'deg C' ? '°C' : dataA.unit || varMeta.unit;
 
-    // Banner de modo de datos
     const banner = document.getElementById('compareModeBanner');
     const bannerText = document.getElementById('compareModeText');
     if (banner && bannerText) {
@@ -128,16 +118,13 @@ document.addEventListener('DOMContentLoaded', () => {
       banner.classList.toggle('is-live', !isMock);
       bannerText.innerHTML = isMock
         ? '<strong>MODO DATOS DE PRUEBA (Contrato JSON):</strong> Comparando series simuladas reproducibles con la misma variable y período mientras el backend Flask no esté activo.'
-        : '<strong>CONECTADO AL BACKEND NASA POWER:</strong> Comparación calculada con datos reales de NASA POWER / MERRA-2.';
+        : '<strong>CONECTADO AL BACKEND NASA POWER:</strong> Comparación calculada con datos de NASA POWER / MERRA-2 y motor estadístico SciPy.';
     }
 
-    // Encabezado de unidad y período compartido
     setText('cmpSharedVariable', `${varMeta.name} (${state.variable}) · Unidad: ${unitDisplay}`);
     setText('cmpSharedPeriod', `Período común: ${state.start_year} – ${state.end_year}`);
 
-    // Poblar columna Ubicación A
     populateLocationColumn('A', state.locA, dataA, unitDisplay);
-    // Poblar columna Ubicación B
     populateLocationColumn('B', state.locB, dataB, unitDisplay);
 
     // Veredicto del Modo detective (Persona 5): la hipótesis se evalúa sobre la Ubicación A.
@@ -150,10 +137,8 @@ document.addEventListener('DOMContentLoaded', () => {
       );
     }
 
-    // Síntesis comparativa automática
     renderComparativeSynthesis(state.locA.name, state.locB.name, dataA, dataB, varMeta, unitDisplay);
 
-    // Gráfico superpuesto en Chart.js
     const showTrends = document.getElementById('cmpToggleTrendlines')?.checked ?? true;
     EarthLensCharts.renderComparisonChart(
       'comparisonChart',
@@ -164,7 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
       showTrends
     );
 
-    // Tabla comparativa año por año
     renderComparisonTable(dataA, dataB, unitDisplay);
   }
 
@@ -324,7 +308,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnExport = document.getElementById('btnExportCompareCSV');
     const toggleTrend = document.getElementById('cmpToggleTrendlines');
 
-    // Sincronizar inputs iniciales
     if (varSelect) varSelect.value = state.variable;
     if (startInput) startInput.value = state.start_year;
     if (endInput) endInput.value = state.end_year;

@@ -96,10 +96,14 @@ def list_missions() -> list[dict]:
 
 def get_mission(mission_id: str) -> dict | None:
     """Detalle completo de una misión, con la variable expandida y el link al explorador."""
-    mission = next((m for m in _missions_data()["missions"] if m["id"] == mission_id), None)
+    key = str(mission_id or "").strip().lower()
+    mission = next((m for m in _missions_data()["missions"]
+                    if m["id"] == key or m.get("number") == key), None)
     if mission is None:
         return None
     detail = dict(mission)
+    detail["primary_variable"] = mission["variable"]
+    detail["recommended_variables"] = [mission["variable"], *mission.get("supporting_variables", [])]
     detail["variable_info"] = get_variable(mission["variable"])
     detail["supporting_variables_info"] = [
         get_variable(c) for c in mission.get("supporting_variables", []) if get_variable(c)
@@ -236,3 +240,22 @@ def annual_series_from_power_monthly(payload: dict, code: str,
             value = sum(v * d for v, d in zip(values, days)) / sum(days)
         series.append({"year": year, "value": round(value, 3)})
     return series
+
+
+# --------------------------------------------------------------------------
+# Compatibilidad con routes/api_routes.py y app.py (main)
+# --------------------------------------------------------------------------
+
+def get_variables_catalog() -> list[dict]:
+    """Lista de variables (la usa GET /api/variables y el explorador)."""
+    return list_variables()
+
+
+def get_missions_list() -> list[dict]:
+    """Resumen de las misiones (lo usa GET /api/missions)."""
+    return list_missions()
+
+
+def get_mission_by_id(mission_id: str) -> dict | None:
+    """Detalle de una misión por id o número (lo usa GET /api/missions/<id>)."""
+    return get_mission(mission_id)

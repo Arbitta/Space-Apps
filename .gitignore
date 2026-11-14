@@ -1,4 +1,11 @@
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 .venv/
 venv/
+env/
+.pytest_cache/
+.coverage
+*.log
+.DS_Store
+*.pyc

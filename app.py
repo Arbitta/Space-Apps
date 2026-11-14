@@ -1,407 +1,229 @@
 """
-EarthLens — Servidor Local de Prueba (app.py)
-Rutas principales:
-  - /               -> templates/index.html (Inicio simple: Ubicación actual + Estimación de todas las variables)
-  - /explorer       -> templates/explorer.html (Explorador completo para cargar y configurar datos)
-  - /api/variables  -> Catálogo de variables NASA POWER
-  - /api/summary    -> Estimación rápida de TODAS las variables para una ubicación (Inicio)
-  - /api/analyze    -> Análisis estadístico individual y regresión lineal (Explorador)
-Soporta Flask (si está instalado) o http.server nativo de Python como respaldo automático.
+EarthLens — Servidor Principal Unificado (app.py)
+Integra los módulos:
+  - Rol 01 (Inicio e Identidad: /, /index, /about)
+  - Rol 02 (Explorador y Mapa: /explorer)
+  - Rol 03 (Resultados y Comparador: /results, /compare)
+  - Rol 04 (Backend y Consumo NASA POWER: /api/analyze, /api/summary, /api/variables)
+  - Rol 05 (Misiones y Modo Detective: /missions, /api/missions)
+  - Rol 06 (Estadística SciPy, Integración y Pruebas: services/trend_analysis.py, /api/compare)
 """
 
+from __future__ import annotations
+
 import json
-import math
 import mimetypes
 import os
+import threading
+import webbrowser
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.error import URLError
-from urllib.request import Request, urlopen
+from typing import Any
+from urllib.parse import parse_qs, urlparse
+
+from routes.api_routes import (
+    handle_analyze_request,
+    handle_compare_request,
+    handle_summary_request,
+    register_api_routes,
+)
+from routes.missions_routes import handle_missions_get, register_missions_routes
+from services.datasets import get_mission_by_id, get_missions_list, get_variables_catalog
 
 BASE_DIR = Path(__file__).resolve().parent
-
-VARIABLES_CATALOG = [
-    {
-        "code": "T2M",
-        "name": "Temperatura media a 2 metros",
-        "shortName": "Temperatura media",
-        "unit": "deg C",
-        "displayUnit": "°C",
-        "priority": "Primera",
-        "source": "NASA POWER / MERRA-2",
-        "description": "Promedio anual de la temperatura del aire a 2 metros sobre la superficie. Variable principal del MVP."
-    },
-    {
-        "code": "PRECTOTCORR",
-        "name": "Precipitaciones corregidas",
-        "shortName": "Precipitaciones",
-        "unit": "mm/day",
-        "displayUnit": "mm/día",
-        "priority": "Alta",
-        "source": "NASA POWER / MERRA-2",
-        "description": "Precipitación total corregida promedio. Permite analizar sequías o incrementos de lluvias."
-    },
-    {
-        "code": "RH2M",
-        "name": "Humedad relativa a 2 metros",
-        "shortName": "Humedad relativa",
-        "unit": "%",
-        "displayUnit": "%",
-        "priority": "Alta",
-        "source": "NASA POWER / MERRA-2",
-        "description": "Porcentaje de humedad atmosférica a 2 metros. Nota científica: la humedad relativa no equivale a la humedad del suelo."
-    },
-    {
-        "code": "WS2M",
-        "name": "Velocidad del viento a 2 metros",
-        "shortName": "Velocidad del viento",
-        "unit": "m/s",
-        "displayUnit": "m/s",
-        "priority": "Alta",
-        "source": "NASA POWER / MERRA-2",
-        "description": "Velocidad media del viento a 2 metros de altura. Útil para evaluar cambios en regímenes eólicos."
-    },
-    {
-        "code": "T2M_MAX",
-        "name": "Temperatura máxima a 2 metros",
-        "shortName": "Temperatura máxima",
-        "unit": "deg C",
-        "displayUnit": "°C",
-        "priority": "Secundaria",
-        "source": "NASA POWER / MERRA-2",
-        "description": "Temperatura máxima registrada a 2 metros para evaluar extremos cálidos."
-    },
-    {
-        "code": "T2M_MIN",
-        "name": "Temperatura mínima a 2 metros",
-        "shortName": "Temperatura mínima",
-        "unit": "deg C",
-        "displayUnit": "°C",
-        "priority": "Secundaria",
-        "source": "NASA POWER / MERRA-2",
-        "description": "Temperatura mínima registrada a 2 metros para evaluar extremos fríos y heladas."
-    }
-]
+TEMPLATES_DIR = BASE_DIR / "templates"
+STATIC_DIR = BASE_DIR / "static"
 
 
-def compute_linear_regression(series, start_year, end_year, unit):
-    """Calcula pendiente, cambio por década, cambio total y p-valor aproximado."""
-    n = len(series)
-    if n < 2:
-        return {
-            "slope": 0.0,
-            "change_per_decade": 0.0,
-            "total_change": 0.0,
-            "p_value": 1.0,
-            "significant": False,
-            "direction": "no_clear_trend"
-        }, "Datos insuficientes para calcular tendencia."
-
-    xs = [pt["year"] for pt in series]
-    ys = [pt["value"] for pt in series]
-    mean_x = sum(xs) / n
-    mean_y = sum(ys) / n
-
-    s_xx = sum((x - mean_x) ** 2 for x in xs)
-    s_xy = sum((x - mean_x) * (y - mean_y) for x, y in zip(xs, ys))
-    s_yy = sum((y - mean_y) ** 2 for y in ys)
-
-    slope = s_xy / s_xx if s_xx > 0 else 0.0
-    intercept = mean_y - slope * mean_x
-
-    dof = max(1, n - 2)
-    sse = max(0.0, s_yy - slope * s_xy)
-    mse = sse / dof
-    se_slope = math.sqrt(mse / s_xx) if s_xx > 0 and mse > 0 else 0.0
-    t_stat = abs(slope / se_slope) if se_slope > 0 else 0.0
-
-    p_value = round(math.erfc(t_stat / math.sqrt(2.0)), 4)
-    significant = p_value < 0.05
-
-    change_per_decade = round(slope * 10.0, 3)
-    total_change = round(slope * (end_year - start_year), 2)
-    slope_rounded = round(slope, 4)
-
-    if slope_rounded > 0.0005:
-        direction = "increasing"
-    elif slope_rounded < -0.0005:
-        direction = "decreasing"
+def _resolve_page_file(page_slug: str) -> Path:
+    """Resuelve la plantilla HTML solicitada o usa un respaldo seguro."""
+    clean = page_slug.strip("/").replace("templates/", "")
+    if not clean or clean in ("index", "index.html"):
+        candidate = TEMPLATES_DIR / "index.html"
+    elif clean.endswith(".html"):
+        candidate = TEMPLATES_DIR / clean
     else:
-        direction = "no_clear_trend"
+        candidate = TEMPLATES_DIR / f"{clean}.html"
 
-    if significant and direction == "increasing":
-        conclusion = f"Se detectó una tendencia ascendente estadísticamente significativa ({change_per_decade:+} {unit}/década, p = {p_value})."
-    elif significant and direction == "decreasing":
-        conclusion = f"Se detectó una tendencia descendente estadísticamente significativa ({change_per_decade:+} {unit}/década, p = {p_value})."
-    else:
-        conclusion = f"No se detectó evidencia estadística suficiente de tendencia lineal en el período (p = {p_value})."
-
-    return {
-        "slope": slope_rounded,
-        "intercept": round(intercept, 3),
-        "change_per_decade": change_per_decade,
-        "total_change": total_change,
-        "p_value": p_value,
-        "significant": significant,
-        "direction": direction
-    }, conclusion
+    if candidate.is_file():
+        return candidate
+    if (TEMPLATES_DIR / "index.html").is_file():
+        return TEMPLATES_DIR / "index.html"
+    return TEMPLATES_DIR / "results.html"
 
 
-def extract_annual_series(param_data, start_year, end_year):
-    """Extrae la serie anual de un parámetro en la respuesta mensual de NASA POWER."""
-    series = []
-    for year in range(start_year, end_year + 1):
-        ann_key = f"{year}13"
-        val = param_data.get(ann_key)
-        if val is not None and val > -900:
-            series.append({"year": year, "value": round(float(val), 2)})
-        else:
-            monthly_vals = [
-                float(param_data[f"{year}{m:02d}"])
-                for m in range(1, 13)
-                if f"{year}{m:02d}" in param_data and float(param_data[f"{year}{m:02d}"]) > -900
-            ]
-            if len(monthly_vals) >= 10:
-                series.append({"year": year, "value": round(sum(monthly_vals) / len(monthly_vals), 2)})
-    return series
+def create_app() -> Any:
+    """Crea y configura la aplicación Flask unificada de EarthLens."""
+    from flask import Flask, send_file, send_from_directory  # type: ignore
 
-
-def fetch_nasa_power_monthly_to_annual(lat, lon, variable, start_year, end_year):
-    """Consulta el endpoint mensual de NASA POWER para una variable y agrega el valor anual (ANN)."""
-    url = (
-        f"https://power.larc.nasa.gov/api/temporal/monthly/point"
-        f"?parameters={variable}&community=RE"
-        f"&longitude={lon}&latitude={lat}"
-        f"&start={start_year}&end={end_year}&format=JSON"
+    app = Flask(
+        __name__,
+        template_folder=str(TEMPLATES_DIR),
+        static_folder=str(STATIC_DIR),
+        static_url_path="/static",
     )
-    req = Request(url, headers={"User-Agent": "EarthLens-SpaceApps/1.0"})
-    with urlopen(req, timeout=8) as resp:
-        payload = json.loads(resp.read().decode("utf-8"))
 
-    param_data = payload["properties"]["parameter"][variable]
-    return extract_annual_series(param_data, start_year, end_year)
-
-
-def process_summary_all_variables(lat, lon, start_year=2000, end_year=2024):
-    """Consulta TODAS las variables del catálogo en una sola llamada a NASA POWER para el Inicio."""
-    codes = [v["code"] for v in VARIABLES_CATALOG]
-    params_csv = ",".join(codes)
-    url = (
-        f"https://power.larc.nasa.gov/api/temporal/monthly/point"
-        f"?parameters={params_csv}&community=RE"
-        f"&longitude={lon}&latitude={lat}"
-        f"&start={start_year}&end={end_year}&format=JSON"
-    )
-    try:
-        req = Request(url, headers={"User-Agent": "EarthLens-SpaceApps/1.0"})
-        with urlopen(req, timeout=9) as resp:
-            payload = json.loads(resp.read().decode("utf-8"))
-
-        all_params = payload["properties"]["parameter"]
-        estimations = {}
-        for var_meta in VARIABLES_CATALOG:
-            code = var_meta["code"]
-            p_data = all_params.get(code, {})
-            series = extract_annual_series(p_data, start_year, end_year)
-            if len(series) >= 3:
-                mean_val = round(sum(pt["value"] for pt in series) / len(series), 2)
-                stats, conclusion = compute_linear_regression(series, start_year, end_year, var_meta["unit"])
-                estimations[code] = {
-                    "variable": code,
-                    "unit": var_meta["unit"],
-                    "mean_value": mean_val,
-                    "latest_value": series[-1]["value"],
-                    "statistics": stats,
-                    "conclusion": conclusion
-                }
-        if estimations:
-            return 200, {
-                "is_mock": False,
-                "latitude": lat,
-                "longitude": lon,
-                "start_year": start_year,
-                "end_year": end_year,
-                "estimations": estimations
-            }
-    except (URLError, TimeoutError, KeyError, ValueError, OSError) as exc:
-        return 503, {"error": f"No se pudo conectar con NASA POWER ({exc})."}
-
-    return 503, {"error": "Datos insuficientes de NASA POWER."}
-
-
-def process_analyze_payload(body):
-    """Procesa el payload de POST /api/analyze y retorna (status_code, response_dict)."""
-    try:
-        lat = float(body.get("latitude"))
-        lon = float(body.get("longitude"))
-        variable = str(body.get("variable", "T2M")).strip().upper()
-        start_year = int(body.get("start_year", 2000))
-        end_year = int(body.get("end_year", 2024))
-    except (TypeError, ValueError):
-        return 400, {"error": "Parámetros inválidos en la solicitud JSON."}
-
-    if not (-90 <= lat <= 90) or not (-180 <= lon <= 180):
-        return 400, {"error": "Coordenadas fuera de rango (-90..90, -180..180)."}
-    if start_year < 1981 or end_year > 2024 or start_year >= end_year:
-        return 400, {"error": "Rango de años inválido (1981–2024, start_year < end_year)."}
-
-    var_meta = next((v for v in VARIABLES_CATALOG if v["code"] == variable), VARIABLES_CATALOG[0])
-
-    try:
-        series = fetch_nasa_power_monthly_to_annual(lat, lon, variable, start_year, end_year)
-        if len(series) < 3:
-            raise ValueError("Serie de NASA POWER con menos de 3 años válidos.")
-        stats, conclusion = compute_linear_regression(series, start_year, end_year, var_meta["unit"])
-        return 200, {
-            "is_mock": False,
-            "variable": variable,
-            "source": "NASA POWER / MERRA-2",
-            "unit": var_meta["unit"],
-            "series": series,
-            "statistics": stats,
-            "conclusion": conclusion
-        }
-    except (URLError, TimeoutError, KeyError, ValueError, OSError) as exc:
-        return 503, {
-            "error": f"No se pudo conectar con NASA POWER en este momento ({exc})."
-        }
-
-
-try:
-    from flask import Flask, jsonify, render_template, request
-
-    app = Flask(__name__)
+    register_api_routes(app)
+    register_missions_routes(app)
 
     @app.route("/")
+    @app.route("/index")
     @app.route("/index.html")
-    def index():
-        return render_template("index.html")
+    def index_page():
+        return send_file(str(_resolve_page_file("index.html")))
 
     @app.route("/explorer")
     @app.route("/explorer.html")
-    def explorer():
-        return render_template("explorer.html")
+    def explorer_page():
+        return send_file(str(_resolve_page_file("explorer.html")))
 
     @app.route("/results")
     @app.route("/results.html")
-    def results():
-        return render_template("results.html")
+    def results_page():
+        return send_file(str(_resolve_page_file("results.html")))
 
     @app.route("/compare")
     @app.route("/compare.html")
-    def compare():
-        return render_template("compare.html")
-
-    # Modo detective (Persona 5): página + /api/missions, /api/phenomena,
-    # /api/variables/recommend y /api/sources (ver routes/missions_routes.py)
-    from routes.missions_routes import missions_bp
-    app.register_blueprint(missions_bp)
+    def compare_page():
+        return send_file(str(_resolve_page_file("compare.html")))
 
     @app.route("/missions")
     @app.route("/missions.html")
-    def missions():
-        return render_template("missions.html")
+    def missions_page():
+        target = TEMPLATES_DIR / "missions.html"
+        if target.is_file():
+            return send_file(str(target))
+        return send_file(str(_resolve_page_file("explorer.html")))
 
-    @app.route("/api/variables", methods=["GET"])
-    def get_variables():
-        return jsonify(VARIABLES_CATALOG)
+    @app.route("/about")
+    @app.route("/about.html")
+    def about_page():
+        target = TEMPLATES_DIR / "about.html"
+        if target.is_file():
+            return send_file(str(target))
+        return send_file(str(_resolve_page_file("index.html")))
 
-    @app.route("/api/summary", methods=["GET"])
-    def summary():
+    @app.route("/templates/<path:filename>")
+    def templates_passthrough(filename: str):
+        return send_from_directory(str(TEMPLATES_DIR), filename)
+
+    return app
+
+
+class EarthLensUnifiedHandler(BaseHTTPRequestHandler):
+    """Servidor HTTP nativo de respaldo cuando se ejecuta sin Flask instalado localmente."""
+
+    def _send_json(self, data: Any, status: int = 200) -> None:
+        body = json.dumps(data, ensure_ascii=False).encode("utf-8")
         try:
-            lat = float(request.args.get("lat", -34.6037))
-            lon = float(request.args.get("lon", -58.3816))
-            start_year = int(request.args.get("start_year", 2000))
-            end_year = int(request.args.get("end_year", 2024))
-        except (TypeError, ValueError):
-            return jsonify({"error": "Coordenadas inválidas"}), 400
-        status, payload = process_summary_all_variables(lat, lon, start_year, end_year)
-        return jsonify(payload), status
-
-    @app.route("/api/analyze", methods=["POST"])
-    def analyze():
-        body = request.get_json(silent=True) or {}
-        status, payload = process_analyze_payload(body)
-        return jsonify(payload), status
-
-    HAS_FLASK = True
-except ImportError:
-    HAS_FLASK = False
-    from http.server import BaseHTTPRequestHandler, HTTPServer
-    from urllib.parse import parse_qs, urlparse
-
-    class EarthLensHandler(BaseHTTPRequestHandler):
-        def _send_json(self, status, data):
-            raw = json.dumps(data, ensure_ascii=False).encode("utf-8")
             self.send_response(status)
             self.send_header("Content-Type", "application/json; charset=utf-8")
-            self.send_header("Content-Length", str(len(raw)))
+            self.send_header("Content-Length", str(len(body)))
             self.end_headers()
-            self.wfile.write(raw)
+            self.wfile.write(body)
+        except (ConnectionAbortedError, BrokenPipeError):
+            pass
 
-        def _send_file(self, filepath):
-            if not filepath.is_file():
-                self.send_error(404, "Archivo no encontrado")
-                return
-            mime, _ = mimetypes.guess_type(str(filepath))
-            content = filepath.read_bytes()
+    def _send_file(self, file_path: Path) -> None:
+        if not file_path.is_file():
+            self._send_json({"error": "Archivo no encontrado"}, 404)
+            return
+        ctype, _ = mimetypes.guess_type(str(file_path))
+        content = file_path.read_bytes()
+        try:
             self.send_response(200)
-            self.send_header("Content-Type", (mime or "text/plain") + "; charset=utf-8")
+            self.send_header("Content-Type", (ctype or "text/plain") + "; charset=utf-8")
             self.send_header("Content-Length", str(len(content)))
             self.end_headers()
             self.wfile.write(content)
+        except (ConnectionAbortedError, BrokenPipeError):
+            pass
 
-        def do_GET(self):
-            parsed = urlparse(self.path)
-            route = parsed.path
+    def do_GET(self) -> None:
+        parsed = urlparse(self.path)
+        path = parsed.path
 
-            if route in ("/", "/index", "/index.html"):
-                self._send_file(BASE_DIR / "templates" / "index.html")
-            elif route in ("/explorer", "/explorer.html"):
-                self._send_file(BASE_DIR / "templates" / "explorer.html")
-            elif route == "/api/variables":
-                self._send_json(200, VARIABLES_CATALOG)
-            elif route == "/api/summary":
-                qs = parse_qs(parsed.query)
-                try:
-                    lat = float(qs.get("lat", [-34.6037])[0])
-                    lon = float(qs.get("lon", [-58.3816])[0])
-                    start_year = int(qs.get("start_year", [2000])[0])
-                    end_year = int(qs.get("end_year", [2024])[0])
-                except (TypeError, ValueError):
-                    self._send_json(400, {"error": "Parámetros inválidos"})
-                    return
-                status, payload = process_summary_all_variables(lat, lon, start_year, end_year)
-                self._send_json(status, payload)
-            elif route.startswith("/static/"):
-                rel = route.lstrip("/")
-                self._send_file(BASE_DIR / rel)
-            elif route == "/favicon.ico":
-                self.send_response(204)
-                self.end_headers()
-            else:
-                self.send_error(404, f"Ruta {route} no encontrada")
+        if path == "/api/variables":
+            return self._send_json({"variables": get_variables_catalog()}, 200)
+        if path == "/api/summary":
+            qs = parse_qs(parsed.query)
+            resp, status = handle_summary_request(
+                lat=qs.get("lat", [-34.6037])[0],
+                lon=qs.get("lon", [-58.3816])[0],
+                start_year=qs.get("start_year", [2000])[0],
+                end_year=qs.get("end_year", [2024])[0],
+            )
+            return self._send_json(resp, status)
+        if path == "/api/missions":
+            return self._send_json({"missions": get_missions_list()}, 200)
+        missions_resp = handle_missions_get(path, parse_qs(parsed.query))
+        if missions_resp is not None:
+            return self._send_json(*missions_resp)
+        if path.startswith("/api/missions/"):
+            m_id = path.split("/api/missions/", 1)[1]
+            mission = get_mission_by_id(m_id)
+            if not mission:
+                return self._send_json({"error": "Misión no encontrada"}, 404)
+            return self._send_json(mission, 200)
+        if path == "/favicon.ico":
+            self.send_response(204)
+            self.end_headers()
+            return
 
-        def do_POST(self):
-            parsed = urlparse(self.path)
-            if parsed.path == "/api/analyze":
-                length = int(self.headers.get("Content-Length", 0))
-                raw_body = self.rfile.read(length).decode("utf-8") if length > 0 else "{}"
-                try:
-                    body = json.loads(raw_body)
-                except json.JSONDecodeError:
-                    body = {}
-                status, payload = process_analyze_payload(body)
-                self._send_json(status, payload)
-            else:
-                self.send_error(404, "Endpoint no encontrado")
+        if path.startswith("/static/"):
+            target = (BASE_DIR / path.lstrip("/")).resolve()
+            if str(target).startswith(str(BASE_DIR)):
+                return self._send_file(target)
+
+        if path in ("/", "/index", "/index.html", "/templates/index.html"):
+            return self._send_file(_resolve_page_file("index.html"))
+        if path in ("/explorer", "/explorer.html", "/templates/explorer.html"):
+            return self._send_file(_resolve_page_file("explorer.html"))
+        if path in ("/results", "/results.html", "/templates/results.html"):
+            return self._send_file(_resolve_page_file("results.html"))
+        if path in ("/compare", "/compare.html", "/templates/compare.html"):
+            return self._send_file(_resolve_page_file("compare.html"))
+        if path in ("/missions", "/missions.html", "/templates/missions.html"):
+            return self._send_file(_resolve_page_file("missions.html"))
+        if path in ("/about", "/about.html", "/templates/about.html"):
+            return self._send_file(_resolve_page_file("about.html"))
+
+        candidate = (BASE_DIR / path.lstrip("/")).resolve()
+        if str(candidate).startswith(str(BASE_DIR)) and candidate.is_file():
+            return self._send_file(candidate)
+
+        self._send_json({"error": f"Ruta {path} no encontrada"}, 404)
+
+    def do_POST(self) -> None:
+        parsed = urlparse(self.path)
+        length = int(self.headers.get("Content-Length", 0))
+        raw = self.rfile.read(length).decode("utf-8") if length > 0 else "{}"
+        try:
+            payload = json.loads(raw)
+        except json.JSONDecodeError:
+            return self._send_json({"error": "JSON inválido"}, 400)
+
+        if parsed.path == "/api/analyze":
+            resp, status = handle_analyze_request(payload)
+            return self._send_json(resp, status)
+        if parsed.path == "/api/compare":
+            resp, status = handle_compare_request(payload)
+            return self._send_json(resp, status)
+
+        self._send_json({"error": "Endpoint no encontrado"}, 404)
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    if HAS_FLASK:
-        print(f"Iniciando EarthLens con Flask en http://127.0.0.1:{port}/")
-        app.run(debug=True, port=port)
-    else:
-        print(f"Iniciando servidor EarthLens en http://127.0.0.1:{port}/")
-        server = HTTPServer(("127.0.0.1", port), EarthLensHandler)
+    port = int(os.environ.get("PORT", 8000))
+    host = os.environ.get("HOST", "127.0.0.1")
+    url = f"http://127.0.0.1:{port}/"
+    threading.Timer(0.8, lambda: webbrowser.open(url)).start()
+
+    try:
+        flask_app = create_app()
+        print(f"🌍 EarthLens Unificado (Flask + SciPy) corriendo en {url}")
+        flask_app.run(host=host, port=port, debug=False)
+    except ImportError:
+        print(f"🌍 EarthLens Unificado (Servidor integrado) corriendo en {url}")
+        server = ThreadingHTTPServer((host, port), EarthLensUnifiedHandler)
         server.serve_forever()
