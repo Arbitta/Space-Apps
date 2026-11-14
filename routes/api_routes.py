@@ -1,8 +1,9 @@
 """
-EarthLens — Endpoints REST del Contrato de la API (Página 6 del PDF)
+EarthLens — Endpoints REST del Contrato de la API (Página 6 del PDF + Inicio/Explorador)
 Archivo: routes/api_routes.py
 Endpoints:
   - GET  /api/variables
+  - GET  /api/summary
   - POST /api/analyze
   - POST /api/compare
   - GET  /api/missions
@@ -97,20 +98,69 @@ def handle_analyze_request(payload: Dict[str, Any]) -> Tuple[Dict[str, Any], int
         end_year=clean["end_year"],
         location_name=clean["location_name"],
     )
+    result["is_mock"] = False
     return result, 200
+
+
+def handle_summary_request(
+    lat: Any = -34.6037,
+    lon: Any = -58.3816,
+    start_year: Any = 2000,
+    end_year: Any = 2024,
+) -> Tuple[Dict[str, Any], int]:
+    """
+    Procesa GET /api/summary (utilizado por la pantalla de Inicio index.html)
+    calculando las estadísticas de todas las variables del catálogo con el motor del Rol 06.
+    """
+    try:
+        lat_f = float(lat)
+        lon_f = float(lon)
+        s_yr = int(start_year)
+        e_yr = int(end_year)
+    except (TypeError, ValueError):
+        return {"error": "Parámetros inválidos en /api/summary"}, 400
+
+    if not (-90.0 <= lat_f <= 90.0) or not (-180.0 <= lon_f <= 180.0) or s_yr >= e_yr:
+        return {"error": "Coordenadas o años fuera de rango"}, 400
+
+    estimations: Dict[str, Any] = {}
+    for code in VARIABLES_CATALOG.keys():
+        res, status = handle_analyze_request(
+            {
+                "latitude": lat_f,
+                "longitude": lon_f,
+                "variable": code,
+                "start_year": s_yr,
+                "end_year": e_yr,
+            }
+        )
+        if status == 200 and res.get("series"):
+            series = res["series"]
+            estimations[code] = {
+                "variable": code,
+                "unit": res["unit"],
+                "mean_value": res["statistics"]["mean"],
+                "latest_value": series[-1]["value"],
+                "statistics": res["statistics"],
+                "conclusion": res["conclusion"],
+            }
+
+    return (
+        {
+            "is_mock": False,
+            "latitude": lat_f,
+            "longitude": lon_f,
+            "start_year": s_yr,
+            "end_year": e_yr,
+            "estimations": estimations,
+        },
+        200,
+    )
 
 
 def handle_compare_request(payload: Dict[str, Any]) -> Tuple[Dict[str, Any], int]:
     """
     Procesa POST /api/compare para dos ubicaciones con la misma variable y período.
-    Acepta formato:
-      {
-        "variable": "T2M",
-        "start_year": 2000,
-        "end_year": 2024,
-        "location_a": {"latitude": -45.86, "longitude": -67.50, "name": "Comodoro Rivadavia"},
-        "location_b": {"latitude": -54.80, "longitude": -68.30, "name": "Ushuaia"}
-      }
     """
     if not isinstance(payload, dict):
         return {"error": "El cuerpo de la solicitud debe ser un objeto JSON."}, 400
@@ -162,6 +212,16 @@ def register_api_routes(app: Any) -> None:
     @app.route("/api/variables", methods=["GET"])
     def api_variables():
         return jsonify({"variables": get_variables_catalog()}), 200
+
+    @app.route("/api/summary", methods=["GET"])
+    def api_summary():
+        resp, status = handle_summary_request(
+            lat=request.args.get("lat", -34.6037),
+            lon=request.args.get("lon", -58.3816),
+            start_year=request.args.get("start_year", 2000),
+            end_year=request.args.get("end_year", 2024),
+        )
+        return jsonify(resp), status
 
     @app.route("/api/analyze", methods=["POST"])
     def api_analyze():
