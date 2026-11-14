@@ -1,0 +1,67 @@
+{
+  "missions": [
+    {
+      "id": "patagonia-cambiante",
+      "code": "01",
+      "title": "01 / Patagonia cambiante",
+      "question": "¿Está aumentando la temperatura en la costa patagónica?",
+      "hypothesis": "La temperatura media anual (T2M) y los extremos térmicos (T2M_MAX y T2M_MIN) en Comodoro Rivadavia presentan una tendencia ascendente estadísticamente significativa (p < 0.05) entre 2000 y 2024.",
+      "recommended_variables": ["T2M", "T2M_MAX", "T2M_MIN"],
+      "primary_variable": "T2M",
+      "location": {
+        "name": "Comodoro Rivadavia, Chubut",
+        "latitude": -45.86,
+        "longitude": -67.50
+      },
+      "period": {
+        "start_year": 2000,
+        "end_year": 2024
+      },
+      "scientific_note": "Comparar la pendiente de T2M_MAX frente a T2M_MIN permite evaluar si el calentamiento es más pronunciado en las tardes o en las noches patagónicas."
+    },
+    {
+      "id": "en-busca-del-agua",
+      "code": "02",
+      "title": "02 / En busca del agua",
+      "question": "¿Están disminuyendo las precipitaciones y la humedad atmosférica?",
+      "hypothesis": "Las precipitaciones corregidas (PRECTOTCORR) y la humedad relativa (RH2M) muestran señales de déficit hídrico acompañadas por un aumento de temperatura (T2M).",
+      "recommended_variables": ["PRECTOTCORR", "T2M", "RH2M"],
+      "primary_variable": "PRECTOTCORR",
+      "location": {
+        "name": "Comodoro Rivadavia, Chubut",
+        "latitude": -45.86,
+        "longitude": -67.50
+      },
+      "period": {
+        "start_year": 2000,
+        "end_year": 2024
+      },
+      "scientific_note": "La humedad relativa (RH2M) mide la saturación del aire a 2 metros y NO equivale a la humedad del suelo (que requiere sensores hidrológicos como GLDAS)."
+    },
+    {
+      "id": "el-misterio-del-viento",
+      "code": "03",
+      "title": "03 / El misterio del viento",
+      "question": "¿Está cambiando la velocidad del viento en distintas latitudes de la Patagonia?",
+      "hypothesis": "La velocidad media del viento a 2 metros (WS2M) presenta tendencias diferenciadas al comparar la costa del Golfo San Jorge (Comodoro Rivadavia) con el extremo austral (Ushuaia / Río Gallegos).",
+      "recommended_variables": ["WS2M"],
+      "primary_variable": "WS2M",
+      "mode": "compare",
+      "location": {
+        "name": "Comodoro Rivadavia, Chubut",
+        "latitude": -45.86,
+        "longitude": -67.50
+      },
+      "comparison_location": {
+        "name": "Ushuaia, Tierra del Fuego",
+        "latitude": -54.80,
+        "longitude": -68.30
+      },
+      "period": {
+        "start_year": 2000,
+        "end_year": 2024
+      },
+      "scientific_note": "NASA POWER representa promedios en celdas geográficas satelitales (~50 km), suavizando las ráfagas locales de cañadones o costas escarpadas."
+    }
+  ]
+}
