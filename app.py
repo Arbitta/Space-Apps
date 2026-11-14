@@ -27,6 +27,7 @@ from routes.api_routes import (
     handle_summary_request,
     register_api_routes,
 )
+from routes.missions_routes import handle_missions_get, register_missions_routes
 from services.datasets import get_mission_by_id, get_missions_list, get_variables_catalog
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -63,6 +64,7 @@ def create_app() -> Any:
     )
 
     register_api_routes(app)
+    register_missions_routes(app)
 
     @app.route("/")
     @app.route("/index")
@@ -154,6 +156,9 @@ class EarthLensUnifiedHandler(BaseHTTPRequestHandler):
             return self._send_json(resp, status)
         if path == "/api/missions":
             return self._send_json({"missions": get_missions_list()}, 200)
+        missions_resp = handle_missions_get(path, parse_qs(parsed.query))
+        if missions_resp is not None:
+            return self._send_json(*missions_resp)
         if path.startswith("/api/missions/"):
             m_id = path.split("/api/missions/", 1)[1]
             mission = get_mission_by_id(m_id)

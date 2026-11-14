@@ -127,6 +127,16 @@ document.addEventListener('DOMContentLoaded', () => {
     populateLocationColumn('A', state.locA, dataA, unitDisplay);
     populateLocationColumn('B', state.locB, dataB, unitDisplay);
 
+    // Veredicto del Modo detective (Persona 5): la hipótesis se evalúa sobre la Ubicación A.
+    if (window.EarthLensMissions && !dataA.is_mock) {
+      EarthLensMissions.renderVerdict(
+        document.getElementById('mission-verdict'),
+        dataA.statistics,
+        { variable: state.variable, latitude: state.locA.latitude, longitude: state.locA.longitude },
+        state.locA.name
+      );
+    }
+
     renderComparativeSynthesis(state.locA.name, state.locB.name, dataA, dataB, varMeta, unitDisplay);
 
     const showTrends = document.getElementById('cmpToggleTrendlines')?.checked ?? true;

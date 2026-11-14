@@ -129,6 +129,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     const unitDisplay = data.unit === 'deg C' ? '°C' : data.unit || varMeta.unit;
 
+    // Veredicto del Modo detective (Persona 5). No se evalúa sobre datos de prueba.
+    if (window.EarthLensMissions && !data.is_mock) {
+      EarthLensMissions.renderVerdict(document.getElementById('mission-verdict'), stats, currentRequestParams);
+    }
+
     const banner = document.getElementById('dataModeBanner');
     const bannerText = document.getElementById('dataModeText');
     if (banner && bannerText) {
