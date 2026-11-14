@@ -1,0 +1,112 @@
+/* ==========================================================================
+   EarthLens — Estilos Base Compartidos (styles.css)
+   NASA Space Apps Challenge 2026 · Be An Earth System Trend Detective!
+   ========================================================================== */
+
+:root {
+  --el-bg-dark: #0b132b;
+  --el-bg-panel: #1c2541;
+  --el-bg-light: #f4f7fb;
+  --el-surface: #ffffff;
+  --el-primary: #0d6efd;
+  --el-primary-dark: #0a58ca;
+  --el-accent: #00b4d8;
+  --el-accent-soft: rgba(0, 180, 216, 0.12);
+  --el-success: #198754;
+  --el-warning: #f59e0b;
+  --el-danger: #dc3545;
+  --el-text-main: #1e293b;
+  --el-text-muted: #64748b;
+  --el-border: #e2e8f0;
+  --el-radius: 12px;
+  --el-shadow: 0 4px 20px rgba(11, 19, 43, 0.07);
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--el-bg-light);
+  color: var(--el-text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar EarthLens */
+.el-navbar {
+  background: linear-gradient(90deg, var(--el-bg-dark) 0%, var(--el-bg-panel) 100%);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+.el-brand {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.el-brand-badge {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: rgba(0, 180, 216, 0.2);
+  color: #90e0ef;
+  border: 1px solid rgba(144, 224, 239, 0.35);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.el-navbar .nav-link {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-weight: 500;
+  font-size: 0.94rem;
+  padding: 0.5rem 0.85rem !important;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.el-navbar .nav-link:hover,
+.el-navbar .nav-link.active {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Tarjetas y contenedores */
+.el-card {
+  background: var(--el-surface);
+  border: 1px solid var(--el-border);
+  border-radius: var(--el-radius);
+  box-shadow: var(--el-shadow);
+}
+
+/* Etiqueta de datos de prueba */
+.el-mock-badge {
+  background-color: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fde68a;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Footer */
+.el-footer {
+  margin-top: auto;
+  background-color: var(--el-bg-dark);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.875rem;
+}
+
+.el-footer a {
+  color: #90e0ef;
+  text-decoration: none;
+}
+
+.el-footer a:hover {
+  text-decoration: underline;
+}
