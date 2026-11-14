@@ -82,7 +82,7 @@ def handle_analyze_request(payload: Dict[str, Any]) -> Tuple[Dict[str, Any], int
     if not ok:
         return {"error": err_msg}, 400
 
-    series, source = fetch_nasa_power_series(
+    series, source, is_mock, data_mode = fetch_nasa_power_series(
         latitude=clean["latitude"],
         longitude=clean["longitude"],
         variable=clean["variable"],
@@ -98,7 +98,8 @@ def handle_analyze_request(payload: Dict[str, Any]) -> Tuple[Dict[str, Any], int
         end_year=clean["end_year"],
         location_name=clean["location_name"],
     )
-    result["is_mock"] = False
+    result["is_mock"] = is_mock
+    result["data_mode"] = data_mode
     return result, 200
 
 
@@ -124,6 +125,7 @@ def handle_summary_request(
         return {"error": "Coordenadas o años fuera de rango"}, 400
 
     estimations: Dict[str, Any] = {}
+    data_modes = set()
     for code in VARIABLES_CATALOG.keys():
         res, status = handle_analyze_request(
             {
@@ -135,6 +137,7 @@ def handle_summary_request(
             }
         )
         if status == 200 and res.get("series"):
+            data_modes.add(res.get("data_mode", "unknown"))
             series = res["series"]
             estimations[code] = {
                 "variable": code,
@@ -145,9 +148,12 @@ def handle_summary_request(
                 "conclusion": res["conclusion"],
             }
 
+    resolved_mode = next(iter(data_modes)) if len(data_modes) == 1 else "mixed"
+
     return (
         {
-            "is_mock": False,
+            "is_mock": any(mode != "live" for mode in data_modes),
+            "data_mode": resolved_mode,
             "latitude": lat_f,
             "longitude": lon_f,
             "start_year": s_yr,

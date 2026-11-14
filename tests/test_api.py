@@ -5,7 +5,9 @@ Valida el contrato JSON de la Página 6 del PDF para /api/analyze, /api/compare,
 """
 
 import unittest
+from unittest.mock import patch
 
+from app import create_app
 from routes.api_routes import handle_analyze_request, handle_compare_request
 from services.datasets import get_mission_by_id, get_missions_list, get_variables_catalog
 
@@ -35,6 +37,8 @@ class TestAPIContract(unittest.TestCase):
         self.assertEqual(response["variable"], "T2M")
         self.assertEqual(response["unit"], "deg C")
         self.assertEqual(len(response["series"]), 25)
+        self.assertTrue(response["is_mock"])
+        self.assertEqual(response["data_mode"], "sample")
 
         # Campos obligatorios dentro de statistics (Página 6)
         stats = response["statistics"]
@@ -108,6 +112,66 @@ class TestAPIContract(unittest.TestCase):
         m1 = get_mission_by_id("patagonia-cambiante")
         self.assertIsNotNone(m1)
         self.assertEqual(m1["primary_variable"], "T2M")
+
+    def test_flask_analyze_route_returns_json_contract(self):
+        app = create_app()
+        app.config.update(TESTING=True)
+
+        with app.test_client() as client:
+            response = client.post(
+                "/api/analyze",
+                json={
+                    "latitude": -45.86,
+                    "longitude": -67.50,
+                    "variable": "T2M",
+                    "start_year": 2000,
+                    "end_year": 2024,
+                },
+            )
+
+        self.assertEqual(response.status_code, 200)
+        body = response.get_json()
+        self.assertEqual(body["data_mode"], "sample")
+        self.assertIn("statistics", body)
+
+    @patch(
+        "routes.api_routes.fetch_nasa_power_series",
+        return_value=(
+            [{"year": 2020, "value": 10.0}, {"year": 2021, "value": 10.2}, {"year": 2022, "value": 10.4}],
+            "NASA POWER / MERRA-2",
+            False,
+            "live",
+        ),
+    )
+    def test_live_nasa_mode_is_exposed_without_network(self, mocked_fetch):
+        response, status = handle_analyze_request(
+            {
+                "latitude": -45.86,
+                "longitude": -67.50,
+                "variable": "T2M",
+                "start_year": 2020,
+                "end_year": 2022,
+            }
+        )
+
+        self.assertEqual(status, 200)
+        self.assertFalse(response["is_mock"])
+        self.assertEqual(response["data_mode"], "live")
+        mocked_fetch.assert_called_once()
+
+    def test_flask_summary_reports_data_provenance(self):
+        app = create_app()
+        app.config.update(TESTING=True)
+
+        with app.test_client() as client:
+            response = client.get(
+                "/api/summary?lat=-45.86&lon=-67.50&start_year=2000&end_year=2024"
+            )
+
+        self.assertEqual(response.status_code, 200)
+        body = response.get_json()
+        self.assertTrue(body["is_mock"])
+        self.assertEqual(body["data_mode"], "sample")
 
 
 if __name__ == "__main__":
