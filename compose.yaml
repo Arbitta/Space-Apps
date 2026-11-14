@@ -1,0 +1,70 @@
+name: earthlens
+
+services:
+  backend:
+    image: earthlens-backend:dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    init: true
+    ports:
+      - "127.0.0.1:${EARTHLENS_PORT:-5000}:5000"
+    environment:
+      FLASK_DEBUG: "0"
+      EARTHLENS_CACHE_DIR: /app/data/cache/power
+      EARTHLENS_POWER_REQUEST_DELAY: "1.0"
+    command:
+      - python
+      - -m
+      - flask
+      - --app
+      - app:create_app
+      - run
+      - --host
+      - 0.0.0.0
+      - --port
+      - "5000"
+      - --reload
+      - --no-debugger
+    volumes:
+      - type: bind
+        source: ./app.py
+        target: /app/app.py
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./api
+        target: /app/api
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./services
+        target: /app/services
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./scripts
+        target: /app/scripts
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./tests
+        target: /app/tests
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./data/cities.json
+        target: /app/data/cities.json
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./data/cache
+        target: /app/data/cache
+        bind:
+          create_host_path: false
