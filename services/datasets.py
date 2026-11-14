@@ -112,24 +112,27 @@ def get_mission(mission_id: str) -> dict | None:
 def mission_target_url(mission: dict, hypothesis: str | None = None) -> str:
     """URL del explorador o comparador con los parámetros de la misión precargados.
 
-    Explorador: /explorer?lat=..&lon=..&variable=..&start=..&end=..&mission=..
-    Comparador: /compare?lat1=..&lon1=..&lat2=..&lon2=..&variable=..&start=..&end=..&mission=..
+    Usa los nombres que leen explorer.js y compare.js en main:
+    Explorador: /explorer?lat=..&lon=..&label=..&variable=..&start_year=..&end_year=..&mission=..
+    Comparador: /compare?latA=..&lonA=..&nameA=..&latB=..&lonB=..&nameB=..&variable=..&start_year=..&end_year=..&mission=..
     """
     locs = mission["locations"]
     params: dict = {}
     if mission.get("mode") == "compare" and len(locs) >= 2:
         path = "/compare"
-        for i, loc in enumerate(locs[:2], start=1):
-            params[f"lat{i}"] = loc["latitude"]
-            params[f"lon{i}"] = loc["longitude"]
+        for suffix, loc in zip("AB", locs[:2]):
+            params[f"lat{suffix}"] = loc["latitude"]
+            params[f"lon{suffix}"] = loc["longitude"]
+            params[f"name{suffix}"] = loc["name"]
     else:
         path = "/explorer"
         params["lat"] = locs[0]["latitude"]
         params["lon"] = locs[0]["longitude"]
+        params["label"] = locs[0]["name"]
     params.update({
         "variable": mission["variable"],
-        "start": mission["start_year"],
-        "end": mission["end_year"],
+        "start_year": mission["start_year"],
+        "end_year": mission["end_year"],
         "mission": mission["id"],
     })
     if hypothesis:
@@ -144,8 +147,9 @@ def evaluate_hypothesis(hypothesis: str, statistics: dict) -> dict:
     (direction, significant, p_value, change_per_decade).
     Devuelve {"verdict": supported|contradicted|inconclusive, "message": str}.
     """
-    significant = bool(statistics.get("significant"))
     direction = statistics.get("direction")
+    # Una pendiente "significativa" pero prácticamente nula no es una tendencia.
+    significant = bool(statistics.get("significant")) and direction in ("increasing", "decreasing")
     p = statistics.get("p_value")
     p_txt = f" (p = {p:.3f})" if isinstance(p, (int, float)) else ""
 

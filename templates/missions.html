@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{# Modo detective — Persona 5. Usa los bloques title/content/scripts de base.html (Persona 1). #}
+{# Modo detective — Persona 5. Usa los bloques title/content/extra_js de base.html (Persona 1). #}
 
 {% block title %}Modo detective · EarthLens{% endblock %}
 
@@ -68,6 +68,6 @@
 </section>
 {% endblock %}
 
-{% block scripts %}
+{% block extra_js %}
 <script src="{{ url_for('static', filename='js/missions.js') }}"></script>
 {% endblock %}

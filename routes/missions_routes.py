@@ -1,13 +1,14 @@
 """Endpoints de catálogo y misiones (Persona 5).
 
-Registrar en app.py (Persona 4):
+Se registra en app.py:
 
     from routes.missions_routes import missions_bp
     app.register_blueprint(missions_bp)
 
-Endpoints:
-    GET /api/variables                      catálogo de variables, fenómenos y fuentes
+Endpoints (GET /api/variables lo sirve app.py; acá no se redefine):
+    GET /api/phenomena                      fenómenos para el recomendador
     GET /api/variables/recommend?phenomenon=sequia
+    GET /api/sources                        catálogo de fuentes de datos
     GET /api/missions                       listado de casos guiados
     GET /api/missions/<id>                  detalle del caso
 """
@@ -19,9 +20,14 @@ from services import datasets
 missions_bp = Blueprint("missions", __name__, url_prefix="/api")
 
 
-@missions_bp.get("/variables")
-def variables():
-    return jsonify(datasets.variables_catalog())
+@missions_bp.get("/phenomena")
+def phenomena():
+    return jsonify({"phenomena": datasets.list_phenomena()})
+
+
+@missions_bp.get("/sources")
+def sources():
+    return jsonify({"sources": datasets.list_sources()})
 
 
 @missions_bp.get("/variables/recommend")

@@ -281,6 +281,26 @@ try:
     def explorer():
         return render_template("explorer.html")
 
+    @app.route("/results")
+    @app.route("/results.html")
+    def results():
+        return render_template("results.html")
+
+    @app.route("/compare")
+    @app.route("/compare.html")
+    def compare():
+        return render_template("compare.html")
+
+    # Modo detective (Persona 5): página + /api/missions, /api/phenomena,
+    # /api/variables/recommend y /api/sources (ver routes/missions_routes.py)
+    from routes.missions_routes import missions_bp
+    app.register_blueprint(missions_bp)
+
+    @app.route("/missions")
+    @app.route("/missions.html")
+    def missions():
+        return render_template("missions.html")
+
     @app.route("/api/variables", methods=["GET"])
     def get_variables():
         return jsonify(VARIABLES_CATALOG)

@@ -33,25 +33,36 @@
   }
 
   function loadActiveMission() {
-    const params = new URLSearchParams(location.search);
     let stored = null;
     try { stored = JSON.parse(sessionStorage.getItem(STORAGE_KEY)); } catch (_) { /* nada */ }
-    const id = params.get("mission") || (stored && stored.id);
-    if (!id) return null;
-    return {
-      id,
-      hypothesis: params.get("hypothesis") || (stored && stored.id === id ? stored.hypothesis : null),
-      title: stored && stored.id === id ? stored.title : null,
-      question: stored && stored.id === id ? stored.question : null,
-    };
+    if (!stored || !stored.id || !stored.hypothesis) return null;
+    return stored;
+  }
+
+  function clearActiveMission() {
+    try { sessionStorage.removeItem(STORAGE_KEY); } catch (_) { /* nada */ }
+  }
+
+  /* ¿El análisis que se está mostrando corresponde a la misión activa?
+   * Evita mostrar un veredicto viejo cuando el usuario sigue explorando libremente. */
+  function matchesMission(active, request) {
+    if (!request) return false;
+    const variable = String(request.variable || "").toUpperCase();
+    if (variable !== active.variable) return false;
+    const lat = Number(request.latitude);
+    const lon = Number(request.longitude);
+    return (active.locations || []).some((loc) =>
+      Math.abs(loc.latitude - lat) < 0.05 && Math.abs(loc.longitude - lon) < 0.05);
   }
 
   // ------------------------------------------------- veredicto (compartido)
   /* Igual que services/datasets.py::evaluate_hypothesis.
    * statistics sigue el contrato de /api/analyze. */
   function evaluateHypothesis(hypothesis, statistics) {
-    const significant = Boolean(statistics && statistics.significant);
     const direction = statistics && statistics.direction;
+    // Una pendiente "significativa" pero prácticamente nula no es una tendencia.
+    const significant = Boolean(statistics && statistics.significant) &&
+      (direction === "increasing" || direction === "decreasing");
     const p = statistics && statistics.p_value;
     const pTxt = typeof p === "number" ? ` (p = ${p.toFixed(3)})` : "";
 
@@ -83,19 +94,25 @@
     inconclusive: { cls: "alert-warning", label: "Evidencia insuficiente" },
   };
 
-  /* Para results.js / compare.js (Persona 3):
-   *   EarthLensMissions.renderVerdict(document.getElementById("mission-verdict"), data.statistics);
-   * No hace nada si el usuario no llegó desde una misión. */
-  function renderVerdict(container, statistics) {
+  /* Para results.js / compare.js:
+   *   EarthLensMissions.renderVerdict(container, statistics, { variable, latitude, longitude }, label);
+   * Solo muestra algo si hay una misión activa y el análisis coincide con su
+   * variable y ubicación. `label` (opcional) indica a qué ubicación se refiere. */
+  function renderVerdict(container, statistics, request, label) {
     const active = loadActiveMission();
-    if (!container || !active || !active.hypothesis) return null;
+    if (!container || !active || !statistics || !matchesMission(active, request)) return null;
     const result = evaluateHypothesis(active.hypothesis, statistics);
     const style = VERDICT_STYLE[result.verdict];
-    const box = el("div", { class: `alert ${style.cls}`, role: "status" });
-    box.append(el("strong", {}, `Misión: ${style.label}. `));
-    if (active.question) box.append(el("div", { class: "small text-muted" }, active.question));
-    box.append(el("p", { class: "mb-0" }, result.message));
+    const box = el("div", { class: `alert ${style.cls} mb-0`, role: "status" });
+    box.append(el("strong", {}, `🔎 Misión ${active.number} · ${active.title}: ${style.label}`));
+    box.append(el("div", { class: "small" }, active.question));
+    const hyp = (active.hypotheses || []).find((h) => h.id === active.hypothesis);
+    if (hyp) box.append(el("div", { class: "small" }, `Tu hipótesis: ${hyp.label}${label ? ` (${label})` : ""}.`));
+    box.append(el("p", { class: "mb-0 mt-2" }, result.message));
+    const back = el("a", { href: "/missions", class: "small" }, "Volver al Modo detective");
+    box.append(back);
     container.replaceChildren(box);
+    container.classList.remove("d-none");
     return result;
   }
 
@@ -166,11 +183,20 @@
       document.getElementById("hypothesis-error").classList.remove("d-none");
       return;
     }
-    saveActiveMission({ id: current.id, hypothesis: choice, title: current.title, question: current.question });
+    saveActiveMission({
+      id: current.id,
+      number: current.number,
+      title: current.title,
+      question: current.question,
+      hypothesis: choice,
+      hypotheses: current.hypotheses,
+      variable: current.variable,
+      locations: current.locations,
+    });
     location.href = `${current.explorer_url}&hypothesis=${encodeURIComponent(choice)}`;
   }
 
-  async function setupRecommender(catalog) {
+  function setupRecommender(catalog) {
     const select = document.getElementById("phenomenon-select");
     const out = document.getElementById("recommendations");
     catalog.phenomena.forEach((p) => select.append(el("option", { value: p.id }, p.label)));
@@ -193,7 +219,7 @@
   async function initMissionsPage() {
     const list = document.getElementById("mission-list");
     try {
-      const [missions, catalog] = await Promise.all([getJSON("/api/missions"), getJSON("/api/variables")]);
+      const [missions, catalog] = await Promise.all([getJSON("/api/missions"), getJSON("/api/phenomena")]);
       renderCards(missions.missions);
       setupRecommender(catalog);
     } catch (err) {
@@ -212,7 +238,7 @@
     if (open) openMission(open).catch(console.error);
   }
 
-  window.EarthLensMissions = { evaluateHypothesis, renderVerdict, loadActiveMission };
+  window.EarthLensMissions = { evaluateHypothesis, renderVerdict, loadActiveMission, clearActiveMission };
 
   document.addEventListener("DOMContentLoaded", () => {
     if (document.getElementById("missions-page")) initMissionsPage();
