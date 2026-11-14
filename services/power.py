@@ -23,7 +23,10 @@ SAMPLE_FILE = BASE_DIR / "data" / "samples" / "comodoro_rivadavia_2000_2024.json
 NASA_POWER_MONTHLY_URL = "https://power.larc.nasa.gov/api/temporal/monthly/point"
 
 # Caché simple en memoria para evitar consultas repetidas (Página 3 del PDF)
-_MEMORY_CACHE: Dict[Tuple[float, float, str, int, int], Tuple[List[Dict[str, float]], str]] = {}
+_MEMORY_CACHE: Dict[
+    Tuple[float, float, str, int, int],
+    Tuple[List[Dict[str, float]], str, bool, str],
+] = {}
 
 
 def _load_comodoro_reference() -> Dict[str, Any]:
@@ -100,7 +103,7 @@ def fetch_nasa_power_series(
     start_year: int = 2000,
     end_year: int = 2024,
     timeout: float = 4.0,
-) -> Tuple[List[Dict[str, float]], str]:
+) -> Tuple[List[Dict[str, float]], str, bool, str]:
     """
     Consulta la API de NASA POWER (MERRA-2) y normaliza la serie anual.
     Si el modo offline está activo o la API remota devuelve error (ej. 502),
@@ -150,7 +153,7 @@ def fetch_nasa_power_series(
                             param_dict, start_year=s_yr, end_year=e_yr
                         )
                         if len(annual) >= 3:
-                            result = (annual, "NASA POWER / MERRA-2")
+                            result = (annual, "NASA POWER / MERRA-2", False, "live")
                             _MEMORY_CACHE[cache_key] = result
                             return result
         except (urllib.error.URLError, TimeoutError, ValueError, KeyError):
@@ -158,6 +161,8 @@ def fetch_nasa_power_series(
 
     # Respaldo con muestra oficial de NASA POWER (Comodoro Rivadavia 2000-2024)
     ref_series = get_reference_series(lat_r, lon_r, var_code, s_yr, e_yr)
-    result = (ref_series, "NASA POWER / MERRA-2")
+    is_reference_location = abs(lat_r - (-45.86)) < 0.15 and abs(lon_r - (-67.50)) < 0.15
+    fallback_mode = "sample" if is_reference_location else "synthetic"
+    result = (ref_series, "NASA POWER / MERRA-2", True, fallback_mode)
     _MEMORY_CACHE[cache_key] = result
     return result
