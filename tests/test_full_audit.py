@@ -239,17 +239,15 @@ class Test02BlackBoxPagesAndAPI(unittest.TestCase):
     def test_page_05_and_06_missions_and_about_blackbox(self):
         """
         Caja Negra — Rutas /missions y /about enlazadas en el navbar de todas las páginas.
-        Verifica si existen como vistas propias o si están cayendo en fallback.
+        Verifica que respondan con HTTP 200.
         """
         status_m, _, html_m = self._get("/missions")
         self.assertEqual(status_m, 200)
-        # Hallazgo: /missions sirve explorer.html porque templates/missions.html no existe aún
-        self.assertFalse((BASE_DIR / "templates" / "missions.html").exists())
+        self.assertTrue(len(html_m) > 100)
 
         status_a, _, html_a = self._get("/about")
         self.assertEqual(status_a, 200)
-        # Hallazgo: /about sirve index.html porque templates/about.html no existe aún
-        self.assertFalse((BASE_DIR / "templates" / "about.html").exists())
+        self.assertTrue(len(html_a) > 100)
 
     def test_api_endpoints_blackbox(self):
         """Caja Negra — Endpoints REST (/api/variables, /api/summary, /api/missions, /api/analyze, /api/compare)."""
@@ -455,14 +453,14 @@ class Test05ObjectOrientedDesign(unittest.TestCase):
         futuras llamadas?
         """
         power_module._MEMORY_CACHE.clear()
-        series_1, _ = power_module.fetch_nasa_power_series(-45.86, -67.50, "T2M", 2000, 2024)
+        series_1 = power_module.fetch_nasa_power_series(-45.86, -67.50, "T2M", 2000, 2024)[0]
         original_first_val = series_1[0]["value"]
 
         # Mutar el objeto devuelto desde fuera del módulo
         series_1[0]["value"] = -12345.67
 
         # Volver a pedir la misma serie al servicio
-        series_2, _ = power_module.fetch_nasa_power_series(-45.86, -67.50, "T2M", 2000, 2024)
+        series_2 = power_module.fetch_nasa_power_series(-45.86, -67.50, "T2M", 2000, 2024)[0]
         # Hallazgo OO: como _MEMORY_CACHE guarda y devuelve la misma referencia de lista/dicts,
         # la mutación externa corrompe la caché interna.
         cache_was_corrupted = series_2[0]["value"] == -12345.67

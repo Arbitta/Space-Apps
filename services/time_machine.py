@@ -124,13 +124,14 @@ def get_series_for_location(
         if len(filtered) >= 3:
             return filtered, "NASA POWER / MERRA-2"
 
-    series, source = fetch_nasa_power_series(
+    power_res = fetch_nasa_power_series(
         latitude=latitude,
         longitude=longitude,
         variable=var_code,
         start_year=start_year,
         end_year=end_year,
     )
+    series, source = power_res[0], power_res[1]
     return [dict(item) for item in series], source
 
 
