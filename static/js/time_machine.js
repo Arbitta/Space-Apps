@@ -1,14 +1,18 @@
 /**
  * EarthLens — Controlador de Earth Time Machine (static/js/time_machine.js)
+ * Interfaz Satelital Meteorológica de Pantalla Completa + Ventanas Flotantes (Bootstrap 5 + Leaflet + Chart.js)
  * NASA Space Apps Challenge 2026 · Be An Earth System Trend Detective!
  *
  * Características:
- *  - Reproducción fluida 2000–2024 en memoria (cero peticiones al mover el slider).
- *  - Mapa Leaflet con dos modos:
- *      1) Slide-Zoom Zonal: Grilla satelital MERRA-2 3×3 (0.5° × 0.625°) coloreada por año.
- *      2) Red Nacional Argentina: 25 ciudades en 5 regiones sincronizadas por año.
- *  - Comparador dinámico de Épocas (Época A vs Época B) con prueba t de Welch en tiempo real.
- *  - Cinta de Climate Stripes interactiva, gráficos sincronizados y detector de anomalías (|z| >= 1.5).
+ *  - Mapa satelital Esri World Imagery a pantalla completa con barra temporal en la parte inferior.
+ *  - Pluma meteorológica satelital (pane con desenfoque Gaussiano tipo imagen de TV del clima)
+ *    que cambia de paleta según la variable (Infrarrojo térmico, Radar Doppler de lluvia,
+ *    Vapor de agua/humedad y Jet Stream de viento).
+ *  - Botones alrededor del mapa que abren ventanitas flotantes en la misma pantalla:
+ *      1) Serie anual, tendencia OLS y cursor del año activo.
+ *      2) Desviación y anomalías respecto a la media.
+ *      3) Detector de anomalías (y comparador de épocas).
+ *      4) Matriz histórica anual.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -16,17 +20,19 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeYear = 2000;
   let isPlaying = false;
   let playTimer = null;
-  let playSpeedMs = 800;
+  let playSpeedMs = 700;
   let mapMode = 'zone'; // 'zone' | 'national'
+  let openWindowId = null;
 
   let activeAbortController = null;
   let requestSeq = 0;
 
   let mapInstance = null;
+  let weatherPlumeGroup = null;
   let zoneLayerGroup = null;
   let nationalLayerGroup = null;
-  let zoneCellRects = [];
-  let nationalMarkers = [];
+  let zoneCellLayers = [];
+  let nationalLayers = [];
   let trendChartInstance = null;
 
   let state = {
@@ -40,13 +46,99 @@ document.addEventListener('DOMContentLoaded', () => {
     split_year: 2012
   };
 
+  /**
+   * Paletas meteorológicas estilo TV / Imagen Satelital (NOAA / GOES / Windy)
+   * Cada variable tiene su propia rampa continua según el z-score anual.
+   */
+  const SATELLITE_TV_METADATA = {
+    T2M: {
+      title: '🌡️ Infrarrojo Térmico Satelital (T2M)',
+      minLabel: 'Frío (-2σ)',
+      maxLabel: 'Cálido (+2σ)',
+      scaleClass: 'tm-scale-thermal'
+    },
+    T2M_MAX: {
+      title: '🔥 Onda de Calor Superficial (T2M_MAX)',
+      minLabel: 'Templado (-2σ)',
+      maxLabel: 'Extremo (+2σ)',
+      scaleClass: 'tm-scale-thermal'
+    },
+    T2M_MIN: {
+      title: '❄️ Frente Polar / Mínimas (T2M_MIN)',
+      minLabel: 'Helada (-2σ)',
+      maxLabel: 'Templado (+2σ)',
+      scaleClass: 'tm-scale-thermal'
+    },
+    PRECTOTCORR: {
+      title: '🌧️ Radar Doppler de Precipitación',
+      minLabel: 'Sequía (-2σ)',
+      maxLabel: 'Tormenta (+2σ)',
+      scaleClass: 'tm-scale-precip'
+    },
+    RH2M: {
+      title: '💧 Vapor de Agua Atmosférico (RH2M)',
+      minLabel: 'Aire Seco (-2σ)',
+      maxLabel: 'Saturado (+2σ)',
+      scaleClass: 'tm-scale-humidity'
+    },
+    WS2M: {
+      title: '💨 Corriente de Viento Superficial (WS2M)',
+      minLabel: 'Calma (-2σ)',
+      maxLabel: 'Ráfagas (+2σ)',
+      scaleClass: 'tm-scale-wind'
+    }
+  };
+
+  function getSatelliteWeatherColor(variable, zScore) {
+    const varCode = (variable || 'T2M').toUpperCase();
+    const z = Number(zScore || 0);
+
+    if (varCode === 'PRECTOTCORR') {
+      if (z <= -1.8) return '#92400e';
+      if (z <= -1.0) return '#d97706';
+      if (z <= -0.3) return '#fde047';
+      if (z < 0.35) return '#34d399';
+      if (z < 1.1) return '#06b6d4';
+      if (z < 1.8) return '#2563eb';
+      return '#a855f7';
+    }
+
+    if (varCode === 'RH2M') {
+      if (z <= -1.8) return '#92400e';
+      if (z <= -1.0) return '#f59e0b';
+      if (z <= -0.3) return '#fde68a';
+      if (z < 0.4) return '#5eead4';
+      if (z < 1.2) return '#06b6d4';
+      if (z < 1.9) return '#0284c7';
+      return '#1d4ed8';
+    }
+
+    if (varCode === 'WS2M') {
+      if (z <= -1.6) return '#1e293b';
+      if (z <= -0.8) return '#0284c7';
+      if (z <= 0.2) return '#22d3ee';
+      if (z < 1.0) return '#818cf8';
+      if (z < 1.7) return '#c084fc';
+      return '#f43f5e';
+    }
+
+    // Infrarrojo térmico (T2M, T2M_MAX, T2M_MIN)
+    if (z <= -1.9) return '#3b0764';
+    if (z <= -1.1) return '#1d4ed8';
+    if (z <= -0.35) return '#06b6d4';
+    if (z < 0.35) return '#84cc16';
+    if (z < 1.1) return '#facc15';
+    if (z < 1.8) return '#f97316';
+    return '#dc2626';
+  }
+
   function setText(id, text) {
     const el = document.getElementById(id);
     if (el) el.textContent = text;
   }
 
   /**
-   * 1. Inicializa parámetros desde query string o sessionStorage
+   * 1. Inicializa parámetros desde query string
    */
   function initFromURL() {
     const params = new URLSearchParams(window.location.search);
@@ -116,13 +208,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     customOpt.dataset.lat = String(lat);
     customOpt.dataset.lon = String(lon);
-    customOpt.textContent = `${locName || 'Zona personalizada'} (${Number(lat).toFixed(2)}°, ${Number(lon).toFixed(2)}°)`;
+    customOpt.textContent = `${locName || 'Zona seleccionada'} (${Number(lat).toFixed(2)}°, ${Number(lon).toFixed(2)}°)`;
     citySelect.value = 'custom';
     state.city_id = null;
   }
 
   /**
-   * 2. Inicializa el mapa Leaflet
+   * 2. Inicializa el mapa Leaflet con vista Satelital por defecto + Pane Meteorológico Difuminado
    */
   function initLeafletMap() {
     const mapContainer = document.getElementById('timeMachineMap');
@@ -131,22 +223,51 @@ document.addEventListener('DOMContentLoaded', () => {
     mapInstance = L.map('timeMachineMap', {
       center: [state.latitude, state.longitude],
       zoom: 7,
-      zoomControl: true
+      zoomControl: false
     });
+
+    L.control.zoom({ position: 'bottomright' }).addTo(mapInstance);
+
+    // Vista Satelital Real (Esri World Imagery) por defecto para aspecto de noticiero del clima
+    const satelliteLayer = L.tileLayer(
+      'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      {
+        maxZoom: 17,
+        attribution: 'Satélite &copy; Esri · NASA Earthdata MERRA-2'
+      }
+    );
+
+    // Etiquetas de fronteras y ciudades sobre la imagen satelital
+    const labelsOverlay = L.tileLayer(
+      'https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
+      {
+        maxZoom: 17,
+        opacity: 0.78
+      }
+    );
 
     const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
-      attribution: '&copy; OpenStreetMap contributors · NASA POWER MERRA-2'
+      attribution: '&copy; OpenStreetMap contributors'
     });
 
-    const topoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      maxZoom: 17,
-      attribution: 'Tiles &copy; Esri · NASA Earthdata'
-    });
+    satelliteLayer.addTo(mapInstance);
+    labelsOverlay.addTo(mapInstance);
 
-    osmLayer.addTo(mapInstance);
-    L.control.layers({ 'Mapa Base (OSM)': osmLayer, 'Vista Satelital': topoLayer }).addTo(mapInstance);
+    L.control
+      .layers(
+        { '🛰️ Imagen Satelital (Clima TV)': satelliteLayer, '🗺️ Mapa Político (OSM)': osmLayer },
+        { '🏷️ Nombres y Límites': labelsOverlay },
+        { position: 'bottomright' }
+      )
+      .addTo(mapInstance);
 
+    // Pane especial con filtro CSS blur para simular las manchas meteorológicas de TV
+    const plumePane = mapInstance.createPane('satelliteWeatherPane');
+    plumePane.style.zIndex = 380;
+    plumePane.classList.add('leaflet-satellite-weather-pane');
+
+    weatherPlumeGroup = L.layerGroup().addTo(mapInstance);
     zoneLayerGroup = L.layerGroup().addTo(mapInstance);
     nationalLayerGroup = L.layerGroup();
 
@@ -155,14 +276,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const clickedLon = Number(ev.latlng.lng.toFixed(4));
       state.latitude = clickedLat;
       state.longitude = clickedLon;
-      state.locationName = `Zona (${clickedLat.toFixed(2)}°, ${clickedLon.toFixed(2)}°)`;
+      state.locationName = `Coordenada (${clickedLat.toFixed(2)}°, ${clickedLon.toFixed(2)}°)`;
       syncCitySelectWithCoords(clickedLat, clickedLon, state.locationName);
       loadTimeMachineData();
     });
   }
 
   /**
-   * 3. Consulta POST /api/time-machine (una sola descarga para todo el período)
+   * 3. Consulta POST /api/time-machine
    */
   async function loadTimeMachineData() {
     if (activeAbortController) {
@@ -211,9 +332,6 @@ document.addEventListener('DOMContentLoaded', () => {
     applyTimeMachinePayload(fallbackData);
   }
 
-  /**
-   * Respaldo local en caso de abrir el HTML sin servidor Python activo
-   */
   function buildClientFallbackPayload(req) {
     const mockBase = EarthLensCharts.buildMockAnalysis({
       latitude: req.latitude,
@@ -267,7 +385,7 @@ document.addEventListener('DOMContentLoaded', () => {
         min_record: minRec,
         events: anomBundle.events.map((ev) => ({
           ...ev,
-          badge: ev.z_score > 0 ? '🔥 Anomalía Positiva' : '❄️ Anomalía Negativa',
+          badge: ev.z_score > 0 ? '🔥 Anomalía Alta' : '❄️ Anomalía Baja',
           description: `Año ${ev.year}: valor ${ev.value.toFixed(2)} ${varMeta.unit} (z = ${ev.z_score >= 0 ? '+' : ''}${ev.z_score.toFixed(2)}).`
         }))
       },
@@ -293,13 +411,13 @@ document.addEventListener('DOMContentLoaded', () => {
             value: Number((pt.value + r * 0.2).toFixed(2)),
             anomaly: Number((pt.anomaly + r * 0.15).toFixed(2)),
             z_score: z,
-            color: EarthLensCharts.getVariableColor(variable, z)
+            color: getSatelliteWeatherColor(variable, z)
           };
         });
         cells.push({
           cell_id: `r${r}_c${c}`,
           is_center: r === 0 && c === 0,
-          label: r === 0 && c === 0 ? 'Celda Central MERRA-2' : `Sub-celda (${r}, ${c})`,
+          label: r === 0 && c === 0 ? 'Foco Central Satelital' : `Sector (${r}, ${c})`,
           latitude: lat,
           longitude: lon,
           bounds: [
@@ -321,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
-   * 4. Aplica la respuesta completa y sincroniza toda la interfaz
+   * 4. Aplica la respuesta completa y sincroniza el mapa satelital y las ventanitas
    */
   function applyTimeMachinePayload(data) {
     if (!data || !Array.isArray(data.timeline) || data.timeline.length === 0) return;
@@ -354,33 +472,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const unitDisp = data.display_unit || (data.unit === 'deg C' ? '°C' : data.unit);
     setText('tmTitleLocation', data.location?.name || state.locationName);
     setText('tmVariableBadge', `${data.variable_name} (${data.variable})`);
-    setText('tmRegionBadge', `Región: ${data.location?.region || 'Argentina'}`);
-    setText('tmPeriodBadge', `${minYr} – ${maxYr} (${data.timeline.length} años)`);
+    setText('tmRegionBadge', `${data.location?.region || 'Argentina'}`);
+    setText('tmPeriodBadge', `${minYr}–${maxYr}`);
     setText(
       'tmCoordsText',
-      `Lat: ${Number(data.location.latitude).toFixed(2)}° · Lon: ${Number(data.location.longitude).toFixed(2)}°`
+      `${Number(data.location.latitude).toFixed(2)}°, ${Number(data.location.longitude).toFixed(2)}°`
     );
 
-    updateColorScaleClass(data.variable);
+    updateWeatherLegend(data.variable);
     updateNavigationLinks(data);
-    renderSliderTicksAndStripes(data.timeline);
+    renderSliderStripes(data.timeline, data.variable);
     renderEpochComparisonUI(data.period_comparison, unitDisp);
     renderExtremeRecords(data.anomalies, unitDisp);
     renderAnomalyCards(data.anomalies, unitDisp);
-    renderTimelineTable(data.timeline, unitDisp);
+    renderTimelineTable(data.timeline, unitDisp, data.variable);
 
     rebuildMapLayers(data);
-    setActiveYear(activeYear, { panMap: false });
+    setActiveYear(activeYear);
   }
 
-  function updateColorScaleClass(variable) {
+  function updateWeatherLegend(variable) {
+    const meta = SATELLITE_TV_METADATA[variable] || SATELLITE_TV_METADATA.T2M;
+    setText('tmWeatherTvTitle', meta.title);
+    setText('tmScaleMinText', meta.minLabel);
+    setText('tmScaleMaxText', meta.maxLabel);
     const bar = document.getElementById('tmColorScaleBar');
-    if (!bar) return;
-    bar.className = 'tm-color-scale-bar ';
-    if (variable === 'PRECTOTCORR') bar.classList.add('tm-scale-precip');
-    else if (variable === 'RH2M') bar.classList.add('tm-scale-humidity');
-    else if (variable === 'WS2M') bar.classList.add('tm-scale-wind');
-    else bar.classList.add('tm-scale-thermal');
+    if (bar) {
+      bar.className = `tm-color-scale-bar flex-grow-1 ${meta.scaleClass}`;
+    }
   }
 
   function updateNavigationLinks(data) {
@@ -408,52 +527,77 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
-   * 5. Construye las capas del mapa Leaflet (Grilla Zonal 3×3 y Red de 25 Ciudades)
+   * 5. Construye las capas meteorológicas satelitales (Pluma Gaussiana + Sensores)
    */
   function rebuildMapLayers(data) {
-    if (!mapInstance || !zoneLayerGroup || !nationalLayerGroup) return;
+    if (!mapInstance || !zoneLayerGroup || !nationalLayerGroup || !weatherPlumeGroup) return;
 
+    weatherPlumeGroup.clearLayers();
     zoneLayerGroup.clearLayers();
     nationalLayerGroup.clearLayers();
-    zoneCellRects = [];
-    nationalMarkers = [];
+    zoneCellLayers = [];
+    nationalLayers = [];
 
     const cells = data.spatial_zone?.cells || [];
     cells.forEach((cell) => {
-      const rect = L.rectangle(cell.bounds, {
-        color: cell.is_center ? '#ffffff' : 'rgba(255, 255, 255, 0.55)',
-        weight: cell.is_center ? 2.5 : 1,
-        fillColor: '#3b82f6',
-        fillOpacity: cell.is_center ? 0.68 : 0.46
+      // Pluma meteorológica difusa (se dibuja en el pane con blur CSS para efecto imagen de satélite TV)
+      const plumeCircle = L.circle([cell.latitude, cell.longitude], {
+        pane: 'satelliteWeatherPane',
+        radius: cell.is_center ? 58000 : 48000,
+        stroke: false,
+        fillColor: '#38bdf8',
+        fillOpacity: cell.is_center ? 0.78 : 0.62
       });
-      rect.bindTooltip('', { sticky: true });
+
+      // Marco sutil interactivo para inspección al pasar el mouse
+      const rect = L.rectangle(cell.bounds, {
+        color: cell.is_center ? 'rgba(255, 255, 255, 0.75)' : 'rgba(255, 255, 255, 0.16)',
+        weight: cell.is_center ? 1.8 : 0.7,
+        dashArray: cell.is_center ? null : '3, 4',
+        fillColor: '#38bdf8',
+        fillOpacity: 0.12
+      });
+      rect.bindTooltip('', { sticky: true, className: 'tm-sat-city-tooltip' });
+
       rect.addTo(zoneLayerGroup);
-      zoneCellRects.push({ cell, rect });
+      zoneCellLayers.push({ cell, rect, plumeCircle });
     });
 
-    // Marcador central de la ciudad/ubicación
+    // Marcador del punto central
     const centerMarker = L.circleMarker([data.location.latitude, data.location.longitude], {
-      radius: 7,
+      radius: 6,
       color: '#ffffff',
       weight: 2,
-      fillColor: '#0b132b',
+      fillColor: '#00b4d8',
       fillOpacity: 1
-    }).bindTooltip(`📍 ${data.location.name}`, { permanent: false, direction: 'top' });
+    }).bindTooltip(`📍 ${data.location.name}`, {
+      permanent: false,
+      direction: 'top',
+      className: 'tm-sat-city-tooltip'
+    });
     centerMarker.addTo(zoneLayerGroup);
 
-    // Marcadores de las 25 ciudades argentinas (modo nacional)
+    // Red de 25 ciudades argentinas con halos meteorológicos
     const cities = data.regional_cities || [];
     cities.forEach((city) => {
       const isSelectedCity =
         Math.abs(city.latitude - data.location.latitude) < 0.2 &&
         Math.abs(city.longitude - data.location.longitude) < 0.2;
 
-      const marker = L.circleMarker([city.latitude, city.longitude], {
-        radius: isSelectedCity ? 11 : 8,
-        color: isSelectedCity ? '#ffffff' : '#0f172a',
-        weight: isSelectedCity ? 2.5 : 1.5,
+      const plume = L.circle([city.latitude, city.longitude], {
+        pane: 'satelliteWeatherPane',
+        radius: isSelectedCity ? 230000 : 185000,
+        stroke: false,
         fillColor: '#38bdf8',
-        fillOpacity: 0.88
+        fillOpacity: 0.68
+      });
+
+      const marker = L.circleMarker([city.latitude, city.longitude], {
+        radius: isSelectedCity ? 9 : 6.5,
+        color: '#ffffff',
+        weight: isSelectedCity ? 2.5 : 1.2,
+        fillColor: '#38bdf8',
+        fillOpacity: 0.95
       });
 
       marker.on('click', () => {
@@ -466,7 +610,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       marker.addTo(nationalLayerGroup);
-      nationalMarkers.push({ city, marker, isSelectedCity });
+      nationalLayers.push({ city, marker, plume, isSelectedCity });
     });
 
     applyMapModeView(true);
@@ -475,32 +619,32 @@ document.addEventListener('DOMContentLoaded', () => {
   function applyMapModeView(shouldZoom = true) {
     if (!mapInstance || !currentData) return;
 
+    weatherPlumeGroup.clearLayers();
+
     if (mapMode === 'national') {
       if (mapInstance.hasLayer(zoneLayerGroup)) mapInstance.removeLayer(zoneLayerGroup);
       if (!mapInstance.hasLayer(nationalLayerGroup)) nationalLayerGroup.addTo(mapInstance);
-      setText('tmMapTitle', 'Red Nacional Argentina · 25 Ciudades (GeoRef + NASA POWER)');
-      setText('tmMapSubtitle', 'Cada ciudad cambia de color según su valor y anomalía en el año activo. Haz clic en una ciudad para enfocarte en ella.');
-      setText('tmCellHudInfo', `Red Nacional: ${(currentData.regional_cities || []).length} ciudades activas`);
+      nationalLayers.forEach(({ plume }) => plume.addTo(weatherPlumeGroup));
+      setText('tmCellHudInfo', `Cobertura satelital: ${(currentData.regional_cities || []).length} estaciones en Argentina`);
       if (shouldZoom) {
-        mapInstance.flyTo([-38.5, -64.0], 4, { duration: 0.6 });
+        mapInstance.flyTo([-38.5, -64.0], 4, { duration: 0.65 });
       }
     } else {
       if (mapInstance.hasLayer(nationalLayerGroup)) mapInstance.removeLayer(nationalLayerGroup);
       if (!mapInstance.hasLayer(zoneLayerGroup)) zoneLayerGroup.addTo(mapInstance);
-      setText('tmMapTitle', `Mapa Zonal Slide-Zoom · Grilla MERRA-2 (${currentData.location.name})`);
-      setText('tmMapSubtitle', 'Visualización de la celda central (0.5° × 0.625°) y su entorno 3×3 coloreado por anomalía anual.');
-      setText('tmCellHudInfo', 'Grilla Zonal MERRA-2: 3×3 celdas (1.5° × 1.875°)');
+      zoneCellLayers.forEach(({ plumeCircle }) => plumeCircle.addTo(weatherPlumeGroup));
+      setText('tmCellHudInfo', `Barrido satelital MERRA-2 (0.5° × 0.625°) · ${currentData.location.name}`);
       if (shouldZoom && currentData.spatial_zone?.zone_bounds) {
-        mapInstance.flyToBounds(currentData.spatial_zone.zone_bounds, { padding: [24, 24], duration: 0.6 });
+        mapInstance.flyToBounds(currentData.spatial_zone.zone_bounds, { padding: [70, 70], duration: 0.65 });
       }
     }
     updateMapColorsForYear(activeYear);
   }
 
   /**
-   * 6. Actualiza en < 5 ms el mapa, los visores y los gráficos al cambiar de año
+   * 6. Actualiza en tiempo real el mapa satelital, la barra inferior y las ventanitas
    */
-  function setActiveYear(year, options = {}) {
+  function setActiveYear(year) {
     if (!currentData || !Array.isArray(currentData.timeline)) return;
     const yrNum = Number(year);
     const point = currentData.timeline.find((p) => p.year === yrNum) || currentData.timeline[0];
@@ -508,6 +652,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     activeYear = point.year;
     const unitDisp = currentData.display_unit || '°C';
+    const satColor = getSatelliteWeatherColor(currentData.variable, point.z_score);
 
     const slider = document.getElementById('tmYearSlider');
     if (slider && Number(slider.value) !== activeYear) {
@@ -515,42 +660,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     setText('tmActiveYearDisplay', String(activeYear));
-    setText('tmActiveValue', `${point.value.toFixed(2)} ${unitDisp}`);
+    setText('tmActiveValue', `${point.value.toFixed(1)} ${unitDisp}`);
 
     const anomSign = point.anomaly >= 0 ? '+' : '';
     const anomEl = document.getElementById('tmActiveAnomaly');
     if (anomEl) {
-      anomEl.textContent = `Δ ${anomSign}${point.anomaly.toFixed(2)} ${unitDisp} (z = ${point.z_score >= 0 ? '+' : ''}${point.z_score.toFixed(2)})`;
-      anomEl.style.backgroundColor = point.color;
-      anomEl.style.color = Math.abs(point.z_score) >= 1.2 ? '#ffffff' : '#0f172a';
+      anomEl.textContent = `${anomSign}${point.anomaly.toFixed(2)} ${unitDisp}`;
+      anomEl.style.backgroundColor = satColor;
+      anomEl.style.color = '#ffffff';
     }
 
     const levelBadge = document.getElementById('tmActiveLevelBadge');
     if (levelBadge) {
       const levelLabels = {
         extreme_high: '🔥 Anomalía Extrema (+)',
-        moderate_high: '⚠️ Anomalía Moderada (+)',
-        mild_high: '↗ Ligeramente Superior',
-        normal: '✓ Rango Normal',
-        mild_low: '↘ Ligeramente Inferior',
-        moderate_low: '⚠️ Anomalía Moderada (−)',
+        moderate_high: '⚠️ Superior a lo normal',
+        mild_high: '↗ Ligeramente cálido/alto',
+        normal: '✓ Condición normal',
+        mild_low: '↘ Ligeramente frío/bajo',
+        moderate_low: '⚠️ Inferior a lo normal',
         extreme_low: '❄️ Anomalía Extrema (−)'
       };
-      levelBadge.textContent = levelLabels[point.anomaly_level] || 'Normal';
+      levelBadge.textContent = levelLabels[point.anomaly_level] || '✓ Condición normal';
       levelBadge.className = `badge rounded-pill ${
-        point.is_anomaly ? 'bg-warning text-dark fw-bold' : 'bg-secondary text-white'
+        point.is_anomaly ? 'bg-warning text-dark fw-bold' : 'bg-secondary bg-opacity-50 text-white'
       }`;
     }
 
-    setText(
-      'tmActiveSubtext',
-      `Recta OLS en ${activeYear}: ${point.trend_value.toFixed(2)} ${unitDisp} · Percentil: P${point.percentile}`
-    );
-
-    // Resaltar tick y stripe activos
-    document.querySelectorAll('.tm-tick').forEach((el) => {
-      el.classList.toggle('is-active', Number(el.dataset.year) === activeYear);
-    });
     document.querySelectorAll('.tm-stripe-item').forEach((el) => {
       el.classList.toggle('is-active', Number(el.dataset.year) === activeYear);
     });
@@ -558,7 +694,8 @@ document.addEventListener('DOMContentLoaded', () => {
       el.classList.toggle('is-selected', Number(el.dataset.year) === activeYear);
     });
     document.querySelectorAll('#tmTimelineTableBody tr').forEach((row) => {
-      row.classList.toggle('table-primary', Number(row.dataset.year) === activeYear);
+      row.classList.toggle('table-info', Number(row.dataset.year) === activeYear);
+      row.classList.toggle('text-dark', Number(row.dataset.year) === activeYear);
     });
 
     updateMapColorsForYear(activeYear);
@@ -569,68 +706,66 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!currentData) return;
     const yrKey = String(year);
     const unitDisp = currentData.display_unit || '°C';
+    const varCode = currentData.variable;
 
-    zoneCellRects.forEach(({ cell, rect }) => {
+    zoneCellLayers.forEach(({ cell, rect, plumeCircle }) => {
       const yrData = cell.by_year?.[yrKey];
       if (!yrData) return;
-      rect.setStyle({
-        fillColor: yrData.color,
-        fillOpacity: cell.is_center ? 0.72 : 0.48
+      const satColor = getSatelliteWeatherColor(varCode, yrData.z_score);
+
+      plumeCircle.setStyle({
+        fillColor: satColor,
+        fillOpacity: cell.is_center ? 0.82 : 0.64
       });
+      rect.setStyle({
+        fillColor: satColor,
+        fillOpacity: cell.is_center ? 0.22 : 0.1
+      });
+
       const sign = yrData.anomaly >= 0 ? '+' : '';
       rect.setTooltipContent(
         `<strong>${cell.label}</strong> (${year})<br>` +
-          `Valor: <strong>${yrData.value.toFixed(2)} ${unitDisp}</strong><br>` +
-          `Anomalía: ${sign}${yrData.anomaly.toFixed(2)} ${unitDisp} (z = ${yrData.z_score >= 0 ? '+' : ''}${yrData.z_score})`
+          `Promedio anual: <strong>${yrData.value.toFixed(2)} ${unitDisp}</strong><br>` +
+          `Desviación: ${sign}${yrData.anomaly.toFixed(2)} ${unitDisp}`
       );
     });
 
-    nationalMarkers.forEach(({ city, marker, isSelectedCity }) => {
+    nationalLayers.forEach(({ city, marker, plume, isSelectedCity }) => {
       const yrData = city.by_year?.[yrKey];
       if (!yrData) return;
-      marker.setStyle({
-        fillColor: yrData.color,
-        radius: isSelectedCity ? 12 : yrData.is_anomaly ? 10 : 7.5
+      const satColor = getSatelliteWeatherColor(varCode, yrData.z_score);
+
+      plume.setStyle({
+        fillColor: satColor,
+        fillOpacity: isSelectedCity ? 0.82 : 0.64
       });
+      marker.setStyle({
+        fillColor: satColor,
+        radius: isSelectedCity ? 10 : yrData.is_anomaly ? 8.5 : 6.5
+      });
+
       const sign = yrData.anomaly >= 0 ? '+' : '';
       marker.bindTooltip(
-        `<strong>${city.name}</strong> (${city.region}) · <strong>${year}</strong><br>` +
-          `Valor: <strong>${yrData.value.toFixed(2)} ${unitDisp}</strong> | Δ: ${sign}${yrData.anomaly.toFixed(2)} ${unitDisp} (z = ${yrData.z_score >= 0 ? '+' : ''}${yrData.z_score})<br>` +
-          `Tendencia 2000–2024: ${city.change_per_decade >= 0 ? '+' : ''}${city.change_per_decade.toFixed(3)} ${unitDisp}/década`,
-        { direction: 'top' }
+        `<strong>${city.name}</strong> (${year})<br>` +
+          `Valor: <strong>${yrData.value.toFixed(2)} ${unitDisp}</strong> (${sign}${yrData.anomaly.toFixed(2)} ${unitDisp})`,
+        { direction: 'top', className: 'tm-sat-city-tooltip' }
       );
     });
   }
 
   /**
-   * 7. Renderiza las marcas del slider y la cinta interactiva de Climate Stripes
+   * 7. Renderiza la cinta cromática bajo el slider inferior
    */
-  function renderSliderTicksAndStripes(timeline) {
-    const ticksEl = document.getElementById('tmAnomalyTicks');
+  function renderSliderStripes(timeline, variable) {
     const stripesEl = document.getElementById('tmClimateStripes');
     const unitDisp = currentData?.display_unit || '°C';
 
-    if (ticksEl) {
-      ticksEl.innerHTML = timeline
-        .map(
-          (pt) =>
-            `<div class="tm-tick ${pt.year === activeYear ? 'is-active' : ''}" data-year="${pt.year}" style="background-color: ${pt.color};" title="${pt.year}: ${pt.value.toFixed(2)} ${unitDisp} (z = ${pt.z_score >= 0 ? '+' : ''}${pt.z_score})"></div>`
-        )
-        .join('');
-      ticksEl.querySelectorAll('.tm-tick').forEach((el) => {
-        el.addEventListener('click', () => {
-          stopPlayback();
-          setActiveYear(Number(el.dataset.year));
-        });
-      });
-    }
-
     if (stripesEl) {
       stripesEl.innerHTML = timeline
-        .map(
-          (pt) =>
-            `<div class="tm-stripe-item ${pt.year === activeYear ? 'is-active' : ''}" data-year="${pt.year}" style="background-color: ${pt.color};" title="Año ${pt.year}: ${pt.value.toFixed(2)} ${unitDisp} | Anomalía: ${pt.anomaly >= 0 ? '+' : ''}${pt.anomaly.toFixed(2)} ${unitDisp}"></div>`
-        )
+        .map((pt) => {
+          const satColor = getSatelliteWeatherColor(variable, pt.z_score);
+          return `<div class="tm-stripe-item ${pt.year === activeYear ? 'is-active' : ''}" data-year="${pt.year}" style="background-color: ${satColor};" title="${pt.year}: ${pt.value.toFixed(2)} ${unitDisp}"></div>`;
+        })
         .join('');
       stripesEl.querySelectorAll('.tm-stripe-item').forEach((el) => {
         el.addEventListener('click', () => {
@@ -641,11 +776,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const anomCount = timeline.filter((p) => p.is_anomaly).length;
-    setText('tmAnomaliesCountBadge', `${anomCount} anomalías detectadas (|z| ≥ 1.5)`);
+    setText('tmDockAnomalyCount', String(anomCount));
   }
 
   /**
-   * 8. Renderiza los dos gráficos Chart.js sincronizados con el año activo
+   * 8. Renderiza los dos gráficos dentro de sus respectivas ventanitas
    */
   function renderSynchronizedCharts(data, highlightedYear) {
     const timeline = data.timeline || [];
@@ -653,10 +788,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const slope = Number(data.statistics?.slope ?? 0);
     const meanVal = Number(data.statistics?.mean ?? 0);
 
-    setText('tmSlopeBadge', `Pendiente: ${slope >= 0 ? '+' : ''}${(slope * 10).toFixed(3)} ${unitDisp}/década`);
-    setText('tmMeanBadge', `Media histórica: ${meanVal.toFixed(2)} ${unitDisp}`);
+    setText('tmSlopeBadge', `Tendencia: ${slope >= 0 ? '+' : ''}${(slope * 10).toFixed(2)} ${unitDisp}/década`);
+    setText('tmMeanBadge', `Media: ${meanVal.toFixed(2)} ${unitDisp}`);
 
-    // Gráfico 1: Serie + Regresión OLS + Punto resaltado en el año activo
     const canvas1 = document.getElementById('tmTrendChart');
     if (canvas1 && typeof Chart !== 'undefined') {
       if (trendChartInstance) {
@@ -666,7 +800,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const values = timeline.map((p) => p.value);
       const trends = timeline.map((p) => p.trend_value);
       const pointRadii = timeline.map((p) => (p.year === highlightedYear ? 8 : 3.5));
-      const pointColors = timeline.map((p) => (p.year === highlightedYear ? '#fc3d21' : '#0b3d91'));
+      const pointColors = timeline.map((p) =>
+        p.year === highlightedYear ? '#fc3d21' : getSatelliteWeatherColor(data.variable, p.z_score)
+      );
 
       trendChartInstance = new Chart(canvas1.getContext('2d'), {
         type: 'line',
@@ -683,7 +819,7 @@ document.addEventListener('DOMContentLoaded', () => {
               pointBorderWidth: 1.5,
               pointRadius: pointRadii,
               borderWidth: 2.3,
-              tension: 0.2
+              tension: 0.22
             },
             {
               label: `Tendencia lineal OLS`,
@@ -723,7 +859,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Gráfico 2: Barras de anomalías coloreadas por z-score
     EarthLensCharts.renderAnomalyBarChart(
       'tmAnomalyBarChart',
       timeline,
@@ -738,7 +873,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
-   * 9. Comparador de Épocas (Período A vs Período B) y recálculo instantáneo al mover #tmSplitYearSlider
+   * 9. Comparador de Épocas y Detector de Anomalías (Ventanita 3)
    */
   function computeClientPeriodComparison(timeline, splitYear, unitDisp) {
     const clean = timeline.slice().sort((a, b) => a.year - b.year);
@@ -792,8 +927,8 @@ document.addEventListener('DOMContentLoaded', () => {
       p_value: Number(pVal.toFixed(4)),
       significant_shift: sig,
       summary: sig
-        ? `Al contrastar la época reciente (${labelB}) frente a la época base (${labelA}), se registra un cambio estadísticamente significativo de ${sign}${deltaMean.toFixed(2)} ${unitDisp} (${sign}${deltaPct.toFixed(1)}%, p = ${pVal.toFixed(4)} < 0.05).`
-        : `Entre la época base (${labelA}) y la época reciente (${labelB}), la variación media es de ${sign}${deltaMean.toFixed(2)} ${unitDisp} (${sign}${deltaPct.toFixed(1)}%, p = ${pVal.toFixed(4)} ≥ 0.05).`
+        ? `Cambio estadísticamente significativo de ${sign}${deltaMean.toFixed(2)} ${unitDisp} entre ${labelA} y ${labelB} (p = ${pVal.toFixed(4)} < 0.05).`
+        : `Variación media de ${sign}${deltaMean.toFixed(2)} ${unitDisp} entre ${labelA} y ${labelB}, dentro de la variabilidad natural (p = ${pVal.toFixed(4)} ≥ 0.05).`
     };
   }
 
@@ -802,7 +937,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pA = cmp.period_a;
     const pB = cmp.period_b;
 
-    setText('tmSplitYearLabel', `Corte en ${cmp.split_year} (${pA.label} vs ${pB.label})`);
+    setText('tmSplitYearLabel', `Corte ${cmp.split_year} (${pA.label} vs ${pB.label})`);
     setText('tmEpochPeriodA', `${pA.label}`);
     setText('tmEpochMeanA', `${pA.mean.toFixed(2)} ${unitDisp}`);
     setText('tmEpochStatsA', `σ: ${pA.std_dev.toFixed(2)} · Tend: ${pA.change_per_decade >= 0 ? '+' : ''}${pA.change_per_decade.toFixed(2)}/déc`);
@@ -820,7 +955,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const badge = document.getElementById('tmEpochShiftBadge');
     if (badge) {
       badge.className = `badge rounded-pill ${cmp.significant_shift ? 'badge-sig-yes' : 'badge-sig-no'}`;
-      badge.textContent = cmp.significant_shift ? 'Cambio de época significativo (p < 0.05)' : 'Variación dentro del ruido (p ≥ 0.05)';
+      badge.textContent = cmp.significant_shift ? 'Cambio significativo (p < 0.05)' : 'Variación normal (p ≥ 0.05)';
     }
   }
 
@@ -859,8 +994,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (events.length === 0) {
       container.innerHTML = `
-        <div class="text-muted small p-3 bg-light rounded border">
-          No se registraron anomalías con |z| ≥ 1.5 en este período. Usa las tarjetas de récord máximo y mínimo para explorar los extremos.
+        <div class="text-white-50 small p-3 rounded bg-dark border border-secondary">
+          No se registraron anomalías extremas (|z| ≥ 1.5) en este período.
         </div>`;
       return;
     }
@@ -870,12 +1005,12 @@ document.addEventListener('DOMContentLoaded', () => {
         (ev) => `
         <div class="tm-anomaly-card ${ev.year === activeYear ? 'is-selected' : ''}" data-year="${ev.year}">
           <div class="d-flex justify-content-between align-items-center mb-1">
-            <span class="fw-bold text-dark">Año ${ev.year} · <span style="color:${ev.color}">${ev.badge || 'Anomalía'}</span></span>
-            <button type="button" class="btn btn-sm btn-outline-primary py-0 px-2 js-jump-year" data-year="${ev.year}">
-              Viajar a ${ev.year}
+            <span class="fw-bold text-white small">Año ${ev.year} · <span style="color:${ev.color}">${ev.badge || 'Anomalía'}</span></span>
+            <button type="button" class="btn btn-sm btn-outline-info py-0 px-2 js-jump-year" data-year="${ev.year}">
+              Ver en mapa
             </button>
           </div>
-          <p class="small text-secondary mb-0">${ev.description || `Valor: ${ev.value.toFixed(2)} ${unitDisp} (z = ${ev.z_score})`}</p>
+          <p class="small text-white-50 mb-0" style="font-size: 0.75rem;">${ev.description || `Valor: ${ev.value.toFixed(2)} ${unitDisp} (z = ${ev.z_score})`}</p>
         </div>`
       )
       .join('');
@@ -888,21 +1023,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function renderTimelineTable(timeline, unitDisp) {
+  function renderTimelineTable(timeline, unitDisp, variable) {
     const tbody = document.getElementById('tmTimelineTableBody');
     if (!tbody) return;
 
     tbody.innerHTML = timeline
       .map((pt) => {
         const sign = pt.anomaly >= 0 ? '+' : '';
+        const satColor = getSatelliteWeatherColor(variable, pt.z_score);
+        const isCurrent = pt.year === activeYear;
         return `
-          <tr data-year="${pt.year}" style="cursor: pointer;" class="${pt.year === activeYear ? 'table-primary' : ''}">
+          <tr data-year="${pt.year}" style="cursor: pointer;" class="${isCurrent ? 'table-info text-dark' : ''}">
             <td class="fw-bold">${pt.year}</td>
             <td>${pt.value.toFixed(2)} ${unitDisp}</td>
             <td>${pt.trend_value.toFixed(2)} ${unitDisp}</td>
-            <td class="fw-semibold" style="color: ${pt.color};">${sign}${pt.anomaly.toFixed(2)} ${unitDisp}</td>
+            <td class="fw-semibold" style="color: ${satColor};">${sign}${pt.anomaly.toFixed(2)} ${unitDisp}</td>
             <td class="font-monospace">${pt.z_score >= 0 ? '+' : ''}${pt.z_score.toFixed(2)}</td>
-            <td>${pt.is_anomaly ? '<span class="badge bg-warning text-dark">Anomalía</span>' : '<span class="text-muted small">Normal</span>'}</td>
+            <td>${pt.is_anomaly ? '<span class="badge bg-warning text-dark">Anomalía</span>' : '<span class="text-white-50 small">Normal</span>'}</td>
           </tr>`;
       })
       .join('');
@@ -916,7 +1053,34 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
-   * 10. Reproducción automática (Play / Pause)
+   * 10. Gestión de Ventanitas Flotantes (sin recargar ni abrir otra pestaña)
+   */
+  function togglePopupWindow(windowId) {
+    const allWindows = document.querySelectorAll('.tm-popup-window');
+    const allButtons = document.querySelectorAll('.tm-dock-btn');
+
+    if (openWindowId === windowId) {
+      allWindows.forEach((w) => w.classList.add('d-none'));
+      allButtons.forEach((b) => b.classList.remove('is-active'));
+      openWindowId = null;
+      return;
+    }
+
+    allWindows.forEach((w) => {
+      w.classList.toggle('d-none', w.id !== windowId);
+    });
+    allButtons.forEach((b) => {
+      b.classList.toggle('is-active', b.dataset.windowTarget === windowId);
+    });
+    openWindowId = windowId;
+
+    if (currentData && (windowId === 'winTrend' || windowId === 'winAnomaliesBar')) {
+      setTimeout(() => renderSynchronizedCharts(currentData, activeYear), 40);
+    }
+  }
+
+  /**
+   * 11. Reproducción automática (Play / Pause)
    */
   function togglePlayback() {
     if (isPlaying) {
@@ -1001,7 +1165,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
-   * 11. Enlace de eventos DOM
+   * 12. Enlace de eventos DOM y teclado
    */
   function bindEvents() {
     const citySelect = document.getElementById('tmCitySelect');
@@ -1018,6 +1182,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnZoomZone = document.getElementById('btnSlideZoomZone');
     const btnZoomArg = document.getElementById('btnSlideZoomArg');
     const btnExport = document.getElementById('btnExportTimeMachineCSV');
+
+    // Botones que abren las 4 ventanitas flotantes
+    document.querySelectorAll('.tm-dock-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.windowTarget;
+        if (targetId) togglePopupWindow(targetId);
+      });
+    });
+
+    // Botones de cerrar ventanita
+    document.querySelectorAll('.tm-window-close').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.closeWindow;
+        if (targetId) togglePopupWindow(targetId);
+      });
+    });
+
+    // Cerrar ventanita con tecla Escape y avanzar años con flechas
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape' && openWindowId) {
+        togglePopupWindow(openWindowId);
+      } else if (ev.target && ['INPUT', 'SELECT', 'TEXTAREA'].includes(ev.target.tagName)) {
+        return;
+      } else if (ev.key === 'ArrowRight' && currentData?.timeline) {
+        stopPlayback();
+        const years = currentData.timeline.map((p) => p.year);
+        const idx = years.indexOf(activeYear);
+        if (idx < years.length - 1) setActiveYear(years[idx + 1]);
+      } else if (ev.key === 'ArrowLeft' && currentData?.timeline) {
+        stopPlayback();
+        const years = currentData.timeline.map((p) => p.year);
+        const idx = years.indexOf(activeYear);
+        if (idx > 0) setActiveYear(years[idx - 1]);
+      } else if (ev.key === ' ') {
+        ev.preventDefault();
+        togglePlayback();
+      }
+    });
 
     if (citySelect) {
       citySelect.addEventListener('change', () => {
@@ -1101,7 +1303,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tm-speed-btn').forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
-        playSpeedMs = Number(btn.dataset.speed) || 800;
+        playSpeedMs = Number(btn.dataset.speed) || 700;
         if (isPlaying) {
           stopPlayback();
           startPlayback();
@@ -1142,4 +1344,3 @@ document.addEventListener('DOMContentLoaded', () => {
   bindEvents();
   loadTimeMachineData();
 });
-
