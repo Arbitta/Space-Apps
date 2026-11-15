@@ -1,5 +1,11 @@
 # Publicar la interfaz local en Cloud Run
 
+**Actualización verificada:** el trigger automático de main publica en
+<https://earthlens-pp-224139449590.us-central1.run.app/>. La restauración `ba8ea3a`
+ya se construyó y desplegó correctamente; ver [resultado](../../docs/restore-main.md).
+El paquete manual descrito abajo apunta al servicio anterior `earthlens`, de la
+URL sin `-pp`; no hace falta ejecutarlo para usar el despliegue nuevo.
+
 El paquete se genera desde la imagen que sirve localhost, no desde los archivos
 de `main`. Incluye el código, los catálogos públicos y un Dockerfile que escucha
 en `PORT`; excluye credenciales, pruebas, cachés científicas y bases privadas.

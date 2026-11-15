@@ -771,3 +771,19 @@ La construcci?n/activaci?n real de Cloud Run, la revisi?n de sus triggers y la
 migraci?n de almacenamiento y monitor permanecen pendientes de acceso y operaci?n
 en la nube. El push del c?digo no equivale a una verificaci?n del despliegue.
 Detalles y comandos: [docs/restore-main.md](docs/restore-main.md).
+
+### Publicación automática verificada
+
+La restauración se publicó en main como `ba8ea3a`. El trigger existente
+`cloudrun-earthlens-pp-us-central1-Arbitta-Space-Apps-mhin` completó Pull, Build,
+Push y Deploy correctamente, con build `76528ae7-98ea-442e-86c5-988baf2a959a`.
+El destino automático es **earthlens-pp**, no el servicio anterior **earthlens**.
+
+URL vigente: <https://earthlens-pp-224139449590.us-central1.run.app/>.
+Verificados en la URL pública: raíz, health y JavaScript con HTTP 200; hash de
+JavaScript igual a localhost; Chrome con mapa/timeline, frame de pronóstico real,
+vista móvil y cero errores JavaScript. La URL sin `-pp` sigue sirviendo otro
+despliegue. No se modificó ese servicio ni su tráfico.
+
+Se preservaron los hashes de los 684 archivos locales de caché/base. Las
+dependencias de persistencia y migración de datos a la nube siguen pendientes.

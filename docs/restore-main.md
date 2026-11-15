@@ -1,5 +1,20 @@
 # Restauración de la versión integrada en main — 15/11/2026
 
+## Resultado verificado
+
+Commit de restauración: `ba8ea3a`. El despliegue automático de ese commit terminó
+correctamente en Cloud Build: [build 76528ae7-98ea-442e-86c5-988baf2a959a](https://console.cloud.google.com/cloud-build/builds;region=us-central1/76528ae7-98ea-442e-86c5-988baf2a959a?project=224139449590).
+
+**Abrir <https://earthlens-pp-224139449590.us-central1.run.app/>.**
+El trigger publica en `earthlens-pp`. La URL anterior sin `-pp` pertenece al
+servicio `earthlens` y sigue sirviendo la otra versión. La raíz, `/api/health` y
+`/static/js/workspace.js` del servicio nuevo devolvieron 200. El JavaScript coincide
+con localhost; Chrome verificó mapa, timeline, pronóstico real cargado, vista móvil
+y ausencia de errores JavaScript. Las capturas quedan localmente en
+`dist/cloud-main-verification/`, fuera de Git.
+
+## Procedimiento de recuperación
+
 El usuario autorizó publicar de nuevo su rama `feature/backend-api` en `main`
 después de los pushes cruzados del equipo. Se tomó como fuente `529c7a9` y como
 base del commit de restauración `origin/main` `56c5e1e`.
