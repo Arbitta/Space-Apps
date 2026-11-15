@@ -1,0 +1,45 @@
+# Ejecución estable: usa la imagen construida, sin montar código de la rama activa.
+# Inicializar los volúmenes con las cachés/base existentes antes del primer arranque.
+name: earthlens-runtime
+
+x-environment: &environment
+  PORT: "5000"
+  EARTHLENS_CACHE_DIR: /app/data/cache/power
+  EARTHLENS_DATABASE_PATH: /app/data/runtime/earthlens.sqlite3
+  EARTHLENS_SECRET_KEY: "${EARTHLENS_SECRET_KEY:-}"
+  EARTHLENS_WEATHER_COMMERCIAL: "${EARTHLENS_WEATHER_COMMERCIAL:-false}"
+  OPEN_METEO_API_KEY: "${OPEN_METEO_API_KEY:-}"
+
+services:
+  backend:
+    image: earthlens-backend:local-stable
+    init: true
+    environment: *environment
+    ports:
+      - "127.0.0.1:5000:5000"
+    volumes:
+      - scientific-cache:/app/data/cache
+      - runtime-data:/app/data/runtime
+    restart: unless-stopped
+    mem_limit: 1g
+
+  monitor:
+    image: earthlens-backend:local-stable
+    init: true
+    environment: *environment
+    command: [python, -m, scripts.monitor_events, --loop, --interval, "3600"]
+    volumes:
+      - scientific-cache:/app/data/cache
+      - runtime-data:/app/data/runtime
+    healthcheck:
+      disable: true
+    restart: unless-stopped
+    mem_limit: 1g
+
+volumes:
+  scientific-cache:
+    external: true
+    name: earthlens_scientific_cache
+  runtime-data:
+    external: true
+    name: earthlens_runtime_data
