@@ -1,0 +1,246 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+2 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Length 5552 >>
+stream
+0.08 0.14 0.24 rg
+38 772 519 38 re f
+1 1 1 rg
+BT /F2 13 Tf 48 788 Td (GUIA DE DESPLIEGUE SEGURO Y PROTECCION DE CREDITOS) Tj ET
+0.75 0.86 0.96 rg
+BT /F1 9.2 Tf 48 775 Td (Proyecto EarthLens - NASA Space Apps Challenge 2026) Tj ET
+0.28 0.36 0.48 rg
+BT /F2 8.8 Tf 44 764 Td (Arquitectura: GoDaddy -> Cloudflare -> Vercel -> Google Cloud Run \(Python + Docker\)) Tj ET
+0.14 0.29 0.46 rg
+44 741 507 17 re f
+1 1 1 rg
+BT /F2 10 Tf 50 745 Td (PARTE 1: COMO NO QUEMAR LOS CREDITOS DE GOOGLE CLOUD) Tj ET
+0.12 0.24 0.38 rg
+BT /F2 9.5 Tf 44 727 Td (1.1. La proteccion automatica de la cuenta 'Prueba Gratuita' \(Free Trial\)) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 715 Td (- Mientras tu cuenta de Google Cloud figure como 'Prueba gratuita' \(Free Trial\) y NO) Tj ET
+BT /F1 8.8 Tf 48 704.0 Td (presiones el boton 'Actualizar a cuenta de pago' \(Upgrade to a paid account\), Google NO) Tj ET
+BT /F1 8.8 Tf 48 693.0 Td (puede hacer cargos automaticos a tu tarjeta de credito o debito.) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 680.0 Td (- Si por error se consumieran los $300 USD promocionales o finalizaran los 90 dias, Google) Tj ET
+BT /F1 8.8 Tf 48 669.0 Td (simplemente suspende los recursos hasta que tu decidas manualmente si quieres pasar a cuenta) Tj ET
+BT /F1 8.8 Tf 48 658.0 Td (paga.) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 645.0 Td (- Regla de oro: Nunca actives 'Upgrade to a paid account' en la seccion Billing) Tj ET
+BT /F1 8.8 Tf 48 634.0 Td (\(Facturacion\).) Tj ET
+0.12 0.24 0.38 rg
+BT /F2 9.5 Tf 44 618.0 Td (1.2. Servicios que DEBES EVITAR \(Consumen creditos las 24 horas\)) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 606.0 Td (1. NO usar Google Kubernetes Engine \(GKE\): mantiene nodos prendidos 24/7 y consume entre $70) Tj ET
+BT /F1 8.8 Tf 48 595.0 Td (y $150 USD al mes.) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 582.0 Td (2. NO usar App Engine Flexible ni maquinas virtuales grandes en Compute Engine: cobran por) Tj ET
+BT /F1 8.8 Tf 48 571.0 Td (hora aunque haya 0 visitas.) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 558.0 Td (3. NO usar Cloud SQL: una base de datos encendida 24/7 cuesta de $10 a $50 USD/mes.) Tj ET
+BT /F1 8.8 Tf 48 547.0 Td (EarthLens NO la necesita porque almacena sus muestras y cache en archivos JSON locales) Tj ET
+BT /F1 8.8 Tf 48 536.0 Td (\(carpeta data/\).) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 523.0 Td (4. NO crear un Cloud Load Balancer global: cobra ~$18 USD/mes fijos. Cloud Run ya incluye) Tj ET
+BT /F1 8.8 Tf 48 512.0 Td (gratis su propia URL https://...run.app con certificado SSL.) Tj ET
+0.12 0.24 0.38 rg
+BT /F2 9.5 Tf 44 496.0 Td (1.3. Comando exacto de despliegue en Cloud Run \(Gasto ~$0.00\)) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 484.0 Td (Usa siempre la region us-central1 \(que cuenta con el nivel gratuito mensual Always Free\) y) Tj ET
+BT /F1 8.8 Tf 48 473.0 Td (aplica estos limites estrictos:) Tj ET
+0.94 0.96 0.98 rg
+48 343.5 499 123.5 re f
+0.72 0.78 0.86 RG 0.7 w
+48 343.5 499 123.5 re S
+0.10 0.16 0.24 rg
+BT /F3 8.1 Tf 54 456.5 Td (gcloud run deploy earthlens \\) Tj ET
+BT /F3 8.1 Tf 54 446.0 Td (  --source . \\) Tj ET
+BT /F3 8.1 Tf 54 435.5 Td (  --region us-central1 \\) Tj ET
+BT /F3 8.1 Tf 54 425.0 Td (  --allow-unauthenticated \\) Tj ET
+BT /F3 8.1 Tf 54 414.5 Td (  --min-instances=0 \\) Tj ET
+BT /F3 8.1 Tf 54 404.0 Td (  --max-instances=2 \\) Tj ET
+BT /F3 8.1 Tf 54 393.5 Td (  --cpu=1 \\) Tj ET
+BT /F3 8.1 Tf 54 383.0 Td (  --memory=256Mi \\) Tj ET
+BT /F3 8.1 Tf 54 372.5 Td (  --concurrency=80 \\) Tj ET
+BT /F3 8.1 Tf 54 362.0 Td (  --timeout=60s \\) Tj ET
+BT /F3 8.1 Tf 54 351.5 Td (  --cpu-throttling) Tj ET
+0.12 0.24 0.38 rg
+BT /F2 9.5 Tf 44 329.5 Td (Por que te protege cada parametro:) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 317.5 Td (- --min-instances=0: Cuando nadie visita la pagina, el contenedor se apaga solo y el costo) Tj ET
+BT /F1 8.8 Tf 48 306.5 Td (es $0.00/hora.) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 293.5 Td (- --max-instances=2: Pone un tope duro. Ante un pico de trafico o ataque de bots, jamas se) Tj ET
+BT /F1 8.8 Tf 48 282.5 Td (crearan mas de 2 instancias.) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 269.5 Td (- --cpu-throttling: Solo contabiliza CPU durante los milisegundos que dura la respuesta) Tj ET
+BT /F1 8.8 Tf 48 258.5 Td (HTTP, no mientras el usuario mira el mapa.) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 245.5 Td (- --memory=256Mi y --cpu=1: EarthLens usa ~40 MB de RAM en Python estandar; 256Mi es el) Tj ET
+BT /F1 8.8 Tf 48 234.5 Td (minimo ideal.) Tj ET
+0.12 0.24 0.38 rg
+BT /F2 9.5 Tf 44 218.5 Td (1.4. Limpieza de Artifact Registry y Alerta de Presupuesto) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 206.5 Td (- Artifact Registry: Cada 'gcloud run deploy' guarda una imagen Docker \(los primeros 500 MB) Tj ET
+BT /F1 8.8 Tf 48 195.5 Td (son gratis\). El archivo .gcloudignore del repositorio ya excluye .git, tests y PDFs para que) Tj ET
+BT /F1 8.8 Tf 48 184.5 Td (la imagen sea ultraliviana. Si haces muchos despliegues, borra las imagenes viejas en la) Tj ET
+BT /F1 8.8 Tf 48 173.5 Td (consola de Artifact Registry dejando solo la ultima.) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 160.5 Td (- Alerta de Presupuesto \($5 USD\): En Google Cloud -> Billing -> Budgets & alerts, crea un) Tj ET
+BT /F1 8.8 Tf 48 149.5 Td (presupuesto de $5 USD con alertas al 50% y 100% para recibir un email inmediato si algo) Tj ET
+BT /F1 8.8 Tf 48 138.5 Td (empieza a consumir creditos.) Tj ET
+0.45 0.50 0.58 rg
+BT /F1 8 Tf 44 24 Td (EarthLens \(NASA Space Apps 2026\) - Guia de Despliegue y Proteccion de Creditos | Pagina 1 de 2) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Length 6376 >>
+stream
+0.14 0.29 0.46 rg
+44 794 507 17 re f
+1 1 1 rg
+BT /F2 10 Tf 50 798 Td (PARTE 2: FLUJO DE DESPLIEGUE Y HOSTING PASO A PASO) Tj ET
+0.12 0.24 0.38 rg
+BT /F2 9.5 Tf 44 780 Td (2.1. Esquema completo de la arquitectura) Tj ET
+0.94 0.96 0.98 rg
+48 662.0 499 113.0 re f
+0.72 0.78 0.86 RG 0.7 w
+48 662.0 499 113.0 re S
+0.10 0.16 0.24 rg
+BT /F3 8.1 Tf 54 764.5 Td ([ Dominio en GoDaddy ]) Tj ET
+BT /F3 8.1 Tf 54 754.0 Td (   |  \(1. Cambiar Nameservers a los de Cloudflare\)) Tj ET
+BT /F3 8.1 Tf 54 743.5 Td (   v) Tj ET
+BT /F3 8.1 Tf 54 733.0 Td ([ Cloudflare \(DNS + Firewall Anti-DDoS + SSL Full Strict\) ]) Tj ET
+BT /F3 8.1 Tf 54 722.5 Td (   |  \(2. Registros DNS A y CNAME apuntando a Vercel\)) Tj ET
+BT /F3 8.1 Tf 54 712.0 Td (   v) Tj ET
+BT /F3 8.1 Tf 54 701.5 Td ([ Vercel \(Hosting Frontend / CDN Global + Rewrites en vercel.json\) ]) Tj ET
+BT /F3 8.1 Tf 54 691.0 Td (   |  \(3. Conexion transparente hacia el contenedor Python\)) Tj ET
+BT /F3 8.1 Tf 54 680.5 Td (   v) Tj ET
+BT /F3 8.1 Tf 54 670.0 Td ([ Google Cloud Run \(Backend Python/Docker serverless con --min-instances=0\) ]) Tj ET
+0.12 0.24 0.38 rg
+BT /F2 9.5 Tf 44 648.0 Td (2.2. Paso 1: Desplegar el Backend Python/Docker en Google Cloud Run) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 636.0 Td (1. Abre tu terminal \(o Google Cloud Shell\) en la carpeta del proyecto y autenticate:) Tj ET
+0.94 0.96 0.98 rg
+48 601.0 499 29.0 re f
+0.72 0.78 0.86 RG 0.7 w
+48 601.0 499 29.0 re S
+0.10 0.16 0.24 rg
+BT /F3 8.1 Tf 54 619.5 Td (gcloud auth login) Tj ET
+BT /F3 8.1 Tf 54 609.0 Td (gcloud config set project TU_ID_DE_PROYECTO) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 590.0 Td (2. Ejecuta el comando de despliegue seguro de la Parte 1.3. Si te pregunta si deseas) Tj ET
+BT /F1 8.8 Tf 48 579.0 Td (habilitar las APIs de Cloud Run y Artifact Registry, responde 'y'.) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 566.0 Td (3. Al terminar \(tarda ~2 minutos\), copia la Service URL que te entrega la consola \(ejemplo:) Tj ET
+BT /F1 8.8 Tf 48 555.0 Td (https://earthlens-xxxxxxxxxx-uc.a.run.app\) y verifica en tu navegador que cargue) Tj ET
+BT /F1 8.8 Tf 48 544.0 Td (correctamente.) Tj ET
+0.12 0.24 0.38 rg
+BT /F2 9.5 Tf 44 528.0 Td (2.3. Paso 2: Hostear en Vercel y vincular con Cloud Run) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 516.0 Td (1. Crea un archivo llamado vercel.json en la raiz del proyecto reemplazando la URL de) Tj ET
+BT /F1 8.8 Tf 48 505.0 Td (destino por tu URL real de Cloud Run:) Tj ET
+0.94 0.96 0.98 rg
+48 396.5 499 102.5 re f
+0.72 0.78 0.86 RG 0.7 w
+48 396.5 499 102.5 re S
+0.10 0.16 0.24 rg
+BT /F3 8.1 Tf 54 488.5 Td ({) Tj ET
+BT /F3 8.1 Tf 54 478.0 Td (  "$schema": "https://openapi.vercel.sh/vercel.json",) Tj ET
+BT /F3 8.1 Tf 54 467.5 Td (  "rewrites": [) Tj ET
+BT /F3 8.1 Tf 54 457.0 Td (    {) Tj ET
+BT /F3 8.1 Tf 54 446.5 Td (      "source": "/\(.*\)",) Tj ET
+BT /F3 8.1 Tf 54 436.0 Td (      "destination": "https://earthlens-xxxxxxxxxx-uc.a.run.app/$1") Tj ET
+BT /F3 8.1 Tf 54 425.5 Td (    }) Tj ET
+BT /F3 8.1 Tf 54 415.0 Td (  ]) Tj ET
+BT /F3 8.1 Tf 54 404.5 Td (}) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 385.5 Td (2. Sube el proyecto a GitHub. Entra a vercel.com -> Add New -> Project, importa el) Tj ET
+BT /F1 8.8 Tf 48 374.5 Td (repositorio de GitHub, deja Framework Preset en 'Other' y presiona Deploy.) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 361.5 Td (3. En Vercel, entra a Project Settings -> Domains y agrega tu dominio personalizado \(ej.) Tj ET
+BT /F1 8.8 Tf 48 350.5 Td (tudominio.com y www.tudominio.com\).) Tj ET
+0.12 0.24 0.38 rg
+BT /F2 9.5 Tf 44 334.5 Td (2.4. Paso 3: Delegar el dominio de GoDaddy hacia Cloudflare) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 322.5 Td (1. Crea una cuenta gratuita en cloudflare.com, elige 'Add a domain', ingresa tu dominio de) Tj ET
+BT /F1 8.8 Tf 48 311.5 Td (GoDaddy y selecciona el plan Free \($0\).) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 298.5 Td (2. Cloudflare te mostrara 2 servidores de nombres \(Nameservers\), por ejemplo:) Tj ET
+BT /F1 8.8 Tf 48 287.5 Td (ada.ns.cloudflare.com y bob.ns.cloudflare.com.) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 274.5 Td (3. Entra a GoDaddy -> Mis Productos -> Dominios -> Administrar DNS -> Servidores de nombres) Tj ET
+BT /F1 8.8 Tf 48 263.5 Td (\(Nameservers\) -> Cambiar -> 'Usare mis propios servidores de nombres' y pega los 2) Tj ET
+BT /F1 8.8 Tf 48 252.5 Td (Nameservers de Cloudflare.) Tj ET
+0.12 0.24 0.38 rg
+BT /F2 9.5 Tf 44 236.5 Td (2.5. Paso 4: Apuntar el DNS de Cloudflare hacia Vercel) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 224.5 Td (1. En Cloudflare -> DNS -> Records, agrega los dos registros que indica Vercel:) Tj ET
+0.94 0.96 0.98 rg
+48 189.5 499 29.0 re f
+0.72 0.78 0.86 RG 0.7 w
+48 189.5 499 29.0 re S
+0.10 0.16 0.24 rg
+BT /F3 8.1 Tf 54 208.0 Td (Tipo A     | Name: @   | Content: 76.76.21.21       | Proxy: DNS Only \(nube gris\)) Tj ET
+BT /F3 8.1 Tf 54 197.5 Td (Tipo CNAME | Name: www | Target:  cname.vercel-dns.com | Proxy: DNS Only \(nube gris\)) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 178.5 Td (2. Una vez que Vercel valide el dominio y emita el certificado SSL, si decides activar el) Tj ET
+BT /F1 8.8 Tf 48 167.5 Td (proxy de Cloudflare \(nube naranja\), ve a Cloudflare -> SSL/TLS -> Overview y selecciona el) Tj ET
+BT /F1 8.8 Tf 48 156.5 Td (modo 'Full \(Strict\)'. Nunca uses el modo 'Flexible' porque provoca un bucle de redirecciones) Tj ET
+BT /F1 8.8 Tf 48 145.5 Td (\(ERR_TOO_MANY_REDIRECTS\).) Tj ET
+0.12 0.24 0.38 rg
+BT /F2 9.5 Tf 44 129.5 Td (2.6. Checklist rapido antes de publicar) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 117.5 Td ([ ] Cuenta de Google Cloud en Free Trial \(sin pasar a cuenta paga\).) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 104.5 Td ([ ] Presupuesto de alerta de $5 USD creado en Google Cloud Billing.) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 91.5 Td ([ ] Archivo .gcloudignore incluido en la raiz del proyecto.) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 78.5 Td ([ ] Cloud Run desplegado con --min-instances=0 y --max-instances=2.) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 65.5 Td ([ ] Archivo vercel.json apuntando a la URL https://...run.app.) Tj ET
+0.12 0.15 0.20 rg
+BT /F1 8.8 Tf 48 52.5 Td ([ ] Nameservers de GoDaddy apuntando a Cloudflare y DNS de Cloudflare hacia Vercel.) Tj ET
+0.45 0.50 0.58 rg
+BT /F1 8 Tf 44 24 Td (EarthLens \(NASA Space Apps 2026\) - Guia de Despliegue y Proteccion de Creditos | Pagina 2 de 2) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 8 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 4 0 R >>
+endobj
+7 0 obj
+<< /Type /Page /Parent 8 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 5 0 R >>
+endobj
+8 0 obj
+<< /Type /Pages /Kids [6 0 R 7 0 R] /Count 2 >>
+endobj
+9 0 obj
+<< /Type /Catalog /Pages 8 0 R >>
+endobj
+xref
+0 10
+0000000000 65535 f 
+0000000015 00000 n 
+0000000112 00000 n 
+0000000214 00000 n 
+0000000309 00000 n 
+0000005913 00000 n 
+0000012341 00000 n 
+0000012487 00000 n 
+0000012633 00000 n 
+0000012696 00000 n 
+trailer
+<< /Size 10 /Root 9 0 R >>
+startxref
+12745
+%%EOF
