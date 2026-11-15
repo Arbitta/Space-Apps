@@ -1,0 +1,237 @@
+{
+  "cities": [
+    {
+      "city_id": "comodoro-rivadavia",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:44:53.314106+00:00"
+    },
+    {
+      "city_id": "puerto-madryn",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:30.707464+00:00"
+    },
+    {
+      "city_id": "trelew",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:32.086732+00:00"
+    },
+    {
+      "city_id": "rio-gallegos",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:33.640227+00:00"
+    },
+    {
+      "city_id": "ushuaia",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:34.836845+00:00"
+    },
+    {
+      "city_id": "bariloche",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:36.470854+00:00"
+    },
+    {
+      "city_id": "neuquen",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:37.786666+00:00"
+    },
+    {
+      "city_id": "buenos-aires",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:39.521263+00:00"
+    },
+    {
+      "city_id": "la-plata",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:40.815128+00:00"
+    },
+    {
+      "city_id": "mar-del-plata",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:42.242035+00:00"
+    },
+    {
+      "city_id": "bahia-blanca",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:43.541428+00:00"
+    },
+    {
+      "city_id": "rosario",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:45.059328+00:00"
+    },
+    {
+      "city_id": "cordoba",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:46.701334+00:00"
+    },
+    {
+      "city_id": "santa-fe",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:48.092760+00:00"
+    },
+    {
+      "city_id": "mendoza",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:44:54.775518+00:00"
+    },
+    {
+      "city_id": "san-juan",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:49.471298+00:00"
+    },
+    {
+      "city_id": "san-luis",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:50.542601+00:00"
+    },
+    {
+      "city_id": "salta",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:51.318035+00:00"
+    },
+    {
+      "city_id": "san-salvador-de-jujuy",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:52.893371+00:00"
+    },
+    {
+      "city_id": "san-miguel-de-tucuman",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:54.394897+00:00"
+    },
+    {
+      "city_id": "santiago-del-estero",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:55.868612+00:00"
+    },
+    {
+      "city_id": "posadas",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:44:56.133762+00:00"
+    },
+    {
+      "city_id": "corrientes",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:56.849939+00:00"
+    },
+    {
+      "city_id": "resistencia",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:57.713774+00:00"
+    },
+    {
+      "city_id": "formosa",
+      "origin": "cache",
+      "fetched_at": "2026-11-14T17:58:59.294022+00:00"
+    }
+  ],
+  "monthly_series": 150,
+  "monthly_values": 45000,
+  "annual_analyses": 150,
+  "status": "ok",
+  "nasa_requests": 0,
+  "cache_unchanged": true,
+  "cache_manifest": {
+    "1c965f0fd8a79bf7a1c600da6eaccdde646a5f4e33218b8eec2bd2508f5df928.json": {
+      "sha256": "3356d5472dfdd15f3c8873f318a5fa0a4e68c34cc9576c74834efca33416a756",
+      "fetched_at": "2026-11-14T17:58:57.713774+00:00"
+    },
+    "1f1c0702c0d0070890b20899d7ad1144a3c34def9304761eb4a25f9044d8f942.json": {
+      "sha256": "024c60d2f09bf3f0ca5367f2dc1a6d820dddc9ceace0ea6a1150a1f7c3bfbad7",
+      "fetched_at": "2026-11-14T17:58:59.294022+00:00"
+    },
+    "2cb87e69f2f2a3a2772f4ac3b99c4ecb28722ce9afe891ade44b43c14f0d558f.json": {
+      "sha256": "548449269c1b2b724ee169c49436463eeda4d08257f0332a3c0e4cccf63ee48c",
+      "fetched_at": "2026-11-14T17:58:55.868612+00:00"
+    },
+    "2d7b6fc77a92bf3eef6b23b38f29ba1623b1a170a1a540d734a0d5a997ecb70e.json": {
+      "sha256": "ae3b453da9217cb5b0d2ddad0f4564a3e849b7a7ef7f785f6014ce88dcdf8f35",
+      "fetched_at": "2026-11-14T17:58:42.242035+00:00"
+    },
+    "2deacea4026513c0c8e927168ed1f133f545a42975282c915ba0692fc56f3c71.json": {
+      "sha256": "0f041fccc7cc9b036a399d3ac06b7313a54b41b5549734eeef616ad79c26de3c",
+      "fetched_at": "2026-11-14T17:58:37.786666+00:00"
+    },
+    "32897f340b89355b6051dc45d85f6ac74f88e7fbe44efe937d95d770a21f808b.json": {
+      "sha256": "40fce6ff6256f6542b60020e39eae18e8ee5b4f6f1211749e4f923759d272967",
+      "fetched_at": "2026-11-14T17:58:30.707464+00:00"
+    },
+    "45193ef23c2271fc9a2b1e8b16d9359b6701aa671561fead739d7c8fd41cf5cd.json": {
+      "sha256": "01fc55f834d9a1e31624cd62fb88338623710d97112930a3dbe5ec8a371a799b",
+      "fetched_at": "2026-11-14T17:58:45.059328+00:00"
+    },
+    "4894435f71581ec40c12b9c19889b8143d49ce6a5cd4e67eb3ccb759bf5615e5.json": {
+      "sha256": "0b7cda50db03f4aafefd4815e3660c86349f3d98824cec3feec789037e51a405",
+      "fetched_at": "2026-11-14T17:58:51.318035+00:00"
+    },
+    "5adfae56cb088960ec552dcd5ac12c9b04053e9ac49775a0eba205010fe18a26.json": {
+      "sha256": "f38899ac69bdca0e4beb4dbdcd4e600efffe6cfe0038e43b338bf5462414022b",
+      "fetched_at": "2026-11-14T17:58:40.815128+00:00"
+    },
+    "65d77cf95f5010fd9b8777e8f9d45ebf45a9462a47e450acd41492a0a4879348.json": {
+      "sha256": "3c2ca76c9d6630d7f7c8cea5a903bff75d8852bb0b119e5c9d3ddedb8b385248",
+      "fetched_at": "2026-11-14T17:58:48.092760+00:00"
+    },
+    "6e185b34c821151cb0dd43ca45092ce68e732609e2d05153669026093f15331b.json": {
+      "sha256": "9e6ef9a3119893bff155fc394637de6b82b5b3640417c9a0868774e1a985e1c7",
+      "fetched_at": "2026-11-14T17:58:43.541428+00:00"
+    },
+    "73f25c9bf08cd1b558a06223f019fbf94df89f8b83101008d00bf1fe4a2dc9ab.json": {
+      "sha256": "f5cf11eaa597c23cb9010f403f1148ceb4d7463b663a9de8e358598c815ea444",
+      "fetched_at": "2026-11-14T17:58:50.542601+00:00"
+    },
+    "9dc9138e95b00e6efa5c72a0dba0a0832452c7fe8cf197c5ed3d9e9d3e5cf7c4.json": {
+      "sha256": "20e32053ab45ee54b9519749a7ba92b13f47afb4038b107ed6e38a64da3a3ae9",
+      "fetched_at": "2026-11-14T17:58:33.640227+00:00"
+    },
+    "a3e17ce3e827277e44f7e98c60836c1123be6e374fb62cdbfaaae21688ae6ca8.json": {
+      "sha256": "4799afec38058e07168058d9fa3e11e0f9f3406e06e1503b8bae1e984675e451",
+      "fetched_at": "2026-11-14T17:58:56.849939+00:00"
+    },
+    "a74db81f75094514c4411930319e55fe2aa11ab3d40052b78bddf20ba03e96ce.json": {
+      "sha256": "06e9b1e6c21c74653fc9da61a28c1494c3435870e094d1ae5c3c95324aa9bc4d",
+      "fetched_at": "2026-11-14T17:58:36.470854+00:00"
+    },
+    "ae1ec92d159bbe521c30851c12b8237b6331ee2c0c23d9d4d888c9eb1130bb70.json": {
+      "sha256": "a77a17ac5852cdeeaa5952fea6b081a2e1d0bda66c63f8600462a29a57a6e5dc",
+      "fetched_at": "2026-11-14T17:58:34.836845+00:00"
+    },
+    "befbe70adde2c02c7f57a24b27f2ece41a861f05fbc45623c05875403e23f935.json": {
+      "sha256": "28e9ed1a3d3da9968c9d30d0544db59c1747ddcfffd6661a8c61e6455615d8fa",
+      "fetched_at": "2026-11-14T17:58:46.701334+00:00"
+    },
+    "c2f62006696c4e2a8034573fe1527e8157a4effe0db98f91fc9cff1ccc0d94fc.json": {
+      "sha256": "3824e82f9057dbf47232e52b1b7a675655dab05caadb090a3ae4f31c81189a7a",
+      "fetched_at": "2026-11-14T17:44:53.314106+00:00"
+    },
+    "ce21079f41a619f7205f2e6b9821803ba637765c34fba18cebccdaf53a600f07.json": {
+      "sha256": "d1cdb3974436a74dd28258e9a377f2626738914b96c30311b502793b6c63edd0",
+      "fetched_at": "2026-11-14T17:58:54.394897+00:00"
+    },
+    "ce9ac8448634c7a4d555262360910ae2b2e639c3f74d6600e23cfe0101741b25.json": {
+      "sha256": "04bd7ace7208f0f30814a15201937e780267072fe27f2034a6c1d109df942a22",
+      "fetched_at": "2026-11-14T17:58:52.893371+00:00"
+    },
+    "cecf6d484100335d64e40b8920c922f5720fd874fb9731d30403c32471e3b3ae.json": {
+      "sha256": "a3aa7a0f6d09df27074ab6b4a88d8e6c7515e63cbe4b6fef0ec1f798631e3385",
+      "fetched_at": "2026-11-14T17:44:54.775518+00:00"
+    },
+    "d7f7ad2608c0e4c04f5d71a1db413182a335da350bd8642f01a7b98823bb1397.json": {
+      "sha256": "8f209ba744e4c17ee3abdbb55ce5269edd016f5081d99c7fa06b5b820c55a303",
+      "fetched_at": "2026-11-14T17:44:56.133762+00:00"
+    },
+    "f074e19bd7c3adeb34ff40757550dd96e919a25f742bfb80e9220515766818a9.json": {
+      "sha256": "a355cf50f44db5416773fb5179501bb4eb11800c4757ebf7e5304db5a1e46cdb",
+      "fetched_at": "2026-11-14T17:58:32.086732+00:00"
+    },
+    "f6d424b87c9570f94edef5958cbf5c84b7b757277cb5454a4cfe23632415b986.json": {
+      "sha256": "014bdbb49609bc63f57939cc30cfa03b13049616e630b83bd0ba5be904cbfdcd",
+      "fetched_at": "2026-11-14T17:58:39.521263+00:00"
+    },
+    "feed50e2fe78f6900703aa6712995c852415379112b7dbc81301def3a6f71649.json": {
+      "sha256": "5d09d476513dab475fd3a6ba70284b143198e814a8e417b3b75af89d5e4ae823",
+      "fetched_at": "2026-11-14T17:58:49.471298+00:00"
+    }
+  }
+}

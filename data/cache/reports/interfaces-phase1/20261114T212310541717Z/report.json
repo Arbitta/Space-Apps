@@ -1,0 +1,189 @@
+{
+  "status": "ok",
+  "checks": [
+    "25 perfiles reales: seis variables por ciudad y origen cache",
+    "Radar: cinco filtros, orden, familia global, 25 marcadores y vacío real",
+    "Radar: respuesta anterior fuera de orden ignorada aun sin cancelación",
+    "Radar: error sin datos anteriores, reintento y enlace a Resultados real",
+    "Fingerprint: Comodoro/Mendoza/Posadas, series idénticas a API y comparación compatible",
+    "Fingerprint: selecciones rápidas de ambas ciudades conservan título, datos y gráficos actuales",
+    "Fingerprint: errores/reintento, ciudades distintas, incompatibilidad sin superposición e indicador dinámico insuficiente",
+    "Responsive 1440/1280/820/390, navegación móvil y enlace a Explorador",
+    "Comparación móvil, cancelación nativa y selección de Inicio conservada al ir a Explorador"
+  ],
+  "javascript_errors": [],
+  "study_summary": {
+    "cities": 25,
+    "tests": 150,
+    "statuses": {
+      "valid": 0,
+      "insufficient": 0,
+      "provisional": 150,
+      "error": 0
+    },
+    "computed": 150,
+    "provisional_signals": 48,
+    "exclusions": 0,
+    "confirmed_discoveries": 0,
+    "cache_only": true,
+    "cache_hit_cities": 25
+  },
+  "profiles": [
+    {
+      "city_id": "comodoro-rivadavia",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "puerto-madryn",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "trelew",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "rio-gallegos",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "ushuaia",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "bariloche",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "neuquen",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "buenos-aires",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "la-plata",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "mar-del-plata",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "bahia-blanca",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "rosario",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "cordoba",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "santa-fe",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "mendoza",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "san-juan",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "san-luis",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "salta",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "san-salvador-de-jujuy",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "san-miguel-de-tucuman",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "santiago-del-estero",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "posadas",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "corrientes",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "resistencia",
+      "origin": "cache",
+      "variables": 6
+    },
+    {
+      "city_id": "formosa",
+      "origin": "cache",
+      "variables": 6
+    }
+  ],
+  "protected_sha256": {
+    "data\\cache\\power\\1c965f0fd8a79bf7a1c600da6eaccdde646a5f4e33218b8eec2bd2508f5df928.json": "3356d5472dfdd15f3c8873f318a5fa0a4e68c34cc9576c74834efca33416a756",
+    "data\\cache\\power\\1f1c0702c0d0070890b20899d7ad1144a3c34def9304761eb4a25f9044d8f942.json": "024c60d2f09bf3f0ca5367f2dc1a6d820dddc9ceace0ea6a1150a1f7c3bfbad7",
+    "data\\cache\\power\\2cb87e69f2f2a3a2772f4ac3b99c4ecb28722ce9afe891ade44b43c14f0d558f.json": "548449269c1b2b724ee169c49436463eeda4d08257f0332a3c0e4cccf63ee48c",
+    "data\\cache\\power\\2d7b6fc77a92bf3eef6b23b38f29ba1623b1a170a1a540d734a0d5a997ecb70e.json": "ae3b453da9217cb5b0d2ddad0f4564a3e849b7a7ef7f785f6014ce88dcdf8f35",
+    "data\\cache\\power\\2deacea4026513c0c8e927168ed1f133f545a42975282c915ba0692fc56f3c71.json": "0f041fccc7cc9b036a399d3ac06b7313a54b41b5549734eeef616ad79c26de3c",
+    "data\\cache\\power\\32897f340b89355b6051dc45d85f6ac74f88e7fbe44efe937d95d770a21f808b.json": "40fce6ff6256f6542b60020e39eae18e8ee5b4f6f1211749e4f923759d272967",
+    "data\\cache\\power\\45193ef23c2271fc9a2b1e8b16d9359b6701aa671561fead739d7c8fd41cf5cd.json": "01fc55f834d9a1e31624cd62fb88338623710d97112930a3dbe5ec8a371a799b",
+    "data\\cache\\power\\4894435f71581ec40c12b9c19889b8143d49ce6a5cd4e67eb3ccb759bf5615e5.json": "0b7cda50db03f4aafefd4815e3660c86349f3d98824cec3feec789037e51a405",
+    "data\\cache\\power\\5adfae56cb088960ec552dcd5ac12c9b04053e9ac49775a0eba205010fe18a26.json": "f38899ac69bdca0e4beb4dbdcd4e600efffe6cfe0038e43b338bf5462414022b",
+    "data\\cache\\power\\65d77cf95f5010fd9b8777e8f9d45ebf45a9462a47e450acd41492a0a4879348.json": "3c2ca76c9d6630d7f7c8cea5a903bff75d8852bb0b119e5c9d3ddedb8b385248",
+    "data\\cache\\power\\6e185b34c821151cb0dd43ca45092ce68e732609e2d05153669026093f15331b.json": "9e6ef9a3119893bff155fc394637de6b82b5b3640417c9a0868774e1a985e1c7",
+    "data\\cache\\power\\73f25c9bf08cd1b558a06223f019fbf94df89f8b83101008d00bf1fe4a2dc9ab.json": "f5cf11eaa597c23cb9010f403f1148ceb4d7463b663a9de8e358598c815ea444",
+    "data\\cache\\power\\9dc9138e95b00e6efa5c72a0dba0a0832452c7fe8cf197c5ed3d9e9d3e5cf7c4.json": "20e32053ab45ee54b9519749a7ba92b13f47afb4038b107ed6e38a64da3a3ae9",
+    "data\\cache\\power\\a3e17ce3e827277e44f7e98c60836c1123be6e374fb62cdbfaaae21688ae6ca8.json": "4799afec38058e07168058d9fa3e11e0f9f3406e06e1503b8bae1e984675e451",
+    "data\\cache\\power\\a74db81f75094514c4411930319e55fe2aa11ab3d40052b78bddf20ba03e96ce.json": "06e9b1e6c21c74653fc9da61a28c1494c3435870e094d1ae5c3c95324aa9bc4d",
+    "data\\cache\\power\\ae1ec92d159bbe521c30851c12b8237b6331ee2c0c23d9d4d888c9eb1130bb70.json": "a77a17ac5852cdeeaa5952fea6b081a2e1d0bda66c63f8600462a29a57a6e5dc",
+    "data\\cache\\power\\befbe70adde2c02c7f57a24b27f2ece41a861f05fbc45623c05875403e23f935.json": "28e9ed1a3d3da9968c9d30d0544db59c1747ddcfffd6661a8c61e6455615d8fa",
+    "data\\cache\\power\\c2f62006696c4e2a8034573fe1527e8157a4effe0db98f91fc9cff1ccc0d94fc.json": "3824e82f9057dbf47232e52b1b7a675655dab05caadb090a3ae4f31c81189a7a",
+    "data\\cache\\power\\ce21079f41a619f7205f2e6b9821803ba637765c34fba18cebccdaf53a600f07.json": "d1cdb3974436a74dd28258e9a377f2626738914b96c30311b502793b6c63edd0",
+    "data\\cache\\power\\ce9ac8448634c7a4d555262360910ae2b2e639c3f74d6600e23cfe0101741b25.json": "04bd7ace7208f0f30814a15201937e780267072fe27f2034a6c1d109df942a22",
+    "data\\cache\\power\\cecf6d484100335d64e40b8920c922f5720fd874fb9731d30403c32471e3b3ae.json": "a3aa7a0f6d09df27074ab6b4a88d8e6c7515e63cbe4b6fef0ec1f798631e3385",
+    "data\\cache\\power\\d7f7ad2608c0e4c04f5d71a1db413182a335da350bd8642f01a7b98823bb1397.json": "8f209ba744e4c17ee3abdbb55ce5269edd016f5081d99c7fa06b5b820c55a303",
+    "data\\cache\\power\\f074e19bd7c3adeb34ff40757550dd96e919a25f742bfb80e9220515766818a9.json": "a355cf50f44db5416773fb5179501bb4eb11800c4757ebf7e5304db5a1e46cdb",
+    "data\\cache\\power\\f6d424b87c9570f94edef5958cbf5c84b7b757277cb5454a4cfe23632415b986.json": "014bdbb49609bc63f57939cc30cfa03b13049616e630b83bd0ba5be904cbfdcd",
+    "data\\cache\\power\\feed50e2fe78f6900703aa6712995c852415379112b7dbc81301def3a6f71649.json": "5d09d476513dab475fd3a6ba70284b143198e814a8e417b3b75af89d5e4ae823",
+    "data\\cache\\radar\\latest.json": "df91b483ad8c483121918d24e13ba801e23d79c5b397a5f67a62f8a94645aa31",
+    "services\\trend_analysis.py": "32315a052af249b804dd3f2c95685bd890e2d8747a2d32702026798a70638fa5"
+  },
+  "scientific_data_modified": false,
+  "software_fixtures": "503, metadatos incompatibles e indicador insuficiente sólo interceptados en Chrome; sin persistencia científica"
+}
