@@ -80,6 +80,43 @@ class TimeMachineUnitAndServiceTest(unittest.TestCase):
         self.assertEqual(len(center_cells), 1)
         self.assertIn("2000", center_cells[0]["by_year"])
 
+    def test_resizing_quadrant_changes_areal_series_and_statistics(self) -> None:
+        small_box, _ = build_time_machine_payload(
+            {
+                "city_id": "comodoro-rivadavia",
+                "variable": "T2M",
+                "start_year": 2000,
+                "end_year": 2024,
+                "lat_span": 0.45,
+                "lon_span": 0.55,
+                "include_regional": False,
+            }
+        )
+        large_box, _ = build_time_machine_payload(
+            {
+                "city_id": "comodoro-rivadavia",
+                "variable": "T2M",
+                "start_year": 2000,
+                "end_year": 2024,
+                "lat_span": 10.0,
+                "lon_span": 12.0,
+                "include_regional": False,
+            }
+        )
+
+        self.assertNotEqual(
+            small_box["statistics"]["mean"],
+            large_box["statistics"]["mean"],
+        )
+        self.assertNotEqual(
+            small_box["timeline"][0]["value"],
+            large_box["timeline"][0]["value"],
+        )
+        self.assertGreater(
+            small_box["statistics"]["std_dev"],
+            large_box["statistics"]["std_dev"],
+        )
+
 
 class TimeMachineHttpAndConcurrencyTest(unittest.TestCase):
     """Pruebas HTTP de caja negra y concurrencia para /time-machine y /api/time-machine."""
