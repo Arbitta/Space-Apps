@@ -24,6 +24,7 @@ from urllib.parse import parse_qs, urlparse
 from routes.api_routes import (
     handle_analyze_request,
     handle_compare_request,
+    handle_forecast_request,
     handle_summary_request,
     handle_time_machine_request,
     register_api_routes,
@@ -251,6 +252,9 @@ class EarthLensUnifiedHandler(BaseHTTPRequestHandler):
             return self._send_json(resp, status)
         if parsed.path == "/api/time-machine":
             resp, status = handle_time_machine_request(payload)
+            return self._send_json(resp, status)
+        if parsed.path == "/api/forecast":
+            resp, status = handle_forecast_request(payload)
             return self._send_json(resp, status)
 
         self._send_json({"error": "Endpoint no encontrado"}, 404)

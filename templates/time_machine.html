@@ -282,6 +282,22 @@
             </svg>
           </button>
 
+          <!-- 5. Predicciones, probabilidades de anomalías y conclusiones automáticas -->
+          <button
+            type="button"
+            class="tm-icon-btn"
+            data-window-target="winForecast"
+            data-tooltip="Predicciones del terreno, probabilidades de anomalías y conclusiones"
+            aria-label="Predicciones y probabilidades"
+          >
+            <svg class="tm-svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 17l5-5 4 3 4-5 5-3"></path>
+              <path d="M16 7h5v5" stroke-dasharray="2 2"></path>
+              <circle cx="21" cy="7" r="1.5" fill="currentColor"></circle>
+            </svg>
+            <span id="tmDockForecastAlert" class="tm-icon-counter tm-counter-danger d-none">0</span>
+          </button>
+
           <div class="tm-rail-divider"></div>
 
           <!-- Navegación rápida sincronizada con otras vistas y exportación -->
@@ -531,6 +547,135 @@
             </div>
           </div>
         </section>
+
+        <!-- Ventanita 5: Predicciones, Probabilidades de Anomalías y Conclusiones Automáticas -->
+        <section
+          id="winForecast"
+          class="tm-popup-window tm-popup-window-wide d-none"
+          role="dialog"
+          aria-labelledby="winForecastTitle"
+        >
+          <div class="tm-popup-header">
+            <div class="min-w-0">
+              <span class="tm-window-tag">MÓDULO 05 · PREDICTIVO</span>
+              <strong id="winForecastTitle" class="text-light">Proyección, Probabilidades de Anomalías y Conclusiones</strong>
+            </div>
+            <div class="d-flex align-items-center gap-2 flex-shrink-0">
+              <span id="tmFcConfidence" class="tm-stat-pill">Confianza: --</span>
+              <span id="tmFcWindowLabel" class="tm-stat-pill font-monospace">2025–2034</span>
+              <button type="button" class="btn-close btn-close-white tm-window-close" data-close-window="winForecast" aria-label="Cerrar"></button>
+            </div>
+          </div>
+          <div class="tm-popup-body">
+            <!-- Controles de intervalo futuro y umbral personalizado -->
+            <div class="tm-fc-controls mb-2">
+              <div class="tm-fc-ctrl-group">
+                <span class="tm-micro-label">INTERVALO FUTURO</span>
+                <div class="d-flex align-items-center gap-1 flex-wrap">
+                  <input type="number" id="tmFcStart" class="form-control form-control-sm tm-input-dark tm-fc-year-in" value="2025" min="2025" max="2054" aria-label="Año inicio proyección" />
+                  <span class="text-secondary small">–</span>
+                  <input type="number" id="tmFcEnd" class="form-control form-control-sm tm-input-dark tm-fc-year-in" value="2034" min="2025" max="2054" aria-label="Año fin proyección" />
+                  <div class="btn-group btn-group-sm" role="group" aria-label="Horizontes rápidos">
+                    <button type="button" class="btn tm-hud-btn tm-fc-quick" data-horizon="5">+5a</button>
+                    <button type="button" class="btn tm-hud-btn tm-fc-quick active" data-horizon="10">+10a</button>
+                    <button type="button" class="btn tm-hud-btn tm-fc-quick" data-horizon="20">+20a</button>
+                    <button type="button" class="btn tm-hud-btn tm-fc-quick" data-horizon="30">+30a</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tm-fc-ctrl-group">
+                <span class="tm-micro-label">UMBRAL PERSONALIZADO (OPCIONAL)</span>
+                <div class="d-flex align-items-center gap-1 flex-wrap">
+                  <select id="tmFcCustomDir" class="form-select form-select-sm tm-hud-select tm-fc-dir-sel" aria-label="Dirección del umbral">
+                    <option value="above">≥ (Mayor o igual)</option>
+                    <option value="below">≤ (Menor o igual)</option>
+                  </select>
+                  <input type="number" step="any" id="tmFcCustomValue" class="form-control form-control-sm tm-input-dark tm-fc-thr-in" placeholder="Valor" aria-label="Valor del umbral personalizado" />
+                  <span id="tmFcCustomUnit" class="small text-secondary font-monospace">°C</span>
+                  <button type="button" id="btnFcClearCustom" class="btn btn-sm tm-hud-btn" title="Limpiar umbral">×</button>
+                </div>
+              </div>
+
+              <div class="d-flex align-items-end gap-1 ms-auto">
+                <button type="button" id="btnFcApply" class="btn btn-sm tm-action-btn">Calcular</button>
+                <button type="button" id="btnFcExport" class="btn btn-sm tm-hud-btn" title="Exportar proyección en CSV">CSV</button>
+              </div>
+            </div>
+
+            <div id="tmFcStatus" class="tm-fc-status d-none mb-2"></div>
+
+            <!-- Resumen principal + modelo -->
+            <div class="tm-subpanel tm-fc-headline-box mb-2">
+              <p id="tmFcHeadline" class="small text-light mb-1"></p>
+              <div id="tmFcModelLine" class="tm-micro-label text-secondary"></div>
+            </div>
+
+            <!-- Gráficos: abanico predictivo y probabilidades anuales -->
+            <div class="row g-2 mb-2">
+              <div class="col-lg-7">
+                <div class="tm-section-caption mb-1">Abanico de Proyección (IC 95 % e IP 95 %)</div>
+                <div class="tm-chart-box tm-fc-chart-box">
+                  <canvas id="tmFcFanChart"></canvas>
+                </div>
+              </div>
+              <div class="col-lg-5">
+                <div class="tm-section-caption mb-1">Probabilidad Anual de Anomalía (%)</div>
+                <div class="tm-chart-box tm-fc-chart-box">
+                  <canvas id="tmFcProbChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tabla de probabilidades en el intervalo + Conclusiones automáticas -->
+            <div class="row g-2 mb-2">
+              <div class="col-lg-6">
+                <div class="tm-section-caption mb-1">Probabilidades en el Intervalo Futuro</div>
+                <div class="table-responsive tm-subpanel p-1">
+                  <table class="table table-sm table-dark align-middle mb-0 tm-fc-prob-table">
+                    <thead>
+                      <tr>
+                        <th>Evento</th>
+                        <th>P(≥ 1 año)</th>
+                        <th>Años esp. / Estab.</th>
+                        <th>Riesgo</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tmFcProbTableBody"></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="tm-section-caption mb-1">Conclusiones Automáticas del Terreno</div>
+                <div id="tmFcConclusions" class="d-flex flex-column gap-1 tm-fc-conclusions-list"></div>
+              </div>
+            </div>
+
+            <!-- Detalle año por año plegable -->
+            <details class="tm-subpanel">
+              <summary class="tm-section-caption" style="cursor: pointer;">Ver detalle año por año del intervalo futuro</summary>
+              <div class="table-responsive mt-2" style="max-height: 200px; overflow-y: auto;">
+                <table class="table table-sm table-dark table-hover align-middle mb-0 tm-matrix-table">
+                  <thead class="sticky-top">
+                    <tr>
+                      <th>Año</th>
+                      <th>Esperado</th>
+                      <th>IP 95 %</th>
+                      <th>P(+1.5σ)</th>
+                      <th>P(−1.5σ)</th>
+                      <th>P(Réc.+)</th>
+                      <th>P(Réc.−)</th>
+                      <th id="tmFcYearHeadCustom" class="d-none">P(Umbral)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tmFcYearTableBody"></tbody>
+                </table>
+              </div>
+            </details>
+
+            <p id="tmFcDisclaimer" class="tm-micro-label text-secondary mt-2 mb-0"></p>
+          </div>
+        </section>
       </div>
 
       <!-- RIEL DERECHO PLEGABLE: Al presionar la barra se muestran u ocultan los controles del cuadrante -->
@@ -754,6 +899,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
   <!-- Scripts de gráficos compartidos (Rol 03) y controlador de Earth Time Machine -->
   <script src="../static/js/charts.js"></script>
+  <script src="../static/js/tm_forecast.js"></script>
   <script src="../static/js/time_machine.js"></script>
 </body>
 </html>

@@ -6,6 +6,8 @@ Endpoints:
   - GET  /api/summary
   - POST /api/analyze
   - POST /api/compare
+  - GET|POST /api/time-machine
+  - POST /api/forecast   (proyección y probabilidades de anomalías de Earth Time Machine)
   - GET  /api/missions
   - GET  /api/missions/<mission_id>
 """
@@ -16,7 +18,7 @@ from typing import Any, Dict, Tuple
 
 from services.datasets import get_mission_by_id, get_missions_list, get_variables_catalog
 from services.power import fetch_nasa_power_series
-from services.time_machine import build_time_machine_payload, get_argentina_cities
+from services.time_machine import build_forecast_payload, build_time_machine_payload, get_argentina_cities
 from services.trend_analysis import (
     VARIABLES_CATALOG,
     analyze_series,
@@ -220,6 +222,14 @@ def handle_time_machine_request(payload: Dict[str, Any]) -> Tuple[Dict[str, Any]
     return build_time_machine_payload(payload)
 
 
+def handle_forecast_request(payload: Dict[str, Any]) -> Tuple[Dict[str, Any], int]:
+    """
+    Procesa POST /api/forecast: recalcula la proyección y las probabilidades de anomalías
+    de Earth Time Machine para otro intervalo futuro o umbral personalizado.
+    """
+    return build_forecast_payload(payload)
+
+
 def register_api_routes(app: Any) -> None:
     """Registra los endpoints REST en una aplicación Flask."""
     from flask import jsonify, request  # type: ignore
@@ -276,6 +286,12 @@ def register_api_routes(app: Any) -> None:
                 "include_regional": request.args.get("include_regional", "1") != "0",
             }
         resp, status = handle_time_machine_request(payload)
+        return jsonify(resp), status
+
+    @app.route("/api/forecast", methods=["POST"])
+    def api_forecast():
+        payload = request.get_json(silent=True) or {}
+        resp, status = handle_forecast_request(payload)
         return jsonify(resp), status
 
     @app.route("/api/missions", methods=["GET"])

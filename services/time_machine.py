@@ -6,6 +6,7 @@ Implementa:
   3. Red regional de las 25 ciudades argentinas (5 regiones) sincronizada año por año.
   4. Comparación estadística entre dos épocas (Época A vs Época B) mediante prueba t de Welch.
   5. Detección automática de anomalías climáticas (|z| >= 1.5 y |z| >= 2.0) y récords del período.
+  6. Proyección futura con probabilidades de anomalías y conclusiones automáticas (services/forecast.py).
 """
 
 from __future__ import annotations
@@ -15,6 +16,7 @@ import math
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+from services.forecast import build_forecast
 from services.power import fetch_nasa_power_series
 from services.trend_analysis import (
     VARIABLES_CATALOG,
@@ -648,6 +650,18 @@ def build_time_machine_payload(payload: Dict[str, Any]) -> Tuple[Dict[str, Any],
     stats = dict(base_analysis["statistics"])
     stats["std_dev"] = anom_bundle["std_dev"]
 
+    # 6. Módulo predictivo: proyección + probabilidades de anomalías en el intervalo futuro
+    forecast = build_forecast(
+        series=base_analysis["series"],
+        variable=variable,
+        forecast_start=payload.get("forecast_start"),
+        forecast_end=payload.get("forecast_end"),
+        horizon=payload.get("forecast_horizon"),
+        custom_threshold=payload.get("custom_threshold"),
+        custom_direction=str(payload.get("custom_direction", "above")),
+        location_name=str(location_name),
+    )
+
     result = {
         "is_mock": False,
         "variable": variable,
@@ -676,7 +690,53 @@ def build_time_machine_payload(payload: Dict[str, Any]) -> Tuple[Dict[str, Any],
         "period_comparison": period_cmp,
         "spatial_zone": spatial_zone,
         "regional_cities": regional_cities,
+        "forecast": forecast,
         "conclusion": f"{base_analysis['conclusion']} {period_cmp['summary']}",
     }
     return result, 200
+
+
+def build_forecast_payload(payload: Dict[str, Any]) -> Tuple[Dict[str, Any], int]:
+    """
+    Recalcula solo el bloque predictivo a partir de la serie anual ya cargada en el cliente
+    (POST /api/forecast). Evita volver a descargar la grilla y la red nacional al cambiar
+    el intervalo futuro o el umbral personalizado.
+    """
+    if not isinstance(payload, dict):
+        return {"error": "El cuerpo de la solicitud debe ser un objeto JSON."}, 400
+
+    variable = str(payload.get("variable", "T2M")).strip().upper()
+    if variable not in VARIABLES_CATALOG:
+        return {
+            "error": f"Variable '{variable}' no válida. Opciones permitidas: {list(VARIABLES_CATALOG.keys())}"
+        }, 400
+
+    raw_series = payload.get("series")
+    if not isinstance(raw_series, list) or not raw_series:
+        return {"error": "Se requiere 'series' como lista de objetos {year, value}."}, 400
+    if len(raw_series) > 200:
+        return {"error": "La serie no puede superar 200 años."}, 400
+
+    series: List[Dict[str, float]] = []
+    for item in raw_series:
+        if not isinstance(item, dict):
+            continue
+        try:
+            series.append({"year": int(item["year"]), "value": float(item["value"])})
+        except (KeyError, TypeError, ValueError):
+            continue
+
+    forecast = build_forecast(
+        series=series,
+        variable=variable,
+        forecast_start=payload.get("forecast_start"),
+        forecast_end=payload.get("forecast_end"),
+        horizon=payload.get("forecast_horizon"),
+        custom_threshold=payload.get("custom_threshold"),
+        custom_direction=str(payload.get("custom_direction", "above")),
+        location_name=str(payload.get("location_name") or "") or None,
+    )
+    if not forecast.get("available"):
+        return {"error": forecast.get("reason", "Serie insuficiente para proyectar.")}, 400
+    return forecast, 200
 

@@ -438,7 +438,8 @@ document.addEventListener('DOMContentLoaded', () => {
       split_year: state.split_year,
       lat_span: state.lat_span,
       lon_span: state.lon_span,
-      include_regional: true
+      include_regional: true,
+      ...(window.EarthLensForecast ? window.EarthLensForecast.getRequestParams(state.variable) : {})
     };
 
     try {
@@ -634,6 +635,9 @@ document.addEventListener('DOMContentLoaded', () => {
     renderExtremeRecords(data.anomalies, unitDisp);
     renderAnomalyCards(data.anomalies, unitDisp);
     renderTimelineTable(data.timeline, unitDisp, data.variable);
+    if (window.EarthLensForecast) {
+      window.EarthLensForecast.setData(data);
+    }
 
     rebuildMapLayers(data, !options.preserveZoom);
     setActiveYear(activeYear);
@@ -1360,6 +1364,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (currentData && (windowId === 'winTrend' || windowId === 'winAnomaliesBar')) {
       setTimeout(() => renderSynchronizedCharts(currentData, activeYear), 40);
+    } else if (windowId === 'winForecast' && window.EarthLensForecast) {
+      setTimeout(() => window.EarthLensForecast.render(), 40);
     }
   }
 
