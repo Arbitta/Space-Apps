@@ -1,0 +1,43 @@
+{
+  "model": "TimesFM 3.0",
+  "enabled": false,
+  "implementation": "not_implemented",
+  "inference_endpoint": null,
+  "generated_predictions": 0,
+  "model_accuracy_backtests": 0,
+  "status": "blocked_license_and_validation",
+  "code_license": "Apache-2.0",
+  "weights_license": "timesfm-non-commercial-license-v1.0",
+  "reason": "Pesos descargables restringidos a investigación no comercial y no productiva. Backend sin credenciales de un servicio Google Cloud autorizado.",
+  "sources": [
+    "https://github.com/google-research/timesfm#license-notice-for-pretrained-weights",
+    "https://huggingface.co/google/timesfm-3.0-pytorch"
+  ],
+  "independent_from_operational_weather": true,
+  "validation": "not_run",
+  "recommended_dates_enabled": false,
+  "installed_dependencies": {
+    "torch": false,
+    "timesfm": false,
+    "timesfm3": false
+  },
+  "local_checkpoint_files": 0,
+  "inference_service": false,
+  "time_machine_experimental_predictions": false,
+  "backtest_reports": [
+    {
+      "report": "backtest-comodoro-rivadavia-2023-T2M.json",
+      "timesfm_validated": false,
+      "models": [
+        "persistence",
+        "seasonal_naive_7d"
+      ]
+    }
+  ],
+  "official_checkpoint_bytes": 1322898824,
+  "checkpoint_metadata_verified_at": "2026-11-15",
+  "configured_backend_memory_bytes": 1073741824,
+  "hardware_note": "Archivo F32 mayor al límite del backend, sin contar PyTorch/activaciones. No se ha verificado inferencia en este entorno.",
+  "license_note": "Pesos descargables no habilitados para el producto comercial/productivo. No hay acceso configurado a una vía autorizada Google Cloud.",
+  "operational_weather_independent": true
+}

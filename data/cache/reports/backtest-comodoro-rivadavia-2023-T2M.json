@@ -1,0 +1,208 @@
+{
+  "frequency": "daily",
+  "rows": [
+    {
+      "model": "persistence",
+      "cut_date": "2023-04-01",
+      "training_last_date": "2023-03-31",
+      "horizon_days": 1,
+      "n": 1,
+      "mae": 4.729999999999999,
+      "rmse": 4.729999999999999,
+      "interval_coverage": null
+    },
+    {
+      "model": "persistence",
+      "cut_date": "2023-04-01",
+      "training_last_date": "2023-03-31",
+      "horizon_days": 3,
+      "n": 3,
+      "mae": 3.149999999999999,
+      "rmse": 3.345489500805524,
+      "interval_coverage": null
+    },
+    {
+      "model": "persistence",
+      "cut_date": "2023-04-01",
+      "training_last_date": "2023-03-31",
+      "horizon_days": 7,
+      "n": 7,
+      "mae": 3.915714285714285,
+      "rmse": 4.192917497740343,
+      "interval_coverage": null
+    },
+    {
+      "model": "seasonal_naive_7d",
+      "cut_date": "2023-04-01",
+      "training_last_date": "2023-03-31",
+      "horizon_days": 1,
+      "n": 1,
+      "mae": 1.0399999999999991,
+      "rmse": 1.0399999999999991,
+      "interval_coverage": null
+    },
+    {
+      "model": "seasonal_naive_7d",
+      "cut_date": "2023-04-01",
+      "training_last_date": "2023-03-31",
+      "horizon_days": 3,
+      "n": 3,
+      "mae": 2.6699999999999995,
+      "rmse": 3.008770513016903,
+      "interval_coverage": null
+    },
+    {
+      "model": "seasonal_naive_7d",
+      "cut_date": "2023-04-01",
+      "training_last_date": "2023-03-31",
+      "horizon_days": 7,
+      "n": 7,
+      "mae": 3.6585714285714284,
+      "rmse": 4.055121981607247,
+      "interval_coverage": null
+    },
+    {
+      "model": "persistence",
+      "cut_date": "2023-06-30",
+      "training_last_date": "2023-06-29",
+      "horizon_days": 1,
+      "n": 1,
+      "mae": 0.6000000000000005,
+      "rmse": 0.6000000000000005,
+      "interval_coverage": null
+    },
+    {
+      "model": "persistence",
+      "cut_date": "2023-06-30",
+      "training_last_date": "2023-06-29",
+      "horizon_days": 3,
+      "n": 3,
+      "mae": 2.1633333333333336,
+      "rmse": 2.6866397848117516,
+      "interval_coverage": null
+    },
+    {
+      "model": "persistence",
+      "cut_date": "2023-06-30",
+      "training_last_date": "2023-06-29",
+      "horizon_days": 7,
+      "n": 7,
+      "mae": 1.6814285714285713,
+      "rmse": 2.206804412331486,
+      "interval_coverage": null
+    },
+    {
+      "model": "seasonal_naive_7d",
+      "cut_date": "2023-06-30",
+      "training_last_date": "2023-06-29",
+      "horizon_days": 1,
+      "n": 1,
+      "mae": 2.8100000000000005,
+      "rmse": 2.8100000000000005,
+      "interval_coverage": null
+    },
+    {
+      "model": "seasonal_naive_7d",
+      "cut_date": "2023-06-30",
+      "training_last_date": "2023-06-29",
+      "horizon_days": 3,
+      "n": 3,
+      "mae": 2.5866666666666673,
+      "rmse": 3.226938693767413,
+      "interval_coverage": null
+    },
+    {
+      "model": "seasonal_naive_7d",
+      "cut_date": "2023-06-30",
+      "training_last_date": "2023-06-29",
+      "horizon_days": 7,
+      "n": 7,
+      "mae": 1.8400000000000003,
+      "rmse": 2.388825174491787,
+      "interval_coverage": null
+    },
+    {
+      "model": "persistence",
+      "cut_date": "2023-09-28",
+      "training_last_date": "2023-09-27",
+      "horizon_days": 1,
+      "n": 1,
+      "mae": 1.9299999999999997,
+      "rmse": 1.9299999999999997,
+      "interval_coverage": null
+    },
+    {
+      "model": "persistence",
+      "cut_date": "2023-09-28",
+      "training_last_date": "2023-09-27",
+      "horizon_days": 3,
+      "n": 3,
+      "mae": 1.5599999999999998,
+      "rmse": 1.8758642452658103,
+      "interval_coverage": null
+    },
+    {
+      "model": "persistence",
+      "cut_date": "2023-09-28",
+      "training_last_date": "2023-09-27",
+      "horizon_days": 7,
+      "n": 7,
+      "mae": 1.1657142857142857,
+      "rmse": 1.4620728924568516,
+      "interval_coverage": null
+    },
+    {
+      "model": "seasonal_naive_7d",
+      "cut_date": "2023-09-28",
+      "training_last_date": "2023-09-27",
+      "horizon_days": 1,
+      "n": 1,
+      "mae": 2.3999999999999995,
+      "rmse": 2.3999999999999995,
+      "interval_coverage": null
+    },
+    {
+      "model": "seasonal_naive_7d",
+      "cut_date": "2023-09-28",
+      "training_last_date": "2023-09-27",
+      "horizon_days": 3,
+      "n": 3,
+      "mae": 3.25,
+      "rmse": 3.4555125041977015,
+      "interval_coverage": null
+    },
+    {
+      "model": "seasonal_naive_7d",
+      "cut_date": "2023-09-28",
+      "training_last_date": "2023-09-27",
+      "horizon_days": 7,
+      "n": 7,
+      "mae": 2.375714285714286,
+      "rmse": 2.6427339739638684,
+      "interval_coverage": null
+    }
+  ],
+  "method": "rolling_origin_no_future_access",
+  "archived_weather_forecast_comparison": "not_available",
+  "timesfm_validated": false,
+  "city_id": "comodoro-rivadavia",
+  "variable": "T2M",
+  "unit": "C",
+  "provider": "NASA POWER",
+  "product": "POWER_DAILY_AG",
+  "provenance": {
+    "source_urls": [
+      "https://power.larc.nasa.gov/api/temporal/daily/point"
+    ],
+    "requested_coordinates": {
+      "latitude": -45.8806237030771,
+      "longitude": -67.5194575718113
+    },
+    "timezone": "UTC"
+  },
+  "fetched_at": "2026-11-15T18:31:17.041156+00:00",
+  "limitations": [
+    "Sin archivo de pronósticos operativos para contrastar.",
+    "Baselines de software con datos reales, no validación de un modelo físico ni TimesFM."
+  ]
+}

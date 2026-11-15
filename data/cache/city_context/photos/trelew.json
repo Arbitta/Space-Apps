@@ -1,0 +1,21 @@
+{
+  "city_id": "trelew",
+  "status": "available",
+  "title": "File:Edificio Fenix, Trelew.JPG",
+  "caption": "Edificio Fénix. Av. Fontana 485, Trelew, Prov. de Chubut.",
+  "author": "Gastón Cuello",
+  "license": "CC BY-SA 3.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+  "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Edificio_Fenix%2C_Trelew.JPG/960px-Edificio_Fenix%2C_Trelew.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "source_url": "https://commons.wikimedia.org/wiki/File:Edificio_Fenix,_Trelew.JPG",
+  "coordinates": {
+    "lat": -43.2534,
+    "lon": -65.305,
+    "primary": "",
+    "globe": "earth"
+  },
+  "fetched_at": "2026-11-15T19:06:16.322491+00:00",
+  "limitations": [
+    "Fotografía ilustrativa con fecha propia; no demuestra condiciones ambientales actuales."
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "city_id": "formosa",
+  "status": "available",
+  "title": "File:Formosa de Noche - panoramio.jpg",
+  "caption": "Formosa de Noche",
+  "author": "Fernando Locatelli",
+  "license": "CC BY 3.0",
+  "license_url": "https://creativecommons.org/licenses/by/3.0",
+  "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/Formosa_de_Noche_-_panoramio.jpg/960px-Formosa_de_Noche_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "source_url": "https://commons.wikimedia.org/wiki/File:Formosa_de_Noche_-_panoramio.jpg",
+  "coordinates": {
+    "lat": -26.19041,
+    "lon": -58.168144,
+    "primary": "",
+    "globe": "earth"
+  },
+  "fetched_at": "2026-11-15T19:07:02.543028+00:00",
+  "limitations": [
+    "Fotografía ilustrativa con fecha propia; no demuestra condiciones ambientales actuales."
+  ]
+}

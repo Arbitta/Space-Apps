@@ -1,0 +1,21 @@
+{
+  "city_id": "la-plata",
+  "status": "available",
+  "title": "File:La Plata - Catedral - HDR.jpg",
+  "caption": "Catedral de La Plata, Buenos Aires, Argentina",
+  "author": "José María Pérez Nuñez  from Buenos Aires, Argentina",
+  "license": "CC BY-SA 2.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+  "image_url": "https://upload.wikimedia.org/wikipedia/commons/c/c0/La_Plata_-_Catedral_-_HDR.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+  "source_url": "https://commons.wikimedia.org/wiki/File:La_Plata_-_Catedral_-_HDR.jpg",
+  "coordinates": {
+    "lat": -34.92130556,
+    "lon": -57.95455556,
+    "primary": "",
+    "globe": "earth"
+  },
+  "fetched_at": "2026-11-15T19:06:34.379035+00:00",
+  "limitations": [
+    "Fotografía ilustrativa con fecha propia; no demuestra condiciones ambientales actuales."
+  ]
+}

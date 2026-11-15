@@ -1,0 +1,21 @@
+{
+  "city_id": "puerto-madryn",
+  "status": "available",
+  "title": "File:Cruise in Puerto Madryn - panoramio (1).jpg",
+  "caption": "Cruise in Puerto Madryn",
+  "author": "Ecohotel",
+  "license": "CC BY-SA 3.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+  "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/Cruise_in_Puerto_Madryn_-_panoramio_%281%29.jpg/960px-Cruise_in_Puerto_Madryn_-_panoramio_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "source_url": "https://commons.wikimedia.org/wiki/File:Cruise_in_Puerto_Madryn_-_panoramio_(1).jpg",
+  "coordinates": {
+    "lat": -42.765595,
+    "lon": -65.033441,
+    "primary": "",
+    "globe": "earth"
+  },
+  "fetched_at": "2026-11-15T19:06:12.926035+00:00",
+  "limitations": [
+    "Fotografía ilustrativa con fecha propia; no demuestra condiciones ambientales actuales."
+  ]
+}

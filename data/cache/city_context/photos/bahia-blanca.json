@@ -1,0 +1,21 @@
+{
+  "city_id": "bahia-blanca",
+  "status": "available",
+  "title": "File:Bahía Blanca - Monumento Bernardino Rivadavia.jpg",
+  "caption": "Monument to Bernardino Rivadavia, the first Constitutional President of Argentina, in the city of Bahía Blanca. The monument was created by Luis Rovatti and unveiled in 1946.",
+  "author": "Arcibel",
+  "license": "CC BY-SA 3.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+  "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7c/Bah%C3%ADa_Blanca_-_Monumento_Bernardino_Rivadavia.jpg/960px-Bah%C3%ADa_Blanca_-_Monumento_Bernardino_Rivadavia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "source_url": "https://commons.wikimedia.org/wiki/File:Bah%C3%ADa_Blanca_-_Monumento_Bernardino_Rivadavia.jpg",
+  "coordinates": {
+    "lat": -38.71775833,
+    "lon": -62.26508611,
+    "primary": "",
+    "globe": "earth"
+  },
+  "fetched_at": "2026-11-15T19:06:40.103708+00:00",
+  "limitations": [
+    "Fotografía ilustrativa con fecha propia; no demuestra condiciones ambientales actuales."
+  ]
+}

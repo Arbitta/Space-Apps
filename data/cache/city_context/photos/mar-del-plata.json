@@ -1,0 +1,21 @@
+{
+  "city_id": "mar-del-plata",
+  "status": "available",
+  "title": "File:Facultad de Derecho UNMdP.jpg",
+  "caption": "University of Mar del Plata Law School.",
+  "author": "Hernán A.",
+  "license": "CC BY 2.0",
+  "license_url": "https://creativecommons.org/licenses/by/2.0",
+  "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d8/Facultad_de_Derecho_UNMdP.jpg/960px-Facultad_de_Derecho_UNMdP.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "source_url": "https://commons.wikimedia.org/wiki/File:Facultad_de_Derecho_UNMdP.jpg",
+  "coordinates": {
+    "lat": -37.99639453,
+    "lon": -57.54815745,
+    "primary": "",
+    "globe": "earth"
+  },
+  "fetched_at": "2026-11-15T19:06:37.209080+00:00",
+  "limitations": [
+    "Fotografía ilustrativa con fecha propia; no demuestra condiciones ambientales actuales."
+  ]
+}
