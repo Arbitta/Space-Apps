@@ -18,11 +18,11 @@
   --tm-accent-highlight: #7aa2c4;
   --tm-radius: 4px;
 
-  /* Variables fluidas proporcionales al tamaño de pantalla */
-  --tm-btn-size: clamp(30px, 4.6vmin, 40px);
-  --tm-icon-size: clamp(14px, 2.3vmin, 18px);
-  --tm-rail-gap: clamp(4px, 0.8vmin, 6px);
-  --tm-edge-offset: clamp(6px, 1.4vw, 12px);
+  /* Variables fluidas proporcionales tanto al ancho como al alto disponible */
+  --tm-btn-size: clamp(28px, min(4.3dvh, 5.2vmin), 38px);
+  --tm-icon-size: clamp(13px, min(2.2dvh, 2.5vmin), 17px);
+  --tm-rail-gap: clamp(3px, 0.65dvh, 6px);
+  --tm-edge-offset: clamp(6px, 1.1vmin, 11px);
 }
 
 /* Cuerpo e inmersión de pantalla completa */
@@ -36,14 +36,19 @@
   flex-direction: column;
 }
 
+/* Contenedor Flex en 3 filas (Arriba / Centro / Abajo) para que NADA se superponga jamás */
 .tm-stage-wrapper {
   position: relative;
   flex: 1;
+  min-height: 0;
   width: 100%;
-  height: calc(100vh - 56px);
-  height: calc(100dvh - 56px);
   overflow: hidden;
   background: var(--tm-bg-deep);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--tm-edge-offset);
+  padding: var(--tm-edge-offset);
 }
 
 /* Mapa satelital de fondo a pantalla completa */
@@ -76,8 +81,8 @@
 }
 
 .tm-svg-icon-sm {
-  width: clamp(12px, 1.9vmin, 15px);
-  height: clamp(12px, 1.9vmin, 15px);
+  width: clamp(12px, 1.8vmin, 15px);
+  height: clamp(12px, 1.8vmin, 15px);
   stroke: currentColor;
   stroke-width: 2;
   stroke-linecap: round;
@@ -86,13 +91,14 @@
   flex-shrink: 0;
 }
 
-/* Barra Técnica Superior (Proporcional y plegable) */
+/* ==========================================================================
+   FILA 1: Barra Técnica Superior (En flujo Flex: nunca tapa los botones laterales)
+   ========================================================================== */
 .tm-hud-top {
-  position: absolute;
-  top: var(--tm-edge-offset);
-  left: var(--tm-edge-offset);
-  right: var(--tm-edge-offset);
-  z-index: 520;
+  position: relative;
+  z-index: 530;
+  flex-shrink: 0;
+  width: 100%;
   pointer-events: none;
 }
 
@@ -261,24 +267,40 @@
 }
 
 /* ==========================================================================
-   Rieles Laterales Plegables (Barras que ocultan/muestran los botones al hacer clic)
+   FILA 2: Escenario Central (Riel Izquierdo + Ventanas Centrales + Riel Derecho)
+   Se ubica estrictamente entre la barra superior y la barra inferior sin solaparse
    ========================================================================== */
+.tm-hud-middle {
+  position: relative;
+  z-index: 510;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: var(--tm-edge-offset);
+  pointer-events: none;
+}
+
 .tm-icon-rail {
-  position: absolute;
-  top: clamp(58px, 9.5vh, 76px);
-  z-index: 500;
+  position: relative;
+  z-index: 520;
   display: flex;
   flex-direction: column;
   gap: var(--tm-rail-gap);
+  max-height: 100%;
+  min-height: 0;
+  flex-shrink: 0;
   pointer-events: none;
 }
 
 .tm-rail-left {
-  left: var(--tm-edge-offset);
+  align-items: flex-start;
 }
 
 .tm-rail-right {
-  right: var(--tm-edge-offset);
+  align-items: flex-end;
 }
 
 /* Botón cabecera de la barra lateral para desplegar u ocultar los demás botones */
@@ -286,7 +308,8 @@
   pointer-events: auto;
   position: relative;
   width: var(--tm-btn-size);
-  height: clamp(22px, 3.2vmin, 28px);
+  height: clamp(20px, 2.9vmin, 26px);
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -313,28 +336,32 @@
   transform: rotate(180deg);
 }
 
+/* Si la pantalla es muy baja en vertical, los iconos se acomodan en 2 columnas sin chocar con la barra inferior */
 .tm-rail-items {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   gap: var(--tm-rail-gap);
-  max-height: 70vh;
-  opacity: 1;
-  transition: max-height 0.22s ease, opacity 0.18s ease, transform 0.18s ease;
+  flex: 1;
+  min-height: 0;
+  max-height: calc(100% - 28px);
+  align-content: flex-start;
+}
+
+.tm-rail-right .tm-rail-items {
+  align-content: flex-end;
 }
 
 .tm-icon-rail:not(.is-expanded) .tm-rail-items {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
-  transform: translateY(-6px);
+  display: none !important;
 }
 
 .tm-rail-divider {
   height: 1px;
-  width: 100%;
+  width: var(--tm-btn-size);
   background: var(--tm-border-subtle);
   margin: 1px 0;
+  flex-shrink: 0;
 }
 
 .tm-icon-btn {
@@ -342,6 +369,7 @@
   position: relative;
   width: var(--tm-btn-size);
   height: var(--tm-btn-size);
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -375,7 +403,7 @@
   height: 13px;
   padding: 0 2px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.56rem;
+  font-size: 0.54rem;
   font-weight: 700;
   line-height: 13px;
   text-align: center;
@@ -397,8 +425,8 @@
   color: #f1f5f9;
   border: 1px solid var(--tm-border-active);
   border-radius: 3px;
-  padding: 0.28rem 0.55rem;
-  font-size: 0.72rem;
+  padding: 0.26rem 0.52rem;
+  font-size: 0.7rem;
   font-weight: 500;
   letter-spacing: 0.01em;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.65);
@@ -423,39 +451,43 @@
   visibility: visible;
 }
 
-/* Leyenda espectral inferior derecha proporcional */
-.tm-spectral-legend {
-  position: absolute;
-  right: var(--tm-edge-offset);
-  bottom: clamp(78px, 12vh, 96px);
-  z-index: 480;
-  width: clamp(210px, 28vw, 310px);
-  background: var(--tm-panel-bg);
-  border: 1px solid var(--tm-border-subtle);
-  border-radius: var(--tm-radius);
-  padding: 0.4rem 0.65rem;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+/* Escala espectral integrada en la barra inferior */
+.tm-bottom-topstrip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-bottom: 0.3rem;
+  margin-bottom: 0.35rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.tm-inline-scale {
+  width: clamp(90px, 16vw, 175px);
 }
 
 .tm-legend-title {
-  font-size: clamp(0.64rem, 1.2vw, 0.72rem);
+  font-size: clamp(0.62rem, 1.15vw, 0.72rem);
   font-weight: 600;
   color: var(--tm-text-primary);
+  white-space: nowrap;
 }
 
 .tm-legend-meta {
-  font-size: 0.62rem;
+  font-size: clamp(0.58rem, 1.05vw, 0.66rem);
   color: var(--tm-text-muted);
+  white-space: nowrap;
 }
 
 .tm-legend-bound {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.64rem;
+  font-size: 0.6rem;
   color: var(--tm-text-muted);
 }
 
 .tm-color-scale-bar {
-  height: 8px;
+  flex: 1;
+  height: 7px;
   border-radius: 2px;
   border: 1px solid rgba(255, 255, 255, 0.25);
 }
@@ -488,14 +520,24 @@
   cursor: nwse-resize;
 }
 
-/* Ventanitas Flotantes (Adaptables al ancho y alto del dispositivo) */
+/* Contenedor central libre entre rieles laterales y barras superior/inferior */
+.tm-hud-center {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* Ventanitas Flotantes (Encapsuladas dentro de .tm-hud-center: nunca pisan botones ni barras) */
 .tm-popup-window {
-  position: absolute;
-  top: clamp(58px, 10vh, 78px);
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(760px, calc(100vw - 92px));
-  max-height: calc(100dvh - 180px);
+  pointer-events: auto;
+  position: relative;
+  width: min(740px, 100%);
+  max-height: 100%;
   z-index: 650;
   background: rgba(13, 18, 28, 0.96);
   backdrop-filter: blur(14px);
@@ -512,11 +554,11 @@
 @keyframes tmWindowPop {
   from {
     opacity: 0;
-    transform: translate(-50%, 6px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, 0);
+    transform: translateY(0);
   }
 }
 
@@ -525,59 +567,62 @@
   justify-content: space-between;
   align-items: center;
   gap: 0.5rem;
-  padding: clamp(0.45rem, 1.2vmin, 0.65rem) clamp(0.65rem, 1.8vw, 1rem);
+  padding: clamp(0.4rem, 1vmin, 0.6rem) clamp(0.55rem, 1.5vw, 0.9rem);
   background: #141c2b;
   border-bottom: 1px solid var(--tm-border-subtle);
-  font-size: clamp(0.76rem, 1.6vw, 0.9rem);
+  font-size: clamp(0.72rem, 1.5vw, 0.88rem);
+  flex-shrink: 0;
 }
 
 .tm-window-tag {
   display: inline-block;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   color: #9ec1e0;
   background: rgba(61, 107, 153, 0.25);
   border: 1px solid rgba(122, 162, 196, 0.35);
-  padding: 0.1rem 0.38rem;
+  padding: 0.1rem 0.35rem;
   border-radius: 2px;
-  margin-right: 0.35rem;
+  margin-right: 0.3rem;
 }
 
 .tm-stat-pill {
   font-family: 'JetBrains Mono', monospace;
-  font-size: clamp(0.64rem, 1.3vw, 0.72rem);
+  font-size: clamp(0.62rem, 1.2vw, 0.7rem);
   color: var(--tm-text-primary);
   background: #1b2638;
   border: 1px solid var(--tm-border-subtle);
-  padding: 0.15rem 0.45rem;
+  padding: 0.12rem 0.42rem;
   border-radius: 2px;
   white-space: nowrap;
 }
 
 .tm-popup-body {
-  padding: clamp(0.6rem, 1.6vmin, 0.95rem);
+  padding: clamp(0.5rem, 1.4vmin, 0.85rem);
   overflow-y: auto;
+  flex: 1;
+  min-height: 0;
 }
 
 .tm-popup-desc {
-  font-size: clamp(0.7rem, 1.4vw, 0.78rem);
+  font-size: clamp(0.68rem, 1.3vw, 0.76rem);
   color: var(--tm-text-muted);
 }
 
 .tm-chart-box {
   position: relative;
-  height: clamp(200px, 36vh, 295px);
+  height: clamp(165px, 32dvh, 275px);
   width: 100%;
   background: #f8fafc;
   border: 1px solid #cbd5e1;
   border-radius: 3px;
-  padding: 0.45rem;
+  padding: 0.4rem;
 }
 
 .tm-section-caption {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -588,7 +633,7 @@
   background: #141c2b;
   border: 1px solid var(--tm-border-subtle);
   border-radius: 3px;
-  padding: 0.5rem 0.7rem;
+  padding: 0.45rem 0.65rem;
 }
 
 .tm-border-left-cool {
@@ -601,7 +646,7 @@
 
 .tm-micro-label {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   color: var(--tm-text-muted);
   letter-spacing: 0.05em;
 }
@@ -620,7 +665,7 @@
   background: #141c2b;
   border: 1px solid var(--tm-border-subtle);
   border-radius: 3px;
-  padding: 0.5rem 0.7rem;
+  padding: 0.45rem 0.65rem;
   color: var(--tm-text-primary);
 }
 
@@ -629,14 +674,13 @@
 }
 
 /* ==========================================================================
-   Barra Inferior del Slider de Tiempo (Proporcional al tamaño del dispositivo)
+   FILA 3: Barra Inferior del Slider de Tiempo (En flujo Flex: nunca tapa los botones)
    ========================================================================== */
 .tm-bottom-bar {
-  position: absolute;
-  bottom: var(--tm-edge-offset);
-  left: var(--tm-edge-offset);
-  right: var(--tm-edge-offset);
-  z-index: 500;
+  position: relative;
+  z-index: 520;
+  flex-shrink: 0;
+  width: 100%;
   pointer-events: none;
 }
 
@@ -647,21 +691,31 @@
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--tm-border-subtle);
   border-radius: var(--tm-radius);
-  padding: clamp(0.38rem, 1vmin, 0.55rem) clamp(0.55rem, 1.5vw, 1rem);
+  padding: clamp(0.32rem, 0.85vmin, 0.5rem) clamp(0.5rem, 1.4vw, 0.95rem);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
 }
 
 .tm-bottom-handle {
   background: var(--tm-panel-elevated);
   border: 1px solid var(--tm-border-subtle);
-  color: var(--tm-text-muted);
+  color: var(--tm-text-primary);
   border-radius: 2px;
-  padding: 1px 6px;
+  padding: 2px 7px;
   line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.14s ease, border-color 0.14s ease;
+}
+
+.tm-bottom-handle:hover {
+  background: var(--tm-accent-steel);
+  border-color: #9ec1e0;
+  color: #ffffff;
 }
 
 .tm-bottom-bar:not(.is-expanded) #tmClimateStripes,
-.tm-bottom-bar:not(.is-expanded) .tm-slider-caption {
+.tm-bottom-bar:not(.is-expanded) .tm-slider-caption,
+.tm-bottom-bar:not(.is-expanded) #tmCellHudInfo {
   display: none !important;
 }
 
@@ -671,7 +725,7 @@
 
 .tm-year-readout {
   font-family: 'JetBrains Mono', monospace;
-  font-size: clamp(1.25rem, 3.6vw, 2.15rem);
+  font-size: clamp(1.1rem, 3.2vw, 1.95rem);
   font-weight: 700;
   line-height: 1;
   color: #e2e8f0;
@@ -679,26 +733,26 @@
 }
 
 .tm-active-val {
-  font-size: clamp(0.82rem, 1.9vw, 1.15rem);
+  font-size: clamp(0.78rem, 1.7vw, 1.08rem);
 }
 
 .tm-anom-pill {
   font-family: 'JetBrains Mono', monospace;
-  font-size: clamp(0.62rem, 1.3vw, 0.74rem);
+  font-size: clamp(0.6rem, 1.2vw, 0.72rem);
   font-weight: 600;
-  padding: 0.1rem 0.38rem;
+  padding: 0.08rem 0.35rem;
   border-radius: 2px;
   border: 1px solid rgba(255, 255, 255, 0.22);
 }
 
 .tm-condition-label {
-  font-size: clamp(0.62rem, 1.2vw, 0.72rem);
+  font-size: clamp(0.6rem, 1.15vw, 0.7rem);
   color: var(--tm-text-muted);
 }
 
 .tm-transport-btn {
-  width: clamp(26px, 3.8vmin, 34px);
-  height: clamp(26px, 3.8vmin, 34px);
+  width: clamp(25px, 3.6vmin, 32px);
+  height: clamp(25px, 3.6vmin, 32px);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -717,8 +771,8 @@
 }
 
 .tm-play-btn {
-  width: clamp(30px, 4.2vmin, 38px);
-  height: clamp(30px, 4.2vmin, 38px);
+  width: clamp(28px, 4vmin, 36px);
+  height: clamp(28px, 4vmin, 36px);
   border-radius: 3px;
   display: inline-flex;
   align-items: center;
@@ -737,14 +791,14 @@
 
 .tm-slider-caption {
   font-family: 'JetBrains Mono', monospace;
-  font-size: clamp(0.58rem, 1.1vw, 0.68rem);
+  font-size: clamp(0.56rem, 1.05vw, 0.66rem);
   color: var(--tm-text-muted);
   letter-spacing: 0.03em;
 }
 
 .tm-year-slider {
   width: 100%;
-  height: clamp(4px, 0.8vmin, 6px);
+  height: clamp(4px, 0.75vmin, 6px);
   accent-color: #7aa2c4;
   cursor: pointer;
 }
@@ -752,7 +806,7 @@
 .tm-stripes-bar {
   display: flex;
   width: 100%;
-  height: clamp(8px, 1.5vmin, 13px);
+  height: clamp(7px, 1.35vmin, 11px);
   border-radius: 2px;
   overflow: hidden;
   border: 1px solid var(--tm-border-subtle);
@@ -778,8 +832,8 @@
   border: 1px solid var(--tm-border-subtle);
   border-radius: 2px !important;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  padding: 0.18rem 0.45rem;
+  font-size: 0.68rem;
+  padding: 0.16rem 0.42rem;
 }
 
 .tm-speed-btn.active,
@@ -799,20 +853,11 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55) !important;
 }
 
-/* Ajustes específicos para tablets y móviles */
+/* Ajustes específicos para móviles y pantallas pequeñas */
 @media (max-width: 767.98px) {
-  .tm-spectral-legend {
-    display: none;
-  }
-  .tm-popup-window {
-    top: 56px;
-    width: calc(100vw - 14px);
-    max-height: calc(100dvh - 150px);
-  }
-  /* En móviles pequeños ocultar tooltips largos al hacer tap para no tapar la pantalla */
   .tm-icon-btn::after,
   .tm-rail-handle::after {
-    font-size: 0.66rem;
-    padding: 0.2rem 0.45rem;
+    font-size: 0.64rem;
+    padding: 0.18rem 0.42rem;
   }
 }

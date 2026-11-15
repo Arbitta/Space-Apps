@@ -870,6 +870,28 @@ document.addEventListener('DOMContentLoaded', () => {
     loadTimeMachineData({ preserveZoom: false });
   }
 
+  /**
+   * Calcula los márgenes seguros del mapa según el tamaño real de las barras HUD
+   * para que el cuadrante nunca quede oculto detrás de las barras ni botones
+   */
+  function getSafeMapBoundsOptions() {
+    const topEl = document.querySelector('.tm-hud-top');
+    const bottomEl = document.getElementById('tmBottomBar');
+    const leftEl = document.getElementById('tmLeftRail');
+    const rightEl = document.getElementById('tmRightRail');
+
+    const topPad = (topEl ? topEl.offsetHeight : 54) + 24;
+    const bottomPad = (bottomEl ? bottomEl.offsetHeight : 84) + 24;
+    const leftPad = (leftEl ? leftEl.offsetWidth : 38) + 24;
+    const rightPad = (rightEl ? rightEl.offsetWidth : 38) + 24;
+
+    return {
+      paddingTopLeft: [leftPad, topPad],
+      paddingBottomRight: [rightPad, bottomPad],
+      duration: 0.55
+    };
+  }
+
   function applyMapModeView(shouldZoom = true) {
     if (!mapInstance || !currentData) return;
 
@@ -894,7 +916,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `Cuadrante ${state.lat_span.toFixed(2)}° × ${state.lon_span.toFixed(2)}° (arrastra vértices)`
       );
       if (shouldZoom && currentData.spatial_zone?.zone_bounds) {
-        mapInstance.flyToBounds(currentData.spatial_zone.zone_bounds, { padding: [80, 80], duration: 0.6 });
+        mapInstance.flyToBounds(currentData.spatial_zone.zone_bounds, getSafeMapBoundsOptions());
       }
     }
     updateMapColorsForYear(activeYear);
