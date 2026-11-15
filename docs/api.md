@@ -6,6 +6,9 @@ para análisis y comparación; Radar y Fingerprint están disponibles con result
 provisionales. Las coordenadas libres y la validación científica siguen pendientes.
 La interfaz y la API comparten origen.
 
+La capa multiproveedor agrega `/api/science/variables` y `/api/science/data`,
+documentados al final. Los endpoints anteriores conservan el contrato POWER.
+
 ## Instalación y ejecución local
 
 Desde la raíz del repositorio, en PowerShell:
@@ -442,3 +445,150 @@ con nombres, unidades, grupos y enlaces recibidos; no fija seis códigos en JS.
 Ambas interfaces descartan respuestas anteriores ante cambios rápidos y ocultan
 resultados previos durante una nueva consulta o error. Las rutas anteriores de
 Explorador, Resultados y Comparador mantienen sus parámetros y comportamiento.
+
+
+## API aditiva de series científicas nativas
+
+`GET /api/science/variables` devuelve únicamente variables con valores reales en
+cachés validadas de esta instalación. No hace consultas externas. Cada entrada
+incluye proveedor, producto, versión conocida o `null`, variable, unidad,
+frecuencia, resolución y `verification` con ciudades, períodos, cobertura y fechas.
+`available: true` no garantiza cobertura universal ni habilita análisis estadísticos.
+`meta.availability` es `verified_cached_data`; `meta.radar_family_changed` es `false`.
+El endpoint histórico `/api/variables` sigue devolviendo el catálogo POWER de seis
+variables, incluso antes de inicializar sus datos.
+
+`POST /api/science/data` usa JSON con estos campos:
+
+| Campo | Tipo y contrato |
+| --- | --- |
+| `provider` | Obligatorio: `power`, `modis`, `gldas` o `gpm`; disponibilidad comprobada en el catálogo dinámico. |
+| `city_id` | ID obligatorio del catálogo argentino. |
+| `variables` | Lista no vacía de códigos ya verificados en `/api/science/variables`. |
+| `start_year`, `end_year` | Enteros; por defecto 2000 y 2024. Sin fechas futuras ni período invertido. |
+| `force` | Booleano, por defecto `false`; actualización remota explícita. |
+
+Se rechazan campos extra y coordenadas libres. La primera verificación se hace
+con `scripts.fetch_science`; HTTP no habilita candidatos sin observaciones.
+Se prioriza la caché. Un fallo o una actualización degradada conserva la serie
+anterior, pero devuelve error; no presenta esa serie como descarga nueva.
+Si una extracción validada abarca un período mayor, se seleccionan sólo las
+fechas solicitadas sin consultar al proveedor. Se conservan valores, QA y fecha
+de obtención original; `provenance.cache_selection` documenta el período de origen
+y `operation: "date_filter_only"`. No se combinan versiones, políticas QA ni vías
+de acceso para completar una selección. `force: true` omite esta reutilización.
+Esta mejora corresponde a `/api/science`; el contrato de `/api/data` se conserva.
+
+Solicitud de una serie POWER existente:
+
+```json
+{
+  "provider": "power",
+  "city_id": "mendoza",
+  "variables": ["T2M"],
+  "start_year": 2000,
+  "end_year": 2024
+}
+```
+
+La respuesta 200 mantiene el sobre `status`, `data`, `meta`. `data` es una lista de
+registros `earthlens.scientific-series.v1`, uno por variable: `provider`, `product`,
+`product_version`, `cache_version`, `variable`, `unit`, `location`, `period`,
+`frequency`, `spatial_resolution`, `series`, `coverage`, `fetched_at`, `metadata`,
+`provenance` y `analysis`. Cada punto tiene `date` ISO y `value` numérico o `null`.
+MODIS agrega `raw_value` y `quality` con las banderas originales y los motivos de
+exclusión. `coverage.missing_count` incluye los valores excluidos por QA; no implica
+que el proveedor haya omitido esas fechas.
+
+No asumir doce registros por año: MODIS conserva sus compuestos de 16 días. En
+POWER, el día 01 etiqueta el mes completo. La versión científica puede ser `null`;
+no inferirla de `cache_version`. `analysis.enabled` y `meta.analysis_enabled` son
+`false`: este contrato todavía no alimenta el motor ni amplía Radar/Fingerprint.
+
+Ejemplos PowerShell, usando sólo variables publicadas en el catálogo dinámico:
+
+```powershell
+Invoke-RestMethod 'http://127.0.0.1:5000/api/science/variables'
+
+$body = @{ provider='modis'; city_id='posadas'; variables=@('NDVI','EVI'); start_year=2024; end_year=2024 } | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:5000/api/science/data' -ContentType 'application/json' -Body $body
+```
+
+Errores: 400 `invalid_request`, 404 `city_not_found`, 502
+`provider_invalid_response`, 503 `provider_not_verified`, `provider_auth_required`
+o `provider_unavailable`, 504 `provider_timeout`. Los detalles internos y tokens
+no se exponen. GLDAS y GPM ya tienen históricos reales 2000–2024 en las 25
+ciudades. Procedencia, comandos y límites:
+[scientific-sources.md](scientific-sources.md).
+
+### Comparaciones descriptivas: `POST /api/science/compare`
+
+Requiere dos selecciones con `provider`, `city_id` y `variable`, y años enteros.
+Admite la misma variable del mismo producto/versión en dos ciudades o la
+comparación explícita POWER–IMERG. Rechaza coordenadas libres, campos extra,
+productos/variables incompatibles y frecuencias diferentes; no remuestrea.
+
+```json
+{
+  "selections": [
+    {"provider":"power","city_id":"mendoza","variable":"PRECTOTCORR"},
+    {"provider":"gpm","city_id":"mendoza","variable":"precipitation"}
+  ],
+  "start_year":2000,
+  "end_year":2024,
+  "target_unit":"mm/day"
+}
+```
+
+La respuesta contiene `data.sources` (dos contratos nativos sin transformar),
+`data.plots` (dos proyecciones con ciudad, `source_unit`, `display_unit`, `factor`
+y `series`) y `data.comparison` (`scope: "descriptive_only"`,
+`statistical_test_performed: false`, fechas comunes válidas y advertencias).
+POWER conserva factor 1; GPM pasa de `mm/hr` a `mm/day` con factor 24. Los nulos
+siguen siendo nulos. No es una conversión a acumulados mensuales. Grillas y
+métodos son diferentes; no se supone equivalencia ni causalidad. Una incompatibilidad
+devuelve 422 `incompatible_analysis`; la falta de conversión explícita devuelve 400.
+
+### Entidades hidrológicas: `GET /api/science/water-features`
+
+Devuelve el catálogo argentino curado con `id`, `type`, `feature_id` del proveedor,
+nombre, provincia, producto, versión, SWORD y evidencia geográfica. Actualmente
+contiene `chubut-trelew`, tramo `65341000051`. El centroide GeoRef documentado
+corresponde a esa entidad curada: no habilita coordenadas libres ni sustituye un
+validador territorial general.
+
+### Observaciones de agua: `POST /api/science/water-data`
+
+```json
+{
+  "feature_id":"chubut-trelew",
+  "start_time":"2024-01-01T00:00:00Z",
+  "end_time":"2024-12-31T23:59:59Z",
+  "force":false
+}
+```
+
+Se exige identificador del catálogo, fechas ISO con zona horaria y período no
+futuro ni invertido; `force` es booleano opcional. Prioriza la caché exacta.
+La respuesta usa `earthlens.hydrology-series.v1`: `feature`, `product`,
+`product_version`, `sword_version`, `period`, `frequency`, `geometries`,
+`variables`, `fetched_at`, `provenance` y `analysis.enabled: false`.
+`variables.wse` y `variables.width` conservan unidades `m`, cobertura y series
+con fecha de paso, valor, valor original, incertidumbre, geometría, calidad y
+atributos originales. Los 31 pasos reales del piloto 2024 no se transforman en
+doce meses. `quality.review_required: true` impide interpretar disponibilidad
+numérica como aceptación científica automática. No se generan tendencias.
+
+Un ID desconocido devuelve 404 `water_feature_not_found`; tipos/fechas/campos
+inválidos devuelven 400. Rigen los errores de proveedor 502/503/504 y mensajes
+públicos controlados. No se admiten IDs externos arbitrarios, coordenadas ni
+configuración remota en el cuerpo.
+
+### Consumidores actuales
+
+`/sources` y el panel desplegable en `/explorer`, `/compare`, `/radar`,
+`/fingerprint` y `/missions` consumen estos contratos, mostrando QA, procedencia,
+unidades y gráficos nativos. El deslizador recorre la respuesta ya recibida.
+Cerrar el panel evita cargar su catálogo. La familia estadística de Radar y los
+indicadores de Fingerprint mantienen su contrato POWER previo. Time Machine y
+Connections todavía no consumen estos endpoints en sus interfaces.

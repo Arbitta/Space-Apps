@@ -13,6 +13,9 @@ from services.analysis_service import AnalysisService
 from web.routes import web
 from services.fingerprint import FingerprintService
 from services.radar import DEFAULT_ARTIFACT_NAME, RadarService
+from services.scientific import ScientificService
+from services.hydrology import HydrologyService
+from api.scientific import scientific_api
 
 
 def create_app(config=None):
@@ -38,11 +41,14 @@ def create_app(config=None):
         max_age_days=app.config["POWER_CACHE_MAX_AGE_DAYS"],
     )
     app.extensions["earthlens_service"] = EarthLensService(bulk)
+    app.extensions["earthlens_science"] = ScientificService(app.extensions["earthlens_service"])
+    app.extensions["earthlens_hydrology"] = HydrologyService(Path(app.config["CACHE_DIR"]).parent / "science")
     app.extensions["earthlens_analysis"] = AnalysisService(app.extensions["earthlens_service"])
     app.extensions["earthlens_fingerprint"] = FingerprintService(app.extensions["earthlens_analysis"])
     radar_path = app.config["RADAR_ARTIFACT_PATH"] or Path(app.config["CACHE_DIR"]).parent / DEFAULT_ARTIFACT_NAME
     app.extensions["earthlens_radar"] = RadarService(app.extensions["earthlens_analysis"], radar_path)
     app.register_blueprint(api)
+    app.register_blueprint(scientific_api)
     app.register_blueprint(web)
     register_error_handlers(app)
     return app

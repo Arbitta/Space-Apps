@@ -262,9 +262,18 @@ Priorizar NASA POWER, MERRA-2, Giovanni, GPM y GLDAS según la variable y el cas
 uso. Evaluar SWOT como recurso complementario, incluyendo Hydrocron como posible
 vía de acceso. Estas prioridades no equivalen a integraciones terminadas.
 
-Actualmente sólo existe el proveedor NASA POWER. MERRA-2 figura en su contrato de
-datos; no hay un cliente directo de MERRA-2. Giovanni es una vía de acceso/análisis
-a evaluar mediante servicios oficiales NASA Earthdata; no tratarlo como un dataset
+NASA POWER mantiene el acceso meteorológico y estadístico existente. La capa
+aditiva `services/scientific.py` y el adaptador MODIS/ORNL conservan series nativas
+separadas; su disponibilidad depende de observaciones reales verificadas en caché.
+GLDAS_NOAH025_M 2.1 tiene extracción puntual OPeNDAP verificada para las tres
+ciudades piloto en 2024: 15 series y 180 registros disponibles, sin faltantes.
+Giovanni in the Cloud se verificó con una serie real y ofrece un adaptador
+mensual para ampliar históricos. Sus CSV pueden venir redondeados: se separan
+de NetCDF por revisión/política de caché y se conserva esa limitación de precisión.
+Consultar [docs/scientific-sources.md](docs/scientific-sources.md) y los informes
+locales para cobertura y limitaciones reales. MERRA-2 figura en el contrato POWER;
+no hay un cliente directo de MERRA-2. Giovanni es una vía de acceso/análisis
+verificada mediante servicios oficiales NASA Earthdata; no tratarlo como un dataset
 único ni suponer que todos los productos comparten variables o resolución.
 
 Antes de agregar una fuente, verificar documentación oficial, acceso y autenticación,
@@ -401,5 +410,79 @@ radiales ni normalizaciones sin metodología acordada. El período de la interfa
 es el cacheado 2000–2024; Radar no modifica la familia al filtrar.
 
 Ver `docs/products.md`, `tests/test_product_pages.py` y el verificador optativo
-`scripts/check_product_pages.py`. Los proveedores de fases posteriores siguen
-pendientes y requieren documentación oficial y consultas reales antes de habilitarse.
+`scripts/check_product_pages.py`. Los proveedores nuevos requieren documentación
+oficial y observaciones reales antes de habilitarse; no quedan incorporados a estas
+interfaces por aparecer en el catálogo multiproveedor.
+
+## Recuperación y capa multiproveedor — noviembre de 2026
+
+`scripts/initialize_data.py` permite inicializar una instalación nueva: reutiliza
+POWER, descarga sólo las cachés faltantes, audita unidades/cobertura y regenera
+Radar mediante su generador cache-only. No amplía su familia de 150 pruebas.
+Si fallan datos o análisis, conserva el artefacto anterior. La recuperación del
+15/11 encontró las cachés ausentes y descargó realmente las 25 ciudades para
+2000–2024: 150 series, 45.000 valores y cero nulos. Su repetición reutilizó las 25
+cachés sin descargas. Esto es distinto del lote histórico anterior de sólo caché.
+
+La API aditiva `/api/science/variables` publica disponibilidad basada en cachés
+validadas; `/api/science/data` sirve frecuencias nativas, con análisis desactivado.
+Los endpoints POWER existentes no cambian. Las cachés nuevas se separan en
+`data/cache/science/series/<provider>/<product>/<cache_version>/<variable>/` y
+preservan unidades, QA, versiones conocidas e integridad. No atribuir una versión
+científica a partir de una versión de API o de un identificador local de caché.
+
+MODIS usa MOD13Q1 puntual, NDVI/EVI escalados desde metadatos reales, compuestos
+de 16 días y QA conservada. La colección no está identificada en la respuesta
+REST recibida: se informa `product_version: null`. No mezclarla con colecciones
+supuestas ni trasladarla al OLS mensual sin acuerdo metodológico. El acceso GLDAS
+se verificó después de autorizar NASA GESDISC DATA ARCHIVE; los errores 401/400/403
+anteriores no representan el estado final del piloto. Configurar tokens sólo en
+el entorno local, sin Git ni chat. La API sirve cachés verificadas sin requerir
+el token en el proceso HTTP; las descargas nuevas sí requieren autenticación.
+
+El motor del compañero se conserva. La API nativa y el panel aditivo de fuentes
+no calculan tendencias nuevas ni amplían los seis indicadores de Fingerprint o
+la familia de 150 pruebas de Radar. La revisión metodológica continúa pendiente.
+
+### Estado verificado de fuentes e interfaces
+
+- GLDAS `GLDAS_NOAH025_M.2.1`: cuatro capas de humedad del suelo en `kg m-2`
+  y evapotranspiración en `kg m-2 s-1`. Piloto NetCDF puntual: 3 ciudades, 2024,
+  15 series/180 registros. Histórico Giovanni: 25 ciudades, 2000–2024,
+  125 series/37.500 registros válidos. Son accesos al mismo producto; no sumar
+  el piloto al histórico como observaciones independientes. CSV y NetCDF tienen
+  cachés distintas porque el CSV redondea algunos valores.
+- GPM `GPM_3IMERGM.07`, IMERG Final mensual: 25 ciudades, 2000–2024,
+  25 series/7.500 registros válidos, conservados en `mm/hr`. La comparación con
+  POWER exige `target_unit: "mm/day"` y multiplica explícitamente por 24 sólo
+  la proyección gráfica. Los originales permanecen intactos; no se acumula lluvia.
+- MODIS `MOD13Q1`: piloto REST 2024 de 3 ciudades, 6 series/138 registros,
+  56 aceptados y 82 excluidos por QA. Las órdenes históricas ORNL se gestionan
+  mediante `scripts/order_modis.py`, con contacto sólo en memoria. Una orden
+  aceptada no equivale a una descarga verificada: consultar su estado y validar
+  CSV, colección por gránulo, píxel, fechas y QA antes de publicar las series.
+- SWOT Hydrocron: tramo argentino `65341000051`, río Chubut cerca de Trelew,
+  `SWOT_L2_HR_RiverSP_D`, SWORD 17b. Piloto 2024 con 31 pasos, altura y ancho
+  en metros, incertidumbres, banderas y geometría propios. No es una serie de
+  ciudad, no usa el OLS mensual y sus banderas requieren revisión. No hay lagos
+  argentinos verificados todavía. Catálogo: `data/water_features.json`.
+
+`services/hydrology.py` y `/api/science/water-*` conservan el contrato hidrológico
+independiente. `/api/science/compare` es descriptivo. El panel compartido en
+`templates/_scientific_panel.html`, `static/js/scientific.js` y
+`static/css/scientific.css` presenta datos reales en Explorador, Comparador,
+Radar, Fingerprint y Modo detective, y en `/sources`. Se carga al abrirlo;
+los gráficos respetan fechas nativas, huecos y unidades. El recorrido histórico
+del deslizador no hace consultas nuevas. No sustituye los análisis o misiones
+existentes ni crea relaciones causales.
+
+Time Machine existe en `origin/feature/earth-time-machine` (8a39937), no en las
+rutas locales. Su contrato usa funciones ausentes del motor local y un recurso
+de muestras de respaldo: no fusionarlo ni habilitar ese respaldo automáticamente.
+El usuario confirmó que Earth Connections todavía no existe. La integración de
+esas interfaces sigue pendiente de resolver sus contratos y disponer de su código.
+
+`scripts/audit_science.py` audita las cachés sin red, agrupando versiones, vías
+de acceso y períodos para evitar contabilizar pilotos y proyecciones dos veces.
+`scripts/check_scientific_pages.py` verifica con Chrome real las cinco interfaces,
+gráficos, comparación, QA, recorrido histórico y descarte de respuestas tardías.

@@ -5,6 +5,11 @@ from flask import Blueprint, render_template
 web = Blueprint("web", __name__)
 
 
+@web.get('/sources')
+def scientific_sources():
+    return render_template('scientific.html',science_open=True)
+
+
 @web.get("/")
 @web.get("/index.html")
 def index():

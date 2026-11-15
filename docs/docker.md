@@ -156,3 +156,46 @@ Las capturas muestran exclusivamente datos reales. No es una prueba de conexión
 Bootstrap, Leaflet, Chart.js, fuentes y teselas siguen usando los recursos externos
 del proyecto y requieren acceso a Internet. Playwright sólo se necesita para la
 verificación de navegador, no para ejecutar EarthLens.
+
+## Inicialización desde una instalación nueva y otras fuentes
+
+```powershell
+docker compose up -d --build --wait --wait-timeout 60
+docker compose exec -T backend python -m scripts.initialize_data
+```
+
+El inicializador recupera POWER mediante las APIs reales sólo cuando falta caché,
+audita los datos y regenera Radar desde caché. Repetirlo reutiliza las observaciones.
+Los informes tienen nombres únicos bajo `data/cache/reports`. Si fallan datos o
+análisis, no sustituye el artefacto Radar anterior y sale con código 1.
+
+Las nuevas respuestas originales, series nativas y diagnósticos científicos viven
+en `data/cache/science`, dentro del mismo bind mount persistente. No hay nuevas
+dependencias, servicios ni volúmenes. `/api/science/variables` describe únicamente
+datos verificados de la instalación; los contratos existentes siguen usando POWER.
+
+Comandos de GLDAS, GPM y órdenes MODIS sin exponer tokens ni guardar el contacto:
+[scientific-sources.md](scientific-sources.md). GLDAS y GPM ya tienen históricos
+reales en caché; el piloto SWOT usa un contrato separado. El catálogo curado
+`data/water_features.json` se copia en la imagen y se monta como sólo lectura
+en desarrollo; sus observaciones comparten el montaje persistente de caché.
+
+```powershell
+docker compose exec -T backend python -m scripts.audit_science
+docker compose exec -T backend python -m scripts.order_modis --poll
+docker compose exec -T backend python -B -m unittest discover -s tests
+# Con Playwright y Chrome en el host:
+.\venv\Scripts\python.exe -B -m scripts.check_scientific_pages
+```
+
+La página `http://127.0.0.1:5000/sources` y los paneles desplegables en las cinco
+herramientas existentes muestran series reales con gráficos nativos. Las consultas
+cacheadas no requieren Earthdata en el servidor. Para nuevas descargas autenticadas
+usar `docker compose exec -T -e EARTHDATA_TOKEN ...` desde la terminal que tenga
+el token; no incluir su valor en Compose, `.env` versionable, Dockerfile o comandos
+compartidos. Los pedidos ORNL usan de la misma manera `EARTHLENS_ORNL_EMAIL`.
+El sondeo de órdenes no exige correo ni token y nunca reenvía pedidos.
+Compose activa `EARTHLENS_TEMPLATES_AUTO_RELOAD=true` para recargar Jinja durante
+el desarrollo manteniendo desactivado el depurador interactivo. Los gráficos
+del panel se crean sólo al consultar; los paneles cerrados no agregan lienzos
+ni consultas a las interfaces originales.

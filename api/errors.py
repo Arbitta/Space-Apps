@@ -8,6 +8,9 @@ from services.api_service import ServiceError
 
 
 SERVICE_STATUS = {
+    "water_feature_not_found": 404,
+    "provider_auth_required": 503,
+    "provider_not_verified": 503,
     "invalid_request": 400,
     "coordinates_not_supported": 400,
     "city_not_found": 404,

@@ -11,3 +11,6 @@
     </div>
   </div>
 </nav>
+{% if request.endpoint in ['web.explorer','web.compare','web.radar','web.fingerprint','web.missions'] %}
+{% include "_scientific_panel.html" %}
+{% endif %}

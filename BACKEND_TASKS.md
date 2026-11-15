@@ -1,6 +1,6 @@
 # EarthLens — estado y tareas del backend
 
-Actualización: **14 de noviembre de 2026**. Equipo: **Patagonia Prime**.
+Actualización: **15 de noviembre de 2026**. Equipo: **Patagonia Prime**.
 Desafío: **Earth System Trend Detective**, NASA Space Apps Challenge 2026.
 
 **Alcance exclusivo: República Argentina.** No incluir ciudades internacionales.
@@ -19,8 +19,17 @@ equipo están integrados para análisis exploratorio y comparación de ciudades.
 Earth Radar y Earth Fingerprint tienen backend provisional, contrato común, API,
 estudio persistido e interfaces completas `/radar` y `/fingerprint` (fase 1).
 La confirmación científica y el ajuste múltiple permanecen pendientes de B06.
-El entorno de desarrollo Docker está construido, iniciado y verificado, y el lote
-de 25 ciudades 2000–2024 se ejecutó reutilizando íntegramente la caché existente.
+El entorno de desarrollo Docker está construido, iniciado y verificado. En esta
+instalación faltaban las observaciones: se descargaron las 25 ciudades 2000–2024
+y se comprobó después su reutilización completa sin nuevas descargas.
+La capa multiproveedor y sus contratos nativos están implementados. GLDAS y GPM
+tienen históricos reales 2000–2024 de las 25 ciudades. MODIS tiene un piloto
+verificado de tres ciudades y órdenes históricas en procesamiento; SWOT tiene
+un tramo argentino con observaciones reales. El panel de fuentes está conectado
+al Explorador, Comparador, Radar, Fingerprint y Modo detective, sin ampliar sus
+métodos estadísticos. Time Machine sigue pendiente de adaptar. El usuario confirmó
+que Earth Connections todavía no existe. Las secciones de diagnóstico conservan
+sus estados históricos; el cierre de fuentes al final refleja el estado vigente.
 
 | Componente/tarea | Estado | Evidencia |
 | --- | --- | --- |
@@ -30,13 +39,13 @@ de 25 ciudades 2000–2024 se ejecutó reutilizando íntegramente la caché exis
 | **B01 — catálogo argentino** | Completada para las 25 ciudades solicitadas | `data/cities.json`, `services/cities.py`; listado, búsqueda por ID y filtros por provincia/región. |
 | Procedencia geográfica y reconstrucción | Implementada con GeoRef real | `coordinate_source` conserva centroide, registro, consulta, ID y fecha; `scripts/build_city_catalog.py`. |
 | **B03 — caché local** | Completada para POWER | `services/cache.py`, `data/cache/.gitignore`; clave canónica, fechas UTC y reemplazo atómico. |
-| **B04 — obtención masiva** | Implementada; lote completo de 25 ciudades verificado en Docker | 25 aciertos de caché, 150 series y 45.000 registros con valor para 2000–2024; cero descargas nuevas y cero fallos. |
+| **B04 — obtención masiva** | Implementada; recuperación real de 25 ciudades verificada en Docker | 25 descargas reales, 150 series y 45.000 registros disponibles 2000–2024. Repetición: 25 aciertos, cero descargas y cero fallos. |
 | Protección de caché ante respuestas incompletas o degradadas | Implementada y probada | Seis series, meses completos, contexto, fuentes y unidades; no reemplaza valores disponibles por nulos. |
 | Arquitectura para coordenadas libres argentinas | Preparada; falta el adaptador territorial real | `services/geography.py`, `TerritoryEvidence`, `collect_location()`. |
 | **B05 — API REST básica** | Completada y probada con el cliente Flask | `app.py`, Blueprint `api/routes.py`, servicio `services/api_service.py`; seis endpoints documentados. |
 | **B02 — instalación y dependencias** | Instalación limpia verificada en Docker Linux/amd64 | Python 3.12.16, Flask 3.1.3 y Requests 2.34.2 instalados desde `requirements.txt`; `pip check` y suite satisfactorios. Sin lock transitivo. |
 | **B19 — Docker para desarrollo** | Completada para el alcance autorizado | `Dockerfile`, `compose.yaml`, `.dockerignore`, `docs/docker.md`; backend saludable, recarga y caché persistente verificadas. |
-| Pruebas sin red | 137 aprobadas: las 134 anteriores más tres contratos de interfaces | `tests/`; 138 descubiertas, sólo NASA de red optativa omitida en Docker. |
+| Pruebas sin red | Regresión original de 137 conservada; suite ampliada en esta fase | `tests/`; resultados de la ampliación al final. Sólo NASA de red optativa omitida en Docker. |
 | Script manual y documentación previa | Conservados | `test_nasa.py`, `docs/nasa-power.md`. |
 | Documentación | Actualizada | `AGENTS.md`, este archivo y contrato para frontend en `docs/api.md`; documentación previa conservada. |
 
@@ -216,8 +225,8 @@ pendiente; no se afirma aprobación del compañero de nuevos métodos. B17 conti
 | --- | --- | --- | --- |
 | B18 | P1 | Incorporar adaptador real de límites oficiales de Argentina. | Verificar fuente, geometrías y cobertura. Probar interiores, exteriores, costas y fronteras con procedencia/versionado; nunca usar sólo una caja rectangular. |
 | B06 | P1 | Revisar criterios científicos con el responsable del motor. | Contrato técnico inspeccionado e integrado (`docs/integration.md`). Falta precisión completa, coherencia p-valor/significancia/slope_tolerance, revisión conjunta de estacionalidad, autocorrelación, cobertura, centinelas, acumulados y comparaciones múltiples. Bloquea confirmación de hallazgos, no el procesamiento provisional explícito autorizado. |
-| B13 | P2 | Evaluar Giovanni/Earthdata, GPM, GLDAS y MERRA-2 directo según necesidad. | Caso de uso argentino y documentación oficial. Verificar acceso, variables, unidades y cobertura; integración completa sólo con cliente y prueba real. |
-| B14 | P3 | Evaluar SWOT/Hydrocron como complemento. | Caso de uso hídrico argentino y documentación oficial. Registrar viabilidad y límites; implementar sólo si aporta. |
+| B13 | P2 | Completar MODIS histórico e integración de productos; MERRA-2 directo sigue sin cliente. | GLDAS 2.1 y GPM 07 verificados con Giovanni/Earthdata en 25 ciudades. MODIS requiere resultados de las órdenes, validación de colección y QA; métodos nuevos dependen de B06. |
+| B14 | P3 | Ampliar SWOT/Hydrocron más allá del piloto fluvial. | Río Chubut verificado: 31 pasos, altura/ancho e incertidumbres. Faltan lagos argentinos con ID verificado y revisión de banderas/metodología; no aplicar el OLS de ciudades. |
 | B16 | P2 | Definir investigaciones guiadas argentinas. | Interfaz original, tres misiones, hipótesis y recomendador incorporados desde `origin/datasets-missions`; falta revisión conjunta de recorridos e interpretación científica. |
 | B17 | P2 — continua | Ampliar integración y CI. | B02 y módulos incorporados. Mantener pruebas sin red separadas de comprobaciones reales optativas; contratos HTTP, motor y flujo de navegador incorporados; falta CI del equipo. |
 
@@ -407,6 +416,197 @@ acordada, especialmente precipitación. No se modificó ninguno de esos criterio
 La comparación no prueba diferencias significativas entre ciudades. Continúan
 pendientes el adaptador territorial B18 y el despliegue productivo.
 
-**Fases 2–7 no iniciadas**: arquitectura multiproveedor, consultas reales GLDAS,
+**Estado al cierre de las interfaces del 14/11 — fases 2–7 no iniciadas**: arquitectura multiproveedor, consultas reales GLDAS,
 MODIS, GPM y SWOT/Hydrocron e integración general se abordarán en ese orden tras
 esta fase. No hay nuevas variables habilitadas ni ampliación automática de Radar.
+
+## Historial inicial de recuperación y primeras fuentes multiproveedor — 15/11/2026
+
+Base inspeccionada: `e127aad`, rama `feature/backend-api`. Esta sección reemplaza
+el estado futuro de las fases 2–4 del cierre anterior. No se hicieron commits ni
+push; se conservaron motor, frontend, proveedor POWER, normalizador y caché histórica.
+Guía completa, fuentes oficiales y comandos: [docs/scientific-sources.md](docs/scientific-sources.md).
+
+| Fase / prioridad | Estado comprobado | Evidencia y dependencia |
+| --- | --- | --- |
+| 1 — Recuperación POWER, P0 | Completada | Docker Desktop iniciado; bind mount persistente existente, sin observaciones recuperables. Descarga real de 25 ciudades, seis variables por petición, 2000–2024. |
+| 1 — Cobertura y unidades, P0 | Comprobadas | 150 series, 45.000 registros disponibles, 300 meses por serie, cero nulos/fallos. Unidades `C`, `mm/day`, `%`, `m/s`, fuentes NASA conservadas. |
+| 1 — Inicialización reproducible, P0 | Implementada y comprobada | `scripts/initialize_data.py`; repetición: 25 aciertos de caché y cero descargas. Informes únicos, falla con código 1 si faltan datos/análisis. |
+| 1 — Radar, P0 | Regenerado desde observaciones reales cacheadas | 150 análisis provisionales, 48 señales nominales y cero confirmados. Misma familia POWER; ninguna variable MODIS añadida. |
+| 2 — Contrato y almacenamiento nativos, P1 | Implementados para proveedores puntuales | `services/scientific.py`, cachés separadas por proveedor/producto/revisión/variable, cobertura, QA, procedencia e integridad SHA-256. POWER delegado al servicio existente. SWOT necesitará geometría/identidad propia. |
+| 2 — Catálogo dinámico y API aditiva, P1 | Implementados y verificados | `api/scientific.py`: `/api/science/variables` sólo publica datos con valores reales en cachés validadas; `/api/science/data` conserva frecuencias nativas. Endpoints anteriores intactos. |
+| 3 — GLDAS, P1 | Parcial; bloqueada la extracción por acceso Earthdata | CMR verificó `GLDAS_NOAH025_M` 2.1 y Cloud OPeNDAP. Descriptor real: HTTP 401. Servidor antiguo: 410. `gldas.py` sólo descubre/prueba acceso; cero observaciones; variables deshabilitadas. |
+| 4 — MODIS, P1 | Adaptador y piloto real verificados; ampliación pendiente | MOD13Q1/ORNL, NDVI/EVI, tres ciudades, 2024; 6 series, 138 registros, 56 aceptados y 82 excluidos QA. Sin convertirlos a meses ni inventar valores. |
+| 4 — Colección y representatividad, P1 | Revisión pendiente | Catálogo documental ORNL declara 6.1, pero REST no identifica la colección por observación. Se mantiene versión científica `null`. QA aceptada por índice: Mendoza 2/23, Comodoro 7/23, Posadas 19/23. |
+| 5–6 — GPM y SWOT, P2 | No implementadas en esta etapa | Verificar IMERG Final mensual V07 y Hydrocron; autenticación/cobertura/geometría propias. |
+| 7 — Integración general, P2 | Pendiente | Radar/Fingerprint/motor conservan las seis variables POWER. Las series nativas nuevas llevan `analysis.enabled: false`; faltan acuerdos metodológicos y coordinación de interfaces ajenas. |
+
+### Pruebas y preservación
+
+- Suite final en Docker: **155 descubiertas, 154 aprobadas y una prueba remota
+  optativa omitida**. Las 137 originales siguen aprobadas; 17 nuevas verifican
+  almacenamiento, validación, API, escala/QA, partición ante HTTP 502, GLDAS sin
+  credenciales persistidas e inicialización con fallos.
+- Diez solicitudes del cliente Flask con datos reales y red bloqueada: seis
+  endpoints originales, Radar/Fingerprint y dos endpoints nuevos, todos HTTP 200;
+  las cachés inspeccionadas conservaron sus hashes. Informe local
+  `data/cache/reports/api-multisource-check.json`.
+- SHA-256 de las 25 cachés POWER sin cambios después de la recuperación y la
+  repetición. Motor y todos los archivos de frontend idénticos a la inspección
+  inicial; no se modificaron dependencias, Dockerfile ni Compose.
+- Imagen Docker reconstruida satisfactoriamente; persistencia en el mismo montaje
+  `data/cache`. No hay servicios adicionales ni credenciales dentro de la imagen.
+- Contenedor recreado y saludable; HTTP real devolvió ocho variables verificadas
+  (seis POWER y dos MODIS), 25 ciudades y cinco regiones. Las series MODIS de
+  Posadas devolvieron 23 registros por índice con la cobertura QA esperada.
+- Repetición del CLI MODIS con red y escrituras de observaciones bloqueadas:
+  tres ciudades exitosas; los 31 archivos POWER/MODIS conservaron sus hashes.
+  Informe `scientific-modis-20261115T130541Z-7c19a03f.json`; no es una descarga nueva.
+
+Informes reales conservados en `data/cache/reports/` (ignorados por Git):
+`initialization-2000-2024.json` (25 descargas),
+`initialization-2000-2024-bbb23b72ed.json` (25 aciertos),
+`scientific-modis-20261115T124457Z-7dc51607.json` (fallos del primer intento) y
+`scientific-modis-20261115T130201Z-ad814caa.json` (piloto completo).
+Los diagnósticos públicos se guardan por separado bajo `science/discovery/` y no
+cuentan como observaciones disponibles. No se probó acceso GLDAS autenticado.
+
+### Siguiente trabajo concreto y dependencias
+
+1. Con Earthdata configurado localmente, repetir `--provider gldas --probe` y
+   verificar la extracción de un píxel real antes de implementar/publicar las cinco
+   variables. Luego ejecutar Mendoza, Comodoro y Posadas; sólo con éxito extender a
+   25 ciudades. Un descriptor autenticado no completa esta tarea.
+2. Revisar colección y representatividad de píxeles MODIS con la cobertura QA
+   obtenida; ampliar período/ciudades mediante CLI reutilizando las respuestas.
+   El histórico 2000–2024 de las 25 ciudades MODIS todavía no está descargado.
+3. Abordar GPM y SWOT con productos independientes y procedencia verificable.
+4. Coordinar con B06 la agregación y los criterios de uso de las nuevas series,
+   antes de integrar análisis, visualizaciones o ampliar la familia de Radar.
+
+### Historial del diagnóstico GLDAS con token en otra sesión PowerShell — 15/11/2026
+
+- El usuario verificó que su terminal pasa `EARTHDATA_TOKEN` a Docker. El proceso
+  del agente y el servicio HTTP no heredan esa variable; las pruebas autenticadas
+  se ejecutaron mediante el comando `docker compose exec -T -e EARTHDATA_TOKEN`.
+- CMR confirmó nuevamente el producto/versión. Las consultas de descriptor DAP2
+  y DAP4 recibieron **HTTP 400**, no un descriptor científico. El mensaje público
+  de Tomcat rechazó la cabecera `Authorization` por incumplimiento de RFC 9112.
+  Esto no verifica vigencia/permisos del token ni acceso a observaciones GLDAS.
+- Se amplió `services/providers/gldas.py` con diagnóstico público redactado,
+  exclusión de formularios/scripts HTML, intento DAP4 acotado ante HTTP 400 y
+  validación local del formato Bearer antes de la red. No se guarda el token.
+- `scripts/fetch_science.py --probe` devuelve errores de configuración como JSON
+  controlado; se documentó carga del token con entrada oculta en PowerShell.
+  Ver [docs/scientific-sources.md](docs/scientific-sources.md).
+- `tests/test_gldas_provider.py`: ocho pruebas, cinco adicionales. Suite completa
+  Docker: **160 descubiertas, 159 aprobadas y una remota optativa omitida**.
+  Backend saludable y las 31 cachés POWER/MODIS conservan sus hashes.
+- **GLDAS sigue parcial y deshabilitado: cero observaciones, extractor pendiente**.
+  Falta obtener un descriptor válido y verificar una extracción puntual real.
+  El resultado del diagnóstico con la nueva validación local queda pendiente del usuario.
+  No se ampliaron MODIS, GPM, SWOT, la familia de Radar ni las interfaces durante
+  este diagnóstico, conforme al orden solicitado: primero verificar GLDAS.
+- No se hicieron commits/push ni se modificaron archivos del motor o frontend.
+
+#### Validación local posterior
+
+El usuario recibió `credential_format_valid: false`; esa ejecución fue rechazada
+antes de acceder a la red. Se añadieron indicadores de espacios, comillas, prefijo
+Bearer, controles, Unicode y marcas de pegado, sin devolver fragmentos del token.
+Se documentó la asignación local desde portapapeles como alternativa a `Read-Host`.
+Pruebas GLDAS específicas: **10 aprobadas**, incluidas dos nuevas sobre el
+diagnóstico de formato. La última suite completa anterior conserva su resultado
+de 159 aprobadas y una omitida; esta comprobación específica no se presenta como
+una nueva ejecución completa. GLDAS continuaba sin datos verificados en ese diagnóstico.
+
+## Continuación verificada después de autorizar Earthdata — 15/11/2026
+
+Este apartado reemplaza los estados iniciales de acceso que figuran en el
+historial anterior. Los errores 400/401/403 no describen el estado actual de GLDAS.
+
+| Fase | Estado real | Evidencia y cantidades |
+| --- | --- | --- |
+| 1 — recuperación | Completada | POWER: 25 ciudades, 150 series y 45.000 registros mensuales 2000–2024, sin nulos. Inicializador reproducible y Radar regenerado sin ampliar la familia. |
+| 2 — arquitectura | Implementada para datos nativos | `services/scientific.py`, cachés por proveedor/producto/revisión/variable, catálogo derivado de datos verificados y contratos HTTP aditivos. Identidad, SHA-256, unidades y refrescos degradados comprobados. |
+| 3 — GLDAS | Histórico verificado | `gldas.py`, `gldas_points.py`, `giovanni.py`: 3 ciudades NetCDF 2024 (15 series/180 registros) y 25 ciudades Giovanni 2000–2024 (125 series/37.500 registros válidos). Mismo producto 2.1; no sumar pilotos duplicados. |
+| 4 — MODIS | Piloto verificado; histórico solicitado al servicio externo | REST: 3 ciudades 2024, 6 series/138 registros, 56 aceptados y 82 excluidos QA. Se solicitaron 25 órdenes 2000–2024: 24 identificadores guardados; Mendoza recibió HTTP 200 pero su identificador no se conservó y falta recuperar el enlace, sin reenvío. Todavía sin CSV histórico validado. |
+| 5 — GPM | Histórico verificado | `GPM_3IMERGM.07`, IMERG Final mensual por Giovanni: 25 ciudades, 25 series/7.500 registros 2000–2024, sin nulos, `mm/hr`. Comparación descriptiva con POWER mediante conversión explícita a `mm/day`. |
+| 6 — SWOT | Piloto fluvial verificado; ampliación pendiente | Hydrocron, río Chubut `65341000051`, producto D/SWORD 17b, 31 pasos en 2024, altura/ancho en metros: 62 valores numéricos, incertidumbres, banderas y geometría. Lagos argentinos todavía sin ID/datos verificados. |
+| 7 — interfaces | Integración descriptiva parcial verificada | Panel aditivo en Explorador, Comparador, Radar, Fingerprint y Modo detective, más `/sources`. Gráficos nativos, QA/metadatos, comparación y recorrido histórico. No amplía métodos, misiones, indicadores ni familia de Radar. |
+| 7 — Time Machine | Pendiente de adaptar contrato | Rama `origin/feature/earth-time-machine` 8a39937 inspeccionada, sin fusionar. Espera otro servidor/API, funciones ausentes del motor local y un camino de muestras/coordenadas libres. Ver `docs/time-machine-integration.md`. |
+| 7 — Earth Connections | Pendiente de implementación del equipo | El usuario confirmó que todavía no existe; contrato científico disponible para conectarla posteriormente. |
+
+Los históricos mensuales principales suman **300 series y 90.000 registros**
+entre POWER, GLDAS y GPM. El piloto MODIS y las observaciones SWOT se informan
+separadamente, con sus frecuencias y calidad. Los pilotos GLDAS/GPM solapados y
+las proyecciones POWER no se suman como observaciones nuevas. El catálogo puede
+mostrar variantes de acceso de una misma variable; no equivalen a variables nuevas.
+
+Informes reales conservados bajo `data/cache/reports/`:
+
+- GLDAS puntual: `scientific-gldas-20261115T143415Z-d2844834.json`.
+- GLDAS histórico: `scientific-gldas-20261115T144853Z-63b9c121.json`.
+- GPM histórico: `scientific-gpm-20261115T145756Z-a7cdd8ef.json`.
+- MODIS piloto: `scientific-modis-20261115T130201Z-ad814caa.json`.
+- SWOT original: `data/cache/science/discovery/hydrocron-chubut-2024.json`.
+
+### Archivos incorporados o modificados
+
+- Núcleo y acceso: `services/scientific.py`, `services/scientific_compare.py`,
+  `services/hydrology.py`, `services/providers/{gldas,gldas_points,giovanni,modis}.py`,
+  `api/scientific.py`, `api/errors.py`, `app.py`, `data/water_features.json`.
+- Comandos: `scripts/{initialize_data,fetch_science,probe_giovanni,order_modis,audit_science,check_scientific_pages,check_scientific_cache}.py`.
+- Interfaz aditiva: `templates/{_scientific_panel,scientific}.html`,
+  `static/js/scientific.js`, `static/css/scientific.css`, enlace del panel en
+  `templates/_navigation.html` y ruta `/sources` en `web/routes.py`.
+- Ejecución/documentación: `Dockerfile`, `compose.yaml`, `AGENTS.md`, este archivo,
+  `docs/{api,docker,scientific-sources,time-machine-integration}.md`.
+- Pruebas nuevas: `tests/test_{scientific,scientific_compare,gldas_provider,gldas_points,giovanni_provider,giovanni_probe,hydrology,initialize_data,modis_orders}.py`.
+
+El motor `services/trend_analysis.py`, el proveedor/normalizador POWER, los
+archivos originales de cada página y las pruebas originales se conservan.
+El correo sólo se envió en memoria a ORNL; tokens y contactos no se escriben en Git.
+No se hicieron commits ni push.
+
+### Verificación y siguientes dependencias
+
+La última suite completa ejecutada en Docker descubrió **193 pruebas**:
+**192 aprobadas y una de red optativa omitida**; `pip check` sin conflictos.
+Después se comprobó el rechazo de colecciones MODIS no admitidas sin perder
+cachés anteriores: sus cuatro pruebas específicas pasaron.
+Chrome pasó nueve grupos de verificaciones con cachés reales, sin errores JavaScript:
+paneles en cinco herramientas, GLDAS, conversión POWER–IMERG, MODIS con huecos QA,
+SWOT con incertidumbre, histórico sin nuevas solicitudes, vista móvil y respuesta
+tardía descartada. Se conservaron hashes de las 25 cachés POWER, Radar y motor.
+Informe final: `data/cache/reports/scientific-pages/20261115T155859Z/report.json`.
+También pasaron los nueve grupos originales Radar/Fingerprint y los diez grupos
+de `scripts/check_web.py`, sin errores JavaScript. Informe de producto:
+`data/cache/reports/interfaces-phase1/20261115T154506468804Z/`.
+La imagen se reconstruyó y Compose quedó saludable en `127.0.0.1:5000`, con el
+mismo montaje persistente. Se activó recarga de plantillas sólo en desarrollo,
+sin depurador interactivo. El inventario cache-only no detectó archivos inválidos.
+El escaneo de 646 archivos de código/datos no encontró el contacto autorizado ni
+cadenas con formato de JWT. No se imprimió ni se almacenó el token.
+
+Se corrigió además la selección de períodos parciales en la capa nativa: puede
+filtrar fechas de una extracción más amplia sin nuevas consultas ni cambios de
+unidades, QA o fecha de obtención. No combina versiones, políticas o vías de acceso.
+POWER delega en su servicio original usando el período fuente válido y proyecta
+la selección; sus cachés originales y contratos HTTP previos se conservan.
+Dos pruebas incluidas en la suite comprueban esa reutilización y preservación.
+La verificación real con red bloqueada también pasó: tres ciudades, GLDAS y
+comparación POWER–GPM, 72 meses por serie, hashes protegidos conservados.
+Comando reproducible: `scripts/check_scientific_cache.py`.
+
+El último sondeo ORNL conservó 24 órdenes con identificador, todas con resultados
+todavía HTTP 404, y la orden de Mendoza con HTTP 200 de envío e identificador
+pendiente. Cero históricos MODIS publicados; no se cuentan pedidos como datos.
+Inventario local sin cachés inválidas: `data/cache/reports/scientific-inventory-20261115.json`.
+
+Prioridad inmediata: recuperar el enlace de Mendoza y consultar las órdenes ORNL
+sin reenviarlas; validar CSV/colección/píxel/fechas/QA antes de habilitar el histórico.
+Después, coordinar la adaptación de Time Machine y la metodología de nuevas
+variables con B06. Lagos SWOT requieren identificadores oficiales y consultas reales.
+Connections depende de su implementación. B18, CI, MERRA-2 directo, TimesFM y el
+despliegue productivo siguen pendientes; no se presentan como trabajos terminados.
