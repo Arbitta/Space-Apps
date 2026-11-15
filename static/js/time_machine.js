@@ -712,8 +712,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       const rect = L.rectangle(cell.bounds, {
-        color: cell.is_center ? 'rgba(226, 232, 240, 0.55)' : 'rgba(226, 232, 240, 0.18)',
-        weight: cell.is_center ? 1.2 : 0.6,
+        color: cell.is_center ? 'rgba(125, 211, 252, 0.72)' : 'rgba(226, 232, 240, 0.24)',
+        weight: cell.is_center ? 1.5 : 0.75,
         dashArray: cell.is_center ? null : '3, 4',
         fillColor: '#3d8c95',
         fillOpacity: 0.08
@@ -728,8 +728,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (data.spatial_zone?.zone_bounds) {
       const bounds = data.spatial_zone.zone_bounds;
       outerBoundingRect = L.rectangle(bounds, {
-        color: '#e2e8f0',
-        weight: 1.8,
+        color: '#7dd3fc',
+        weight: 2.1,
+        opacity: 0.92,
         fill: false,
         interactive: false
       }).addTo(zoneLayerGroup);
@@ -739,10 +740,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Punto central
     const centerMarker = L.circleMarker([data.location.latitude, data.location.longitude], {
-      radius: 5,
-      color: '#ffffff',
-      weight: 1.8,
-      fillColor: '#141c2b',
+      radius: 5.5,
+      color: '#38bdf8',
+      weight: 2.2,
+      fillColor: '#080c14',
       fillOpacity: 1
     }).bindTooltip(`${data.location.name}`, {
       permanent: false,
@@ -812,8 +813,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const handleIcon = L.divIcon({
       className: 'tm-resize-handle',
-      iconSize: [11, 11],
-      iconAnchor: [5, 5]
+      iconSize: [12, 12],
+      iconAnchor: [6, 6]
     });
 
     corners.forEach((corner) => {
