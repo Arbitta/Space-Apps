@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Earth Time Machine · Telemetría Satelital · EarthLens</title>
+  <title>Earth Time Machine · Histórico ambiental · EarthLens</title>
 
   <!-- Google Fonts (Inter + JetBrains Mono) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -32,6 +32,8 @@
   <link rel="stylesheet" href="../static/css/time_machine.css" />
 </head>
 <body class="tm-viewport-body">
+  <div id="tmDataNotice" class="tm-data-notice" role="status">Cargando datos reales del catálogo argentino…</div>
+  <a class="tm-source-link" href="/sources">Fuentes científicas</a>
   <!-- ESCENARIO PRINCIPAL: MAPA SATELITAL A PANTALLA COMPLETA + HUD SUPERIOR + CONTROLES LATERALES + TIMELINE INFERIOR -->
   <main class="tm-stage-wrapper">
     <!-- Mapa Leaflet de pantalla completa -->
@@ -143,8 +145,8 @@
             </select>
 
             <select id="tmMapModeSelect" class="form-select form-select-sm tm-hud-select tm-select-mode" autocomplete="off" aria-label="Modo de cobertura">
-              <option value="zone" selected>Cuadrante Zonal Editable</option>
-              <option value="national">Red Nacional (25 Estaciones)</option>
+              <option value="zone" disabled selected>Cuadrante Zonal Editable</option>
+              <option value="national">Red Nacional (25 ciudades)</option>
             </select>
 
             <!-- 4to Selector: Período histórico -->
@@ -491,7 +493,6 @@
             </div>
           </div>
         </section>
-
         <!-- Ventanita 5: Predicciones, Probabilidades de Anomalías y Conclusiones Automáticas -->
         <section
           id="winForecast"
@@ -835,6 +836,7 @@
         </div>
       </div>
     </footer>
+
   </main>
 
   <!-- Bootstrap 5 JS + Leaflet 1.9.4 + Chart.js 4 CDN -->
@@ -843,6 +845,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
   <!-- Scripts de gráficos compartidos (Rol 03) y controlador de Earth Time Machine -->
   <script src="../static/js/charts.js"></script>
+  <script src="../static/js/time_machine_charts.js"></script>
   <script src="../static/js/tm_forecast.js"></script>
   <script src="../static/js/time_machine.js"></script>
 </body>

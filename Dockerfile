@@ -2,24 +2,37 @@ FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PORT=8000 \
-    HOST=0.0.0.0
+    PIP_DISABLE_PIP_VERSION_CHECK=1
 
 WORKDIR /app
 
-# Instalar dependencias científicas y web (Flask, SciPy, NumPy, Pandas, Pytest, Gunicorn)
-COPY requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r /app/requirements.txt
+COPY requirements.txt ./
+RUN python -m pip install --no-cache-dir -r requirements.txt
 
-# Copiar el proyecto tanto en /app como en /app_baked (respaldo inmutable ante cambios de branch) y normalizar CRLF
-COPY . /app
-RUN sed -i 's/\r$//' /app/docker-entrypoint.sh && cp -r /app /app_baked && chmod +x /app/docker-entrypoint.sh /app_baked/docker-entrypoint.sh
+RUN groupadd --gid 10001 earthlens \
+    && useradd --uid 10001 --gid 10001 --create-home earthlens
 
-# Ejecutar la suite de pruebas (Rol 06) al construir la imagen si tests/ está presente
-# (en Cloud Run, .gcloudignore excluye tests/ para mantener la imagen liviana)
-RUN if [ -d /app/tests ]; then python3 -m unittest discover -s /app/tests -v; fi
+COPY app.py ./
+COPY api/ ./api/
+COPY services/ ./services/
+COPY web/ ./web/
+COPY templates/ ./templates/
+COPY static/ ./static/
+COPY scripts/ ./scripts/
+COPY deployment/ ./deployment/
+COPY tests/ ./tests/
+COPY data/cities.json ./data/cities.json
+COPY data/water_features.json ./data/water_features.json
+COPY data/missions.json data/variables.json ./data/
+COPY data/guided_missions.json data/mission_variables.json ./data/
+RUN mkdir -p /app/data/cache/power /app/data/runtime \
+    && chown -R earthlens:earthlens /app
 
-EXPOSE 8000
+USER earthlens
 
-ENTRYPOINT ["/app_baked/docker-entrypoint.sh"]
-CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-8000} --workers 1 --threads 8 --timeout 60 app:app"]
+EXPOSE 5000
+
+HEALTHCHECK --interval=15s --timeout=3s --start-period=10s --retries=3 \
+    CMD ["python", "-c", "import os, urllib.request; urllib.request.urlopen('http://127.0.0.1:' + os.environ.get('PORT', '5000') + '/api/health', timeout=2).close()"]
+
+CMD ["sh", "-c", "exec gunicorn --bind 0.0.0.0:${PORT:-5000} --workers 1 --threads 8 --timeout 60 app:app"]

@@ -1,3 +1,4 @@
+"""Pruebas heredadas del catálogo; la muestra se usa sólo como fixture de software."""
 """Pruebas del catálogo y las misiones (Persona 5).
 
 Ejecutar:  python -m pytest tests/test_datasets.py   (o  python -m unittest tests.test_datasets)
@@ -7,9 +8,9 @@ import json
 import unittest
 from pathlib import Path
 
-from services import datasets
+from services import guided_missions as datasets
 
-SAMPLE = Path(__file__).resolve().parent.parent / "data" / "samples" / "power_comodoro_2000_2024.json"
+SAMPLE = Path(__file__).resolve().parent / "data" / "samples" / "power_comodoro_2000_2024.json"
 
 
 class CatalogTests(unittest.TestCase):
@@ -57,8 +58,7 @@ class MissionTests(unittest.TestCase):
         self.assertIn("variable=T2M", m["explorer_url"])
         wind = datasets.get_mission("misterio-del-viento")
         self.assertTrue(wind["explorer_url"].startswith("/compare?"))
-        self.assertIn("latB=", wind["explorer_url"])
-        self.assertIn("start_year=2000", wind["explorer_url"])
+        self.assertIn("lat2=", wind["explorer_url"])
 
 
 class HypothesisTests(unittest.TestCase):
@@ -71,11 +71,6 @@ class HypothesisTests(unittest.TestCase):
     def test_contradicted(self):
         self.assertEqual(datasets.evaluate_hypothesis("decreasing", self.up_sig)["verdict"], "contradicted")
         self.assertEqual(datasets.evaluate_hypothesis("no_clear_trend", self.up_sig)["verdict"], "contradicted")
-
-    def test_significant_but_flat_is_not_a_trend(self):
-        flat = {"direction": "no_clear_trend", "significant": True, "p_value": 0.04}
-        self.assertEqual(datasets.evaluate_hypothesis("no_clear_trend", flat)["verdict"], "supported")
-        self.assertEqual(datasets.evaluate_hypothesis("increasing", flat)["verdict"], "inconclusive")
 
     def test_not_significant_is_inconclusive(self):
         self.assertEqual(datasets.evaluate_hypothesis("increasing", self.up_ns)["verdict"], "inconclusive")

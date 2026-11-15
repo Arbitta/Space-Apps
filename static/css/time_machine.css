@@ -1272,6 +1272,12 @@ html,
     padding: 0.18rem 0.42rem;
   }
 }
+/* Estado científico visible sin reemplazar la interfaz recibida de main. */
+.tm-data-notice{position:fixed;bottom:150px;left:16px;max-width:min(650px,calc(100vw - 32px));z-index:1100;background:#fff;color:#17334a;padding:8px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px;box-shadow:0 2px 8px #0002}
+.tm-data-notice[data-error=true]{color:#9b1c1c;border-color:#dc2626}
+.tm-source-link{position:fixed;left:16px;bottom:225px;z-index:1101;background:#fff;padding:6px 10px;border-radius:6px}
+
+
 
 
 /* ============================================================================

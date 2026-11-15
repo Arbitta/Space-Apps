@@ -1,6 +1,0 @@
-{
-  "fetched_at": "2026-11-15T14:28:11.313836+00:00",
-  "request_url": "https://opendap.earthdata.nasa.gov/collections/C1342986036-GES_DISC/granules/GLDAS_NOAH025_M.2.1%3AGLDAS_NOAH025_M.A200001.021.nc4.nc?lat,lon",
-  "http_status": 403,
-  "diagnostic": "Hyrax - Forbidden (403) | Hyrax - Forbidden (403) | The specific error message associated with your request was: | Failed to read the DMR++ from S3. ERROR - The HTTP GET request for the source URL: https://data.gesdisc.earthdata.nasa.gov/data/GLDAS/GLDAS_NOAH025_M.2.1/2000/GLDAS_NOAH025_M.A200001.021.nc4.dmrpp FAILED. CURLINFO_EFFECTIVE_URL: https://data.gesdisc.earthdata.nasa.gov/data/GLDAS/GLDAS_NOAH025_M.2.1/2000/GLDAS_NOAH025_M.A200001.021.nc4.dmrpp The response from https://data.gesdisc.earthdata.nasa.gov/data/GLDAS/GLDAS_NOAH025_M.2.1/2000/GLDAS_NOAH025_M.A200001.021.nc4.dmrpp (Originally: https://data.gesdisc.earthdata.nasa.gov/data/GLDAS/GLDAS_NOAH025_M.2.1/2000/GLDAS_NOAH025_M.A200001.021.nc4.dmrpp) returned an HTTP code of 403 which means Forbidden: Contact the server administrator. | If you think that the server is broken (that the URL you submitted should have worked),\n            then please contact the OPeNDAP user support coordinator at: | support@opendap.org | Hyrax - Forbidden (403)"
-}

@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let isPlaying = false;
   let playTimer = null;
   let playSpeedMs = 700;
-  let mapMode = 'zone'; // 'zone' | 'national'
+  let mapMode = 'national'; // 'zone' | 'national'
   let openWindowId = null;
 
   let activeAbortController = null;
@@ -47,31 +47,31 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   const SATELLITE_TV_METADATA = {
     T2M: {
-      title: 'Espectro Térmico IR (T2M)',
+      title: 'Temperatura media (T2M)',
       minLabel: 'Frío (-2σ)',
       maxLabel: 'Cálido (+2σ)',
       scaleClass: 'tm-scale-thermal'
     },
     T2M_MAX: {
-      title: 'Espectro Térmico Máximas (T2M_MAX)',
+      title: 'Temperatura máxima (T2M_MAX)',
       minLabel: 'Templado (-2σ)',
       maxLabel: 'Extremo (+2σ)',
       scaleClass: 'tm-scale-thermal'
     },
     T2M_MIN: {
-      title: 'Espectro Térmico Mínimas (T2M_MIN)',
+      title: 'Temperatura mínima (T2M_MIN)',
       minLabel: 'Helada (-2σ)',
       maxLabel: 'Templado (+2σ)',
       scaleClass: 'tm-scale-thermal'
     },
     PRECTOTCORR: {
-      title: 'Radar Doppler de Precipitación',
+      title: 'Precipitación corregida (POWER)',
       minLabel: 'Déficit (-2σ)',
       maxLabel: 'Exceso (+2σ)',
       scaleClass: 'tm-scale-precip'
     },
     RH2M: {
-      title: 'Vapor de Agua Atmosférico (RH2M)',
+      title: 'Humedad relativa del aire (RH2M)',
       minLabel: 'Seco (-2σ)',
       maxLabel: 'Saturado (+2σ)',
       scaleClass: 'tm-scale-humidity'
@@ -304,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     setText(
       'tmBoxSpanText',
-      `Cuadrante: ${Number(state.lat_span).toFixed(2)}° × ${Number(state.lon_span).toFixed(2)}°`
+      'Ciudad verificada; datos de grilla NASA POWER'
     );
   }
 
@@ -450,193 +450,48 @@ document.addEventListener('DOMContentLoaded', () => {
     resizeHandlesGroup = L.layerGroup().addTo(mapInstance);
     nationalLayerGroup = L.layerGroup();
 
-    mapInstance.on('click', (ev) => {
-      const wrapped = ev.latlng.wrap();
-      const clickedLat = Number(Math.max(-85, Math.min(85, wrapped.lat)).toFixed(4));
-      const clickedLon = Number(wrapped.lng.toFixed(4));
-      state.latitude = clickedLat;
-      state.longitude = clickedLon;
-      state.locationName = `Zona (${clickedLat.toFixed(2)}°, ${clickedLon.toFixed(2)}°)`;
-      syncTopBarControlsWithState();
-      persistStateToStorageAndURL();
-      loadTimeMachineData({ preserveZoom: true });
-    });
+    mapInstance.on('click', () => { document.getElementById('tmDataNotice').textContent='Seleccionar una ciudad del catalogo; las coordenadas libres todavia no estan habilitadas.'; });
   }
 
   /**
    * 3. Consulta POST /api/time-machine incluyendo lat_span y lon_span del cuadrante
    */
   async function loadTimeMachineData(options = {}) {
-    if (activeAbortController) {
-      activeAbortController.abort();
-    }
+    activeAbortController?.abort();
     activeAbortController = new AbortController();
     const mySeq = ++requestSeq;
-
     const spinner = document.getElementById('tmLoadingSpinner');
-    if (spinner) spinner.classList.remove('d-none');
-
+    spinner?.classList.remove('d-none');
+    const notice = document.getElementById('tmDataNotice');
+    window.EarthLensForecast?.setData(null);
+    notice.textContent='Consultando la ciudad y el período seleccionados…';
     syncTopBarControlsWithState();
     persistStateToStorageAndURL();
-
-    const payload = {
-      city_id: state.city_id,
-      latitude: state.latitude,
-      longitude: state.longitude,
-      location_name: state.locationName,
-      variable: state.variable,
-      start_year: state.start_year,
-      end_year: state.end_year,
-      split_year: state.split_year,
-      lat_span: state.lat_span,
-      lon_span: state.lon_span,
-      include_regional: true,
-      ...(window.EarthLensForecast ? window.EarthLensForecast.getRequestParams(state.variable) : {})
-    };
-
     try {
-      const res = await fetch('/api/time-machine', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        signal: activeAbortController.signal
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (mySeq !== requestSeq) return;
-        if (spinner) spinner.classList.add('d-none');
-        applyTimeMachinePayload(data, options);
-        return;
-      }
-    } catch (err) {
-      if (err && err.name === 'AbortError') return;
-    }
-
-    if (mySeq !== requestSeq) return;
-    if (spinner) spinner.classList.add('d-none');
-    const fallbackData = buildClientFallbackPayload(payload);
-    applyTimeMachinePayload(fallbackData, options);
+      if (!state.city_id) throw new Error('Seleccionar una ciudad argentina del catalogo.');
+      const res = await fetch('/api/time-machine', {method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({city_id:state.city_id,variable:state.variable,start_year:state.start_year,
+          end_year:state.end_year,split_year:state.split_year,include_regional:true}),signal:activeAbortController.signal});
+      const value = await res.json();
+      if (!res.ok || value.status !== 'ok') throw new Error(value.error?.message || 'No hay datos verificados para esta seleccion.');
+      if (mySeq !== requestSeq) return;
+      notice.textContent = 'Datos reales de ciudades verificadas. Analisis exploratorio provisional; proyecciones exploratorias separadas del historico.';
+      notice.dataset.error = 'false';
+      mapMode='national';
+      const mode=document.getElementById('tmMapModeSelect');if(mode)mode.value='national';
+      ['btnShrinkBox','btnExpandBox','btnResetBox','btnSlideZoomZone'].forEach(id=>{const button=document.getElementById(id);if(button){button.disabled=true;button.title='Seleccion espacial pendiente de validacion territorial y datos reales.';}});
+      applyTimeMachinePayload(value.data, options);
+    } catch (error) {
+      if (mySeq !== requestSeq || error.name === 'AbortError') return;
+      stopPlayback();currentData=null;
+      [weatherPlumeGroup,zoneLayerGroup,nationalLayerGroup,resizeHandlesGroup].forEach(group=>group?.clearLayers());
+      document.getElementById('tmTimelineTableBody')?.replaceChildren();
+      trendChartInstance?.destroy();trendChartInstance=null;
+      ['tmActiveValue','tmActiveAnomaly','tmActiveLevelBadge','tmActiveYearDisplay'].forEach(id=>setText(id,'--'));
+      notice.textContent=error.message;notice.dataset.error='true';
+    } finally {if(mySeq===requestSeq)spinner?.classList.add('d-none');}
   }
 
-  function buildClientFallbackPayload(req) {
-    const mockBase = EarthLensCharts.buildMockAnalysis({
-      latitude: req.latitude,
-      longitude: req.longitude,
-      locationName: req.location_name,
-      variable: req.variable,
-      start_year: req.start_year,
-      end_year: req.end_year
-    });
-    const varMeta = EarthLensCharts.VARIABLES_META[req.variable] || EarthLensCharts.VARIABLES_META.T2M;
-    const anomBundle = EarthLensCharts.computeAnomalySeries(
-      mockBase.series,
-      req.variable,
-      mockBase.statistics
-    );
-    const maxRec = [...anomBundle.timeline].sort((a, b) => b.value - a.value)[0];
-    const minRec = [...anomBundle.timeline].sort((a, b) => a.value - b.value)[0];
-    const midYr = Math.floor((req.start_year + req.end_year) / 2);
-
-    return {
-      is_mock: true,
-      variable: req.variable,
-      variable_name: varMeta.name,
-      unit: mockBase.unit,
-      display_unit: varMeta.unit,
-      source: mockBase.source,
-      location: {
-        id: 'custom',
-        name: req.location_name || 'Comodoro Rivadavia, Chubut',
-        province: 'Patagonia',
-        region: 'Patagonia',
-        latitude: req.latitude,
-        longitude: req.longitude
-      },
-      period: {
-        start_year: req.start_year,
-        end_year: req.end_year,
-        split_year: midYr,
-        n_years: anomBundle.timeline.length
-      },
-      statistics: {
-        ...mockBase.statistics,
-        mean: anomBundle.mean,
-        std_dev: anomBundle.stdDev
-      },
-      timeline: anomBundle.timeline,
-      anomalies: {
-        threshold_z: 1.5,
-        count: anomBundle.events.length,
-        max_record: maxRec,
-        min_record: minRec,
-        events: anomBundle.events.map((ev) => ({
-          ...ev,
-          badge: ev.z_score > 0 ? 'Anomalía Positiva' : 'Anomalía Negativa',
-          description: `Año ${ev.year}: valor ${ev.value.toFixed(2)} ${varMeta.unit} (z = ${ev.z_score >= 0 ? '+' : ''}${ev.z_score.toFixed(2)}).`
-        }))
-      },
-      period_comparison: computeClientPeriodComparison(anomBundle.timeline, midYr, varMeta.unit),
-      spatial_zone: buildClientSpatialZone(
-        req.latitude,
-        req.longitude,
-        req.variable,
-        anomBundle.timeline,
-        req.lat_span,
-        req.lon_span
-      ),
-      regional_cities: [],
-      conclusion: mockBase.conclusion
-    };
-  }
-
-  function buildClientSpatialZone(cLat, cLon, variable, timeline, latSpan = 1.5, lonSpan = 1.875) {
-    const effLatSpan = Math.max(0.3, Math.min(30, Number(latSpan) || 1.5));
-    const effLonSpan = Math.max(0.3, Math.min(36, Number(lonSpan) || 1.875));
-    const latStep = effLatSpan / 3;
-    const lonStep = effLonSpan / 3;
-    const cells = [];
-
-    for (let r = -1; r <= 1; r++) {
-      for (let c = -1; c <= 1; c++) {
-        const lat = Number((cLat + r * latStep).toFixed(4));
-        const lon = Number((cLon + c * lonStep).toFixed(4));
-        const by_year = {};
-        timeline.forEach((pt) => {
-          const z = Number((pt.z_score + r * 0.15 - c * 0.1).toFixed(2));
-          by_year[String(pt.year)] = {
-            value: Number((pt.value + r * 0.2).toFixed(2)),
-            anomaly: Number((pt.anomaly + r * 0.15).toFixed(2)),
-            z_score: z,
-            color: getSatelliteWeatherColor(variable, z)
-          };
-        });
-        cells.push({
-          cell_id: `r${r}_c${c}`,
-          is_center: r === 0 && c === 0,
-          label: r === 0 && c === 0 ? 'Sector Central' : `Sub-sector (${r}, ${c})`,
-          latitude: lat,
-          longitude: lon,
-          bounds: [
-            [lat - latStep / 2, lon - lonStep / 2],
-            [lat + latStep / 2, lon + lonStep / 2]
-          ],
-          by_year
-        });
-      }
-    }
-    return {
-      cell_resolution_deg: { lat: latStep, lon: lonStep },
-      zone_bounds: [
-        [cLat - 1.5 * latStep, cLon - 1.5 * lonStep],
-        [cLat + 1.5 * latStep, cLon + 1.5 * lonStep]
-      ],
-      cells
-    };
-  }
-
-  /**
-   * 4. Aplica la respuesta completa y sincroniza toda la interfaz
-   */
   function applyTimeMachinePayload(data, options = {}) {
     if (!data || !Array.isArray(data.timeline) || data.timeline.length === 0) return;
     currentData = data;
@@ -687,9 +542,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderExtremeRecords(data.anomalies, unitDisp);
     renderAnomalyCards(data.anomalies, unitDisp);
     renderTimelineTable(data.timeline, unitDisp, data.variable);
-    if (window.EarthLensForecast) {
-      window.EarthLensForecast.setData(data);
-    }
+    window.EarthLensForecast?.setData(data);
 
     rebuildMapLayers(data, !options.preserveZoom);
     setActiveYear(activeYear);
@@ -711,8 +564,7 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   function updateNavigationLinks(data) {
     const qRes = new URLSearchParams({
-      latitude: data.location.latitude,
-      longitude: data.location.longitude,
+      city_id: data.location.id,
       location: data.location.name,
       variable: data.variable,
       start_year: data.period.start_year,
@@ -725,8 +577,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (navRes) navRes.href = resUrl;
 
     const qCmp = new URLSearchParams({
-      latA: data.location.latitude,
-      lonA: data.location.longitude,
+      city_id_a: data.location.id,
       nameA: data.location.name,
       variable: data.variable,
       start_year: data.period.start_year,
@@ -951,6 +802,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function applyMapModeView(shouldZoom = true) {
     if (!mapInstance || !currentData) return;
+    if (!currentData.capabilities?.spatial_resize) mapMode='national';
 
     weatherPlumeGroup.clearLayers();
 
@@ -959,7 +811,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (mapInstance.hasLayer(resizeHandlesGroup)) mapInstance.removeLayer(resizeHandlesGroup);
       if (!mapInstance.hasLayer(nationalLayerGroup)) nationalLayerGroup.addTo(mapInstance);
       nationalLayers.forEach(({ plume }) => plume.addTo(weatherPlumeGroup));
-      setText('tmCellHudInfo', `Red Nacional: ${(currentData.regional_cities || []).length} estaciones`);
+      setText('tmCellHudInfo', `Red Nacional: ${(currentData.regional_cities || []).length} ciudades de grilla`);
       if (shouldZoom) {
         mapInstance.flyTo([-38.5, -64.0], 4, { duration: 0.6 });
       }
@@ -1214,63 +1066,6 @@ document.addEventListener('DOMContentLoaded', () => {
   /**
    * 9. Comparador de Épocas y Detector de Anomalías (Ventanita 3)
    */
-  function computeClientPeriodComparison(timeline, splitYear, unitDisp) {
-    const clean = timeline.slice().sort((a, b) => a.year - b.year);
-    const groupA = clean.filter((d) => d.year < splitYear);
-    const groupB = clean.filter((d) => d.year >= splitYear);
-    if (groupA.length < 2 || groupB.length < 2) return null;
-
-    const mean = (arr) => arr.reduce((s, d) => s + d.value, 0) / arr.length;
-    const variance = (arr, m) =>
-      arr.length > 1 ? arr.reduce((s, d) => s + Math.pow(d.value - m, 2), 0) / (arr.length - 1) : 0;
-
-    const meanA = mean(groupA);
-    const meanB = mean(groupB);
-    const varA = variance(groupA, meanA);
-    const varB = variance(groupB, meanB);
-    const stdA = Math.sqrt(varA);
-    const stdB = Math.sqrt(varB);
-
-    const deltaMean = meanB - meanA;
-    const deltaPct = Math.abs(meanA) > 1e-9 ? (deltaMean / Math.abs(meanA)) * 100 : 0;
-    const seSq = varA / groupA.length + varB / groupB.length;
-    const tStat = seSq > 1e-12 ? deltaMean / Math.sqrt(seSq) : 0;
-    const df = Math.max(2, groupA.length + groupB.length - 2);
-    const zEq = Math.sqrt(df * Math.log(1 + (tStat * tStat) / df)) * (1 - 1 / (4 * df));
-    const pVal = Math.max(0.0001, Math.min(1, Math.exp(-0.5 * zEq * zEq)));
-
-    const regA = EarthLensCharts.computeRegressionLine(groupA);
-    const regB = EarthLensCharts.computeRegressionLine(groupB);
-
-    const labelA = `${groupA[0].year}–${groupA[groupA.length - 1].year}`;
-    const labelB = `${groupB[0].year}–${groupB[groupB.length - 1].year}`;
-    const sig = pVal < 0.05;
-    const sign = deltaMean >= 0 ? '+' : '';
-
-    return {
-      split_year: splitYear,
-      period_a: {
-        label: labelA,
-        mean: Number(meanA.toFixed(3)),
-        std_dev: Number(stdA.toFixed(3)),
-        change_per_decade: Number((regA.slope * 10).toFixed(3))
-      },
-      period_b: {
-        label: labelB,
-        mean: Number(meanB.toFixed(3)),
-        std_dev: Number(stdB.toFixed(3)),
-        change_per_decade: Number((regB.slope * 10).toFixed(3))
-      },
-      delta_mean: Number(deltaMean.toFixed(3)),
-      delta_percent: Number(deltaPct.toFixed(2)),
-      p_value: Number(pVal.toFixed(4)),
-      significant_shift: sig,
-      summary: sig
-        ? `Cambio estadísticamente significativo de ${sign}${deltaMean.toFixed(2)} ${unitDisp} entre ${labelA} y ${labelB} (p = ${pVal.toFixed(4)} < 0.05).`
-        : `Variación media de ${sign}${deltaMean.toFixed(2)} ${unitDisp} entre ${labelA} y ${labelB}, dentro de la variabilidad interanual (p = ${pVal.toFixed(4)} ≥ 0.05).`
-    };
-  }
-
   function renderEpochComparisonUI(cmp, unitDisp) {
     if (!cmp) return;
     const pA = cmp.period_a;
@@ -1414,10 +1209,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     openWindowId = windowId;
 
+    if(windowId === 'winForecast')setTimeout(()=>window.EarthLensForecast?.render(),40);
     if (currentData && (windowId === 'winTrend' || windowId === 'winAnomaliesBar')) {
       setTimeout(() => renderSynchronizedCharts(currentData, activeYear), 40);
-    } else if (windowId === 'winForecast' && window.EarthLensForecast) {
-      setTimeout(() => window.EarthLensForecast.render(), 40);
     }
   }
 
@@ -1737,17 +1531,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (splitSlider) {
-      splitSlider.addEventListener('input', () => {
-        if (!currentData) return;
-        const newSplit = Number(splitSlider.value);
-        state.split_year = newSplit;
-        const unitDisp = currentData.display_unit || '°C';
-        const cmp = computeClientPeriodComparison(currentData.timeline, newSplit, unitDisp);
-        if (cmp) {
-          currentData.period_comparison = cmp;
-          renderEpochComparisonUI(cmp, unitDisp);
-        }
-      });
+      splitSlider.addEventListener('change', () => {if(!currentData)return;state.split_year=Number(splitSlider.value);loadTimeMachineData({preserveZoom:true});});
     }
 
     if (btnPlay) btnPlay.addEventListener('click', togglePlayback);

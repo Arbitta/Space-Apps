@@ -110,3 +110,6 @@ body {
 .el-footer a:hover {
   text-decoration: underline;
 }
+
+/* Mantiene espacio para la navegación de productos en pantallas pequeñas. */
+@media (max-width: 575px) { .el-navbar .el-brand-badge { display: none; } }

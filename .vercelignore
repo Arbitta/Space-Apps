@@ -6,4 +6,7 @@ __pycache__
 *.pdf
 *.docx
 data/cache/reports
+data/cache
+.env
+.env.*
 tests

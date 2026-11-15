@@ -1,0 +1,274 @@
+{
+  "_comment": "Catálogo de variables y fuentes de EarthLens. Mantenido por Persona 5 (feature/datasets-missions). Verificado contra NASA POWER API v2.10.0 el 2026-11-14.",
+  "variables": [
+    {
+      "code": "T2M",
+      "name": "Temperatura media a 2 metros",
+      "shortName": "Temperatura media",
+      "description": "Promedio anual de la temperatura del aire a 2 metros sobre la superficie. Variable principal del MVP.",
+      "unit": "deg C",
+      "display_unit": "°C",
+      "displayUnit": "°C",
+      "aggregation": "mean",
+      "priority": "Primera",
+      "source": "NASA POWER / MERRA-2",
+      "short_name": "Temperatura media",
+      "power_unit": "C",
+      "annual_aggregation": "mean",
+      "annual_unit": "°C",
+      "temporal_start": 1981,
+      "spatial_resolution": "0.5° × 0.625° (~50 km)",
+      "valid_range": [
+        -90,
+        60
+      ],
+      "phenomena": [
+        "calor",
+        "frio",
+        "calentamiento"
+      ],
+      "notes": "Valor de una celda de la grilla, no de una estación meteorológica puntual."
+    },
+    {
+      "code": "PRECTOTCORR",
+      "name": "Precipitaciones corregidas",
+      "shortName": "Precipitaciones",
+      "description": "Precipitación total corregida (promedio diario anual en mm/día). Permite analizar sequías o incrementos de lluvias.",
+      "unit": "mm/day",
+      "display_unit": "mm/día",
+      "displayUnit": "mm/día",
+      "aggregation": "mean",
+      "priority": "Alta",
+      "source": "NASA POWER / MERRA-2",
+      "short_name": "Precipitaciones",
+      "power_unit": "mm/day",
+      "annual_aggregation": "sum",
+      "annual_unit": "mm/año",
+      "temporal_start": 1981,
+      "spatial_resolution": "0.5° × 0.625° (~50 km)",
+      "valid_range": [
+        0,
+        200
+      ],
+      "phenomena": [
+        "sequia",
+        "lluvia",
+        "agua",
+        "inundacion"
+      ],
+      "notes": "POWER entrega promedios en mm/día. Para el total anual: sumar (valor mensual × días del mes). El valor anual (mes 13) del endpoint mensual es un promedio en mm/día, no un total."
+    },
+    {
+      "code": "RH2M",
+      "name": "Humedad relativa a 2 metros",
+      "shortName": "Humedad relativa",
+      "description": "Humedad relativa a 2 metros. Nota: la humedad relativa atmosférica no equivale a la humedad del suelo.",
+      "unit": "%",
+      "display_unit": "%",
+      "displayUnit": "%",
+      "aggregation": "mean",
+      "priority": "Alta",
+      "source": "NASA POWER / MERRA-2",
+      "short_name": "Humedad relativa",
+      "power_unit": "%",
+      "annual_aggregation": "mean",
+      "annual_unit": "%",
+      "temporal_start": 1981,
+      "spatial_resolution": "0.5° × 0.625° (~50 km)",
+      "valid_range": [
+        0,
+        100
+      ],
+      "phenomena": [
+        "sequia",
+        "agua",
+        "humedad"
+      ],
+      "notes": "Humedad del AIRE. No equivale a la humedad del suelo (para eso ver GLDAS). Depende de la temperatura: si sube T2M, RH2M puede bajar sin que cambie la cantidad de agua."
+    },
+    {
+      "code": "WS2M",
+      "name": "Velocidad del viento a 2 metros",
+      "shortName": "Velocidad del viento",
+      "description": "Velocidad media del viento a 2 metros de altura. Útil para evaluar cambios en regímenes eólicos.",
+      "unit": "m/s",
+      "display_unit": "m/s",
+      "displayUnit": "m/s",
+      "aggregation": "mean",
+      "priority": "Alta",
+      "source": "NASA POWER / MERRA-2",
+      "short_name": "Velocidad del viento",
+      "power_unit": "m/s",
+      "annual_aggregation": "mean",
+      "annual_unit": "m/s",
+      "temporal_start": 1981,
+      "spatial_resolution": "0.5° × 0.625° (~50 km)",
+      "valid_range": [
+        0,
+        75
+      ],
+      "phenomena": [
+        "viento",
+        "erosion",
+        "energia"
+      ],
+      "notes": "Promedio de una celda de ~50 km: suaviza efectos locales (relieve, costa, edificios)."
+    },
+    {
+      "code": "T2M_MAX",
+      "name": "Temperatura máxima a 2 metros",
+      "shortName": "Temperatura máxima",
+      "description": "Temperatura máxima diaria promediada a 2 metros para evaluar extremos cálidos.",
+      "unit": "deg C",
+      "display_unit": "°C",
+      "displayUnit": "°C",
+      "aggregation": "mean",
+      "priority": "Secundaria",
+      "source": "NASA POWER / MERRA-2",
+      "short_name": "Temperatura máxima",
+      "power_unit": "C",
+      "annual_aggregation": "max",
+      "annual_unit": "°C",
+      "temporal_start": 1981,
+      "spatial_resolution": "0.5° × 0.625° (~50 km)",
+      "valid_range": [
+        -90,
+        70
+      ],
+      "phenomena": [
+        "calor",
+        "calentamiento",
+        "olas_de_calor"
+      ],
+      "notes": "ATENCIÓN: en el endpoint mensual, el valor mensual es el MÁXIMO ABSOLUTO del mes y el anual (mes 13) el máximo del año, no el promedio de las máximas diarias. Para 'promedio de máximas' usar el endpoint diario y promediar."
+    },
+    {
+      "code": "T2M_MIN",
+      "name": "Temperatura mínima a 2 metros",
+      "shortName": "Temperatura mínima",
+      "description": "Temperatura mínima diaria promediada a 2 metros para evaluar extremos fríos y heladas.",
+      "unit": "deg C",
+      "display_unit": "°C",
+      "displayUnit": "°C",
+      "aggregation": "mean",
+      "priority": "Secundaria",
+      "source": "NASA POWER / MERRA-2",
+      "short_name": "Temperatura mínima",
+      "power_unit": "C",
+      "annual_aggregation": "min",
+      "annual_unit": "°C",
+      "temporal_start": 1981,
+      "spatial_resolution": "0.5° × 0.625° (~50 km)",
+      "valid_range": [
+        -90,
+        60
+      ],
+      "phenomena": [
+        "frio",
+        "heladas",
+        "calentamiento"
+      ],
+      "notes": "ATENCIÓN: en el endpoint mensual, el valor mensual es el MÍNIMO ABSOLUTO del mes y el anual (mes 13) el mínimo del año. Para 'promedio de mínimas' usar el endpoint diario."
+    }
+  ],
+  "phenomena": [
+    {
+      "id": "calentamiento",
+      "label": "¿Hace más calor que antes?",
+      "variables": [
+        "T2M",
+        "T2M_MAX",
+        "T2M_MIN"
+      ]
+    },
+    {
+      "id": "sequia",
+      "label": "¿Llueve menos / hay sequía?",
+      "variables": [
+        "PRECTOTCORR",
+        "T2M",
+        "RH2M"
+      ]
+    },
+    {
+      "id": "viento",
+      "label": "¿Cambió el viento?",
+      "variables": [
+        "WS2M"
+      ]
+    },
+    {
+      "id": "heladas",
+      "label": "¿Hay menos heladas o noches más templadas?",
+      "variables": [
+        "T2M_MIN",
+        "T2M"
+      ]
+    },
+    {
+      "id": "humedad",
+      "label": "¿El aire está más seco o más húmedo?",
+      "variables": [
+        "RH2M",
+        "T2M"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "power",
+      "name": "NASA POWER (MERRA-2)",
+      "url": "https://power.larc.nasa.gov/docs/services/api/",
+      "use": "Base del MVP: series por coordenada, JSON, sin autenticación.",
+      "access": "API REST pública",
+      "spatial_resolution": "0.5° × 0.625° (meteorología)",
+      "temporal_coverage": "1981 – presente (meteorología)",
+      "status": "integrado",
+      "tested": "2026-11-14: endpoint mensual OK para Comodoro Rivadavia 2000–2024 (data/samples/)."
+    },
+    {
+      "id": "giovanni",
+      "name": "NASA Giovanni",
+      "url": "https://giovanni.gsfc.nasa.gov/giovanni/",
+      "use": "Series temporales promediadas por área; contraste de los valores de POWER.",
+      "access": "Web, requiere cuenta NASA Earthdata (gratuita)",
+      "spatial_resolution": "Depende del producto",
+      "temporal_coverage": "Depende del producto",
+      "status": "pendiente de prueba",
+      "tested": "Descarga manual pendiente (requiere login Earthdata)."
+    },
+    {
+      "id": "gpm_imerg",
+      "name": "GPM IMERG (precipitación satelital)",
+      "url": "https://gpm.nasa.gov/data/imerg",
+      "use": "Contraste de precipitación con datos satelitales de mayor resolución.",
+      "access": "GES DISC / Giovanni, requiere Earthdata",
+      "spatial_resolution": "0.1° (~10 km)",
+      "temporal_coverage": "junio 2000 – presente",
+      "status": "opcional",
+      "tested": "No probado."
+    },
+    {
+      "id": "gldas",
+      "name": "GLDAS (modelo de superficie terrestre)",
+      "url": "https://ldas.gsfc.nasa.gov/gldas",
+      "use": "Humedad del suelo: complementa RH2M en la misión del agua.",
+      "access": "GES DISC / Hydrology Data Rods, requiere Earthdata",
+      "spatial_resolution": "0.25° (GLDAS-2.1)",
+      "temporal_coverage": "2000 – presente (GLDAS-2.1)",
+      "status": "opcional",
+      "tested": "No probado."
+    },
+    {
+      "id": "appeears",
+      "name": "AppEEARS / MODIS",
+      "url": "https://appeears.earthdatacloud.nasa.gov/",
+      "use": "Vegetación (NDVI), nieve y temperatura de superficie.",
+      "access": "API con token Earthdata; pedidos asincrónicos",
+      "spatial_resolution": "250 m – 1 km según producto",
+      "temporal_coverage": "2000 – presente",
+      "status": "si hay tiempo",
+      "tested": "No probado."
+    }
+  ]
+}

@@ -8,7 +8,11 @@ import unittest
 from http.server import ThreadingHTTPServer
 from urllib import error, request
 
-from app import EarthLensUnifiedHandler
+from app import create_app
+from pathlib import Path
+import tempfile
+from unittest.mock import patch,Mock
+from test_bulk import synthetic_payload
 from services.forecast import build_forecast, student_t_cdf, student_t_ppf
 
 
@@ -80,92 +84,58 @@ class ForecastUnitTest(unittest.TestCase):
 
 
 class ForecastHttpTest(unittest.TestCase):
-    """Pruebas HTTP para /time-machine, /api/time-machine (con forecast) y /api/forecast."""
+    """Software con NASA simulada y cache temporal; nunca observaciones reales."""
+    def setUp(self):
+        temporary=tempfile.TemporaryDirectory();self.addCleanup(temporary.cleanup)
+        self.app=create_app({'TESTING':True,'CACHE_DIR':Path(temporary.name)/'power','POWER_REQUEST_DELAY':0})
+        self.client=self.app.test_client()
+        def respond(url,params,timeout):
+            payload=synthetic_payload(params)
+            for values in payload['properties']['parameter'].values():
+                for date in values:values[date]+=0.08*(int(date[:4])-2000)+(0.1 if int(date[:4])%2 else -0.1)
+            response=Mock();response.json.return_value=payload;return response
+        with patch('services.providers.power.requests.get',side_effect=respond):
+            self.assertEqual(self.client.post('/api/data',json={'city_id':'mendoza'}).status_code,200)
+        self.body={'city_id':'mendoza','variable':'T2M','start_year':2000,'end_year':2024,'forecast_start':2025,'forecast_end':2032}
+        self.network=patch('requests.sessions.Session.request',side_effect=AssertionError('No network'))
+        self.network.start();self.addCleanup(self.network.stop)
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        proxy_handler = request.ProxyHandler({})
-        opener = request.build_opener(proxy_handler)
-        request.install_opener(opener)
-        cls.server = ThreadingHTTPServer(("127.0.0.1", 0), EarthLensUnifiedHandler)
-        cls.port = cls.server.server_address[1]
-        cls.base_url = f"http://127.0.0.1:{cls.port}"
-        cls.thread = threading.Thread(target=cls.server.serve_forever, daemon=True)
-        cls.thread.start()
+    def test_page_and_forecast_contract_use_cached_verified_city(self):
+        # La reestructuración conserva la proyección anual en la interfaz original;
+        # la vista nueva presenta pronósticos operativos con un contrato separado.
+        self.assertIn(b'tm_forecast.js',self.client.get('/time-machine/legacy').data)
+        self.assertIn(b'workspace.js',self.client.get('/time-machine').data)
+        result=self.client.post('/api/forecast',json=self.body)
+        self.assertEqual(result.status_code,200)
+        record=result.get_json()['data']
+        self.assertTrue(record['available']);self.assertEqual(len(record['years']),8)
+        self.assertEqual(record['record_type'],'model_projection')
+        self.assertEqual(record['unit'],'C');self.assertEqual(record['location']['id'],'mendoza')
+        self.assertEqual(record['scientific_status'],'provisional');self.assertIsNone(record['confidence'])
+        self.assertEqual(record['provenance']['origin'],'cache')
+        self.assertNotIn('impact',{c['kind'] for c in record['conclusions']})
 
-    @classmethod
-    def tearDownClass(cls) -> None:
-        cls.server.shutdown()
-        cls.server.server_close()
-        cls.thread.join(timeout=2.0)
+    def test_time_machine_includes_projections_separate_from_observations(self):
+        result=self.client.post('/api/time-machine',json={**self.body,'include_regional':False})
+        self.assertEqual(result.status_code,200)
+        data=result.get_json()['data']
+        self.assertEqual(len(data['timeline']),25);self.assertTrue(data['forecast']['available'])
+        self.assertEqual(data['forecast']['window']['end_year'],2032)
 
-    def test_time_machine_page_contains_forecast_module(self) -> None:
-        with request.urlopen(f"{self.base_url}/time-machine", timeout=5) as resp:
-            html = resp.read().decode("utf-8")
-            self.assertEqual(resp.status, 200)
-            self.assertIn("winForecast", html)
-            self.assertIn("tm_forecast.js", html)
-            self.assertIn("btnFcApply", html)
+    def test_validation_rejects_injected_series_coordinates_and_nonfinite_values(self):
+        for change in ({'series':[]},{'latitude':-32},{'forecast_start':True},{'forecast_end':2055},
+                       {'forecast_end':2020},{'custom_threshold':float('nan')},{'custom_direction':'other'},
+                       {'forecast_start':None},{'forecast_horizon':'10'}):
+            self.assertEqual(self.client.post('/api/forecast',json={**self.body,**change}).status_code,400,change)
 
-    def test_post_time_machine_includes_forecast(self) -> None:
-        payload = json.dumps({
-            "city_id": "comodoro-rivadavia",
-            "variable": "T2M",
-            "start_year": 2000,
-            "end_year": 2024,
-            "forecast_start": 2025,
-            "forecast_end": 2035,
-            "include_regional": False,
-        }).encode("utf-8")
-        req = request.Request(
-            f"{self.base_url}/api/time-machine",
-            data=payload,
-            headers={"Content-Type": "application/json"},
-            method="POST",
-        )
-        with request.urlopen(req, timeout=5) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-            self.assertEqual(resp.status, 200)
-            self.assertIn("forecast", data)
-            self.assertTrue(data["forecast"]["available"])
-            self.assertEqual(data["forecast"]["window"]["end_year"], 2035)
+    def test_missing_cache_does_not_download_or_create_fallback(self):
+        response=self.client.post('/api/forecast',json={**self.body,'city_id':'posadas'})
+        self.assertEqual(response.status_code,503)
+        self.assertNotIn('years',response.get_json())
 
-    def test_post_api_forecast_recalculates_and_validates(self) -> None:
-        series = [{"year": 2000 + i, "value": 11.0 + 0.04 * i} for i in range(25)]
-        payload = json.dumps({
-            "variable": "T2M",
-            "location_name": "Zona Test",
-            "series": series,
-            "forecast_start": 2026,
-            "forecast_end": 2032,
-            "custom_threshold": 12.2,
-            "custom_direction": "above",
-        }).encode("utf-8")
-        req = request.Request(
-            f"{self.base_url}/api/forecast",
-            data=payload,
-            headers={"Content-Type": "application/json"},
-            method="POST",
-        )
-        with request.urlopen(req, timeout=5) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-            self.assertEqual(resp.status, 200)
-            self.assertTrue(data["available"])
-            self.assertEqual(data["window"]["start_year"], 2026)
-            self.assertEqual(data["window"]["end_year"], 2032)
-            self.assertIn("custom", data["summary"])
+    def test_custom_threshold_uses_the_same_actual_units(self):
+        result=self.client.post('/api/forecast',json={**self.body,'custom_threshold':2.0,'custom_direction':'below'})
+        self.assertEqual(result.status_code,200)
+        self.assertIn('custom',result.get_json()['data']['summary'])
 
-        # Serie vacía -> HTTP 400
-        bad_req = request.Request(
-            f"{self.base_url}/api/forecast",
-            data=json.dumps({"variable": "T2M", "series": []}).encode("utf-8"),
-            headers={"Content-Type": "application/json"},
-            method="POST",
-        )
-        with self.assertRaises(error.HTTPError) as ctx:
-            request.urlopen(bad_req, timeout=5)
-        self.assertEqual(ctx.exception.code, 400)
-
-
-if __name__ == "__main__":
-    unittest.main()
+if __name__=='__main__':unittest.main()

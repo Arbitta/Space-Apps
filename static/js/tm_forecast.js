@@ -66,6 +66,7 @@
   }
 
   function fmt(value, digits = 2) {
+    if(value===null || value===undefined || value==='') return '--';
     const num = Number(value);
     return Number.isFinite(num) ? num.toFixed(digits) : '--';
   }
@@ -159,8 +160,9 @@
 
     const body = {
       variable: timeMachineData.variable,
-      location_name: timeMachineData.location?.name || '',
-      series: timeMachineData.timeline.map((p) => ({ year: p.year, value: p.value })),
+      city_id: timeMachineData.location.id,
+      start_year: timeMachineData.period.start_year,
+      end_year: timeMachineData.period.end_year,
       forecast_start: start,
       forecast_end: end
     };
@@ -183,12 +185,13 @@
       });
       const json = await res.json();
       if (mySeq !== reqSeq) return;
-      if (!res.ok || !json.available) {
-        setStatus(json.error || json.reason || 'No se pudo calcular la proyección.', false, true);
+      if (!res.ok || json.status!=='ok' || !json.data?.available) {
+        forecast=null;renderUnavailable(json.error?.message || 'No se pudo calcular la proyeccion.');
+        setStatus(json.error?.message || 'No se pudo calcular la proyeccion.', false, true);
         return;
       }
-      forecast = json;
-      if (timeMachineData) timeMachineData.forecast = json;
+      forecast = json.data;
+      if (timeMachineData) timeMachineData.forecast = json.data;
       setStatus('', false);
       renderAll();
     } catch (err) {
@@ -241,9 +244,9 @@
     const conf = forecast.confidence || '--';
     const pill = $('tmFcConfidence');
     if (pill) {
-      pill.textContent = `Confianza: ${conf}`;
+      pill.textContent = 'Exploratoria: validacion pendiente';
       pill.classList.remove('is-success', 'is-warning', 'is-danger');
-      if (CONFIDENCE_CLASS[conf]) pill.classList.add(CONFIDENCE_CLASS[conf]);
+
     }
     setText('tmFcHeadline', forecast.headline || '');
     const m = forecast.model || {};
@@ -686,6 +689,8 @@
   // ----------------------------------------------------------------------------------
   function setData(data) {
     bindEvents();
+    reqController?.abort();reqSeq++;
+    if(!data){timeMachineData=null;forecast=null;renderUnavailable('Sin datos historicos disponibles.');return;}
     const previousVariable = timeMachineData?.variable;
     timeMachineData = data;
 
@@ -702,6 +707,7 @@
       return;
     }
 
+    if(data.forecast && !data.forecast.available){forecast=null;renderUnavailable(data.forecast.reason || 'Historico insuficiente para extrapolar.');return;}
     // Respuesta sin bloque predictivo (p. ej. datos de respaldo del cliente): se solicita al backend.
     forecast = null;
     renderUnavailable('Calculando proyección…');

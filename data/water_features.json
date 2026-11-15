@@ -1,0 +1,65 @@
+{
+  "schema_version": "earthlens.water-features.v1",
+  "features": [
+    {
+      "id": "chubut-trelew",
+      "type": "Reach",
+      "feature_id": "65341000051",
+      "name": "Río Chubut — tramo 65341000051",
+      "country_code": "AR",
+      "province": "Chubut",
+      "near_city_id": "trelew",
+      "latitude": -43.298796,
+      "longitude": -65.3231,
+      "product": "SWOT_L2_HR_RiverSP_D",
+      "product_version": "D",
+      "sword_version": "17b",
+      "geography_source": {
+        "sword_explorer": "https://www.swordexplorer.com/",
+        "index_url": "https://pub-ceb2c39205d5401cac3cf448cff9518d.r2.dev/tiles/reach_search_index.json",
+        "index_sha256": "c62648983769105d40c793d26dc7af861fc361089b09ac734821b53813725c2e",
+        "source_record": {
+          "reach_id": "65341000051",
+          "river_name": "Rio Chubut",
+          "lon": -65.3231,
+          "lat": -43.298796,
+          "bbox": [
+            -65.370365,
+            -43.31634,
+            -65.270871,
+            -43.272778
+          ],
+          "continent_id": "sa"
+        },
+        "georef_query": {
+          "lat": -43.298796,
+          "lon": -65.3231
+        },
+        "georef_response": {
+          "parametros": {
+            "lat": -43.298796,
+            "lon": -65.3231
+          },
+          "ubicacion": {
+            "departamento": {
+              "id": "26077",
+              "nombre": "Rawson"
+            },
+            "lat": -43.298796,
+            "lon": -65.3231,
+            "municipio": {
+              "id": "260119",
+              "nombre": "Trelew"
+            },
+            "provincia": {
+              "id": "26",
+              "nombre": "Chubut"
+            }
+          }
+        },
+        "fetched_at": "2026-11-15T14:48:34.771313+00:00",
+        "scope": "Curated Argentine river; GeoRef verifies source centroid jurisdiction. Not a general coordinate boundary validator."
+      }
+    }
+  ]
+}

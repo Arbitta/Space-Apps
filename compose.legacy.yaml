@@ -1,0 +1,7 @@
+# Compatibilidad con el nombre anterior; una sola configuracion de desarrollo.
+name: earthlens
+services:
+  backend:
+    extends:
+      file: compose.yaml
+      service: backend

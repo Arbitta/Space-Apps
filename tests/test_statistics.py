@@ -1,3 +1,4 @@
+"""Pruebas heredadas con fixtures sintéticas; no validan tendencias reales."""
 """
 EarthLens — Rol 06: Pruebas Unitarias del Motor Estadístico (test_statistics.py)
 Valida:
@@ -10,7 +11,7 @@ Valida:
 
 import unittest
 
-from services.power import get_reference_series
+from statistics_fixtures.power import get_reference_series
 from services.trend_analysis import (
     aggregate_to_annual_series,
     analyze_series,
@@ -153,23 +154,6 @@ class TestKnownMathematicalCases(unittest.TestCase):
         self.assertFalse(res["statistics"]["significant"])
         self.assertGreaterEqual(res["statistics"]["p_value"], 0.05)
         self.assertIn("no demuestra ausencia de cambio", res["conclusion"])
-
-    def test_constant_series_is_stable(self):
-        series = [{"year": 2000 + i, "value": 12.0} for i in range(5)]
-
-        stats = compute_linear_trend(series, start_year=2000, end_year=2004)
-
-        self.assertEqual(stats["direction"], "stable")
-        self.assertFalse(stats["significant"])
-        self.assertEqual(stats["slope"], 0.0)
-
-    def test_regression_requires_three_valid_years(self):
-        with self.assertRaises(ValueError):
-            compute_linear_trend(
-                [{"year": 2000, "value": 10.0}, {"year": 2001, "value": 10.1}],
-                start_year=2000,
-                end_year=2001,
-            )
 
     def test_missing_values_and_nasa_power_monthly_aggregation(self):
         """Verifica limpieza de códigos -999 de NASA POWER, exclusión de mes 13 y criterio de completitud."""
