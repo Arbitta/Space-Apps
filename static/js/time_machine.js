@@ -929,18 +929,23 @@ document.addEventListener('DOMContentLoaded', () => {
       anomEl.style.color = '#ffffff';
     }
 
+    const levelLabels = {
+      extreme_high: 'Anomalía alta extrema (+2σ)',
+      moderate_high: 'Superior al promedio (+1.5σ)',
+      mild_high: 'Ligeramente sobre la media',
+      normal: 'Dentro del rango normal',
+      mild_low: 'Ligeramente bajo la media',
+      moderate_low: 'Inferior al promedio (-1.5σ)',
+      extreme_low: 'Anomalía baja extrema (-2σ)'
+    };
+    const levelText = levelLabels[point.anomaly_level] || 'Dentro del rango normal';
     const levelBadge = document.getElementById('tmActiveLevelBadge');
     if (levelBadge) {
-      const levelLabels = {
-        extreme_high: 'Anomalía alta extrema (+2σ)',
-        moderate_high: 'Superior al promedio (+1.5σ)',
-        mild_high: 'Ligeramente sobre la media',
-        normal: 'Dentro del rango normal',
-        mild_low: 'Ligeramente bajo la media',
-        moderate_low: 'Inferior al promedio (-1.5σ)',
-        extreme_low: 'Anomalía baja extrema (-2σ)'
-      };
-      levelBadge.textContent = levelLabels[point.anomaly_level] || 'Dentro del rango normal';
+      levelBadge.textContent = levelText;
+    }
+    const levelBadgeMobile = document.getElementById('tmActiveLevelBadgeMobile');
+    if (levelBadgeMobile) {
+      levelBadgeMobile.textContent = levelText;
     }
 
     document.querySelectorAll('.tm-stripe-item').forEach((el) => {
@@ -1450,6 +1455,63 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnExpandBox = document.getElementById('btnExpandBox');
     const btnResetBox = document.getElementById('btnResetBox');
     const btnExport = document.getElementById('btnExportTimeMachineCSV');
+    const btnToggleTopFilters = document.getElementById('btnToggleTopFilters');
+    const topFiltersCollapse = document.getElementById('tmTopFiltersCollapse');
+    const btnToggleLeftRail = document.getElementById('btnToggleLeftRail');
+    const leftRail = document.getElementById('tmLeftRail');
+    const btnToggleRightRail = document.getElementById('btnToggleRightRail');
+    const rightRail = document.getElementById('tmRightRail');
+    const btnToggleBottomBar = document.getElementById('btnToggleBottomBar');
+    const bottomBar = document.getElementById('tmBottomBar');
+
+    // En pantallas muy pequeñas (< 576px), iniciar la barra derecha plegada para despejar el mapa
+    if (window.innerWidth < 576 && rightRail && btnToggleRightRail) {
+      rightRail.classList.remove('is-expanded');
+      btnToggleRightRail.setAttribute('aria-expanded', 'false');
+    }
+
+    // Recalcular mapa al cambiar el tamaño de la ventana
+    window.addEventListener('resize', () => {
+      if (mapInstance) {
+        mapInstance.invalidateSize();
+      }
+    });
+
+    // Barra plegable superior (filtros en pantallas medianas/pequeñas)
+    if (btnToggleTopFilters && topFiltersCollapse) {
+      btnToggleTopFilters.addEventListener('click', () => {
+        const isOpen = topFiltersCollapse.classList.toggle('is-open');
+        btnToggleTopFilters.classList.toggle('is-active', isOpen);
+        btnToggleTopFilters.setAttribute('aria-expanded', String(isOpen));
+        setTimeout(() => {
+          if (mapInstance) mapInstance.invalidateSize();
+        }, 240);
+      });
+    }
+
+    // Barra plegable izquierda (ventanas de análisis)
+    if (btnToggleLeftRail && leftRail) {
+      btnToggleLeftRail.addEventListener('click', () => {
+        const expanded = leftRail.classList.toggle('is-expanded');
+        btnToggleLeftRail.setAttribute('aria-expanded', String(expanded));
+      });
+    }
+
+    // Barra plegable derecha (controles del cuadrante y vista)
+    if (btnToggleRightRail && rightRail) {
+      btnToggleRightRail.addEventListener('click', () => {
+        const expanded = rightRail.classList.toggle('is-expanded');
+        btnToggleRightRail.setAttribute('aria-expanded', String(expanded));
+      });
+    }
+
+    // Barra plegable inferior (cinta cromática y leyenda en móviles)
+    if (btnToggleBottomBar && bottomBar) {
+      btnToggleBottomBar.addEventListener('click', () => {
+        const expanded = bottomBar.classList.toggle('is-expanded');
+        btnToggleBottomBar.setAttribute('aria-expanded', String(expanded));
+      });
+    }
 
     // Sincronizar automáticamente cuando el usuario vuelve desde otra pestaña o con el botón Atrás
     window.addEventListener('pageshow', () => {

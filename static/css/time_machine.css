@@ -1,7 +1,9 @@
 /* ==========================================================================
    EarthLens — Earth Time Machine (time_machine.css)
-   Interfaz Satelital Científica: Bordes técnicos (4px), paleta sobria,
-   iconos SVG con tooltip al pasar el puntero y cuadrante editable.
+   Interfaz Satelital Científica 100% Responsive:
+   - Escalado proporcional fluido con clamp() según el tamaño del dispositivo.
+   - Barras plegables (acordeones) para mostrar u ocultar los botones e inputs.
+   - Bordes técnicos (4px), paleta sobria y tooltips de iconos.
    ========================================================================== */
 
 :root {
@@ -15,6 +17,12 @@
   --tm-accent-steel: #3d6b99;
   --tm-accent-highlight: #7aa2c4;
   --tm-radius: 4px;
+
+  /* Variables fluidas proporcionales al tamaño de pantalla */
+  --tm-btn-size: clamp(30px, 4.6vmin, 40px);
+  --tm-icon-size: clamp(14px, 2.3vmin, 18px);
+  --tm-rail-gap: clamp(4px, 0.8vmin, 6px);
+  --tm-edge-offset: clamp(6px, 1.4vw, 12px);
 }
 
 /* Cuerpo e inmersión de pantalla completa */
@@ -23,6 +31,7 @@
   color: var(--tm-text-primary);
   overflow: hidden;
   height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
 }
@@ -32,6 +41,7 @@
   flex: 1;
   width: 100%;
   height: calc(100vh - 56px);
+  height: calc(100dvh - 56px);
   overflow: hidden;
   background: var(--tm-bg-deep);
 }
@@ -53,10 +63,10 @@
   pointer-events: none;
 }
 
-/* Iconos vectoriales limpios (sin emojis) */
+/* Iconos vectoriales limpios proporcionales */
 .tm-svg-icon {
-  width: 19px;
-  height: 19px;
+  width: var(--tm-icon-size);
+  height: var(--tm-icon-size);
   stroke: currentColor;
   stroke-width: 1.85;
   stroke-linecap: round;
@@ -66,8 +76,8 @@
 }
 
 .tm-svg-icon-sm {
-  width: 15px;
-  height: 15px;
+  width: clamp(12px, 1.9vmin, 15px);
+  height: clamp(12px, 1.9vmin, 15px);
   stroke: currentColor;
   stroke-width: 2;
   stroke-linecap: round;
@@ -76,13 +86,13 @@
   flex-shrink: 0;
 }
 
-/* Barra Técnica Superior */
+/* Barra Técnica Superior (Proporcional y plegable) */
 .tm-hud-top {
   position: absolute;
-  top: 10px;
-  left: 12px;
-  right: 12px;
-  z-index: 500;
+  top: var(--tm-edge-offset);
+  left: var(--tm-edge-offset);
+  right: var(--tm-edge-offset);
+  z-index: 520;
   pointer-events: none;
 }
 
@@ -93,23 +103,57 @@
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--tm-border-subtle);
   border-radius: var(--tm-radius);
-  padding: 0.5rem 0.85rem;
+  padding: clamp(0.35rem, 0.9vmin, 0.55rem) clamp(0.55rem, 1.4vw, 0.9rem);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.45rem;
+}
+
+@media (min-width: 992px) {
+  .tm-hud-panel {
+    flex-wrap: nowrap;
+  }
+  .tm-top-filters-collapse {
+    display: flex !important;
+    width: auto;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .tm-top-filters-collapse {
+    display: none;
+    width: 100%;
+    padding-top: 0.45rem;
+    margin-top: 0.35rem;
+    border-top: 1px solid var(--tm-border-subtle);
+  }
+  .tm-top-filters-collapse.is-open {
+    display: block;
+  }
+}
+
+.tm-location-heading {
+  font-size: clamp(0.78rem, 1.8vw, 0.92rem);
+  line-height: 1.2;
 }
 
 .tm-telemetry-tag {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   background: rgba(61, 107, 153, 0.22);
   border: 1px solid rgba(122, 162, 196, 0.42);
   color: #cbd5e1;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem;
+  font-size: clamp(0.58rem, 1.2vw, 0.68rem);
   font-weight: 700;
-  letter-spacing: 0.08em;
-  padding: 0.22rem 0.5rem;
+  letter-spacing: 0.06em;
+  padding: 0.18rem 0.42rem;
   border-radius: 2px;
+  flex-shrink: 0;
 }
 
 .tm-telemetry-dot {
@@ -120,19 +164,50 @@
 }
 
 .tm-meta-subline {
-  font-size: 0.73rem;
+  font-size: clamp(0.64rem, 1.3vw, 0.73rem);
   color: var(--tm-text-muted);
   font-family: 'JetBrains Mono', monospace;
+}
+
+/* Botón en la barra superior para mostrar/ocultar selectores en pantallas chicas */
+.tm-bar-toggle {
+  width: var(--tm-btn-size);
+  height: var(--tm-btn-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--tm-panel-elevated);
+  border: 1px solid var(--tm-border-subtle);
+  border-radius: var(--tm-radius);
+  color: var(--tm-text-primary);
+  flex-shrink: 0;
+  transition: background 0.14s ease, border-color 0.14s ease;
+}
+
+.tm-bar-toggle.is-active,
+.tm-bar-toggle:hover {
+  background: var(--tm-accent-steel);
+  border-color: #9ec1e0;
+  color: #ffffff;
 }
 
 .tm-hud-select {
   background-color: var(--tm-panel-elevated);
   color: var(--tm-text-primary);
   border: 1px solid var(--tm-border-subtle);
-  font-size: 0.78rem;
+  font-size: clamp(0.7rem, 1.4vw, 0.78rem);
   font-weight: 500;
   border-radius: var(--tm-radius);
-  max-width: 230px;
+  max-width: 215px;
+  padding-top: 0.22rem;
+  padding-bottom: 0.22rem;
+}
+
+@media (max-width: 575.98px) {
+  .tm-hud-select {
+    max-width: 100%;
+    flex: 1 1 calc(50% - 0.35rem);
+  }
 }
 
 .tm-hud-select:focus {
@@ -146,7 +221,7 @@
   background: var(--tm-panel-elevated);
   color: var(--tm-text-primary);
   border: 1px solid var(--tm-border-subtle);
-  font-size: 0.76rem;
+  font-size: clamp(0.68rem, 1.3vw, 0.76rem);
   font-weight: 600;
   border-radius: var(--tm-radius);
   transition: background 0.14s ease, border-color 0.14s ease;
@@ -185,37 +260,88 @@
   color: #ffffff;
 }
 
-/* Rieles laterales de botones solo-icono con tooltip al pasar el puntero */
+/* ==========================================================================
+   Rieles Laterales Plegables (Barras que ocultan/muestran los botones al hacer clic)
+   ========================================================================== */
 .tm-icon-rail {
   position: absolute;
-  top: 78px;
+  top: clamp(58px, 9.5vh, 76px);
   z-index: 500;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--tm-rail-gap);
   pointer-events: none;
 }
 
 .tm-rail-left {
-  left: 12px;
+  left: var(--tm-edge-offset);
 }
 
 .tm-rail-right {
-  right: 12px;
+  right: var(--tm-edge-offset);
+}
+
+/* Botón cabecera de la barra lateral para desplegar u ocultar los demás botones */
+.tm-rail-handle {
+  pointer-events: auto;
+  position: relative;
+  width: var(--tm-btn-size);
+  height: clamp(22px, 3.2vmin, 28px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #141c2b;
+  border: 1px solid var(--tm-border-active);
+  border-radius: var(--tm-radius);
+  color: #9ec1e0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: background 0.14s ease, color 0.14s ease;
+}
+
+.tm-rail-handle:hover {
+  background: var(--tm-accent-steel);
+  color: #ffffff;
+}
+
+.tm-chevron-icon {
+  transition: transform 0.2s ease;
+}
+
+.tm-icon-rail.is-Expanded .tm-chevron-icon,
+.tm-icon-rail.is-expanded .tm-chevron-icon {
+  transform: rotate(180deg);
+}
+
+.tm-rail-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tm-rail-gap);
+  max-height: 70vh;
+  opacity: 1;
+  transition: max-height 0.22s ease, opacity 0.18s ease, transform 0.18s ease;
+}
+
+.tm-icon-rail:not(.is-expanded) .tm-rail-items {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transform: translateY(-6px);
 }
 
 .tm-rail-divider {
   height: 1px;
   width: 100%;
   background: var(--tm-border-subtle);
-  margin: 2px 0;
+  margin: 1px 0;
 }
 
 .tm-icon-btn {
   pointer-events: auto;
   position: relative;
-  width: 42px;
-  height: 42px;
+  width: var(--tm-btn-size);
+  height: var(--tm-btn-size);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -243,26 +369,27 @@
 /* Contador discreto sobre el icono de anomalías */
 .tm-icon-counter {
   position: absolute;
-  top: 3px;
-  right: 3px;
-  min-width: 15px;
-  height: 15px;
-  padding: 0 3px;
+  top: 2px;
+  right: 2px;
+  min-width: 13px;
+  height: 13px;
+  padding: 0 2px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.62rem;
+  font-size: 0.56rem;
   font-weight: 700;
-  line-height: 15px;
+  line-height: 13px;
   text-align: center;
   background: #9e3a34;
   color: #ffffff;
   border-radius: 2px;
 }
 
-/* Tooltip instantáneo al pasar el puntero sobre cualquier icono */
-.tm-icon-btn::after {
+/* Tooltip instantáneo al pasar el puntero sobre cualquier icono o barra */
+.tm-icon-btn::after,
+.tm-rail-handle::after {
   content: attr(data-tooltip);
   position: absolute;
-  left: calc(100% + 10px);
+  left: calc(100% + 8px);
   top: 50%;
   transform: translateY(-50%);
   white-space: nowrap;
@@ -270,67 +397,70 @@
   color: #f1f5f9;
   border: 1px solid var(--tm-border-active);
   border-radius: 3px;
-  padding: 0.32rem 0.6rem;
-  font-size: 0.74rem;
+  padding: 0.28rem 0.55rem;
+  font-size: 0.72rem;
   font-weight: 500;
   letter-spacing: 0.01em;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.65);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition: opacity 0.12s ease;
-  z-index: 900;
+  z-index: 950;
 }
 
-.tm-icon-btn[data-tooltip-pos="left"]::after {
+.tm-icon-btn[data-tooltip-pos="left"]::after,
+.tm-rail-handle[data-tooltip-pos="left"]::after {
   left: auto;
-  right: calc(100% + 10px);
+  right: calc(100% + 8px);
 }
 
 .tm-icon-btn:hover::after,
-.tm-icon-btn:focus-visible::after {
+.tm-icon-btn:focus-visible::after,
+.tm-rail-handle:hover::after,
+.tm-rail-handle:focus-visible::after {
   opacity: 1;
   visibility: visible;
 }
 
-/* Leyenda espectral inferior derecha */
+/* Leyenda espectral inferior derecha proporcional */
 .tm-spectral-legend {
   position: absolute;
-  right: 12px;
-  bottom: 96px;
+  right: var(--tm-edge-offset);
+  bottom: clamp(78px, 12vh, 96px);
   z-index: 480;
-  width: 315px;
+  width: clamp(210px, 28vw, 310px);
   background: var(--tm-panel-bg);
   border: 1px solid var(--tm-border-subtle);
   border-radius: var(--tm-radius);
-  padding: 0.5rem 0.75rem;
+  padding: 0.4rem 0.65rem;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
 }
 
 .tm-legend-title {
-  font-size: 0.72rem;
+  font-size: clamp(0.64rem, 1.2vw, 0.72rem);
   font-weight: 600;
   color: var(--tm-text-primary);
 }
 
 .tm-legend-meta {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   color: var(--tm-text-muted);
 }
 
 .tm-legend-bound {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem;
+  font-size: 0.64rem;
   color: var(--tm-text-muted);
 }
 
 .tm-color-scale-bar {
-  height: 9px;
+  height: 8px;
   border-radius: 2px;
   border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
-/* Rampas espectrales satelitales tipo TV del clima (meteorológicas, no genéricas) */
+/* Rampas espectrales satelitales tipo TV del clima */
 .tm-scale-thermal {
   background: linear-gradient(90deg, #1b2a4a 0%, #2b5c8f 22%, #3d8c95 42%, #7ca968 60%, #d4a349 78%, #c86432 90%, #9e2a2b 100%);
 }
@@ -358,14 +488,14 @@
   cursor: nwse-resize;
 }
 
-/* Ventanitas Flotantes (Modales técnicos con bordes de 4px) */
+/* Ventanitas Flotantes (Adaptables al ancho y alto del dispositivo) */
 .tm-popup-window {
   position: absolute;
-  top: 78px;
+  top: clamp(58px, 10vh, 78px);
   left: 50%;
   transform: translateX(-50%);
-  width: min(780px, calc(100vw - 120px));
-  max-height: calc(100vh - 195px);
+  width: min(760px, calc(100vw - 92px));
+  max-height: calc(100dvh - 180px);
   z-index: 650;
   background: rgba(13, 18, 28, 0.96);
   backdrop-filter: blur(14px);
@@ -394,58 +524,60 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.65rem 1rem;
+  gap: 0.5rem;
+  padding: clamp(0.45rem, 1.2vmin, 0.65rem) clamp(0.65rem, 1.8vw, 1rem);
   background: #141c2b;
   border-bottom: 1px solid var(--tm-border-subtle);
+  font-size: clamp(0.76rem, 1.6vw, 0.9rem);
 }
 
 .tm-window-tag {
   display: inline-block;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   color: #9ec1e0;
   background: rgba(61, 107, 153, 0.25);
   border: 1px solid rgba(122, 162, 196, 0.35);
-  padding: 0.12rem 0.42rem;
+  padding: 0.1rem 0.38rem;
   border-radius: 2px;
-  margin-right: 0.45rem;
+  margin-right: 0.35rem;
 }
 
 .tm-stat-pill {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
+  font-size: clamp(0.64rem, 1.3vw, 0.72rem);
   color: var(--tm-text-primary);
   background: #1b2638;
   border: 1px solid var(--tm-border-subtle);
-  padding: 0.18rem 0.5rem;
+  padding: 0.15rem 0.45rem;
   border-radius: 2px;
+  white-space: nowrap;
 }
 
 .tm-popup-body {
-  padding: 0.9rem 1.05rem;
+  padding: clamp(0.6rem, 1.6vmin, 0.95rem);
   overflow-y: auto;
 }
 
 .tm-popup-desc {
-  font-size: 0.78rem;
+  font-size: clamp(0.7rem, 1.4vw, 0.78rem);
   color: var(--tm-text-muted);
 }
 
 .tm-chart-box {
   position: relative;
-  height: 295px;
+  height: clamp(200px, 36vh, 295px);
   width: 100%;
   background: #f8fafc;
   border: 1px solid #cbd5e1;
   border-radius: 3px;
-  padding: 0.6rem;
+  padding: 0.45rem;
 }
 
 .tm-section-caption {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -456,7 +588,7 @@
   background: #141c2b;
   border: 1px solid var(--tm-border-subtle);
   border-radius: 3px;
-  padding: 0.55rem 0.75rem;
+  padding: 0.5rem 0.7rem;
 }
 
 .tm-border-left-cool {
@@ -469,7 +601,7 @@
 
 .tm-micro-label {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   color: var(--tm-text-muted);
   letter-spacing: 0.05em;
 }
@@ -484,12 +616,11 @@
   font-weight: 600;
 }
 
-/* Tarjetas de anomalías dentro de la ventanita */
 .tm-anomaly-card {
   background: #141c2b;
   border: 1px solid var(--tm-border-subtle);
   border-radius: 3px;
-  padding: 0.55rem 0.75rem;
+  padding: 0.5rem 0.7rem;
   color: var(--tm-text-primary);
 }
 
@@ -497,12 +628,14 @@
   border-color: var(--tm-accent-highlight);
 }
 
-/* Barra Inferior del Slider de Tiempo */
+/* ==========================================================================
+   Barra Inferior del Slider de Tiempo (Proporcional al tamaño del dispositivo)
+   ========================================================================== */
 .tm-bottom-bar {
   position: absolute;
-  bottom: 10px;
-  left: 12px;
-  right: 12px;
+  bottom: var(--tm-edge-offset);
+  left: var(--tm-edge-offset);
+  right: var(--tm-edge-offset);
   z-index: 500;
   pointer-events: none;
 }
@@ -514,36 +647,58 @@
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--tm-border-subtle);
   border-radius: var(--tm-radius);
-  padding: 0.55rem 1rem;
+  padding: clamp(0.38rem, 1vmin, 0.55rem) clamp(0.55rem, 1.5vw, 1rem);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
+}
+
+.tm-bottom-handle {
+  background: var(--tm-panel-elevated);
+  border: 1px solid var(--tm-border-subtle);
+  color: var(--tm-text-muted);
+  border-radius: 2px;
+  padding: 1px 6px;
+  line-height: 1;
+}
+
+.tm-bottom-bar:not(.is-expanded) #tmClimateStripes,
+.tm-bottom-bar:not(.is-expanded) .tm-slider-caption {
+  display: none !important;
+}
+
+.tm-bottom-bar.is-expanded .tm-bottom-handle .tm-chevron-icon {
+  transform: rotate(180deg);
 }
 
 .tm-year-readout {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 2.2rem;
+  font-size: clamp(1.25rem, 3.6vw, 2.15rem);
   font-weight: 700;
   line-height: 1;
   color: #e2e8f0;
   letter-spacing: -0.02em;
 }
 
+.tm-active-val {
+  font-size: clamp(0.82rem, 1.9vw, 1.15rem);
+}
+
 .tm-anom-pill {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.74rem;
+  font-size: clamp(0.62rem, 1.3vw, 0.74rem);
   font-weight: 600;
-  padding: 0.15rem 0.45rem;
+  padding: 0.1rem 0.38rem;
   border-radius: 2px;
   border: 1px solid rgba(255, 255, 255, 0.22);
 }
 
 .tm-condition-label {
-  font-size: 0.72rem;
+  font-size: clamp(0.62rem, 1.2vw, 0.72rem);
   color: var(--tm-text-muted);
 }
 
 .tm-transport-btn {
-  width: 34px;
-  height: 34px;
+  width: clamp(26px, 3.8vmin, 34px);
+  height: clamp(26px, 3.8vmin, 34px);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -551,6 +706,7 @@
   border: 1px solid var(--tm-border-subtle);
   border-radius: 3px;
   color: var(--tm-text-primary);
+  flex-shrink: 0;
   transition: background 0.14s ease, border-color 0.14s ease;
 }
 
@@ -561,8 +717,8 @@
 }
 
 .tm-play-btn {
-  width: 38px;
-  height: 38px;
+  width: clamp(30px, 4.2vmin, 38px);
+  height: clamp(30px, 4.2vmin, 38px);
   border-radius: 3px;
   display: inline-flex;
   align-items: center;
@@ -581,14 +737,14 @@
 
 .tm-slider-caption {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem;
+  font-size: clamp(0.58rem, 1.1vw, 0.68rem);
   color: var(--tm-text-muted);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
 }
 
 .tm-year-slider {
   width: 100%;
-  height: 6px;
+  height: clamp(4px, 0.8vmin, 6px);
   accent-color: #7aa2c4;
   cursor: pointer;
 }
@@ -596,7 +752,7 @@
 .tm-stripes-bar {
   display: flex;
   width: 100%;
-  height: 14px;
+  height: clamp(8px, 1.5vmin, 13px);
   border-radius: 2px;
   overflow: hidden;
   border: 1px solid var(--tm-border-subtle);
@@ -622,8 +778,8 @@
   border: 1px solid var(--tm-border-subtle);
   border-radius: 2px !important;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
-  padding: 0.22rem 0.5rem;
+  font-size: 0.7rem;
+  padding: 0.18rem 0.45rem;
 }
 
 .tm-speed-btn.active,
@@ -633,23 +789,30 @@
   border-color: var(--tm-border-active);
 }
 
-/* Etiquetas sobre el mapa satelital */
 .tm-sat-city-tooltip {
   background: #0d131f !important;
   border: 1px solid var(--tm-border-active) !important;
   color: #f8fafc !important;
   border-radius: 2px !important;
-  padding: 0.25rem 0.5rem !important;
-  font-size: 0.74rem !important;
+  padding: 0.22rem 0.45rem !important;
+  font-size: 0.72rem !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55) !important;
 }
 
-@media (max-width: 992px) {
+/* Ajustes específicos para tablets y móviles */
+@media (max-width: 767.98px) {
   .tm-spectral-legend {
     display: none;
   }
   .tm-popup-window {
-    top: 112px;
-    width: calc(100vw - 24px);
+    top: 56px;
+    width: calc(100vw - 14px);
+    max-height: calc(100dvh - 150px);
+  }
+  /* En móviles pequeños ocultar tooltips largos al hacer tap para no tapar la pantalla */
+  .tm-icon-btn::after,
+  .tm-rail-handle::after {
+    font-size: 0.66rem;
+    padding: 0.2rem 0.45rem;
   }
 }
