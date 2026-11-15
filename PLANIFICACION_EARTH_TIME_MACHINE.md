@@ -205,3 +205,4 @@ Para que el usuario interprete intuitivamente los colores en el mapa y en las ba
 * `templates/time_machine.html`: Interfaz interactiva con mapa Leaflet Slide-Zoom, barra de reproducción temporal `2000–2024`, selector de épocas, 3 gráficos sincronizados y detector de anomalías.
 * `static/css/time_machine.css` y `static/js/time_machine.js`: Estilos y controlador reactivo sin sobrecarga de red.
 * `tests/test_time_machine.py`: Suite de pruebas unitarias, de integración HTTP y de concurrencia para validar el nuevo módulo junto con los 31 tests existentes.
+
