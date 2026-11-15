@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Earth Time Machine · Máquina del Tiempo Ambiental · EarthLens</title>
+
+  <!-- Google Fonts (Inter + JetBrains Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- Leaflet 1.9.4 CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    crossorigin=""
+  />
+
+  <!-- Estilos compartidos y de Earth Time Machine -->
+  <link rel="stylesheet" href="../static/css/styles.css" />
+  <link rel="stylesheet" href="../static/css/results.css" />
+  <link rel="stylesheet" href="../static/css/time_machine.css" />
+</head>
+<body>
+  <!-- Barra de Navegación Principal -->
+  <nav class="navbar navbar-expand-lg navbar-dark el-navbar sticky-top">
+    <div class="container">
+      <a class="navbar-brand el-brand" href="/">
+        <span>🌍 EarthLens</span>
+        <span class="el-brand-badge">NASA Space Apps 2026</span>
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#earthlensNavbar"
+        aria-controls="earthlensNavbar"
+        aria-expanded="false"
+        aria-label="Alternar navegación"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="earthlensNavbar">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-1">
+          <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="/explorer">Explorador</a></li>
+          <li class="nav-item"><a class="nav-link" href="/results">Resultados</a></li>
+          <li class="nav-item"><a class="nav-link" href="/compare">Comparador</a></li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/time-machine">⏳ Time Machine</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="/missions">Modo detective</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about">Nosotros y metodología</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-4 flex-grow-1">
+    <!-- Banner de conexión científica -->
+    <div
+      id="tmDataBanner"
+      class="data-mode-banner is-live mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2"
+    >
+      <div id="tmDataBannerText">
+        <strong>⏳ EARTH TIME MACHINE (NASA POWER / MERRA-2):</strong> Carga matricial única (cero sobrecarga al deslizar años).
+      </div>
+      <span id="tmLoadingSpinner" class="spinner-border spinner-border-sm text-primary d-none" role="status"></span>
+    </div>
+
+    <!-- Encabezado y enlaces rápidos -->
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+      <div>
+        <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+          <span id="tmVariableBadge" class="badge bg-primary">Temperatura media a 2m (T2M)</span>
+          <span id="tmRegionBadge" class="badge bg-info text-dark">Región: Patagonia</span>
+          <span id="tmPeriodBadge" class="badge bg-secondary">2000 – 2024 (25 años)</span>
+        </div>
+        <h1 class="h3 fw-bold mb-1">
+          ⏳ Earth Time Machine · <span id="tmTitleLocation">Comodoro Rivadavia, Chubut</span>
+        </h1>
+        <p class="text-muted small mb-0">
+          Recorre la evolución ambiental año por año (2000–2024), visualiza el cambio cromático en la celda satelital MERRA-2 (<span id="tmCoordsText">Lat: -45.86° · Lon: -67.50°</span>), compara épocas y detecta anomalías históricas.
+        </p>
+      </div>
+      <div class="d-flex flex-wrap gap-2">
+        <a id="tmLinkToResults" href="/results" class="btn btn-outline-primary btn-sm fw-semibold">
+          📊 Ver Dashboard de Resultados
+        </a>
+        <a id="tmLinkToCompare" href="/compare" class="btn btn-outline-secondary btn-sm fw-semibold">
+          ⚖️ Comparar con otra ciudad
+        </a>
+        <button id="btnExportTimeMachineCSV" type="button" class="btn btn-success btn-sm fw-semibold">
+          ⬇ Exportar CSV Temporal
+        </button>
+      </div>
+    </div>
+
+    <!-- Panel de configuración de ubicación, variable y rango temporal -->
+    <section class="card border-0 shadow-sm mb-4">
+      <div class="card-body">
+        <div class="row g-3 align-items-end">
+          <div class="col-lg-3 col-md-6">
+            <label for="tmCitySelect" class="form-label small fw-semibold text-secondary mb-1">
+              Ciudad / Zona Argentina (25 sedes GeoRef)
+            </label>
+            <select id="tmCitySelect" class="form-select form-select-sm">
+              <optgroup label="Patagonia">
+                <option value="comodoro-rivadavia" data-lat="-45.8806" data-lon="-67.5195" selected>Comodoro Rivadavia, Chubut</option>
+                <option value="bariloche" data-lat="-41.1335" data-lon="-71.3101">San Carlos de Bariloche, Río Negro</option>
+                <option value="ushuaia" data-lat="-54.8127" data-lon="-68.3225">Ushuaia, Tierra del Fuego</option>
+                <option value="rio-gallegos" data-lat="-51.6234" data-lon="-69.2161">Río Gallegos, Santa Cruz</option>
+                <option value="puerto-madryn" data-lat="-42.7673" data-lon="-65.0366">Puerto Madryn, Chubut</option>
+                <option value="trelew" data-lat="-43.2531" data-lon="-65.3095">Trelew, Chubut</option>
+                <option value="neuquen" data-lat="-38.9513" data-lon="-68.0591">Neuquén Capital, Neuquén</option>
+              </optgroup>
+              <optgroup label="Cuyo">
+                <option value="mendoza" data-lat="-32.8986" data-lon="-68.8464">Mendoza, Mendoza</option>
+                <option value="san-juan" data-lat="-31.5372" data-lon="-68.5250">San Juan, San Juan</option>
+                <option value="san-luis" data-lat="-33.3021" data-lon="-66.3369">San Luis, San Luis</option>
+              </optgroup>
+              <optgroup label="Centro y región pampeana">
+                <option value="buenos-aires" data-lat="-34.6084" data-lon="-58.3721">Buenos Aires, CABA</option>
+                <option value="la-plata" data-lat="-34.9214" data-lon="-57.9545">La Plata, Buenos Aires</option>
+                <option value="mar-del-plata" data-lat="-37.9976" data-lon="-57.5482">Mar del Plata, Buenos Aires</option>
+                <option value="bahia-blanca" data-lat="-38.7175" data-lon="-62.2654">Bahía Blanca, Buenos Aires</option>
+                <option value="rosario" data-lat="-32.9470" data-lon="-60.6332">Rosario, Santa Fe</option>
+                <option value="cordoba" data-lat="-31.4167" data-lon="-64.1836">Córdoba, Córdoba</option>
+                <option value="santa-fe" data-lat="-31.6466" data-lon="-60.7100">Santa Fe, Santa Fe</option>
+              </optgroup>
+              <optgroup label="NOA">
+                <option value="salta" data-lat="-24.7831" data-lon="-65.4110">Salta, Salta</option>
+                <option value="san-salvador-de-jujuy" data-lat="-24.1858" data-lon="-65.2991">San Salvador de Jujuy, Jujuy</option>
+                <option value="san-miguel-de-tucuman" data-lat="-26.8331" data-lon="-65.2044">San Miguel de Tucumán, Tucumán</option>
+                <option value="santiago-del-estero" data-lat="-27.7876" data-lon="-64.2597">Santiago del Estero</option>
+              </optgroup>
+              <optgroup label="NEA">
+                <option value="posadas" data-lat="-27.3897" data-lon="-55.9193">Posadas, Misiones</option>
+                <option value="corrientes" data-lat="-27.4633" data-lon="-58.8392">Corrientes, Corrientes</option>
+                <option value="resistencia" data-lat="-27.4511" data-lon="-58.9865">Resistencia, Chaco</option>
+                <option value="formosa" data-lat="-26.1852" data-lon="-58.1744">Formosa, Formosa</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <label for="tmVariableSelect" class="form-label small fw-semibold text-secondary mb-1">
+              Variable Climática NASA POWER
+            </label>
+            <select id="tmVariableSelect" class="form-select form-select-sm">
+              <option value="T2M" selected>T2M · Temperatura media (°C)</option>
+              <option value="PRECTOTCORR">PRECTOTCORR · Precipitaciones (mm/día)</option>
+              <option value="RH2M">RH2M · Humedad relativa (%)</option>
+              <option value="WS2M">WS2M · Velocidad del viento (m/s)</option>
+              <option value="T2M_MAX">T2M_MAX · Temperatura máxima (°C)</option>
+              <option value="T2M_MIN">T2M_MIN · Temperatura mínima (°C)</option>
+            </select>
+          </div>
+
+          <div class="col-6 col-md-3 col-lg-2">
+            <label for="tmStartYear" class="form-label small fw-semibold text-secondary mb-1">Año inicio</label>
+            <input type="number" id="tmStartYear" class="form-control form-control-sm" value="2000" min="1981" max="2021" />
+          </div>
+
+          <div class="col-6 col-md-3 col-lg-2">
+            <label for="tmEndYear" class="form-label small fw-semibold text-secondary mb-1">Año fin</label>
+            <input type="number" id="tmEndYear" class="form-control form-control-sm" value="2024" min="1984" max="2024" />
+          </div>
+
+          <div class="col-lg-2 col-md-6 d-grid">
+            <button id="btnLoadTimeMachine" type="button" class="btn btn-primary btn-sm fw-semibold">
+              🔄 Cargar Máquina
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONSOLA DE REPRODUCCIÓN TEMPORAL (SLIDE-ZOOM 2000–2024) -->
+    <section class="tm-player-deck mb-4" aria-label="Controles de la Máquina del Tiempo">
+      <div class="row g-3 align-items-center mb-3">
+        <!-- Visor del año activo y métricas instantáneas -->
+        <div class="col-lg-5 d-flex align-items-center gap-3 flex-wrap">
+          <div>
+            <div class="text-uppercase text-white-50" style="font-size: 0.7rem; letter-spacing: 0.08em;">Año en pantalla</div>
+            <div id="tmActiveYearDisplay" class="tm-year-readout">2000</div>
+          </div>
+          <div class="border-start border-secondary ps-3">
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <span id="tmActiveValue" class="fs-4 fw-bold text-white">-- °C</span>
+              <span id="tmActiveAnomaly" class="badge bg-secondary">--</span>
+              <span id="tmActiveLevelBadge" class="badge rounded-pill bg-info text-dark">Normal</span>
+            </div>
+            <div id="tmActiveSubtext" class="small text-white-50 mt-1">
+              Recta OLS: -- · Percentil histórico: --
+            </div>
+          </div>
+        </div>
+
+        <!-- Botonera Play / Pause / Paso / Velocidad / Modo de Mapa -->
+        <div class="col-lg-7 d-flex flex-wrap align-items-center justify-content-lg-end gap-2">
+          <button id="btnPrevYear" type="button" class="btn btn-outline-light btn-sm" title="Año anterior">
+            ⏮ Anterior
+          </button>
+          <button id="btnPlayPause" type="button" class="tm-play-btn" title="Reproducir / Pausar viaje en el tiempo">
+            ▶
+          </button>
+          <button id="btnNextYear" type="button" class="btn btn-outline-light btn-sm" title="Año siguiente">
+            Siguiente ⏭
+          </button>
+
+          <div class="btn-group btn-group-sm ms-1" role="group" aria-label="Velocidad de reproducción">
+            <button type="button" class="btn btn-outline-info tm-speed-btn" data-speed="1400">0.5x</button>
+            <button type="button" class="btn btn-outline-info tm-speed-btn active" data-speed="800">1x</button>
+            <button type="button" class="btn btn-outline-info tm-speed-btn" data-speed="380">2x</button>
+          </div>
+
+          <select id="tmMapModeSelect" class="form-select form-select-sm bg-dark text-white border-secondary ms-lg-2" style="width: auto;">
+            <option value="zone" selected>🔍 Modo Slide-Zoom: Celda Zonal MERRA-2 (3×3)</option>
+            <option value="national">🇦🇷 Modo Red Nacional: 25 Ciudades Argentinas</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Slider Deslizante de Año + Marcas de Anomalía -->
+      <div class="tm-slider-wrapper mb-2">
+        <div class="d-flex justify-content-between small text-white-50 mb-1">
+          <span id="tmSliderMinLabel">2000</span>
+          <span class="text-info fw-semibold">Desliza para viajar en el tiempo o haz clic en una franja climática</span>
+          <span id="tmSliderMaxLabel">2024</span>
+        </div>
+        <input
+          type="range"
+          id="tmYearSlider"
+          class="tm-year-slider"
+          min="2000"
+          max="2024"
+          step="1"
+          value="2000"
+          aria-label="Selector de año de la máquina del tiempo"
+        />
+        <div id="tmAnomalyTicks" class="tm-anomaly-ticks" title="Indicadores cromáticos por año"></div>
+      </div>
+
+      <!-- Cinta interactiva de Climate Stripes (2000–2024) -->
+      <div class="mt-2">
+        <div class="d-flex justify-content-between align-items-center small text-white-50 mb-1">
+          <span>Franjas Climáticas Anuales (Warming / Anomaly Stripes):</span>
+          <span id="tmAnomaliesCountBadge" class="badge bg-warning text-dark">0 anomalías detectadas (|z| ≥ 1.5)</span>
+        </div>
+        <div id="tmClimateStripes" class="tm-stripes-bar" role="region" aria-label="Franjas climáticas interactivas"></div>
+      </div>
+    </section>
+
+    <!-- GRILLA CENTRAL: MAPA INTERACTIVO SLIDE-ZOOM + COMPARADOR DE ÉPOCAS -->
+    <div class="row g-4 mb-4">
+      <!-- Mapa Leaflet con Grilla Zonal MERRA-2 y Red de 25 Ciudades -->
+      <div class="col-lg-7">
+        <div class="tm-map-card h-100 d-flex flex-column">
+          <div class="p-3 bg-white border-bottom d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <div>
+              <h2 class="h6 fw-bold mb-0" id="tmMapTitle">
+                Mapa Zonal Slide-Zoom · Grilla Satelital MERRA-2 (0.5° × 0.625°)
+              </h2>
+              <p class="text-muted small mb-0" id="tmMapSubtitle">
+                Coloreado dinámico de la zona según la anomalía estandarizada (z-score) del año activo.
+              </p>
+            </div>
+            <div class="d-flex gap-1">
+              <button type="button" id="btnSlideZoomZone" class="btn btn-outline-primary btn-sm py-1 px-2">
+                🎯 Zoom a Zona
+              </button>
+              <button type="button" id="btnSlideZoomArg" class="btn btn-outline-secondary btn-sm py-1 px-2">
+                🇦🇷 Ver Argentina
+              </button>
+            </div>
+          </div>
+
+          <div id="timeMachineMap" role="application" aria-label="Mapa temporal interactivo"></div>
+
+          <div class="tm-map-hud mt-auto">
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <span class="small text-white-50">Escala de anomalía (z):</span>
+              <span class="small fw-semibold">-2σ</span>
+              <div id="tmColorScaleBar" class="tm-color-scale-bar tm-scale-thermal"></div>
+              <span class="small fw-semibold">+2σ</span>
+            </div>
+            <div class="small text-info font-monospace" id="tmCellHudInfo">
+              Celda MERRA-2: 9 sub-celdas activas
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna Derecha: Comparador de Épocas (Período A vs Período B) y Récords -->
+      <div class="col-lg-5">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                <h2 class="h5 fw-bold mb-0">⚖️ Comparador de Épocas</h2>
+                <span id="tmEpochShiftBadge" class="badge rounded-pill badge-sig-yes">Cambio significativo</span>
+              </div>
+              <p class="text-muted small mb-3">
+                Contrasta dos sub-períodos históricos en la misma zona para comprobar si el promedio climático se desplazó con el tiempo.
+              </p>
+
+              <!-- Selector del Año de Corte (Split Year) -->
+              <div class="p-2 bg-light rounded border mb-3">
+                <div class="d-flex justify-content-between align-items-center small fw-semibold mb-1">
+                  <span>Año de corte entre épocas:</span>
+                  <span id="tmSplitYearLabel" class="badge bg-primary">Corte en 2012 (2000–2011 vs 2012–2024)</span>
+                </div>
+                <input
+                  type="range"
+                  id="tmSplitYearSlider"
+                  class="form-range"
+                  min="2003"
+                  max="2022"
+                  step="1"
+                  value="2012"
+                />
+              </div>
+
+              <!-- Tarjetas Época A y Época B -->
+              <div class="row g-2 mb-3">
+                <div class="col-6">
+                  <div class="tm-epoch-card-a h-100">
+                    <div class="small text-uppercase fw-bold text-primary">Época Base (A)</div>
+                    <div id="tmEpochPeriodA" class="small text-muted mb-1">2000–2011</div>
+                    <div id="tmEpochMeanA" class="fs-4 fw-bold text-dark">--</div>
+                    <div id="tmEpochStatsA" class="small text-secondary mt-1">σ: -- · Pend: --</div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="tm-epoch-card-b h-100">
+                    <div class="small text-uppercase fw-bold text-danger">Época Reciente (B)</div>
+                    <div id="tmEpochPeriodB" class="small text-muted mb-1">2012–2024</div>
+                    <div id="tmEpochMeanB" class="fs-4 fw-bold text-dark">--</div>
+                    <div id="tmEpochStatsB" class="small text-secondary mt-1">σ: -- · Pend: --</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Diferencia neta y prueba t de Welch -->
+              <div class="tm-epoch-delta mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="small fw-bold text-uppercase text-secondary">Diferencia entre Épocas (B − A)</span>
+                  <span id="tmEpochPValue" class="small font-monospace fw-semibold">p = --</span>
+                </div>
+                <div class="d-flex align-items-baseline gap-2">
+                  <span id="tmEpochDeltaMean" class="fs-4 fw-bold text-primary">--</span>
+                  <span id="tmEpochDeltaPct" class="small fw-semibold text-secondary">(--%)</span>
+                </div>
+                <p id="tmEpochSummaryText" class="small text-dark mb-0 mt-1">
+                  Calculando comparación entre épocas...
+                </p>
+              </div>
+            </div>
+
+            <!-- Récords extremos del período -->
+            <div class="border-top pt-3">
+              <div class="small fw-bold text-uppercase text-secondary mb-2">
+                🏆 Récords Históricos Detectados en el Período
+              </div>
+              <div class="row g-2">
+                <div class="col-6">
+                  <div class="p-2 border rounded bg-white d-flex justify-content-between align-items-center">
+                    <div>
+                      <div class="text-muted" style="font-size: 0.72rem;">MÁXIMO HISTÓRICO</div>
+                      <div id="tmMaxRecordVal" class="fw-bold small">--</div>
+                      <div id="tmMaxRecordYr" class="text-danger fw-semibold small">Año --</div>
+                    </div>
+                    <button type="button" id="btnJumpMaxRecord" class="btn btn-outline-danger btn-sm py-0 px-2">
+                      Ir ↗
+                    </button>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="p-2 border rounded bg-white d-flex justify-content-between align-items-center">
+                    <div>
+                      <div class="text-muted" style="font-size: 0.72rem;">MÍNIMO HISTÓRICO</div>
+                      <div id="tmMinRecordVal" class="fw-bold small">--</div>
+                      <div id="tmMinRecordYr" class="text-primary fw-semibold small">Año --</div>
+                    </div>
+                    <button type="button" id="btnJumpMinRecord" class="btn btn-outline-primary btn-sm py-0 px-2">
+                      Ir ↗
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRÁFICOS SINCRONIZADOS (SERIE + CURSOR TEMPORAL Y BARRAS DE ANOMALÍAS) -->
+    <div class="row g-4 mb-4">
+      <div class="col-lg-6">
+        <section class="chart-panel h-100">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+            <div>
+              <h2 class="h6 fw-bold mb-0">1. Serie Anual, Tendencia OLS y Cursor del Año Activo</h2>
+              <p class="text-muted small mb-0">
+                Haz clic en cualquier punto para viajar a ese año en el mapa.
+              </p>
+            </div>
+            <span id="tmSlopeBadge" class="badge bg-light text-dark border">Pendiente: --</span>
+          </div>
+          <div class="chart-canvas-wrapper" style="min-height: 310px;">
+            <canvas id="tmTrendChart"></canvas>
+          </div>
+        </section>
+      </div>
+
+      <div class="col-lg-6">
+        <section class="chart-panel h-100">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+            <div>
+              <h2 class="h6 fw-bold mb-0">2. Desviación y Anomalías Respecto a la Media (Δ = y − ȳ)</h2>
+              <p class="text-muted small mb-0">
+                Barras coloreadas según su z-score. Haz clic en una barra para inspeccionar el año.
+              </p>
+            </div>
+            <span id="tmMeanBadge" class="badge bg-light text-dark border">Media: --</span>
+          </div>
+          <div class="chart-canvas-wrapper" style="min-height: 310px;">
+            <canvas id="tmAnomalyBarChart"></canvas>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- DETECTOR DE ANOMALÍAS HISTÓRICAS (|z| >= 1.5) Y TABLA COMPLETA -->
+    <div class="row g-4">
+      <div class="col-lg-5">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
+            <span class="fw-bold small text-uppercase text-secondary">
+              🚨 Detector de Anomalías Estadísticas (|z| ≥ 1.5)
+            </span>
+            <span id="tmAnomalyListCount" class="badge bg-danger">0 eventos</span>
+          </div>
+          <div class="card-body">
+            <div id="tmAnomaliesContainer" class="d-flex flex-column gap-2">
+              <!-- Poblado dinámicamente por time_machine.js -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
+            <span class="fw-bold small text-uppercase text-secondary">
+              📋 Matriz Histórica Anual (2000–2024)
+            </span>
+            <span class="small text-muted">Haz clic en una fila para viajar a ese año</span>
+          </div>
+          <div class="table-responsive" style="max-height: 340px; overflow-y: auto;">
+            <table class="table table-sm table-hover table-scientific mb-0 align-middle">
+              <thead class="sticky-top">
+                <tr>
+                  <th>Año</th>
+                  <th>Valor NASA</th>
+                  <th>Tendencia OLS</th>
+                  <th>Anomalía (Δ)</th>
+                  <th>Z-Score</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody id="tmTimelineTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="el-footer py-3 mt-5">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <div>
+        <strong>EarthLens</strong> · NASA Space Apps Challenge 2026 — <em>Be An Earth System Trend Detective!</em>
+      </div>
+      <div>
+        Fuente principal: <a href="https://power.larc.nasa.gov/" target="_blank" rel="noopener noreferrer">NASA POWER / MERRA-2</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 JS + Leaflet 1.9.4 + Chart.js 4 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <!-- Scripts de gráficos compartidos (Rol 03) y controlador de Earth Time Machine -->
+  <script src="../static/js/charts.js"></script>
+  <script src="../static/js/time_machine.js"></script>
+</body>
+</html>

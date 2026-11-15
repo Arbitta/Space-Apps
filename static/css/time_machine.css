@@ -1,0 +1,227 @@
+/* ==========================================================================
+   EarthLens — Earth Time Machine (time_machine.css)
+   NASA Space Apps Challenge 2026 · Be An Earth System Trend Detective!
+   Complementa static/css/styles.css y static/css/results.css
+   ========================================================================== */
+
+:root {
+  --tm-deck-bg: #0f172a;
+  --tm-deck-panel: #1e293b;
+  --tm-accent: #00b4d8;
+  --tm-warm: #ef4444;
+  --tm-cool: #3b82f6;
+}
+
+/* Cabecera y consola de control de la Máquina del Tiempo */
+.tm-player-deck {
+  background: linear-gradient(135deg, #0b132b 0%, #1c2541 100%);
+  color: #ffffff;
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 10px 28px rgba(11, 19, 43, 0.22);
+  border: 1px solid rgba(144, 224, 239, 0.22);
+}
+
+.tm-year-readout {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #90e0ef;
+  text-shadow: 0 0 16px rgba(0, 180, 216, 0.35);
+  letter-spacing: -0.03em;
+}
+
+.tm-play-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  background: linear-gradient(135deg, #0d6efd 0%, #00b4d8 100%);
+  border: none;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(0, 180, 216, 0.4);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tm-play-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 18px rgba(0, 180, 216, 0.55);
+  color: #fff;
+}
+
+/* Slider temporal principal y marcas de anomalía */
+.tm-slider-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.tm-year-slider {
+  width: 100%;
+  height: 8px;
+  accent-color: #00b4d8;
+  cursor: pointer;
+}
+
+.tm-anomaly-ticks {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+  padding: 0 4px;
+  gap: 2px;
+}
+
+.tm-tick {
+  flex: 1;
+  height: 10px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  opacity: 0.85;
+  position: relative;
+}
+
+.tm-tick:hover {
+  transform: scaleY(1.6);
+  opacity: 1;
+}
+
+.tm-tick.is-active {
+  outline: 2px solid #ffffff;
+  transform: scaleY(1.7);
+  opacity: 1;
+  z-index: 2;
+}
+
+/* Cinta de Climate Stripes interactiva */
+.tm-stripes-bar {
+  display: flex;
+  width: 100%;
+  height: 42px;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid #cbd5e1;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.tm-stripe-item {
+  flex: 1;
+  height: 100%;
+  cursor: pointer;
+  transition: transform 0.12s ease, filter 0.12s ease;
+  position: relative;
+}
+
+.tm-stripe-item:hover {
+  filter: brightness(1.08);
+  z-index: 2;
+}
+
+.tm-stripe-item.is-active {
+  box-shadow: inset 0 0 0 2.5px #0b132b, 0 0 0 1px #ffffff;
+  z-index: 3;
+}
+
+/* Mapa Leaflet de la Máquina del Tiempo */
+.tm-map-card {
+  background: #ffffff;
+  border: 1px solid var(--el-border);
+  border-radius: 0.85rem;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+}
+
+#timeMachineMap {
+  width: 100%;
+  height: 470px;
+  background: #0b132b;
+}
+
+.tm-map-hud {
+  background: rgba(11, 19, 43, 0.92);
+  color: #f8fafc;
+  padding: 0.65rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.tm-color-scale-bar {
+  height: 12px;
+  border-radius: 999px;
+  width: 180px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.tm-scale-thermal {
+  background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 25%, #e2e8f0 50%, #f59e0b 75%, #dc2626 100%);
+}
+
+.tm-scale-precip {
+  background: linear-gradient(90deg, #92400e 0%, #fcd34d 30%, #e2e8f0 50%, #38bdf8 75%, #0369a1 100%);
+}
+
+.tm-scale-humidity {
+  background: linear-gradient(90deg, #b45309 0%, #fde68a 30%, #e2e8f0 50%, #34d399 75%, #047857 100%);
+}
+
+.tm-scale-wind {
+  background: linear-gradient(90deg, #0284c7 0%, #bae6fd 30%, #e2e8f0 50%, #818cf8 75%, #7e22ce 100%);
+}
+
+/* Tarjetas de Época A vs Época B */
+.tm-epoch-card-a {
+  border-left: 4px solid #0b3d91;
+  background: #f8fafc;
+  border-radius: 0.65rem;
+  padding: 1rem;
+}
+
+.tm-epoch-card-b {
+  border-left: 4px solid #fc3d21;
+  background: #fff8f6;
+  border-radius: 0.65rem;
+  padding: 1rem;
+}
+
+.tm-epoch-delta {
+  border-left: 4px solid #00b4d8;
+  background: #f0f9ff;
+  border-radius: 0.65rem;
+  padding: 1rem;
+}
+
+/* Tarjetas de eventos anómalos */
+.tm-anomaly-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.65rem;
+  padding: 0.85rem 1rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tm-anomaly-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08);
+}
+
+.tm-anomaly-card.is-selected {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.2);
+}
+
+@media (max-width: 768px) {
+  .tm-year-readout {
+    font-size: 1.9rem;
+  }
+  #timeMachineMap {
+    height: 350px;
+  }
+}

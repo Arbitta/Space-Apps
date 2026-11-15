@@ -16,6 +16,7 @@ from typing import Any, Dict, Tuple
 
 from services.datasets import get_mission_by_id, get_missions_list, get_variables_catalog
 from services.power import fetch_nasa_power_series
+from services.time_machine import build_time_machine_payload, get_argentina_cities
 from services.trend_analysis import (
     VARIABLES_CATALOG,
     analyze_series,
@@ -205,6 +206,14 @@ def handle_compare_request(payload: Dict[str, Any]) -> Tuple[Dict[str, Any], int
     return comparison, 200
 
 
+def handle_time_machine_request(payload: Dict[str, Any]) -> Tuple[Dict[str, Any], int]:
+    """
+    Procesa POST/GET /api/time-machine y retorna la matriz temporal 2000–2024,
+    grilla espacial MERRA-2 3×3, red de 25 ciudades argentinas, anomalías y comparación de épocas.
+    """
+    return build_time_machine_payload(payload)
+
+
 def register_api_routes(app: Any) -> None:
     """Registra los endpoints REST en una aplicación Flask."""
     from flask import jsonify, request  # type: ignore
@@ -212,6 +221,12 @@ def register_api_routes(app: Any) -> None:
     @app.route("/api/variables", methods=["GET"])
     def api_variables():
         return jsonify({"variables": get_variables_catalog()}), 200
+
+    @app.route("/api/cities", methods=["GET"])
+    def api_cities():
+        region = request.args.get("region")
+        cities = get_argentina_cities(region=region)
+        return jsonify({"cities": cities, "count": len(cities)}), 200
 
     @app.route("/api/summary", methods=["GET"])
     def api_summary():
@@ -233,6 +248,26 @@ def register_api_routes(app: Any) -> None:
     def api_compare():
         payload = request.get_json(silent=True) or {}
         resp, status = handle_compare_request(payload)
+        return jsonify(resp), status
+
+    @app.route("/api/time-machine", methods=["GET", "POST"])
+    def api_time_machine():
+        if request.method == "POST":
+            payload = request.get_json(silent=True) or {}
+        else:
+            payload = {
+                "city_id": request.args.get("city_id"),
+                "latitude": request.args.get("latitude", request.args.get("lat", -45.86)),
+                "longitude": request.args.get("longitude", request.args.get("lon", -67.50)),
+                "variable": request.args.get("variable", "T2M"),
+                "start_year": request.args.get("start_year", 2000),
+                "end_year": request.args.get("end_year", 2024),
+                "split_year": request.args.get("split_year"),
+                "location_name": request.args.get("location_name") or request.args.get("location"),
+                "region": request.args.get("region"),
+                "include_regional": request.args.get("include_regional", "1") != "0",
+            }
+        resp, status = handle_time_machine_request(payload)
         return jsonify(resp), status
 
     @app.route("/api/missions", methods=["GET"])
