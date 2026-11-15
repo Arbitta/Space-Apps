@@ -75,38 +75,35 @@
     <!-- Mapa Leaflet de pantalla completa -->
     <div id="timeMachineMap" role="application" aria-label="Mapa satelital meteorológico interactivo"></div>
 
-    <!-- BARRA TÉCNICA SUPERIOR (Proporcional y plegable en dispositivos pequeños) -->
+    <!-- BARRA TÉCNICA SUPERIOR: Texto de telemetría arriba + 4 selectores en una sola fila abajo -->
     <header class="tm-hud-top">
-      <div class="tm-hud-panel w-100">
-        <!-- Fila principal siempre visible + Botón para desplegar filtros en pantallas chicas -->
-        <div class="d-flex align-items-center justify-content-between gap-2 w-100">
-          <div class="d-flex align-items-center gap-2 min-w-0">
+      <div class="tm-hud-panel">
+        <!-- Fila 1 (Arriba): Información de la zona seleccionada, coordenadas y variable científica -->
+        <div class="tm-hud-info-row">
+          <div class="tm-telemetry-line">
             <span class="tm-telemetry-tag">
               <span class="tm-telemetry-dot"></span> MERRA-2
             </span>
-            <div class="min-w-0">
-              <div class="fw-bold text-light text-truncate tm-location-heading">
-                <span id="tmTitleLocation">Comodoro Rivadavia, Chubut</span>
-              </div>
-              <div class="tm-meta-subline text-truncate">
-                <span id="tmVariableBadge">Temperatura media (T2M)</span>
-                <span class="mx-1">|</span>
-                <span id="tmRegionBadge">Patagonia</span>
-                <span class="mx-1 d-none d-sm-inline">|</span>
-                <span id="tmCoordsText" class="d-none d-sm-inline">Lat: -45.88° · Lon: -67.52°</span>
-                <span class="mx-1 d-none d-md-inline">|</span>
-                <span id="tmBoxSpanText" class="d-none d-md-inline">Cuadrante: 1.50° × 1.88°</span>
-              </div>
+            <span id="tmTitleLocation" class="fw-bold text-light tm-location-heading">Comodoro Rivadavia, Chubut</span>
+            <span id="tmLoadingSpinner" class="spinner-border spinner-border-sm text-info d-none flex-shrink-0" role="status"></span>
+            <span class="tm-meta-divider d-none d-sm-inline">|</span>
+            <div class="tm-meta-subline">
+              <span id="tmVariableBadge" class="tm-meta-highlight">Temperatura media (T2M)</span>
+              <span class="tm-meta-sep">·</span>
+              <span id="tmRegionBadge">Patagonia</span>
+              <span class="tm-meta-sep">·</span>
+              <span id="tmCoordsText">Lat: -45.88° · Lon: -67.52°</span>
+              <span class="tm-meta-sep">·</span>
+              <span id="tmBoxSpanText">Cuadrante: 1.50° × 1.88°</span>
             </div>
-            <span id="tmLoadingSpinner" class="spinner-border spinner-border-sm text-secondary d-none ms-1" role="status"></span>
           </div>
 
-          <!-- Botón que oculta/muestra los selectores de la barra superior en pantallas pequeñas/medianas -->
+          <!-- Botón responsive solo para móviles (< 768px) -->
           <button
             type="button"
             id="btnToggleTopFilters"
-            class="tm-bar-toggle d-lg-none"
-            data-tooltip="Mostrar u ocultar selectores de ciudad y variable"
+            class="tm-bar-toggle d-md-none"
+            data-tooltip="Mostrar u ocultar controles superiores"
             data-tooltip-pos="left"
             aria-expanded="false"
             aria-controls="tmTopFiltersCollapse"
@@ -123,10 +120,10 @@
           </button>
         </div>
 
-        <!-- Selectores sincronizados (plegables en móvil/tablet, en línea en desktop) -->
+        <!-- Fila 2 (Abajo del texto): Los 4 selectores en una única fila horizontal de izquierda a derecha -->
         <div id="tmTopFiltersCollapse" class="tm-top-filters-collapse">
-          <div class="d-flex flex-wrap align-items-center gap-2 w-100">
-            <select id="tmCitySelect" class="form-select form-select-sm tm-hud-select" autocomplete="off" aria-label="Ciudad o Zona">
+          <div class="tm-selectors-row">
+            <select id="tmCitySelect" class="form-select form-select-sm tm-hud-select tm-select-city" autocomplete="off" aria-label="Ciudad o Zona">
               <optgroup label="Patagonia">
                 <option value="comodoro-rivadavia" data-lat="-45.8806" data-lon="-67.5195" selected>Comodoro Rivadavia, Chubut</option>
                 <option value="bariloche" data-lat="-41.1335" data-lon="-71.3101">San Carlos de Bariloche, Río Negro</option>
@@ -164,7 +161,7 @@
               </optgroup>
             </select>
 
-            <select id="tmVariableSelect" class="form-select form-select-sm tm-hud-select" autocomplete="off" aria-label="Variable Satelital">
+            <select id="tmVariableSelect" class="form-select form-select-sm tm-hud-select tm-select-var" autocomplete="off" aria-label="Variable Satelital">
               <option value="T2M" selected>T2M · Temperatura media (°C)</option>
               <option value="PRECTOTCORR">PRECTOTCORR · Precipitación (mm/día)</option>
               <option value="RH2M">RH2M · Humedad relativa (%)</option>
@@ -173,14 +170,14 @@
               <option value="T2M_MIN">T2M_MIN · Temperatura mínima (°C)</option>
             </select>
 
-            <select id="tmMapModeSelect" class="form-select form-select-sm tm-hud-select" autocomplete="off" aria-label="Modo de cobertura">
+            <select id="tmMapModeSelect" class="form-select form-select-sm tm-hud-select tm-select-mode" autocomplete="off" aria-label="Modo de cobertura">
               <option value="zone" selected>Cuadrante Zonal Editable</option>
               <option value="national">Red Nacional (25 Estaciones)</option>
             </select>
 
-            <!-- Selector de Período -->
-            <div class="dropdown">
-              <button class="btn btn-sm tm-hud-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <!-- 4to Selector: Período histórico -->
+            <div class="dropdown tm-period-dropdown">
+              <button class="btn btn-sm tm-hud-btn tm-hud-control-uniform dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <span id="tmPeriodBadge">2000–2024</span>
               </button>
               <div class="dropdown-menu dropdown-menu-end tm-dropdown-panel p-3" style="min-width: 240px;">
@@ -630,10 +627,10 @@
       </aside>
     </div>
 
-    <!-- BARRA INFERIOR DE SLIDE TEMPORAL + LEYENDA ESPECTRAL INTEGRADA (Sin superponerse con ningún botón o cuadro) -->
+    <!-- PANEL FLOTANTE INFERIOR COMPACTO (~70% viewport, centrado, sin tapar el mapa) -->
     <footer id="tmBottomBar" class="tm-bottom-bar is-expanded" aria-label="Barra de control temporal satelital">
       <div class="tm-bottom-panel">
-        <!-- Fila superior de la barra inferior: Leyenda espectral + Estado + Botón para plegar/desplegar detalles -->
+        <!-- Micro-fila superior: Leyenda espectral compacta + Estado + Botón plegable -->
         <div class="tm-bottom-topstrip">
           <div class="d-flex align-items-center gap-2 flex-wrap min-w-0">
             <span id="tmWeatherTvTitle" class="tm-legend-title">Espectro Térmico IR (T2M)</span>
@@ -642,7 +639,7 @@
               <div id="tmColorScaleBar" class="tm-color-scale-bar tm-scale-thermal"></div>
               <span id="tmScaleMaxText" class="tm-legend-bound">+2σ</span>
             </div>
-            <span id="tmCellHudInfo" class="tm-legend-meta d-none d-sm-inline">Arrastra los vértices del cuadro para ajustar zona</span>
+            <span id="tmCellHudInfo" class="tm-legend-meta d-none d-md-inline">Arrastra los vértices del cuadro para ajustar zona</span>
             <span id="tmActiveLevelBadgeMobile" class="tm-condition-label d-md-none">Dentro del rango normal</span>
           </div>
           <button
@@ -659,92 +656,92 @@
           </button>
         </div>
 
-        <div class="row g-2 align-items-center">
-          <!-- Año activo y lectura puntual proporcional -->
-          <div class="col-lg-3 col-md-4 col-5 d-flex align-items-center gap-2 gap-sm-3">
+        <!-- Fila principal compacta: Lectura del año + Transporte + Slider temporal + Velocidades -->
+        <div class="tm-timeline-main">
+          <!-- Año seleccionado, valor/variación e indicador de rango normal -->
+          <div class="tm-readout-block">
             <div id="tmActiveYearDisplay" class="tm-year-readout">2000</div>
-            <div class="lh-sm min-w-0">
-              <div class="d-flex align-items-center gap-1 gap-sm-2 flex-wrap">
+            <div class="tm-readout-details">
+              <div class="d-flex align-items-center gap-1 flex-nowrap">
                 <span id="tmActiveValue" class="fw-bold text-light tm-active-val">-- °C</span>
                 <span id="tmActiveAnomaly" class="tm-anom-pill">--</span>
               </div>
-              <div class="mt-1 d-none d-md-block">
+              <div class="d-none d-md-block text-truncate">
                 <span id="tmActiveLevelBadge" class="tm-condition-label">Condición normal</span>
                 <span id="tmActiveSubtext" class="d-none"></span>
               </div>
             </div>
           </div>
 
-          <!-- Controles de reproducción + Barra de Slide + Franjas satelitales -->
-          <div class="col-lg-9 col-md-8 col-7">
-            <div class="d-flex align-items-center gap-1 gap-sm-2">
-              <button
-                id="btnPrevYear"
-                type="button"
-                class="tm-transport-btn"
-                title="Año anterior (Flecha izquierda)"
-                aria-label="Año anterior"
-              >
-                <svg class="tm-svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                  <polygon points="19 20 9 12 19 4 19 20"></polygon>
-                  <line x1="5" y1="19" x2="5" y2="5"></line>
-                </svg>
-              </button>
-              <button
-                id="btnPlayPause"
-                type="button"
-                class="tm-play-btn"
-                title="Reproducir / Pausar secuencia anual (Espacio)"
-                aria-label="Reproducir o pausar"
-              >
-                <svg id="tmPlayIconSvg" class="tm-svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                  <polygon points="6 4 20 12 6 20 6 4" fill="currentColor"></polygon>
-                </svg>
-              </button>
-              <button
-                id="btnNextYear"
-                type="button"
-                class="tm-transport-btn"
-                title="Año siguiente (Flecha derecha)"
-                aria-label="Año siguiente"
-              >
-                <svg class="tm-svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                  <polygon points="5 4 15 12 5 20 5 4"></polygon>
-                  <line x1="19" y1="5" x2="19" y2="19"></line>
-                </svg>
-              </button>
+          <div class="tm-v-divider d-none d-sm-block" aria-hidden="true"></div>
 
-              <!-- Barra deslizante central -->
-              <div class="tm-slider-wrapper flex-grow-1 mx-1 mx-sm-2">
-                <div class="d-flex justify-content-between align-items-center tm-slider-caption">
-                  <span id="tmSliderMinLabel">2000</span>
-                  <span class="d-none d-sm-inline">LÍNEA DE TIEMPO SATELITAL</span>
-                  <span id="tmSliderMaxLabel">2024</span>
-                </div>
-                <input
-                  type="range"
-                  id="tmYearSlider"
-                  class="tm-year-slider"
-                  autocomplete="off"
-                  min="2000"
-                  max="2024"
-                  step="1"
-                  value="2000"
-                  aria-label="Selector de año de la máquina del tiempo"
-                />
-                <!-- Franjas cromáticas satelitales integradas bajo el slider (se ocultan al compactar en móvil) -->
-                <div id="tmClimateStripes" class="tm-stripes-bar mt-1" title="Haz clic en cualquier año"></div>
-                <div id="tmAnomalyTicks" class="d-none"></div>
-                <span id="tmAnomaliesCountBadge" class="d-none"></span>
-              </div>
+          <!-- Botones de navegación anterior, reproducción y siguiente -->
+          <div class="tm-transport-group">
+            <button
+              id="btnPrevYear"
+              type="button"
+              class="tm-transport-btn"
+              title="Año anterior (Flecha izquierda)"
+              aria-label="Año anterior"
+            >
+              <svg class="tm-svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                <polygon points="19 20 9 12 19 4 19 20"></polygon>
+                <line x1="5" y1="19" x2="5" y2="5"></line>
+              </svg>
+            </button>
+            <button
+              id="btnPlayPause"
+              type="button"
+              class="tm-play-btn"
+              title="Reproducir / Pausar secuencia anual (Espacio)"
+              aria-label="Reproducir o pausar"
+            >
+              <svg id="tmPlayIconSvg" class="tm-svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                <polygon points="6 4 20 12 6 20 6 4" fill="currentColor"></polygon>
+              </svg>
+            </button>
+            <button
+              id="btnNextYear"
+              type="button"
+              class="tm-transport-btn"
+              title="Año siguiente (Flecha derecha)"
+              aria-label="Año siguiente"
+            >
+              <svg class="tm-svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                <line x1="19" y1="5" x2="19" y2="19"></line>
+              </svg>
+            </button>
+          </div>
 
-              <!-- Velocidad -->
-              <div class="btn-group btn-group-sm d-none d-lg-inline-flex" role="group" aria-label="Velocidad">
-                <button type="button" class="btn tm-speed-btn" data-speed="1300">0.5x</button>
-                <button type="button" class="btn tm-speed-btn active" data-speed="700">1x</button>
-                <button type="button" class="btn tm-speed-btn" data-speed="320">2x</button>
-              </div>
+          <!-- Barra deslizante temporal + Franjas cromáticas -->
+          <div class="tm-slider-wrapper">
+            <div class="d-flex justify-content-between align-items-center tm-slider-caption">
+              <span id="tmSliderMinLabel">2000</span>
+              <span class="d-none d-lg-inline tm-slider-title">EVOLUCIÓN TEMPORAL</span>
+              <span id="tmSliderMaxLabel">2024</span>
             </div>
+            <input
+              type="range"
+              id="tmYearSlider"
+              class="tm-year-slider"
+              autocomplete="off"
+              min="2000"
+              max="2024"
+              step="1"
+              value="2000"
+              aria-label="Selector de año de la máquina del tiempo"
+            />
+            <div id="tmClimateStripes" class="tm-stripes-bar" title="Haz clic en cualquier año"></div>
+            <div id="tmAnomalyTicks" class="d-none"></div>
+            <span id="tmAnomaliesCountBadge" class="d-none"></span>
+          </div>
+
+          <!-- Controles de velocidad 0.5x, 1x y 2x -->
+          <div class="btn-group btn-group-sm tm-speed-group" role="group" aria-label="Velocidad">
+            <button type="button" class="btn tm-speed-btn" data-speed="1300">0.5x</button>
+            <button type="button" class="btn tm-speed-btn active" data-speed="700">1x</button>
+            <button type="button" class="btn tm-speed-btn" data-speed="320">2x</button>
           </div>
         </div>
       </div>
