@@ -25,10 +25,12 @@ from routes.api_routes import (
     handle_analyze_request,
     handle_compare_request,
     handle_summary_request,
+    handle_time_machine_request,
     register_api_routes,
 )
 from routes.missions_routes import handle_missions_get, register_missions_routes
 from services.datasets import get_mission_by_id, get_missions_list, get_variables_catalog
+from services.time_machine import get_argentina_cities
 
 BASE_DIR = Path(__file__).resolve().parent
 TEMPLATES_DIR = BASE_DIR / "templates"
@@ -86,6 +88,13 @@ def create_app() -> Any:
     @app.route("/compare.html")
     def compare_page():
         return send_file(str(_resolve_page_file("compare.html")))
+
+    @app.route("/time-machine")
+    @app.route("/time-machine.html")
+    @app.route("/time_machine")
+    @app.route("/time_machine.html")
+    def time_machine_page():
+        return send_file(str(_resolve_page_file("time_machine.html")))
 
     @app.route("/missions")
     @app.route("/missions.html")
@@ -145,6 +154,29 @@ class EarthLensUnifiedHandler(BaseHTTPRequestHandler):
 
         if path == "/api/variables":
             return self._send_json({"variables": get_variables_catalog()}, 200)
+        if path == "/api/cities":
+            qs = parse_qs(parsed.query)
+            region = qs.get("region", [None])[0]
+            cities = get_argentina_cities(region=region)
+            return self._send_json({"cities": cities, "count": len(cities)}, 200)
+        if path == "/api/time-machine":
+            qs = parse_qs(parsed.query)
+            payload = {
+                "city_id": qs.get("city_id", [None])[0],
+                "latitude": qs.get("latitude", qs.get("lat", [-45.86]))[0],
+                "longitude": qs.get("longitude", qs.get("lon", [-67.50]))[0],
+                "variable": qs.get("variable", ["T2M"])[0],
+                "start_year": qs.get("start_year", [2000])[0],
+                "end_year": qs.get("end_year", [2024])[0],
+                "split_year": qs.get("split_year", [None])[0],
+                "location_name": qs.get("location_name", qs.get("location", [None]))[0],
+                "region": qs.get("region", [None])[0],
+                "lat_span": qs.get("lat_span", [1.5])[0],
+                "lon_span": qs.get("lon_span", [1.875])[0],
+                "include_regional": qs.get("include_regional", ["1"])[0] != "0",
+            }
+            resp, status = handle_time_machine_request(payload)
+            return self._send_json(resp, status)
         if path == "/api/summary":
             qs = parse_qs(parsed.query)
             resp, status = handle_summary_request(
@@ -183,6 +215,14 @@ class EarthLensUnifiedHandler(BaseHTTPRequestHandler):
             return self._send_file(_resolve_page_file("results.html"))
         if path in ("/compare", "/compare.html", "/templates/compare.html"):
             return self._send_file(_resolve_page_file("compare.html"))
+        if path in (
+            "/time-machine",
+            "/time-machine.html",
+            "/time_machine",
+            "/time_machine.html",
+            "/templates/time_machine.html",
+        ):
+            return self._send_file(_resolve_page_file("time_machine.html"))
         if path in ("/missions", "/missions.html", "/templates/missions.html"):
             return self._send_file(_resolve_page_file("missions.html"))
         if path in ("/about", "/about.html", "/templates/about.html"):
@@ -208,6 +248,9 @@ class EarthLensUnifiedHandler(BaseHTTPRequestHandler):
             return self._send_json(resp, status)
         if parsed.path == "/api/compare":
             resp, status = handle_compare_request(payload)
+            return self._send_json(resp, status)
+        if parsed.path == "/api/time-machine":
+            resp, status = handle_time_machine_request(payload)
             return self._send_json(resp, status)
 
         self._send_json({"error": "Endpoint no encontrado"}, 404)

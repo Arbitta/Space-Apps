@@ -11,9 +11,9 @@ WORKDIR /app
 COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Copiar el proyecto tanto en /app como en /app_baked (respaldo inmutable ante cambios de branch)
+# Copiar el proyecto tanto en /app como en /app_baked (respaldo inmutable ante cambios de branch) y normalizar CRLF
 COPY . /app
-RUN cp -r /app /app_baked && chmod +x /app/docker-entrypoint.sh /app_baked/docker-entrypoint.sh
+RUN sed -i 's/\r$//' /app/docker-entrypoint.sh && cp -r /app /app_baked && chmod +x /app/docker-entrypoint.sh /app_baked/docker-entrypoint.sh
 
 # Ejecutar la suite de pruebas (Rol 06) al construir la imagen para garantizar integridad
 RUN python3 -m unittest discover -s /app/tests -v

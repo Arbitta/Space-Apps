@@ -1,0 +1,1184 @@
+{
+  "schema_version": 1,
+  "country": "Argentina",
+  "country_code": "AR",
+  "region_definition": "Agrupación del proyecto EarthLens definida por Patagonia Prime",
+  "generated_at": "2026-11-14T17:39:11.912111+00:00",
+  "cities": [
+    {
+      "id": "comodoro-rivadavia",
+      "name": "Comodoro Rivadavia",
+      "province": "Chubut",
+      "province_id": "26",
+      "region": "Patagonia",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -45.8806237030771,
+      "longitude": -67.5194575718113,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Comodoro Rivadavia",
+          "provincia": "Chubut",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "26021030",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Localidad simple",
+          "centroide": {
+            "lat": -45.8806237030771,
+            "lon": -67.5194575718113
+          },
+          "departamento": {
+            "id": "26021",
+            "nombre": "Escalante"
+          },
+          "funcion": null,
+          "id": "26021030",
+          "municipio": {
+            "id": "260049",
+            "nombre": "Comodoro Rivadavia"
+          },
+          "nombre": "Comodoro Rivadavia",
+          "provincia": {
+            "id": "26",
+            "nombre": "Chubut"
+          }
+        }
+      }
+    },
+    {
+      "id": "puerto-madryn",
+      "name": "Puerto Madryn",
+      "province": "Chubut",
+      "province_id": "26",
+      "region": "Patagonia",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -42.7672587115408,
+      "longitude": -65.0366329097967,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Puerto Madryn",
+          "provincia": "Chubut",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "26007020",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Localidad simple",
+          "centroide": {
+            "lat": -42.7672587115408,
+            "lon": -65.0366329097967
+          },
+          "departamento": {
+            "id": "26007",
+            "nombre": "Biedma"
+          },
+          "funcion": null,
+          "id": "26007020",
+          "municipio": {
+            "id": "260007",
+            "nombre": "Puerto Madryn"
+          },
+          "nombre": "Puerto Madryn",
+          "provincia": {
+            "id": "26",
+            "nombre": "Chubut"
+          }
+        }
+      }
+    },
+    {
+      "id": "trelew",
+      "name": "Trelew",
+      "province": "Chubut",
+      "province_id": "26",
+      "region": "Patagonia",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -43.2530972556468,
+      "longitude": -65.3095157059582,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Trelew",
+          "provincia": "Chubut",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "26077040",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Localidad simple",
+          "centroide": {
+            "lat": -43.2530972556468,
+            "lon": -65.3095157059582
+          },
+          "departamento": {
+            "id": "26077",
+            "nombre": "Rawson"
+          },
+          "funcion": null,
+          "id": "26077040",
+          "municipio": {
+            "id": "260119",
+            "nombre": "Trelew"
+          },
+          "nombre": "Trelew",
+          "provincia": {
+            "id": "26",
+            "nombre": "Chubut"
+          }
+        }
+      }
+    },
+    {
+      "id": "rio-gallegos",
+      "name": "Río Gallegos",
+      "province": "Santa Cruz",
+      "province_id": "78",
+      "region": "Patagonia",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -51.6234085204239,
+      "longitude": -69.2161035841345,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Río Gallegos",
+          "provincia": "Santa Cruz",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "78021040",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Localidad simple",
+          "centroide": {
+            "lat": -51.6234085204239,
+            "lon": -69.2161035841345
+          },
+          "departamento": {
+            "id": "78021",
+            "nombre": "Güer Aike"
+          },
+          "funcion": null,
+          "id": "78021040",
+          "municipio": {
+            "id": null,
+            "nombre": null
+          },
+          "nombre": "Río Gallegos",
+          "provincia": {
+            "id": "78",
+            "nombre": "Santa Cruz"
+          }
+        }
+      }
+    },
+    {
+      "id": "ushuaia",
+      "name": "Ushuaia",
+      "province": "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+      "province_id": "94",
+      "region": "Patagonia",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -54.8127033710513,
+      "longitude": -68.3225299045399,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Ushuaia",
+          "provincia": "Tierra del Fuego",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "94015020",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Localidad simple",
+          "centroide": {
+            "lat": -54.8127033710513,
+            "lon": -68.3225299045399
+          },
+          "departamento": {
+            "id": "94015",
+            "nombre": "Ushuaia"
+          },
+          "funcion": null,
+          "id": "94015020",
+          "municipio": {
+            "id": "940014",
+            "nombre": "Ushuaia"
+          },
+          "nombre": "Ushuaia",
+          "provincia": {
+            "id": "94",
+            "nombre": "Tierra del Fuego, Antártida e Islas del Atlántico Sur"
+          }
+        }
+      }
+    },
+    {
+      "id": "bariloche",
+      "name": "Bariloche",
+      "province": "Río Negro",
+      "province_id": "62",
+      "region": "Patagonia",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -41.1335181791713,
+      "longitude": -71.3101230266527,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Bariloche",
+          "provincia": "Río Negro",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "62021060",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Localidad simple",
+          "centroide": {
+            "lat": -41.1335181791713,
+            "lon": -71.3101230266527
+          },
+          "departamento": {
+            "id": "62021",
+            "nombre": "Bariloche"
+          },
+          "funcion": null,
+          "id": "62021060",
+          "municipio": {
+            "id": "620077",
+            "nombre": "San Carlos de Bariloche"
+          },
+          "nombre": "San Carlos de Bariloche",
+          "provincia": {
+            "id": "62",
+            "nombre": "Río Negro"
+          }
+        }
+      }
+    },
+    {
+      "id": "neuquen",
+      "name": "Neuquén",
+      "province": "Neuquén",
+      "province_id": "58",
+      "region": "Patagonia",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -38.9513065600706,
+      "longitude": -68.0591439619475,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Neuquén",
+          "provincia": "Neuquén",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "58035070",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Componente de localidad compuesta",
+          "centroide": {
+            "lat": -38.9513065600706,
+            "lon": -68.0591439619475
+          },
+          "departamento": {
+            "id": "58035",
+            "nombre": "Confluencia"
+          },
+          "funcion": null,
+          "id": "58035070",
+          "municipio": {
+            "id": "580056",
+            "nombre": "Neuquén"
+          },
+          "nombre": "Neuquén",
+          "provincia": {
+            "id": "58",
+            "nombre": "Neuquén"
+          }
+        }
+      }
+    },
+    {
+      "id": "buenos-aires",
+      "name": "Buenos Aires",
+      "province": "Ciudad Autónoma de Buenos Aires",
+      "province_id": "02",
+      "region": "Centro y región pampeana",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -34.6084120437114,
+      "longitude": -58.3721439253779,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Ciudad Autónoma de Buenos Aires",
+          "provincia": "Ciudad Autónoma de Buenos Aires",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "02000010",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Componente de localidad compuesta",
+          "centroide": {
+            "lat": -34.6084120437114,
+            "lon": -58.3721439253779
+          },
+          "departamento": {
+            "id": null,
+            "nombre": null
+          },
+          "funcion": null,
+          "id": "02000010",
+          "municipio": {
+            "id": "022007",
+            "nombre": "Comuna 1"
+          },
+          "nombre": "Ciudad Autónoma de Buenos Aires",
+          "provincia": {
+            "id": "02",
+            "nombre": "Ciudad Autónoma de Buenos Aires"
+          }
+        }
+      }
+    },
+    {
+      "id": "la-plata",
+      "name": "La Plata",
+      "province": "Buenos Aires",
+      "province_id": "06",
+      "region": "Centro y región pampeana",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -34.9213622338581,
+      "longitude": -57.9545000223642,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "La Plata",
+          "provincia": "Buenos Aires",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "06441030",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Componente de localidad compuesta",
+          "centroide": {
+            "lat": -34.9213622338581,
+            "lon": -57.9545000223642
+          },
+          "departamento": {
+            "id": "06441",
+            "nombre": "La Plata"
+          },
+          "funcion": null,
+          "id": "06441030",
+          "municipio": {
+            "id": "060441",
+            "nombre": "La Plata"
+          },
+          "nombre": "La Plata",
+          "provincia": {
+            "id": "06",
+            "nombre": "Buenos Aires"
+          }
+        }
+      }
+    },
+    {
+      "id": "mar-del-plata",
+      "name": "Mar del Plata",
+      "province": "Buenos Aires",
+      "province_id": "06",
+      "region": "Centro y región pampeana",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -37.997618882919,
+      "longitude": -57.5481525302113,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Mar del Plata",
+          "provincia": "Buenos Aires",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "06357110",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Localidad simple",
+          "centroide": {
+            "lat": -37.997618882919,
+            "lon": -57.5481525302113
+          },
+          "departamento": {
+            "id": "06357",
+            "nombre": "General Pueyrredón"
+          },
+          "funcion": null,
+          "id": "06357110",
+          "municipio": {
+            "id": "060357",
+            "nombre": "General Pueyrredón"
+          },
+          "nombre": "Mar del Plata",
+          "provincia": {
+            "id": "06",
+            "nombre": "Buenos Aires"
+          }
+        }
+      }
+    },
+    {
+      "id": "bahia-blanca",
+      "name": "Bahía Blanca",
+      "province": "Buenos Aires",
+      "province_id": "06",
+      "region": "Centro y región pampeana",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -38.7175489907773,
+      "longitude": -62.2654155252819,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Bahía Blanca",
+          "provincia": "Buenos Aires",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "06056010",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Localidad simple",
+          "centroide": {
+            "lat": -38.7175489907773,
+            "lon": -62.2654155252819
+          },
+          "departamento": {
+            "id": "06056",
+            "nombre": "Bahía Blanca"
+          },
+          "funcion": null,
+          "id": "06056010",
+          "municipio": {
+            "id": "060056",
+            "nombre": "Bahía Blanca"
+          },
+          "nombre": "Bahía Blanca",
+          "provincia": {
+            "id": "06",
+            "nombre": "Buenos Aires"
+          }
+        }
+      }
+    },
+    {
+      "id": "rosario",
+      "name": "Rosario",
+      "province": "Santa Fe",
+      "province_id": "82",
+      "region": "Centro y región pampeana",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -32.9470419146466,
+      "longitude": -60.6332161913325,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Rosario",
+          "provincia": "Santa Fe",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "82084270",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Componente de localidad compuesta",
+          "centroide": {
+            "lat": -32.9470419146466,
+            "lon": -60.6332161913325
+          },
+          "departamento": {
+            "id": "82084",
+            "nombre": "Rosario"
+          },
+          "funcion": null,
+          "id": "82084270",
+          "municipio": {
+            "id": "820210",
+            "nombre": "Rosario"
+          },
+          "nombre": "Rosario",
+          "provincia": {
+            "id": "82",
+            "nombre": "Santa Fe"
+          }
+        }
+      }
+    },
+    {
+      "id": "cordoba",
+      "name": "Córdoba",
+      "province": "Córdoba",
+      "province_id": "14",
+      "region": "Centro y región pampeana",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -31.4167418935531,
+      "longitude": -64.1835547808918,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Córdoba",
+          "provincia": "Córdoba",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "14014010",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Componente de localidad compuesta",
+          "centroide": {
+            "lat": -31.4167418935531,
+            "lon": -64.1835547808918
+          },
+          "departamento": {
+            "id": "14014",
+            "nombre": "Capital"
+          },
+          "funcion": null,
+          "id": "14014010",
+          "municipio": {
+            "id": "140077",
+            "nombre": "Córdoba"
+          },
+          "nombre": "Córdoba",
+          "provincia": {
+            "id": "14",
+            "nombre": "Córdoba"
+          }
+        }
+      }
+    },
+    {
+      "id": "santa-fe",
+      "name": "Santa Fe",
+      "province": "Santa Fe",
+      "province_id": "82",
+      "region": "Centro y región pampeana",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -31.646557462771,
+      "longitude": -60.7099957332733,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Santa Fe",
+          "provincia": "Santa Fe",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "82063170",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Componente de localidad compuesta",
+          "centroide": {
+            "lat": -31.646557462771,
+            "lon": -60.7099957332733
+          },
+          "departamento": {
+            "id": "82063",
+            "nombre": "La Capital"
+          },
+          "funcion": null,
+          "id": "82063170",
+          "municipio": {
+            "id": "820147",
+            "nombre": "Santa Fe"
+          },
+          "nombre": "Santa Fe",
+          "provincia": {
+            "id": "82",
+            "nombre": "Santa Fe"
+          }
+        }
+      }
+    },
+    {
+      "id": "mendoza",
+      "name": "Mendoza",
+      "province": "Mendoza",
+      "province_id": "50",
+      "region": "Cuyo",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -32.8985811304419,
+      "longitude": -68.8464060446987,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Mendoza",
+          "provincia": "Mendoza",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "50007010",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Componente de localidad compuesta",
+          "centroide": {
+            "lat": -32.8985811304419,
+            "lon": -68.8464060446987
+          },
+          "departamento": {
+            "id": "50007",
+            "nombre": "Capital"
+          },
+          "funcion": null,
+          "id": "50007010",
+          "municipio": {
+            "id": "500007",
+            "nombre": "Mendoza"
+          },
+          "nombre": "Mendoza",
+          "provincia": {
+            "id": "50",
+            "nombre": "Mendoza"
+          }
+        }
+      }
+    },
+    {
+      "id": "san-juan",
+      "name": "San Juan",
+      "province": "San Juan",
+      "province_id": "70",
+      "region": "Cuyo",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -31.5371970378027,
+      "longitude": -68.5250183173793,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "San Juan",
+          "provincia": "San Juan",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "70028010",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Componente de localidad compuesta",
+          "centroide": {
+            "lat": -31.5371970378027,
+            "lon": -68.5250183173793
+          },
+          "departamento": {
+            "id": "70028",
+            "nombre": "Capital"
+          },
+          "funcion": null,
+          "id": "70028010",
+          "municipio": {
+            "id": "700028",
+            "nombre": "San Juan"
+          },
+          "nombre": "San Juan",
+          "provincia": {
+            "id": "70",
+            "nombre": "San Juan"
+          }
+        }
+      }
+    },
+    {
+      "id": "san-luis",
+      "name": "San Luis",
+      "province": "San Luis",
+      "province_id": "74",
+      "region": "Cuyo",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -33.30206625434,
+      "longitude": -66.336934749759,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "San Luis",
+          "provincia": "San Luis",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "74056150",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Componente de localidad compuesta",
+          "centroide": {
+            "lat": -33.30206625434,
+            "lon": -66.336934749759
+          },
+          "departamento": {
+            "id": "74056",
+            "nombre": "Juan Martín de Pueyrredón"
+          },
+          "funcion": null,
+          "id": "74056150",
+          "municipio": {
+            "id": "740133",
+            "nombre": "San Luis"
+          },
+          "nombre": "San Luis",
+          "provincia": {
+            "id": "74",
+            "nombre": "San Luis"
+          }
+        }
+      }
+    },
+    {
+      "id": "salta",
+      "name": "Salta",
+      "province": "Salta",
+      "province_id": "66",
+      "region": "NOA",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -24.7830991431743,
+      "longitude": -65.4110357993511,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Salta",
+          "provincia": "Salta",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "66028050",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Componente de localidad compuesta",
+          "centroide": {
+            "lat": -24.7830991431743,
+            "lon": -65.4110357993511
+          },
+          "departamento": {
+            "id": "66028",
+            "nombre": "Capital"
+          },
+          "funcion": null,
+          "id": "66028050",
+          "municipio": {
+            "id": "660063",
+            "nombre": "Salta"
+          },
+          "nombre": "Salta",
+          "provincia": {
+            "id": "66",
+            "nombre": "Salta"
+          }
+        }
+      }
+    },
+    {
+      "id": "san-salvador-de-jujuy",
+      "name": "San Salvador de Jujuy",
+      "province": "Jujuy",
+      "province_id": "38",
+      "region": "NOA",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -24.185813089784,
+      "longitude": -65.2990832994208,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "San Salvador de Jujuy",
+          "provincia": "Jujuy",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "38021060",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Componente de localidad compuesta",
+          "centroide": {
+            "lat": -24.185813089784,
+            "lon": -65.2990832994208
+          },
+          "departamento": {
+            "id": "38021",
+            "nombre": "Dr. Manuel Belgrano"
+          },
+          "funcion": null,
+          "id": "38021060",
+          "municipio": {
+            "id": "380035",
+            "nombre": "San Salvador de Jujuy"
+          },
+          "nombre": "San Salvador de Jujuy",
+          "provincia": {
+            "id": "38",
+            "nombre": "Jujuy"
+          }
+        }
+      }
+    },
+    {
+      "id": "san-miguel-de-tucuman",
+      "name": "San Miguel de Tucumán",
+      "province": "Tucumán",
+      "province_id": "90",
+      "region": "NOA",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -26.8330706975512,
+      "longitude": -65.2044074976478,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "San Miguel de Tucumán",
+          "provincia": "Tucumán",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "90084010",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Componente de localidad compuesta",
+          "centroide": {
+            "lat": -26.8330706975512,
+            "lon": -65.2044074976478
+          },
+          "departamento": {
+            "id": "90084",
+            "nombre": "Capital"
+          },
+          "funcion": null,
+          "id": "90084010",
+          "municipio": {
+            "id": "900014",
+            "nombre": "San Miguel de Tucumán"
+          },
+          "nombre": "San Miguel de Tucumán",
+          "provincia": {
+            "id": "90",
+            "nombre": "Tucumán"
+          }
+        }
+      }
+    },
+    {
+      "id": "santiago-del-estero",
+      "name": "Santiago del Estero",
+      "province": "Santiago del Estero",
+      "province_id": "86",
+      "region": "NOA",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -27.7876388167204,
+      "longitude": -64.2596955067656,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Santiago del Estero",
+          "provincia": "Santiago del Estero",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "86049110",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Componente de localidad compuesta",
+          "centroide": {
+            "lat": -27.7876388167204,
+            "lon": -64.2596955067656
+          },
+          "departamento": {
+            "id": "86049",
+            "nombre": "Capital"
+          },
+          "funcion": null,
+          "id": "86049110",
+          "municipio": {
+            "id": null,
+            "nombre": null
+          },
+          "nombre": "Santiago del Estero",
+          "provincia": {
+            "id": "86",
+            "nombre": "Santiago del Estero"
+          }
+        }
+      }
+    },
+    {
+      "id": "posadas",
+      "name": "Posadas",
+      "province": "Misiones",
+      "province_id": "54",
+      "region": "NEA",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -27.3896545260435,
+      "longitude": -55.9193081767805,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Posadas",
+          "provincia": "Misiones",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "54028030",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Componente de localidad compuesta",
+          "centroide": {
+            "lat": -27.3896545260435,
+            "lon": -55.9193081767805
+          },
+          "departamento": {
+            "id": "54028",
+            "nombre": "Capital"
+          },
+          "funcion": null,
+          "id": "54028030",
+          "municipio": {
+            "id": "540119",
+            "nombre": "Posadas"
+          },
+          "nombre": "Posadas",
+          "provincia": {
+            "id": "54",
+            "nombre": "Misiones"
+          }
+        }
+      }
+    },
+    {
+      "id": "corrientes",
+      "name": "Corrientes",
+      "province": "Corrientes",
+      "province_id": "18",
+      "region": "NEA",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -27.4632821641043,
+      "longitude": -58.8392333481757,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Corrientes",
+          "provincia": "Corrientes",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "18021020",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Localidad simple",
+          "centroide": {
+            "lat": -27.4632821641043,
+            "lon": -58.8392333481757
+          },
+          "departamento": {
+            "id": "18021",
+            "nombre": "Capital"
+          },
+          "funcion": null,
+          "id": "18021020",
+          "municipio": {
+            "id": "180021",
+            "nombre": "Corrientes"
+          },
+          "nombre": "Corrientes",
+          "provincia": {
+            "id": "18",
+            "nombre": "Corrientes"
+          }
+        }
+      }
+    },
+    {
+      "id": "resistencia",
+      "name": "Resistencia",
+      "province": "Chaco",
+      "province_id": "22",
+      "region": "NEA",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -27.4511053567767,
+      "longitude": -58.9864521686869,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Resistencia",
+          "provincia": "Chaco",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "22140060",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Componente de localidad compuesta",
+          "centroide": {
+            "lat": -27.4511053567767,
+            "lon": -58.9864521686869
+          },
+          "departamento": {
+            "id": "22140",
+            "nombre": "San Fernando"
+          },
+          "funcion": null,
+          "id": "22140060",
+          "municipio": {
+            "id": "220413",
+            "nombre": "Resistencia"
+          },
+          "nombre": "Resistencia",
+          "provincia": {
+            "id": "22",
+            "nombre": "Chaco"
+          }
+        }
+      }
+    },
+    {
+      "id": "formosa",
+      "name": "Formosa",
+      "province": "Formosa",
+      "province_id": "34",
+      "region": "NEA",
+      "country": "Argentina",
+      "country_code": "AR",
+      "latitude": -26.1852113386808,
+      "longitude": -58.1743535107885,
+      "coordinate_source": {
+        "name": "GeoRef Argentina",
+        "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+        "method": "POST",
+        "query": {
+          "nombre": "Formosa",
+          "provincia": "Formosa",
+          "max": 50
+        },
+        "entity": "localidades_censales",
+        "entity_id": "34014020",
+        "coordinate_field": "centroide",
+        "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+        "record": {
+          "categoria": "Localidad simple",
+          "centroide": {
+            "lat": -26.1852113386808,
+            "lon": -58.1743535107885
+          },
+          "departamento": {
+            "id": "34014",
+            "nombre": "Formosa"
+          },
+          "funcion": null,
+          "id": "34014020",
+          "municipio": {
+            "id": "340028",
+            "nombre": "Formosa"
+          },
+          "nombre": "Formosa",
+          "provincia": {
+            "id": "34",
+            "nombre": "Formosa"
+          }
+        }
+      }
+    }
+  ]
+}

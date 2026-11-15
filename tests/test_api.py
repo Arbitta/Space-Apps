@@ -7,6 +7,12 @@ Valida el contrato JSON de la Página 6 del PDF para /api/analyze, /api/compare,
 import unittest
 from unittest.mock import patch
 
+try:
+    import flask as _flask  # noqa: F401
+    HAS_FLASK = True
+except ImportError:
+    HAS_FLASK = False
+
 from app import create_app
 from routes.api_routes import handle_analyze_request, handle_compare_request
 from services.datasets import get_mission_by_id, get_missions_list, get_variables_catalog
@@ -113,6 +119,7 @@ class TestAPIContract(unittest.TestCase):
         self.assertIsNotNone(m1)
         self.assertEqual(m1["primary_variable"], "T2M")
 
+    @unittest.skipUnless(HAS_FLASK, "Flask no instalado en el entorno local fuera de Docker")
     def test_flask_analyze_route_returns_json_contract(self):
         app = create_app()
         app.config.update(TESTING=True)
@@ -159,6 +166,7 @@ class TestAPIContract(unittest.TestCase):
         self.assertEqual(response["data_mode"], "live")
         mocked_fetch.assert_called_once()
 
+    @unittest.skipUnless(HAS_FLASK, "Flask no instalado en el entorno local fuera de Docker")
     def test_flask_summary_reports_data_provenance(self):
         app = create_app()
         app.config.update(TESTING=True)

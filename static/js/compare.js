@@ -1,18 +1,23 @@
 /**
  * EarthLens — Rol 03: Lógica del Comparador de Dos Ubicaciones (compare.js)
- * Compara dos ubicaciones con la misma variable, misma unidad y mismo período.
- * Soporta parámetros desde explorer.js (?lat1, ?lon1) y desde results.js (?latA, ?lonA).
+ * Incluye correcciones de auditoría:
+ *  - H-01: Validación de particiones de equivalencia y valores límite (1981–2024, span >= 2).
+ *  - H-06: Sincronización de #selectPresetA y #selectPresetB con URL e inputs manuales y disparo reactivo.
+ *  - Control de concurrencia con AbortController y secuencia de comparación.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  const PRESET_COORDS = {
+  const PRESET_COORDS = Object.freeze({
     comodoro: { name: 'Comodoro Rivadavia, Chubut', latitude: -45.86, longitude: -67.50 },
     ushuaia: { name: 'Ushuaia, Tierra del Fuego', latitude: -54.80, longitude: -68.30 },
     bariloche: { name: 'San Carlos de Bariloche, Río Negro', latitude: -41.13, longitude: -71.31 },
     riogallegos: { name: 'Río Gallegos, Santa Cruz', latitude: -51.62, longitude: -69.22 },
     madryn: { name: 'Puerto Madryn, Chubut', latitude: -42.77, longitude: -65.03 },
     neuquen: { name: 'Neuquén Capital, Neuquén', latitude: -38.95, longitude: -68.06 }
-  };
+  });
+
+  let activeCompareController = null;
+  let compareSeq = 0;
 
   let state = {
     variable: 'T2M',
@@ -24,84 +29,148 @@ document.addEventListener('DOMContentLoaded', () => {
     dataB: null
   };
 
+  /**
+   * Sincroniza el <select> de Ubicación A o B con las coordenadas activas (H-06).
+   */
+  function syncPresetDropdown(selectId, locObj, prefixLabel) {
+    const selectEl = document.getElementById(selectId);
+    if (!selectEl) return;
+
+    for (const [key, preset] of Object.entries(PRESET_COORDS)) {
+      if (
+        Math.abs(preset.latitude - locObj.latitude) < 0.15 &&
+        Math.abs(preset.longitude - locObj.longitude) < 0.15
+      ) {
+        selectEl.value = key;
+        locObj.name = preset.name;
+        return;
+      }
+    }
+
+    let customOpt = selectEl.querySelector('option[value="custom"]');
+    if (!customOpt) {
+      customOpt = document.createElement('option');
+      customOpt.value = 'custom';
+      selectEl.prepend(customOpt);
+    }
+    const label =
+      locObj.name && !Object.values(PRESET_COORDS).some((p) => p.name === locObj.name)
+        ? locObj.name
+        : `${prefixLabel} (${locObj.latitude.toFixed(2)}°, ${locObj.longitude.toFixed(2)}°)`;
+    locObj.name = label;
+    customOpt.textContent = label;
+    selectEl.value = 'custom';
+  }
+
   function initFromURL() {
     const params = new URLSearchParams(window.location.search);
 
-    if (params.get('variable')) {
-      state.variable = params.get('variable').toUpperCase();
-    }
-    if (params.get('start_year')) {
-      state.start_year = parseInt(params.get('start_year'), 10) || 2000;
-    }
-    if (params.get('end_year')) {
-      state.end_year = parseInt(params.get('end_year'), 10) || 2024;
-    }
+    const sanitizedCommon = EarthLensCharts.sanitizeRequestParams({
+      variable: params.get('variable') || state.variable,
+      start_year: params.get('start_year') || state.start_year,
+      end_year: params.get('end_year') || state.end_year
+    });
+    state.variable = sanitizedCommon.variable;
+    state.start_year = sanitizedCommon.start_year;
+    state.end_year = sanitizedCommon.end_year;
 
     const latA = params.get('latA') || params.get('lat1');
     const lonA = params.get('lonA') || params.get('lon1');
     if (latA && lonA) {
+      const cleanA = EarthLensCharts.sanitizeRequestParams({
+        latitude: latA,
+        longitude: lonA,
+        locationName: params.get('nameA') || params.get('label1') || `Ubicación A (${latA}, ${lonA})`
+      });
       state.locA = {
-        name: params.get('nameA') || params.get('label1') || `Ubicación A (${latA}, ${lonA})`,
-        latitude: parseFloat(latA),
-        longitude: parseFloat(lonA)
+        name: cleanA.locationName,
+        latitude: cleanA.latitude,
+        longitude: cleanA.longitude
       };
     }
 
     const latB = params.get('latB') || params.get('lat2');
     const lonB = params.get('lonB') || params.get('lon2');
     if (latB && lonB) {
+      const cleanB = EarthLensCharts.sanitizeRequestParams({
+        latitude: latB,
+        longitude: lonB,
+        locationName: params.get('nameB') || params.get('label2') || `Ubicación B (${latB}, ${lonB})`
+      });
       state.locB = {
-        name: params.get('nameB') || params.get('label2') || `Ubicación B (${latB}, ${lonB})`,
-        latitude: parseFloat(latB),
-        longitude: parseFloat(lonB)
+        name: cleanB.locationName,
+        latitude: cleanB.latitude,
+        longitude: cleanB.longitude
       };
     }
   }
 
-  async function fetchSingleLocation(loc) {
-    const payload = {
-      latitude: Number(loc.latitude),
-      longitude: Number(loc.longitude),
+  async function fetchSingleLocation(loc, signal) {
+    const clean = EarthLensCharts.sanitizeRequestParams({
+      latitude: loc.latitude,
+      longitude: loc.longitude,
       variable: state.variable,
-      start_year: Number(state.start_year),
-      end_year: Number(state.end_year),
-      location_name: loc.name
+      start_year: state.start_year,
+      end_year: state.end_year,
+      locationName: loc.name
+    });
+
+    const payload = {
+      latitude: clean.latitude,
+      longitude: clean.longitude,
+      variable: clean.variable,
+      start_year: clean.start_year,
+      end_year: clean.end_year,
+      location_name: clean.locationName
     };
 
     try {
       const res = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+        signal
       });
       if (res.ok) {
         const json = await res.json();
         json.is_mock = Boolean(json.is_mock);
-        json.location = { name: loc.name, latitude: loc.latitude, longitude: loc.longitude };
+        json.location = { name: clean.locationName, latitude: clean.latitude, longitude: clean.longitude };
         return json;
       }
-    } catch (_) {}
+    } catch (err) {
+      if (err && err.name === 'AbortError') {
+        throw err;
+      }
+    }
 
-    return EarthLensCharts.buildMockAnalysis({
-      latitude: loc.latitude,
-      longitude: loc.longitude,
-      locationName: loc.name,
-      variable: state.variable,
-      start_year: state.start_year,
-      end_year: state.end_year
-    });
+    return EarthLensCharts.buildMockAnalysis(clean);
   }
 
   async function runComparison() {
-    const [resA, resB] = await Promise.all([
-      fetchSingleLocation(state.locA),
-      fetchSingleLocation(state.locB)
-    ]);
+    if (activeCompareController) {
+      activeCompareController.abort();
+    }
+    activeCompareController = new AbortController();
+    const mySeq = ++compareSeq;
 
-    state.dataA = resA;
-    state.dataB = resB;
+    syncPresetDropdown('selectPresetA', state.locA, 'Ubicación A');
+    syncPresetDropdown('selectPresetB', state.locB, 'Ubicación B');
 
-    renderComparisonUI(resA, resB);
+    try {
+      const [resA, resB] = await Promise.all([
+        fetchSingleLocation(state.locA, activeCompareController.signal),
+        fetchSingleLocation(state.locB, activeCompareController.signal)
+      ]);
+
+      if (mySeq !== compareSeq) return;
+      state.dataA = resA;
+      state.dataB = resB;
+
+      renderComparisonUI(resA, resB);
+    } catch (err) {
+      if (err && err.name === 'AbortError') return;
+      console.warn('Error en comparación:', err);
+    }
   }
 
   function renderComparisonUI(dataA, dataB) {
@@ -123,6 +192,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setText('cmpSharedVariable', `${varMeta.name} (${state.variable}) · Unidad: ${unitDisplay}`);
     setText('cmpSharedPeriod', `Período común: ${state.start_year} – ${state.end_year}`);
+
+    const tmBtn = document.getElementById('btnCompareToTimeMachine');
+    if (tmBtn) {
+      const qTm = new URLSearchParams({
+        latitude: state.locA.latitude,
+        longitude: state.locA.longitude,
+        location: state.locA.name,
+        variable: state.variable,
+        start_year: state.start_year,
+        end_year: state.end_year
+      });
+      tmBtn.href = window.location.protocol === 'file:'
+        ? `time_machine.html?${qTm.toString()}`
+        : `/time-machine?${qTm.toString()}`;
+    }
 
     populateLocationColumn('A', state.locA, dataA, unitDisplay);
     populateLocationColumn('B', state.locB, dataB, unitDisplay);
@@ -294,6 +378,52 @@ document.addEventListener('DOMContentLoaded', () => {
     if (el) el.textContent = text;
   }
 
+  function collectAndSanitizeControls() {
+    const varSelect = document.getElementById('cmpVariableSelect');
+    const startInput = document.getElementById('cmpStartYear');
+    const endInput = document.getElementById('cmpEndYear');
+    const latAInput = document.getElementById('inputLatA');
+    const lonAInput = document.getElementById('inputLonA');
+    const latBInput = document.getElementById('inputLatB');
+    const lonBInput = document.getElementById('inputLonB');
+
+    const cleanCommon = EarthLensCharts.sanitizeRequestParams({
+      variable: varSelect ? varSelect.value : state.variable,
+      start_year: startInput ? startInput.value : state.start_year,
+      end_year: endInput ? endInput.value : state.end_year
+    });
+    state.variable = cleanCommon.variable;
+    state.start_year = cleanCommon.start_year;
+    state.end_year = cleanCommon.end_year;
+
+    if (startInput) startInput.value = state.start_year;
+    if (endInput) endInput.value = state.end_year;
+
+    if (latAInput && lonAInput) {
+      const cleanA = EarthLensCharts.sanitizeRequestParams({
+        latitude: latAInput.value,
+        longitude: lonAInput.value,
+        locationName: state.locA.name
+      });
+      state.locA.latitude = cleanA.latitude;
+      state.locA.longitude = cleanA.longitude;
+      latAInput.value = cleanA.latitude;
+      lonAInput.value = cleanA.longitude;
+    }
+
+    if (latBInput && lonBInput) {
+      const cleanB = EarthLensCharts.sanitizeRequestParams({
+        latitude: latBInput.value,
+        longitude: lonBInput.value,
+        locationName: state.locB.name
+      });
+      state.locB.latitude = cleanB.latitude;
+      state.locB.longitude = cleanB.longitude;
+      latBInput.value = cleanB.latitude;
+      lonBInput.value = cleanB.longitude;
+    }
+  }
+
   function bindEvents() {
     const presetA = document.getElementById('selectPresetA');
     const presetB = document.getElementById('selectPresetB');
@@ -308,7 +438,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnExport = document.getElementById('btnExportCompareCSV');
     const toggleTrend = document.getElementById('cmpToggleTrendlines');
 
-    if (varSelect) varSelect.value = state.variable;
+    if (varSelect) {
+      varSelect.value = state.variable;
+      varSelect.addEventListener('change', () => {
+        collectAndSanitizeControls();
+        runComparison();
+      });
+    }
     if (startInput) startInput.value = state.start_year;
     if (endInput) endInput.value = state.end_year;
     if (latAInput) latAInput.value = state.locA.latitude;
@@ -323,6 +459,7 @@ document.addEventListener('DOMContentLoaded', () => {
           state.locA = { ...p };
           if (latAInput) latAInput.value = p.latitude;
           if (lonAInput) lonAInput.value = p.longitude;
+          runComparison();
         }
       });
     }
@@ -334,37 +471,34 @@ document.addEventListener('DOMContentLoaded', () => {
           state.locB = { ...p };
           if (latBInput) latBInput.value = p.latitude;
           if (lonBInput) lonBInput.value = p.longitude;
+          runComparison();
         }
       });
     }
 
+    [latAInput, lonAInput].forEach((input) => {
+      if (input) {
+        input.addEventListener('change', () => {
+          state.locA.name = '';
+          collectAndSanitizeControls();
+          syncPresetDropdown('selectPresetA', state.locA, 'Ubicación A');
+        });
+      }
+    });
+
+    [latBInput, lonBInput].forEach((input) => {
+      if (input) {
+        input.addEventListener('change', () => {
+          state.locB.name = '';
+          collectAndSanitizeControls();
+          syncPresetDropdown('selectPresetB', state.locB, 'Ubicación B');
+        });
+      }
+    });
+
     if (btnCompare) {
       btnCompare.addEventListener('click', () => {
-        if (varSelect) state.variable = varSelect.value;
-        if (startInput && endInput) {
-          const s = parseInt(startInput.value, 10) || 2000;
-          const e = parseInt(endInput.value, 10) || 2024;
-          state.start_year = Math.min(s, e - 2);
-          state.end_year = Math.max(s + 2, e);
-          startInput.value = state.start_year;
-          endInput.value = state.end_year;
-        }
-        if (latAInput && lonAInput) {
-          const la = parseFloat(latAInput.value);
-          const lo = parseFloat(lonAInput.value);
-          if (!Number.isNaN(la) && !Number.isNaN(lo)) {
-            state.locA.latitude = la;
-            state.locA.longitude = lo;
-          }
-        }
-        if (latBInput && lonBInput) {
-          const lb = parseFloat(latBInput.value);
-          const lob = parseFloat(lonBInput.value);
-          if (!Number.isNaN(lb) && !Number.isNaN(lob)) {
-            state.locB.latitude = lb;
-            state.locB.longitude = lob;
-          }
-        }
+        collectAndSanitizeControls();
         runComparison();
       });
     }
