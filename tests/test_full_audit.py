@@ -200,54 +200,14 @@ class Test02BlackBoxPagesAndAPI(unittest.TestCase):
         except urllib.error.HTTPError as err:
             return err.code, json.loads(err.read().decode("utf-8"))
 
-    def test_page_01_index_blackbox(self):
-        """Caja Negra — Página de Inicio (/ y /index.html)."""
-        for route in ("/", "/index", "/index.html", "/templates/index.html"):
+    def test_page_01_time_machine_blackbox(self):
+        """Caja Negra — Página principal centrada en Time Machine (/, /time-machine)."""
+        for route in ("/", "/index", "/time-machine", "/time-machine.html", "/templates/time_machine.html"):
             status, ctype, html = self._get(route)
             self.assertEqual(status, 200, f"Fallo en ruta {route}")
             self.assertIn("text/html", ctype)
-            self.assertIn("id=\"home-location-map\"", html)
-            self.assertIn("id=\"estimations-rows\"", html)
-
-    def test_page_02_explorer_blackbox(self):
-        """Caja Negra — Página del Explorador (/explorer y /explorer.html)."""
-        for route in ("/explorer", "/explorer.html", "/templates/explorer.html"):
-            status, ctype, html = self._get(route)
-            self.assertEqual(status, 200, f"Fallo en ruta {route}")
-            self.assertIn("id=\"explorer-map\"", html)
-            self.assertIn("id=\"explorer-form\"", html)
-            self.assertIn("id=\"select-variable\"", html)
-
-    def test_page_03_results_blackbox(self):
-        """Caja Negra — Página de Resultados (/results y /results.html)."""
-        for route in ("/results", "/results.html", "/templates/results.html"):
-            status, ctype, html = self._get(route)
-            self.assertEqual(status, 200, f"Fallo en ruta {route}")
-            self.assertIn("id=\"resultsTrendChart\"", html)
-            self.assertIn("id=\"metricSlope\"", html)
-            self.assertIn("id=\"btnExportCSV\"", html)
-
-    def test_page_04_compare_blackbox(self):
-        """Caja Negra — Página del Comparador (/compare y /compare.html)."""
-        for route in ("/compare", "/compare.html", "/templates/compare.html"):
-            status, ctype, html = self._get(route)
-            self.assertEqual(status, 200, f"Fallo en ruta {route}")
-            self.assertIn("id=\"comparisonChart\"", html)
-            self.assertIn("id=\"btnRunComparison\"", html)
-            self.assertIn("id=\"btnExportCompareCSV\"", html)
-
-    def test_page_05_and_06_missions_and_about_blackbox(self):
-        """
-        Caja Negra — Rutas /missions y /about enlazadas en el navbar de todas las páginas.
-        Verifica que respondan con HTTP 200.
-        """
-        status_m, _, html_m = self._get("/missions")
-        self.assertEqual(status_m, 200)
-        self.assertTrue(len(html_m) > 100)
-
-        status_a, _, html_a = self._get("/about")
-        self.assertEqual(status_a, 200)
-        self.assertTrue(len(html_a) > 100)
+            self.assertIn("id=\"timeMachineMap\"", html)
+            self.assertIn("id=\"tmYearSlider\"", html)
 
     def test_api_endpoints_blackbox(self):
         """Caja Negra — Endpoints REST (/api/variables, /api/summary, /api/missions, /api/analyze, /api/compare)."""
@@ -288,42 +248,20 @@ class Test02BlackBoxPagesAndAPI(unittest.TestCase):
 class Test03WhiteBoxInternalLogic(unittest.TestCase):
     """Inspecciona ramas internas de código, discrepancias entre módulos y estructura DOM/JS."""
 
-    def test_whitebox_direction_enum_mismatch_between_backend_and_explorer_js(self):
+    def test_whitebox_direction_enum_in_trend_analysis(self):
         """
-        Caja Blanca — Hallazgo de integración entre services/trend_analysis.py y static/js/explorer.js:
-        - trend_analysis.py retorna direction = 'stable' cuando |slope| <= 1e-5.
-        - explorer.js define directionLabelMap con 'no_clear_trend', sin clave 'stable'.
+        Caja Blanca — Verifica que trend_analysis.py retorna direction = 'stable' cuando |slope| <= 1e-5.
         """
         flat_series = [{"year": 2000 + i, "value": 15.0} for i in range(10)]
         stats = compute_linear_trend(flat_series, start_year=2000, end_year=2009)
         self.assertEqual(stats["direction"], "stable")
 
-        explorer_js = (BASE_DIR / "static" / "js" / "explorer.js").read_text(encoding="utf-8")
-        self.assertIn("no_clear_trend:", explorer_js)
-        # Verificar si 'stable:' falta en explorer.js
-        has_stable_in_explorer = bool(re.search(r"\bstable\s*:", explorer_js))
-        self.assertFalse(
-            has_stable_in_explorer,
-            "Confirmado: explorer.js usa 'no_clear_trend' pero no mapea 'stable' de trend_analysis.py",
-        )
-
-    def test_whitebox_base_html_unrendered_jinja_tags(self):
-        """
-        Caja Blanca — Inspección de templates/base.html:
-        base.html usa sintaxis Jinja2 ({{ url_for(...) }} y {% block ... %}), pero las demás
-        plantillas (index.html, explorer.html, results.html, compare.html) no heredan de base.html
-        y el servidor sirve archivos estáticos directos con send_file / _send_file.
-        """
-        base_html = (BASE_DIR / "templates" / "base.html").read_text(encoding="utf-8")
-        self.assertIn("{{ url_for(", base_html)
-        self.assertIn("{% block content %}", base_html)
-
     def test_whitebox_all_html_static_references_exist(self):
         """
         Caja Blanca — Verifica que todos los archivos CSS y JS referenciados en
-        index.html, explorer.html, results.html y compare.html existan en static/.
+        time_machine.html existan en static/.
         """
-        pages = ["index.html", "explorer.html", "results.html", "compare.html"]
+        pages = ["time_machine.html"]
         for page in pages:
             content = (BASE_DIR / "templates" / page).read_text(encoding="utf-8")
             refs = re.findall(r'(?:href|src)="\.\./static/([^"]+)"', content)
@@ -335,30 +273,20 @@ class Test03WhiteBoxInternalLogic(unittest.TestCase):
                     f"El recurso static/{rel_ref} referenciado en {page} NO existe",
                 )
 
-    def test_part03_fixes_verification(self):
+    def test_time_machine_and_charts_fixes_verification(self):
         """
-        Verifica las correcciones aplicadas en la Parte 03 (Resultados y Comparador):
-          1. H-01: max="2024" y min="1981" en results.html y compare.html + sanitizeRequestParams en charts.js.
-          2. H-06: syncLocationSelectUI en results.js y syncPresetDropdown en compare.js.
-          3. Concurrencia y OO en Parte 03: AbortController y Object.freeze en charts.js/results.js/compare.js.
+        Verifica las correcciones aplicadas en Time Machine y Charts:
+          1. max="2024" y min="1981" en time_machine.html + sanitizeRequestParams en charts.js.
+          2. Concurrencia y OO: AbortController y Object.freeze en charts.js y time_machine.js.
         """
-        results_html = (BASE_DIR / "templates" / "results.html").read_text(encoding="utf-8")
-        compare_html = (BASE_DIR / "templates" / "compare.html").read_text(encoding="utf-8")
+        tm_html = (BASE_DIR / "templates" / "time_machine.html").read_text(encoding="utf-8")
         charts_js = (BASE_DIR / "static" / "js" / "charts.js").read_text(encoding="utf-8")
-        results_js = (BASE_DIR / "static" / "js" / "results.js").read_text(encoding="utf-8")
-        compare_js = (BASE_DIR / "static" / "js" / "compare.js").read_text(encoding="utf-8")
+        tm_js = (BASE_DIR / "static" / "js" / "time_machine.js").read_text(encoding="utf-8")
 
-        self.assertNotIn('max="2025"', results_html)
-        self.assertNotIn('max="2025"', compare_html)
-        self.assertIn('max="2024"', results_html)
-        self.assertIn('max="2024"', compare_html)
-
+        self.assertIn('max="2024"', tm_html)
         self.assertIn("sanitizeRequestParams", charts_js)
         self.assertIn("Object.freeze", charts_js)
-        self.assertIn("syncLocationSelectUI", results_js)
-        self.assertIn("AbortController", results_js)
-        self.assertIn("syncPresetDropdown", compare_js)
-        self.assertIn("AbortController", compare_js)
+        self.assertIn("AbortController", tm_js)
 
     def test_whitebox_branches_in_aggregate_and_completeness(self):
         """Cobertura de todas las ramas condicionales de aggregate_to_annual_series."""

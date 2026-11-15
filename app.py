@@ -39,85 +39,51 @@ STATIC_DIR = BASE_DIR / "static"
 
 
 def _resolve_page_file(page_slug: str) -> Path:
-    """Resuelve la plantilla HTML solicitada o usa un respaldo seguro."""
+    """Resuelve la plantilla HTML solicitada hacia Earth Time Machine."""
     clean = page_slug.strip("/").replace("templates/", "")
-    if not clean or clean in ("index", "index.html"):
-        candidate = TEMPLATES_DIR / "index.html"
-    elif clean.endswith(".html"):
-        candidate = TEMPLATES_DIR / clean
-    else:
-        candidate = TEMPLATES_DIR / f"{clean}.html"
-
+    if not clean or clean in ("index", "index.html", "time-machine", "time-machine.html", "time_machine", "time_machine.html"):
+        return TEMPLATES_DIR / "time_machine.html"
+    candidate = TEMPLATES_DIR / (clean if clean.endswith(".html") else f"{clean}.html")
     if candidate.is_file():
         return candidate
-    if (TEMPLATES_DIR / "index.html").is_file():
-        return TEMPLATES_DIR / "index.html"
-    return TEMPLATES_DIR / "results.html"
+    return TEMPLATES_DIR / "time_machine.html"
 
 
 def create_app() -> Any:
-    """Crea y configura la aplicación Flask unificada de EarthLens."""
-    from flask import Flask, send_file, send_from_directory  # type: ignore
+    """Crea y configura la aplicación Flask de EarthLens (centrada en Earth Time Machine)."""
+    try:
+        from flask import Flask, send_file, send_from_directory  # type: ignore
+    except ImportError:
+        return None
 
-    app = Flask(
+    flask_app = Flask(
         __name__,
         template_folder=str(TEMPLATES_DIR),
         static_folder=str(STATIC_DIR),
         static_url_path="/static",
     )
 
-    register_api_routes(app)
-    register_missions_routes(app)
+    register_api_routes(flask_app)
+    register_missions_routes(flask_app)
 
-    @app.route("/")
-    @app.route("/index")
-    @app.route("/index.html")
-    def index_page():
-        return send_file(str(_resolve_page_file("index.html")))
-
-    @app.route("/explorer")
-    @app.route("/explorer.html")
-    def explorer_page():
-        return send_file(str(_resolve_page_file("explorer.html")))
-
-    @app.route("/results")
-    @app.route("/results.html")
-    def results_page():
-        return send_file(str(_resolve_page_file("results.html")))
-
-    @app.route("/compare")
-    @app.route("/compare.html")
-    def compare_page():
-        return send_file(str(_resolve_page_file("compare.html")))
-
-    @app.route("/time-machine")
-    @app.route("/time-machine.html")
-    @app.route("/time_machine")
-    @app.route("/time_machine.html")
+    @flask_app.route("/")
+    @flask_app.route("/index")
+    @flask_app.route("/index.html")
+    @flask_app.route("/time-machine")
+    @flask_app.route("/time-machine.html")
+    @flask_app.route("/time_machine")
+    @flask_app.route("/time_machine.html")
     def time_machine_page():
-        return send_file(str(_resolve_page_file("time_machine.html")))
+        return send_file(str(TEMPLATES_DIR / "time_machine.html"))
 
-    @app.route("/missions")
-    @app.route("/missions.html")
-    def missions_page():
-        target = TEMPLATES_DIR / "missions.html"
-        if target.is_file():
-            return send_file(str(target))
-        return send_file(str(_resolve_page_file("explorer.html")))
-
-    @app.route("/about")
-    @app.route("/about.html")
-    def about_page():
-        target = TEMPLATES_DIR / "about.html"
-        if target.is_file():
-            return send_file(str(target))
-        return send_file(str(_resolve_page_file("index.html")))
-
-    @app.route("/templates/<path:filename>")
+    @flask_app.route("/templates/<path:filename>")
     def templates_passthrough(filename: str):
-        return send_from_directory(str(TEMPLATES_DIR), filename)
+        target = TEMPLATES_DIR / filename
+        if target.is_file():
+            return send_from_directory(str(TEMPLATES_DIR), filename)
+        return send_file(str(TEMPLATES_DIR / "time_machine.html"))
 
-    return app
+    return flask_app
 
 
 class EarthLensUnifiedHandler(BaseHTTPRequestHandler):
@@ -208,26 +174,17 @@ class EarthLensUnifiedHandler(BaseHTTPRequestHandler):
             if str(target).startswith(str(BASE_DIR)):
                 return self._send_file(target)
 
-        if path in ("/", "/index", "/index.html", "/templates/index.html"):
-            return self._send_file(_resolve_page_file("index.html"))
-        if path in ("/explorer", "/explorer.html", "/templates/explorer.html"):
-            return self._send_file(_resolve_page_file("explorer.html"))
-        if path in ("/results", "/results.html", "/templates/results.html"):
-            return self._send_file(_resolve_page_file("results.html"))
-        if path in ("/compare", "/compare.html", "/templates/compare.html"):
-            return self._send_file(_resolve_page_file("compare.html"))
         if path in (
+            "/",
+            "/index",
+            "/index.html",
             "/time-machine",
             "/time-machine.html",
             "/time_machine",
             "/time_machine.html",
             "/templates/time_machine.html",
         ):
-            return self._send_file(_resolve_page_file("time_machine.html"))
-        if path in ("/missions", "/missions.html", "/templates/missions.html"):
-            return self._send_file(_resolve_page_file("missions.html"))
-        if path in ("/about", "/about.html", "/templates/about.html"):
-            return self._send_file(_resolve_page_file("about.html"))
+            return self._send_file(TEMPLATES_DIR / "time_machine.html")
 
         candidate = (BASE_DIR / path.lstrip("/")).resolve()
         if str(candidate).startswith(str(BASE_DIR)) and candidate.is_file():
@@ -260,17 +217,25 @@ class EarthLensUnifiedHandler(BaseHTTPRequestHandler):
         self._send_json({"error": "Endpoint no encontrado"}, 404)
 
 
+# Instancia WSGI de nivel superior (requerido fuera de bloques try/except por el AST parser de Vercel)
+app = create_app()
+
+
+class handler(EarthLensUnifiedHandler):
+    """Manejador HTTP de nivel superior compatible con Vercel Python runtime."""
+    pass
+
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     host = os.environ.get("HOST", "127.0.0.1")
     url = f"http://127.0.0.1:{port}/"
     threading.Timer(0.8, lambda: webbrowser.open(url)).start()
 
-    try:
-        flask_app = create_app()
-        print(f"🌍 EarthLens Unificado (Flask + SciPy) corriendo en {url}")
-        flask_app.run(host=host, port=port, debug=False)
-    except ImportError:
+    if app is not None:
+        print(f"🌍 EarthLens Unificado (Flask) corriendo en {url}")
+        app.run(host=host, port=port, debug=False)
+    else:
         print(f"🌍 EarthLens Unificado (Servidor integrado) corriendo en {url}")
         server = ThreadingHTTPServer((host, port), EarthLensUnifiedHandler)
         server.serve_forever()

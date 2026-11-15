@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Earth Time Machine · Telemetría Satelital · EarthLens</title>
 
   <!-- Google Fonts (Inter + JetBrains Mono) -->
@@ -32,48 +32,20 @@
   <link rel="stylesheet" href="../static/css/time_machine.css" />
 </head>
 <body class="tm-viewport-body">
-  <!-- Barra de Navegación Principal (sin emojis, estética técnica sobria) -->
-  <nav class="navbar navbar-expand-lg navbar-dark el-navbar sticky-top">
-    <div class="container-fluid px-3">
-      <a class="navbar-brand el-brand d-flex align-items-center gap-2" href="/">
-        <svg class="tm-svg-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <circle cx="12" cy="12" r="9"></circle>
-          <path d="M3.6 9h16.8M3.6 15h16.8M12 3a14.5 14.5 0 0 0 0 18M12 3a14.5 14.5 0 0 1 0 18"></path>
-        </svg>
-        <span>EarthLens</span>
-        <span class="el-brand-badge">NASA Space Apps 2026</span>
-      </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#earthlensNavbar"
-        aria-controls="earthlensNavbar"
-        aria-expanded="false"
-        aria-label="Alternar navegación"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="earthlensNavbar">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-1">
-          <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
-          <li class="nav-item"><a class="nav-link" href="/explorer">Explorador</a></li>
-          <li class="nav-item"><a class="nav-link" id="navLinkResults" href="/results">Resultados</a></li>
-          <li class="nav-item"><a class="nav-link" id="navLinkCompare" href="/compare">Comparador</a></li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/time-machine">Time Machine</a>
-          </li>
-          <li class="nav-item"><a class="nav-link" href="/missions">Modo detective</a></li>
-          <li class="nav-item"><a class="nav-link" href="/about">Nosotros y metodología</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <!-- ESCENARIO PRINCIPAL: MAPA SATELITAL + BARRA TÉCNICA SUPERIOR + ICONOS CON TOOLTIP + SLIDER INFERIOR -->
+  <!-- ESCENARIO PRINCIPAL: MAPA SATELITAL A PANTALLA COMPLETA + HUD SUPERIOR + CONTROLES LATERALES + TIMELINE INFERIOR -->
   <main class="tm-stage-wrapper">
     <!-- Mapa Leaflet de pantalla completa -->
     <div id="timeMachineMap" role="application" aria-label="Mapa satelital meteorológico interactivo"></div>
+
+    <!-- Logo discreto en esquina inferior izquierda (tipo marca de agua satelital, no bloquea el mapa) -->
+    <div class="tm-brand-watermark" aria-label="EarthLens · NASA Space Apps 2026">
+      <svg class="tm-svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M3.6 9h16.8M3.6 15h16.8M12 3a14.5 14.5 0 0 0 0 18M12 3a14.5 14.5 0 0 1 0 18"></path>
+      </svg>
+      <span class="tm-brand-watermark-title">EarthLens</span>
+      <span class="tm-brand-watermark-badge">NASA Space Apps</span>
+    </div>
 
     <!-- BARRA TÉCNICA SUPERIOR: Texto de telemetría arriba + 4 selectores en una sola fila abajo -->
     <header class="tm-hud-top">
@@ -299,34 +271,6 @@
           </button>
 
           <div class="tm-rail-divider"></div>
-
-          <!-- Navegación rápida sincronizada con otras vistas y exportación -->
-          <a
-            id="tmLinkToResults"
-            href="/results"
-            class="tm-icon-btn"
-            data-tooltip="Abrir esta zona en el Dashboard de Resultados"
-            aria-label="Ir al Dashboard de Resultados"
-          >
-            <svg class="tm-svg-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <rect x="3" y="3" width="7" height="7"></rect>
-              <rect x="14" y="3" width="7" height="7"></rect>
-              <rect x="14" y="14" width="7" height="7"></rect>
-              <rect x="3" y="14" width="7" height="7"></rect>
-            </svg>
-          </a>
-
-          <a
-            id="tmLinkToCompare"
-            href="/compare"
-            class="tm-icon-btn"
-            data-tooltip="Comparar esta zona con otra ubicación"
-            aria-label="Ir al Comparador"
-          >
-            <svg class="tm-svg-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M16 3h5v5M8 21H3v-5M21 3l-7 7M3 21l7-7"></path>
-            </svg>
-          </a>
 
           <button
             id="btnExportTimeMachineCSV"

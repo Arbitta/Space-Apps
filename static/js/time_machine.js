@@ -344,17 +344,68 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
+   * Sincroniza la altura visible real en navegadores móviles (ej. Chrome iOS/Android con barra inferior)
+   */
+  function syncViewportHeight() {
+    const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    if (vh && vh > 100) {
+      document.documentElement.style.setProperty('--app-height', `${Math.round(vh)}px`);
+    }
+  }
+
+  /**
+   * Calcula el zoom mínimo para que el mapa ocupe toda la pantalla sin repetirse ni mostrar bandas vacías en los polos
+   */
+  function computeMinWorldZoom(container) {
+    const w = (container && container.clientWidth) || window.innerWidth || 1280;
+    const h = (container && container.clientHeight) || window.innerHeight || 800;
+    const maxDim = Math.max(w, h);
+    return Math.max(2.75, Math.ceil(Math.log2(maxDim / 256) * 4) / 4);
+  }
+
+  /**
    * 2. Inicializa el mapa Leaflet con vista Satelital + Cuadrante Redimensionable
    */
   function initLeafletMap() {
+    syncViewportHeight();
     const mapContainer = document.getElementById('timeMachineMap');
     if (!mapContainer || typeof L === 'undefined') return;
 
+    const minWorldZoom = computeMinWorldZoom(mapContainer);
+
     mapInstance = L.map('timeMachineMap', {
       center: [state.latitude, state.longitude],
-      zoom: 7,
-      zoomControl: false
+      zoom: Math.max(7, minWorldZoom),
+      minZoom: minWorldZoom,
+      maxZoom: 17,
+      zoomSnap: 0.25,
+      zoomDelta: 0.5,
+      zoomControl: false,
+      worldCopyJump: true,
+      maxBounds: [
+        [-85, -Infinity],
+        [85, Infinity]
+      ],
+      maxBoundsViscosity: 1.0
     });
+
+    // Cuando se llega al zoom mínimo (final del mapa) y el usuario sigue scrolleando hacia atrás,
+    // desplazar horizontalmente el planeta de forma continua en lugar de repetir el mapa.
+    mapContainer.addEventListener(
+      'wheel',
+      (ev) => {
+        if (!mapInstance) return;
+        const currentZ = mapInstance.getZoom();
+        const minZ = mapInstance.getMinZoom();
+        if (currentZ <= minZ + 0.05 && ev.deltaY > 0) {
+          ev.preventDefault();
+          ev.stopPropagation();
+          const stepX = Math.max(-180, Math.min(180, ev.deltaY * 1.4));
+          mapInstance.panBy([stepX, 0], { animate: false });
+        }
+      },
+      { passive: false, capture: true }
+    );
 
     L.control.zoom({ position: 'bottomright' }).addTo(mapInstance);
 
@@ -400,8 +451,9 @@ document.addEventListener('DOMContentLoaded', () => {
     nationalLayerGroup = L.layerGroup();
 
     mapInstance.on('click', (ev) => {
-      const clickedLat = Number(ev.latlng.lat.toFixed(4));
-      const clickedLon = Number(ev.latlng.lng.toFixed(4));
+      const wrapped = ev.latlng.wrap();
+      const clickedLat = Number(Math.max(-85, Math.min(85, wrapped.lat)).toFixed(4));
+      const clickedLon = Number(wrapped.lng.toFixed(4));
       state.latitude = clickedLat;
       state.longitude = clickedLon;
       state.locationName = `Zona (${clickedLat.toFixed(2)}°, ${clickedLon.toFixed(2)}°)`;
@@ -1499,12 +1551,25 @@ document.addEventListener('DOMContentLoaded', () => {
       btnToggleRightRail.setAttribute('aria-expanded', 'false');
     }
 
-    // Recalcular mapa al cambiar el tamaño de la ventana
-    window.addEventListener('resize', () => {
+    // Recalcular altura visible y límites del mapa al cambiar el tamaño de la ventana o barra móvil
+    const handleViewportResize = () => {
+      syncViewportHeight();
       if (mapInstance) {
         mapInstance.invalidateSize();
+        const container = document.getElementById('timeMachineMap');
+        const newMinZoom = computeMinWorldZoom(container);
+        mapInstance.setMinZoom(newMinZoom);
+        if (mapInstance.getZoom() < newMinZoom) {
+          mapInstance.setZoom(newMinZoom);
+        }
       }
-    });
+    };
+
+    window.addEventListener('resize', handleViewportResize);
+    window.addEventListener('orientationchange', handleViewportResize);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleViewportResize);
+    }
 
     // Barra plegable superior (filtros en pantallas medianas/pequeñas)
     if (btnToggleTopFilters && topFiltersCollapse) {
