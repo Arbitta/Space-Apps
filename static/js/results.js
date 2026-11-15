@@ -301,6 +301,21 @@ document.addEventListener('DOMContentLoaded', () => {
         ? `compare.html?${q.toString()}`
         : `/compare?${q.toString()}`;
     }
+
+    const tmLink = document.getElementById('btnGoToTimeMachine');
+    if (tmLink) {
+      const qTm = new URLSearchParams({
+        latitude: lat,
+        longitude: lon,
+        location: locName,
+        variable: data.variable,
+        start_year: startYr,
+        end_year: endYr
+      });
+      tmLink.href = window.location.protocol === 'file:'
+        ? `time_machine.html?${qTm.toString()}`
+        : `/time-machine?${qTm.toString()}`;
+    }
   }
 
   function renderSeriesTable(series, stats, unitDisplay) {

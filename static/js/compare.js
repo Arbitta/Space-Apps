@@ -193,6 +193,21 @@ document.addEventListener('DOMContentLoaded', () => {
     setText('cmpSharedVariable', `${varMeta.name} (${state.variable}) · Unidad: ${unitDisplay}`);
     setText('cmpSharedPeriod', `Período común: ${state.start_year} – ${state.end_year}`);
 
+    const tmBtn = document.getElementById('btnCompareToTimeMachine');
+    if (tmBtn) {
+      const qTm = new URLSearchParams({
+        latitude: state.locA.latitude,
+        longitude: state.locA.longitude,
+        location: state.locA.name,
+        variable: state.variable,
+        start_year: state.start_year,
+        end_year: state.end_year
+      });
+      tmBtn.href = window.location.protocol === 'file:'
+        ? `time_machine.html?${qTm.toString()}`
+        : `/time-machine?${qTm.toString()}`;
+    }
+
     populateLocationColumn('A', state.locA, dataA, unitDisplay);
     populateLocationColumn('B', state.locB, dataB, unitDisplay);
 

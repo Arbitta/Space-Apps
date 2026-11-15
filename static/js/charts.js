@@ -614,6 +614,170 @@ const EarthLensCharts = (() => {
     };
   }
 
+  /**
+   * Retorna el color hexadecimal según variable y z-score para Earth Time Machine
+   */
+  function getVariableColor(variable = 'T2M', zScore = 0) {
+    const code = String(variable || 'T2M').toUpperCase();
+    const z = Number(zScore || 0);
+
+    if (code === 'PRECTOTCORR') {
+      if (z <= -2.0) return '#92400e';
+      if (z <= -1.2) return '#d97706';
+      if (z <= -0.4) return '#fcd34d';
+      if (z < 0.4) return '#cbd5e1';
+      if (z < 1.2) return '#38bdf8';
+      if (z < 2.0) return '#0284c7';
+      return '#0369a1';
+    }
+    if (code === 'RH2M') {
+      if (z <= -2.0) return '#b45309';
+      if (z <= -1.2) return '#f59e0b';
+      if (z <= -0.4) return '#fde68a';
+      if (z < 0.4) return '#cbd5e1';
+      if (z < 1.2) return '#34d399';
+      if (z < 2.0) return '#10b981';
+      return '#047857';
+    }
+    if (code === 'WS2M') {
+      if (z <= -2.0) return '#0284c7';
+      if (z <= -1.2) return '#38bdf8';
+      if (z <= -0.4) return '#bae6fd';
+      if (z < 0.4) return '#cbd5e1';
+      if (z < 1.2) return '#818cf8';
+      if (z < 2.0) return '#6366f1';
+      return '#7e22ce';
+    }
+    if (z <= -2.0) return '#1e3a8a';
+    if (z <= -1.2) return '#2563eb';
+    if (z <= -0.4) return '#93c5fd';
+    if (z < 0.4) return '#cbd5e1';
+    if (z < 1.2) return '#fbbf24';
+    if (z < 2.0) return '#f97316';
+    return '#dc2626';
+  }
+
+  /**
+   * Calcula anomalías anuales (valor - media, z-score, nivel y color) a partir de una serie anual
+   */
+  function computeAnomalySeries(series = [], variable = 'T2M', statistics = {}) {
+    const valid = (Array.isArray(series) ? series : [])
+      .filter((d) => d && typeof d.year === 'number' && typeof d.value === 'number' && !Number.isNaN(d.value))
+      .map((d) => ({ year: Number(d.year), value: Number(d.value) }))
+      .sort((a, b) => a.year - b.year);
+
+    const n = valid.length;
+    if (n === 0) return { timeline: [], mean: 0, stdDev: 0, events: [] };
+
+    const reg = computeRegressionLine(valid, statistics);
+    const mean = valid.reduce((acc, d) => acc + d.value, 0) / n;
+    const variance = n > 1 ? valid.reduce((acc, d) => acc + Math.pow(d.value - mean, 2), 0) / (n - 1) : 0;
+    const stdDev = Math.sqrt(variance);
+    const sortedVals = valid.map((d) => d.value).sort((a, b) => a - b);
+
+    const timeline = valid.map((d, idx) => {
+      const anom = d.value - mean;
+      const z = stdDev > 1e-9 ? anom / stdDev : 0;
+      const absZ = Math.abs(z);
+      const rank = sortedVals.filter((v) => v <= d.value).length;
+      const percentile = Number(((rank / n) * 100).toFixed(1));
+      let level = 'normal';
+      if (absZ >= 2.0) level = z > 0 ? 'extreme_high' : 'extreme_low';
+      else if (absZ >= 1.5) level = z > 0 ? 'moderate_high' : 'moderate_low';
+      else if (absZ >= 1.0) level = z > 0 ? 'mild_high' : 'mild_low';
+
+      return {
+        year: d.year,
+        value: d.value,
+        trend_value: reg.trendPoints[idx] ?? d.value,
+        ci_low: reg.lowerBand[idx] ?? d.value,
+        ci_high: reg.upperBand[idx] ?? d.value,
+        anomaly: Number(anom.toFixed(4)),
+        z_score: Number(z.toFixed(3)),
+        percentile,
+        anomaly_level: level,
+        is_anomaly: absZ >= 1.5,
+        color: getVariableColor(variable, z)
+      };
+    });
+
+    const events = timeline.filter((p) => p.is_anomaly).sort((a, b) => Math.abs(b.z_score) - Math.abs(a.z_score));
+    return { timeline, mean: Number(mean.toFixed(3)), stdDev: Number(stdDev.toFixed(3)), events };
+  }
+
+  /**
+   * Dibuja el gráfico de barras de anomalías anuales (Climate Stripes / Anomaly Bars) con año activo resaltado
+   */
+  function renderAnomalyBarChart(canvasId, timeline = [], variable = 'T2M', unitLabel = '°C', activeYear = null, onYearClick = null) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas || typeof Chart === 'undefined') return null;
+
+    if (chartInstances[canvasId]) {
+      chartInstances[canvasId].destroy();
+      delete chartInstances[canvasId];
+    }
+
+    const years = timeline.map((p) => p.year);
+    const anomalies = timeline.map((p) => Number(p.anomaly.toFixed(3)));
+    const colors = timeline.map((p) => p.color || getVariableColor(variable, p.z_score));
+    const borderWidths = timeline.map((p) => (p.year === Number(activeYear) ? 2.5 : 1));
+    const borderColors = timeline.map((p) => (p.year === Number(activeYear) ? '#0f172a' : 'rgba(15, 23, 42, 0.25)'));
+
+    const ctx = canvas.getContext('2d');
+    chartInstances[canvasId] = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: years,
+        datasets: [
+          {
+            label: `Anomalía vs media del período (${unitLabel})`,
+            data: anomalies,
+            backgroundColor: colors,
+            borderColor: borderColors,
+            borderWidth: borderWidths,
+            borderRadius: 3
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        onClick: (_, elements) => {
+          if (typeof onYearClick === 'function' && elements && elements.length > 0) {
+            const idx = elements[0].index;
+            if (years[idx] !== undefined) onYearClick(years[idx]);
+          }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(11, 19, 43, 0.94)',
+            callbacks: {
+              label: (context) => {
+                const pt = timeline[context.dataIndex];
+                const sign = context.parsed.y >= 0 ? '+' : '';
+                const zStr = pt ? ` (z = ${pt.z_score >= 0 ? '+' : ''}${pt.z_score.toFixed(2)})` : '';
+                return ` Anomalía: ${sign}${context.parsed.y.toFixed(2)} ${unitLabel}${zStr}`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { maxTicksLimit: 13 }
+          },
+          y: {
+            title: { display: true, text: `Anomalía (${unitLabel})`, font: { weight: '600' } },
+            grid: { color: 'rgba(226, 232, 240, 0.7)' }
+          }
+        }
+      }
+    });
+
+    return chartInstances[canvasId];
+  }
+
   return Object.freeze({
     MIN_VALID_YEAR,
     MAX_VALID_YEAR,
@@ -624,6 +788,9 @@ const EarthLensCharts = (() => {
     renderTrendChart,
     renderComparisonChart,
     downloadCSV,
-    buildMockAnalysis
+    buildMockAnalysis,
+    getVariableColor,
+    computeAnomalySeries,
+    renderAnomalyBarChart
   });
 })();
