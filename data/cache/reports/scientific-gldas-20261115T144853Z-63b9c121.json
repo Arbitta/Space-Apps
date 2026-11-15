@@ -1,0 +1,2020 @@
+{
+  "provider": "gldas",
+  "started_at": "2026-11-15T14:42:38.487215+00:00",
+  "period": {
+    "start_year": 2000,
+    "end_year": 2024
+  },
+  "results": [
+    {
+      "city_id": "comodoro-rivadavia",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:42:43.066708+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:42:45.969517+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:42:49.112506+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:42:52.189786+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:42:55.104598+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "puerto-madryn",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:42:58.125921+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:43:00.800792+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:43:03.554218+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:43:06.703405+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:43:09.947255+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "trelew",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:43:12.928985+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:43:15.707351+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:43:18.666522+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:43:21.349555+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:43:23.947797+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "rio-gallegos",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:43:26.862880+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:43:29.644586+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:43:32.618639+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:43:35.352920+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:43:38.242559+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "ushuaia",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:43:44.369768+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:43:47.785064+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:43:51.062363+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:43:53.743987+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:43:59.744527+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "bariloche",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:03.011047+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:06.158270+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:08.783823+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:11.837928+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:14.574866+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "neuquen",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:17.736324+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:20.534104+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:23.262356+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:26.155145+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:28.954968+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "buenos-aires",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:31.814532+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:34.566044+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:37.405856+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:40.193783+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:42.959517+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "la-plata",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:46.130990+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:48.817920+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:51.746351+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:54.439881+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:44:57.508107+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "mar-del-plata",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:00.589700+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:03.465387+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:06.397556+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:09.169936+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:12.067315+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "bahia-blanca",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:14.969615+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:17.880344+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:20.717096+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:23.971717+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:26.894832+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "rosario",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:29.681163+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:32.409503+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:35.202865+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:38.116879+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:40.903505+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "cordoba",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:43.994079+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:46.722099+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:49.496422+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:52.486413+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:55.737791+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "santa-fe",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:45:58.606343+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:01.449012+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:04.417972+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:07.194413+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:10.098470+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "mendoza",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:13.034153+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:16.127530+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:18.986125+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:21.930503+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:25.229272+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "san-juan",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:28.441644+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:31.759136+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:34.613487+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:37.518011+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:40.301807+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "san-luis",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:43.065429+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:45.884054+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:48.617977+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:51.591114+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:54.409983+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "salta",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:46:57.127237+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:00.409199+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:03.208633+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:05.964418+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:09.155810+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "san-salvador-de-jujuy",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:12.098365+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:14.986854+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:17.983354+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:20.709305+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:23.501853+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "san-miguel-de-tucuman",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:26.991235+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:29.684012+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:32.356788+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:35.083082+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:38.143385+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "santiago-del-estero",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:41.230940+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:43.946815+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:46.732508+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:49.455304+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:52.375200+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "posadas",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:55.395722+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:47:59.056486+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:48:02.349549+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:48:05.695224+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:48:08.488634+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "corrientes",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:48:11.826047+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:48:14.724372+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:48:17.568166+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:48:20.584049+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:48:23.275471+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "resistencia",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:48:26.207961+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:48:28.855744+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:48:31.746898+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:48:34.727291+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:48:37.584072+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "formosa",
+      "status": "ok",
+      "series": 5,
+      "records": 1500,
+      "valid": 1500,
+      "missing": 0,
+      "variables": [
+        {
+          "variable": "SoilMoi0_10cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:48:40.826209+00:00"
+        },
+        {
+          "variable": "SoilMoi10_40cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:48:43.711367+00:00"
+        },
+        {
+          "variable": "SoilMoi40_100cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:48:46.698925+00:00"
+        },
+        {
+          "variable": "SoilMoi100_200cm_inst",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:48:49.650662+00:00"
+        },
+        {
+          "variable": "Evap_tavg",
+          "product": "GLDAS_NOAH025_M",
+          "product_version": "2.1",
+          "cache_version": "2.1-giovanni-csv-v1",
+          "unit": "kg m-2 s-1",
+          "frequency": "monthly",
+          "coverage": {
+            "expected_count": 300,
+            "valid_count": 300,
+            "missing_count": 0
+          },
+          "fetched_at": "2026-11-15T14:48:53.066418+00:00"
+        }
+      ]
+    }
+  ],
+  "finished_at": "2026-11-15T14:48:53.145542+00:00",
+  "summary": {
+    "requested": 25,
+    "succeeded": 25,
+    "failed": 0,
+    "series": 125,
+    "records": 37500,
+    "valid": 37500,
+    "missing": 0
+  }
+}

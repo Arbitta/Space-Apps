@@ -1,0 +1,932 @@
+{
+  "valid": [
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\1c965f0fd8a79bf7a1c600da6eaccdde646a5f4e33218b8eec2bd2508f5df928.json",
+      "city_id": "resistencia",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:57.713774+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\1f1c0702c0d0070890b20899d7ad1144a3c34def9304761eb4a25f9044d8f942.json",
+      "city_id": "formosa",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:59.294022+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\2cb87e69f2f2a3a2772f4ac3b99c4ecb28722ce9afe891ade44b43c14f0d558f.json",
+      "city_id": "santiago-del-estero",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:55.868612+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\2d7b6fc77a92bf3eef6b23b38f29ba1623b1a170a1a540d734a0d5a997ecb70e.json",
+      "city_id": "mar-del-plata",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:42.242035+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\2deacea4026513c0c8e927168ed1f133f545a42975282c915ba0692fc56f3c71.json",
+      "city_id": "neuquen",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:37.786666+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\32897f340b89355b6051dc45d85f6ac74f88e7fbe44efe937d95d770a21f808b.json",
+      "city_id": "puerto-madryn",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:30.707464+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\45193ef23c2271fc9a2b1e8b16d9359b6701aa671561fead739d7c8fd41cf5cd.json",
+      "city_id": "rosario",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:45.059328+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\4894435f71581ec40c12b9c19889b8143d49ce6a5cd4e67eb3ccb759bf5615e5.json",
+      "city_id": "salta",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:51.318035+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\5adfae56cb088960ec552dcd5ac12c9b04053e9ac49775a0eba205010fe18a26.json",
+      "city_id": "la-plata",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:40.815128+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\65d77cf95f5010fd9b8777e8f9d45ebf45a9462a47e450acd41492a0a4879348.json",
+      "city_id": "santa-fe",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:48.092760+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\6e185b34c821151cb0dd43ca45092ce68e732609e2d05153669026093f15331b.json",
+      "city_id": "bahia-blanca",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:43.541428+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\73f25c9bf08cd1b558a06223f019fbf94df89f8b83101008d00bf1fe4a2dc9ab.json",
+      "city_id": "san-luis",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:50.542601+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\9dc9138e95b00e6efa5c72a0dba0a0832452c7fe8cf197c5ed3d9e9d3e5cf7c4.json",
+      "city_id": "rio-gallegos",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:33.640227+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\a3e17ce3e827277e44f7e98c60836c1123be6e374fb62cdbfaaae21688ae6ca8.json",
+      "city_id": "corrientes",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:56.849939+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\a74db81f75094514c4411930319e55fe2aa11ab3d40052b78bddf20ba03e96ce.json",
+      "city_id": "bariloche",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:36.470854+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\ae1ec92d159bbe521c30851c12b8237b6331ee2c0c23d9d4d888c9eb1130bb70.json",
+      "city_id": "ushuaia",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:34.836845+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\befbe70adde2c02c7f57a24b27f2ece41a861f05fbc45623c05875403e23f935.json",
+      "city_id": "cordoba",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:46.701334+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\c2f62006696c4e2a8034573fe1527e8157a4effe0db98f91fc9cff1ccc0d94fc.json",
+      "city_id": "comodoro-rivadavia",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:44:53.314106+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\ce21079f41a619f7205f2e6b9821803ba637765c34fba18cebccdaf53a600f07.json",
+      "city_id": "san-miguel-de-tucuman",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:54.394897+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\ce9ac8448634c7a4d555262360910ae2b2e639c3f74d6600e23cfe0101741b25.json",
+      "city_id": "san-salvador-de-jujuy",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:52.893371+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\cecf6d484100335d64e40b8920c922f5720fd874fb9731d30403c32471e3b3ae.json",
+      "city_id": "mendoza",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:44:54.775518+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\d7f7ad2608c0e4c04f5d71a1db413182a335da350bd8642f01a7b98823bb1397.json",
+      "city_id": "posadas",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:44:56.133762+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\f074e19bd7c3adeb34ff40757550dd96e919a25f742bfb80e9220515766818a9.json",
+      "city_id": "trelew",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:32.086732+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\f6d424b87c9570f94edef5958cbf5c84b7b757277cb5454a4cfe23632415b986.json",
+      "city_id": "buenos-aires",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:39.521263+00:00"
+    },
+    {
+      "path": "C:\\Users\\marco\\AppData\\Local\\Temp\\EarthLens-main-merge-3e45df21cfac47b1b187b6ed6edb0822\\incoming-cache\\power\\feed50e2fe78f6900703aa6712995c852415379112b7dbc81301def3a6f71649.json",
+      "city_id": "san-juan",
+      "quality": {
+        "PRECTOTCORR": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "RH2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MAX": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "T2M_MIN": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        },
+        "WS2M": {
+          "expected_count": 300,
+          "valid_count": 300,
+          "missing_count": 0
+        }
+      },
+      "fetched_at": "2026-11-14T17:58:49.471298+00:00"
+    }
+  ],
+  "invalid": [],
+  "matching_projection_records": 516,
+  "projection_disagreements": []
+}

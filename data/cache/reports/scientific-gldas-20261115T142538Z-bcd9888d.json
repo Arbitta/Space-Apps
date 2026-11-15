@@ -1,0 +1,38 @@
+{
+  "provider": "gldas",
+  "started_at": "2026-11-15T14:25:27.992714+00:00",
+  "period": {
+    "start_year": 2024,
+    "end_year": 2024
+  },
+  "results": [
+    {
+      "city_id": "mendoza",
+      "status": "error",
+      "error_type": "ServiceError",
+      "error_code": "provider_auth_required"
+    },
+    {
+      "city_id": "comodoro-rivadavia",
+      "status": "error",
+      "error_type": "ServiceError",
+      "error_code": "provider_auth_required"
+    },
+    {
+      "city_id": "posadas",
+      "status": "error",
+      "error_type": "ServiceError",
+      "error_code": "provider_auth_required"
+    }
+  ],
+  "finished_at": "2026-11-15T14:25:38.124848+00:00",
+  "summary": {
+    "requested": 3,
+    "succeeded": 0,
+    "failed": 3,
+    "series": 0,
+    "records": 0,
+    "valid": 0,
+    "missing": 0
+  }
+}

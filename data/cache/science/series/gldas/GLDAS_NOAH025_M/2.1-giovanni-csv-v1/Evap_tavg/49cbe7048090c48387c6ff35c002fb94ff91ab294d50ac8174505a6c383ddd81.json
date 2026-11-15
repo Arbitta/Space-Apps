@@ -1,0 +1,3178 @@
+{
+  "schema_version": 1,
+  "query": {
+    "provider": "gldas",
+    "product": "GLDAS_NOAH025_M",
+    "cache_version": "2.1-giovanni-csv-v1",
+    "variable": "Evap_tavg",
+    "city_id": "santiago-del-estero",
+    "latitude": -27.7876388167204,
+    "longitude": -64.2596955067656,
+    "start_year": 2000,
+    "end_year": 2024,
+    "processing": "native-monthly-giovanni-csv-v1"
+  },
+  "fetched_at": "2026-11-15T14:47:52.375200+00:00",
+  "data": {
+    "record": {
+      "schema_version": "earthlens.scientific-series.v1",
+      "provider": "gldas",
+      "product": "GLDAS_NOAH025_M",
+      "product_version": "2.1",
+      "cache_version": "2.1-giovanni-csv-v1",
+      "variable": "Evap_tavg",
+      "unit": "kg m-2 s-1",
+      "location": {
+        "id": "santiago-del-estero",
+        "name": "Santiago del Estero",
+        "province": "Santiago del Estero",
+        "province_id": "86",
+        "region": "NOA",
+        "country": "Argentina",
+        "country_code": "AR",
+        "latitude": -27.7876388167204,
+        "longitude": -64.2596955067656,
+        "coordinate_source": {
+          "name": "GeoRef Argentina",
+          "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+          "method": "POST",
+          "query": {
+            "nombre": "Santiago del Estero",
+            "provincia": "Santiago del Estero",
+            "max": 50
+          },
+          "entity": "localidades_censales",
+          "entity_id": "86049110",
+          "coordinate_field": "centroide",
+          "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+          "record": {
+            "categoria": "Componente de localidad compuesta",
+            "centroide": {
+              "lat": -27.7876388167204,
+              "lon": -64.2596955067656
+            },
+            "departamento": {
+              "id": "86049",
+              "nombre": "Capital"
+            },
+            "funcion": null,
+            "id": "86049110",
+            "municipio": {
+              "id": null,
+              "nombre": null
+            },
+            "nombre": "Santiago del Estero",
+            "provincia": {
+              "id": "86",
+              "nombre": "Santiago del Estero"
+            }
+          }
+        }
+      },
+      "period": {
+        "start_year": 2000,
+        "end_year": 2024
+      },
+      "frequency": "monthly",
+      "spatial_resolution": {
+        "latitude_degrees": 0.25,
+        "longitude_degrees": 0.25,
+        "extraction": "nearest_native_grid_cell"
+      },
+      "series": [
+        {
+          "date": "2000-01-01",
+          "value": 3.8108e-05,
+          "raw_value": 3.8108e-05,
+          "source_time": "2000-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-02-01",
+          "value": 4.00766e-05,
+          "raw_value": 4.00766e-05,
+          "source_time": "2000-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-03-01",
+          "value": 2.59143e-05,
+          "raw_value": 2.59143e-05,
+          "source_time": "2000-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-04-01",
+          "value": 1.82163e-05,
+          "raw_value": 1.82163e-05,
+          "source_time": "2000-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-05-01",
+          "value": 1.72114e-05,
+          "raw_value": 1.72114e-05,
+          "source_time": "2000-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-06-01",
+          "value": 9.70833e-06,
+          "raw_value": 9.70833e-06,
+          "source_time": "2000-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-07-01",
+          "value": 9.28964e-06,
+          "raw_value": 9.28964e-06,
+          "source_time": "2000-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-08-01",
+          "value": 5.98776e-06,
+          "raw_value": 5.98776e-06,
+          "source_time": "2000-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-09-01",
+          "value": 1.03936e-05,
+          "raw_value": 1.03936e-05,
+          "source_time": "2000-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-10-01",
+          "value": 1.80566e-05,
+          "raw_value": 1.80566e-05,
+          "source_time": "2000-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-11-01",
+          "value": 3.2727e-05,
+          "raw_value": 3.2727e-05,
+          "source_time": "2000-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-12-01",
+          "value": 4.46848e-05,
+          "raw_value": 4.46848e-05,
+          "source_time": "2000-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-01-01",
+          "value": 4.73552e-05,
+          "raw_value": 4.73552e-05,
+          "source_time": "2001-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-02-01",
+          "value": 4.71741e-05,
+          "raw_value": 4.71741e-05,
+          "source_time": "2001-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-03-01",
+          "value": 3.97114e-05,
+          "raw_value": 3.97114e-05,
+          "source_time": "2001-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-04-01",
+          "value": 2.19097e-05,
+          "raw_value": 2.19097e-05,
+          "source_time": "2001-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-05-01",
+          "value": 1.20683e-05,
+          "raw_value": 1.20683e-05,
+          "source_time": "2001-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-06-01",
+          "value": 1.05331e-05,
+          "raw_value": 1.05331e-05,
+          "source_time": "2001-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-07-01",
+          "value": 8.85866e-06,
+          "raw_value": 8.85866e-06,
+          "source_time": "2001-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-08-01",
+          "value": 8.5321e-06,
+          "raw_value": 8.5321e-06,
+          "source_time": "2001-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-09-01",
+          "value": 1.27441e-05,
+          "raw_value": 1.27441e-05,
+          "source_time": "2001-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-10-01",
+          "value": 2.0973e-05,
+          "raw_value": 2.0973e-05,
+          "source_time": "2001-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-11-01",
+          "value": 3.46749e-05,
+          "raw_value": 3.46749e-05,
+          "source_time": "2001-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-12-01",
+          "value": 4.68108e-05,
+          "raw_value": 4.68108e-05,
+          "source_time": "2001-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-01-01",
+          "value": 4.15377e-05,
+          "raw_value": 4.15377e-05,
+          "source_time": "2002-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-02-01",
+          "value": 3.93967e-05,
+          "raw_value": 3.93967e-05,
+          "source_time": "2002-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-03-01",
+          "value": 3.47948e-05,
+          "raw_value": 3.47948e-05,
+          "source_time": "2002-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-04-01",
+          "value": 2.10128e-05,
+          "raw_value": 2.10128e-05,
+          "source_time": "2002-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-05-01",
+          "value": 1.79083e-05,
+          "raw_value": 1.79083e-05,
+          "source_time": "2002-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-06-01",
+          "value": 8.84275e-06,
+          "raw_value": 8.84275e-06,
+          "source_time": "2002-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-07-01",
+          "value": 7.96159e-06,
+          "raw_value": 7.96159e-06,
+          "source_time": "2002-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-08-01",
+          "value": 6.39471e-06,
+          "raw_value": 6.39471e-06,
+          "source_time": "2002-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-09-01",
+          "value": 1.16567e-05,
+          "raw_value": 1.16567e-05,
+          "source_time": "2002-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-10-01",
+          "value": 2.42281e-05,
+          "raw_value": 2.42281e-05,
+          "source_time": "2002-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-11-01",
+          "value": 3.29459e-05,
+          "raw_value": 3.29459e-05,
+          "source_time": "2002-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-12-01",
+          "value": 3.93147e-05,
+          "raw_value": 3.93147e-05,
+          "source_time": "2002-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-01-01",
+          "value": 4.6442e-05,
+          "raw_value": 4.6442e-05,
+          "source_time": "2003-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-02-01",
+          "value": 3.84716e-05,
+          "raw_value": 3.84716e-05,
+          "source_time": "2003-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-03-01",
+          "value": 2.94032e-05,
+          "raw_value": 2.94032e-05,
+          "source_time": "2003-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-04-01",
+          "value": 1.93544e-05,
+          "raw_value": 1.93544e-05,
+          "source_time": "2003-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-05-01",
+          "value": 1.23371e-05,
+          "raw_value": 1.23371e-05,
+          "source_time": "2003-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-06-01",
+          "value": 5.50183e-06,
+          "raw_value": 5.50183e-06,
+          "source_time": "2003-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-07-01",
+          "value": 5.10107e-06,
+          "raw_value": 5.10107e-06,
+          "source_time": "2003-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-08-01",
+          "value": 4.22067e-06,
+          "raw_value": 4.22067e-06,
+          "source_time": "2003-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-09-01",
+          "value": 8.19792e-06,
+          "raw_value": 8.19792e-06,
+          "source_time": "2003-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-10-01",
+          "value": 1.62147e-05,
+          "raw_value": 1.62147e-05,
+          "source_time": "2003-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-11-01",
+          "value": 2.14392e-05,
+          "raw_value": 2.14392e-05,
+          "source_time": "2003-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-12-01",
+          "value": 2.70861e-05,
+          "raw_value": 2.70861e-05,
+          "source_time": "2003-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-01-01",
+          "value": 3.33421e-05,
+          "raw_value": 3.33421e-05,
+          "source_time": "2004-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-02-01",
+          "value": 2.31911e-05,
+          "raw_value": 2.31911e-05,
+          "source_time": "2004-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-03-01",
+          "value": 1.63343e-05,
+          "raw_value": 1.63343e-05,
+          "source_time": "2004-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-04-01",
+          "value": 1.73614e-05,
+          "raw_value": 1.73614e-05,
+          "source_time": "2004-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-05-01",
+          "value": 1.05032e-05,
+          "raw_value": 1.05032e-05,
+          "source_time": "2004-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-06-01",
+          "value": 7.66061e-06,
+          "raw_value": 7.66061e-06,
+          "source_time": "2004-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-07-01",
+          "value": 5.17068e-06,
+          "raw_value": 5.17068e-06,
+          "source_time": "2004-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-08-01",
+          "value": 4.12389e-06,
+          "raw_value": 4.12389e-06,
+          "source_time": "2004-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-09-01",
+          "value": 6.66393e-06,
+          "raw_value": 6.66393e-06,
+          "source_time": "2004-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-10-01",
+          "value": 1.32576e-05,
+          "raw_value": 1.32576e-05,
+          "source_time": "2004-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-11-01",
+          "value": 2.19453e-05,
+          "raw_value": 2.19453e-05,
+          "source_time": "2004-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-12-01",
+          "value": 2.96372e-05,
+          "raw_value": 2.96372e-05,
+          "source_time": "2004-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-01-01",
+          "value": 3.14039e-05,
+          "raw_value": 3.14039e-05,
+          "source_time": "2005-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-02-01",
+          "value": 2.46952e-05,
+          "raw_value": 2.46952e-05,
+          "source_time": "2005-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-03-01",
+          "value": 2.74612e-05,
+          "raw_value": 2.74612e-05,
+          "source_time": "2005-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-04-01",
+          "value": 1.77858e-05,
+          "raw_value": 1.77858e-05,
+          "source_time": "2005-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-05-01",
+          "value": 1.13317e-05,
+          "raw_value": 1.13317e-05,
+          "source_time": "2005-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-06-01",
+          "value": 4.88693e-06,
+          "raw_value": 4.88693e-06,
+          "source_time": "2005-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-07-01",
+          "value": 6.32034e-06,
+          "raw_value": 6.32034e-06,
+          "source_time": "2005-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-08-01",
+          "value": 4.3825e-06,
+          "raw_value": 4.3825e-06,
+          "source_time": "2005-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-09-01",
+          "value": 7.07206e-06,
+          "raw_value": 7.07206e-06,
+          "source_time": "2005-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-10-01",
+          "value": 1.20464e-05,
+          "raw_value": 1.20464e-05,
+          "source_time": "2005-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-11-01",
+          "value": 2.67048e-05,
+          "raw_value": 2.67048e-05,
+          "source_time": "2005-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-12-01",
+          "value": 3.03765e-05,
+          "raw_value": 3.03765e-05,
+          "source_time": "2005-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-01-01",
+          "value": 4.17596e-05,
+          "raw_value": 4.17596e-05,
+          "source_time": "2006-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-02-01",
+          "value": 3.85005e-05,
+          "raw_value": 3.85005e-05,
+          "source_time": "2006-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-03-01",
+          "value": 2.08154e-05,
+          "raw_value": 2.08154e-05,
+          "source_time": "2006-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-04-01",
+          "value": 2.06388e-05,
+          "raw_value": 2.06388e-05,
+          "source_time": "2006-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-05-01",
+          "value": 1.02438e-05,
+          "raw_value": 1.02438e-05,
+          "source_time": "2006-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-06-01",
+          "value": 6.5041e-06,
+          "raw_value": 6.5041e-06,
+          "source_time": "2006-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-07-01",
+          "value": 4.39518e-06,
+          "raw_value": 4.39518e-06,
+          "source_time": "2006-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-08-01",
+          "value": 4.01204e-06,
+          "raw_value": 4.01204e-06,
+          "source_time": "2006-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-09-01",
+          "value": 6.33775e-06,
+          "raw_value": 6.33775e-06,
+          "source_time": "2006-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-10-01",
+          "value": 1.80492e-05,
+          "raw_value": 1.80492e-05,
+          "source_time": "2006-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-11-01",
+          "value": 1.90598e-05,
+          "raw_value": 1.90598e-05,
+          "source_time": "2006-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-12-01",
+          "value": 3.61631e-05,
+          "raw_value": 3.61631e-05,
+          "source_time": "2006-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-01-01",
+          "value": 3.69616e-05,
+          "raw_value": 3.69616e-05,
+          "source_time": "2007-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-02-01",
+          "value": 3.88983e-05,
+          "raw_value": 3.88983e-05,
+          "source_time": "2007-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-03-01",
+          "value": 3.13114e-05,
+          "raw_value": 3.13114e-05,
+          "source_time": "2007-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-04-01",
+          "value": 2.32917e-05,
+          "raw_value": 2.32917e-05,
+          "source_time": "2007-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-05-01",
+          "value": 1.04338e-05,
+          "raw_value": 1.04338e-05,
+          "source_time": "2007-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-06-01",
+          "value": 6.7283e-06,
+          "raw_value": 6.7283e-06,
+          "source_time": "2007-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-07-01",
+          "value": 5.58698e-06,
+          "raw_value": 5.58698e-06,
+          "source_time": "2007-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-08-01",
+          "value": 5.46812e-06,
+          "raw_value": 5.46812e-06,
+          "source_time": "2007-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-09-01",
+          "value": 9.02821e-06,
+          "raw_value": 9.02821e-06,
+          "source_time": "2007-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-10-01",
+          "value": 1.69273e-05,
+          "raw_value": 1.69273e-05,
+          "source_time": "2007-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-11-01",
+          "value": 2.7505e-05,
+          "raw_value": 2.7505e-05,
+          "source_time": "2007-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-12-01",
+          "value": 3.52875e-05,
+          "raw_value": 3.52875e-05,
+          "source_time": "2007-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-01-01",
+          "value": 4.18867e-05,
+          "raw_value": 4.18867e-05,
+          "source_time": "2008-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-02-01",
+          "value": 3.83335e-05,
+          "raw_value": 3.83335e-05,
+          "source_time": "2008-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-03-01",
+          "value": 3.27525e-05,
+          "raw_value": 3.27525e-05,
+          "source_time": "2008-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-04-01",
+          "value": 2.21166e-05,
+          "raw_value": 2.21166e-05,
+          "source_time": "2008-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-05-01",
+          "value": 9.78578e-06,
+          "raw_value": 9.78578e-06,
+          "source_time": "2008-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-06-01",
+          "value": 5.46375e-06,
+          "raw_value": 5.46375e-06,
+          "source_time": "2008-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-07-01",
+          "value": 3.64608e-06,
+          "raw_value": 3.64608e-06,
+          "source_time": "2008-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-08-01",
+          "value": 4.63386e-06,
+          "raw_value": 4.63386e-06,
+          "source_time": "2008-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-09-01",
+          "value": 8.31679e-06,
+          "raw_value": 8.31679e-06,
+          "source_time": "2008-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-10-01",
+          "value": 1.39091e-05,
+          "raw_value": 1.39091e-05,
+          "source_time": "2008-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-11-01",
+          "value": 2.69546e-05,
+          "raw_value": 2.69546e-05,
+          "source_time": "2008-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-12-01",
+          "value": 3.46376e-05,
+          "raw_value": 3.46376e-05,
+          "source_time": "2008-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-01-01",
+          "value": 2.97926e-05,
+          "raw_value": 2.97926e-05,
+          "source_time": "2009-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-02-01",
+          "value": 2.59734e-05,
+          "raw_value": 2.59734e-05,
+          "source_time": "2009-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-03-01",
+          "value": 3.15435e-05,
+          "raw_value": 3.15435e-05,
+          "source_time": "2009-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-04-01",
+          "value": 1.70347e-05,
+          "raw_value": 1.70347e-05,
+          "source_time": "2009-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-05-01",
+          "value": 5.9986e-06,
+          "raw_value": 5.9986e-06,
+          "source_time": "2009-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-06-01",
+          "value": 3.7797e-06,
+          "raw_value": 3.7797e-06,
+          "source_time": "2009-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-07-01",
+          "value": 2.56939e-06,
+          "raw_value": 2.56939e-06,
+          "source_time": "2009-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-08-01",
+          "value": 3.86009e-06,
+          "raw_value": 3.86009e-06,
+          "source_time": "2009-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-09-01",
+          "value": 4.44995e-06,
+          "raw_value": 4.44995e-06,
+          "source_time": "2009-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-10-01",
+          "value": 7.65444e-06,
+          "raw_value": 7.65444e-06,
+          "source_time": "2009-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-11-01",
+          "value": 1.43782e-05,
+          "raw_value": 1.43782e-05,
+          "source_time": "2009-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-12-01",
+          "value": 3.18414e-05,
+          "raw_value": 3.18414e-05,
+          "source_time": "2009-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-01-01",
+          "value": 4.26257e-05,
+          "raw_value": 4.26257e-05,
+          "source_time": "2010-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-02-01",
+          "value": 3.68926e-05,
+          "raw_value": 3.68926e-05,
+          "source_time": "2010-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-03-01",
+          "value": 3.43892e-05,
+          "raw_value": 3.43892e-05,
+          "source_time": "2010-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-04-01",
+          "value": 1.80628e-05,
+          "raw_value": 1.80628e-05,
+          "source_time": "2010-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-05-01",
+          "value": 1.30101e-05,
+          "raw_value": 1.30101e-05,
+          "source_time": "2010-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-06-01",
+          "value": 7.21367e-06,
+          "raw_value": 7.21367e-06,
+          "source_time": "2010-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-07-01",
+          "value": 6.22217e-06,
+          "raw_value": 6.22217e-06,
+          "source_time": "2010-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-08-01",
+          "value": 5.79324e-06,
+          "raw_value": 5.79324e-06,
+          "source_time": "2010-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-09-01",
+          "value": 1.11297e-05,
+          "raw_value": 1.11297e-05,
+          "source_time": "2010-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-10-01",
+          "value": 2.08156e-05,
+          "raw_value": 2.08156e-05,
+          "source_time": "2010-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-11-01",
+          "value": 3.37413e-05,
+          "raw_value": 3.37413e-05,
+          "source_time": "2010-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-12-01",
+          "value": 3.31558e-05,
+          "raw_value": 3.31558e-05,
+          "source_time": "2010-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-01-01",
+          "value": 3.84314e-05,
+          "raw_value": 3.84314e-05,
+          "source_time": "2011-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-02-01",
+          "value": 4.1122e-05,
+          "raw_value": 4.1122e-05,
+          "source_time": "2011-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-03-01",
+          "value": 3.72948e-05,
+          "raw_value": 3.72948e-05,
+          "source_time": "2011-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-04-01",
+          "value": 2.51926e-05,
+          "raw_value": 2.51926e-05,
+          "source_time": "2011-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-05-01",
+          "value": 1.27328e-05,
+          "raw_value": 1.27328e-05,
+          "source_time": "2011-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-06-01",
+          "value": 6.74096e-06,
+          "raw_value": 6.74096e-06,
+          "source_time": "2011-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-07-01",
+          "value": 6.2113e-06,
+          "raw_value": 6.2113e-06,
+          "source_time": "2011-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-08-01",
+          "value": 5.14449e-06,
+          "raw_value": 5.14449e-06,
+          "source_time": "2011-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-09-01",
+          "value": 1.31366e-05,
+          "raw_value": 1.31366e-05,
+          "source_time": "2011-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-10-01",
+          "value": 1.951e-05,
+          "raw_value": 1.951e-05,
+          "source_time": "2011-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-11-01",
+          "value": 2.46528e-05,
+          "raw_value": 2.46528e-05,
+          "source_time": "2011-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-12-01",
+          "value": 2.93904e-05,
+          "raw_value": 2.93904e-05,
+          "source_time": "2011-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-01-01",
+          "value": 4.1873e-05,
+          "raw_value": 4.1873e-05,
+          "source_time": "2012-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-02-01",
+          "value": 4.3147e-05,
+          "raw_value": 4.3147e-05,
+          "source_time": "2012-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-03-01",
+          "value": 2.80973e-05,
+          "raw_value": 2.80973e-05,
+          "source_time": "2012-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-04-01",
+          "value": 1.31541e-05,
+          "raw_value": 1.31541e-05,
+          "source_time": "2012-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-05-01",
+          "value": 7.41318e-06,
+          "raw_value": 7.41318e-06,
+          "source_time": "2012-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-06-01",
+          "value": 3.88872e-06,
+          "raw_value": 3.88872e-06,
+          "source_time": "2012-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-07-01",
+          "value": 2.97311e-06,
+          "raw_value": 2.97311e-06,
+          "source_time": "2012-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-08-01",
+          "value": 5.7603e-06,
+          "raw_value": 5.7603e-06,
+          "source_time": "2012-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-09-01",
+          "value": 6.80995e-06,
+          "raw_value": 6.80995e-06,
+          "source_time": "2012-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-10-01",
+          "value": 1.32258e-05,
+          "raw_value": 1.32258e-05,
+          "source_time": "2012-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-11-01",
+          "value": 3.0282e-05,
+          "raw_value": 3.0282e-05,
+          "source_time": "2012-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-12-01",
+          "value": 4.01984e-05,
+          "raw_value": 4.01984e-05,
+          "source_time": "2012-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-01-01",
+          "value": 4.07571e-05,
+          "raw_value": 4.07571e-05,
+          "source_time": "2013-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-02-01",
+          "value": 3.05849e-05,
+          "raw_value": 3.05849e-05,
+          "source_time": "2013-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-03-01",
+          "value": 2.49163e-05,
+          "raw_value": 2.49163e-05,
+          "source_time": "2013-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-04-01",
+          "value": 1.38793e-05,
+          "raw_value": 1.38793e-05,
+          "source_time": "2013-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-05-01",
+          "value": 7.163e-06,
+          "raw_value": 7.163e-06,
+          "source_time": "2013-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-06-01",
+          "value": 7.34179e-06,
+          "raw_value": 7.34179e-06,
+          "source_time": "2013-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-07-01",
+          "value": 3.77276e-06,
+          "raw_value": 3.77276e-06,
+          "source_time": "2013-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-08-01",
+          "value": 2.69973e-06,
+          "raw_value": 2.69973e-06,
+          "source_time": "2013-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-09-01",
+          "value": 4.27451e-06,
+          "raw_value": 4.27451e-06,
+          "source_time": "2013-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-10-01",
+          "value": 1.91186e-05,
+          "raw_value": 1.91186e-05,
+          "source_time": "2013-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-11-01",
+          "value": 2.82269e-05,
+          "raw_value": 2.82269e-05,
+          "source_time": "2013-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-12-01",
+          "value": 3.41439e-05,
+          "raw_value": 3.41439e-05,
+          "source_time": "2013-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-01-01",
+          "value": 5.03906e-05,
+          "raw_value": 5.03906e-05,
+          "source_time": "2014-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-02-01",
+          "value": 4.33101e-05,
+          "raw_value": 4.33101e-05,
+          "source_time": "2014-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-03-01",
+          "value": 3.03629e-05,
+          "raw_value": 3.03629e-05,
+          "source_time": "2014-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-04-01",
+          "value": 1.85864e-05,
+          "raw_value": 1.85864e-05,
+          "source_time": "2014-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-05-01",
+          "value": 9.91484e-06,
+          "raw_value": 9.91484e-06,
+          "source_time": "2014-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-06-01",
+          "value": 7.42131e-06,
+          "raw_value": 7.42131e-06,
+          "source_time": "2014-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-07-01",
+          "value": 5.59813e-06,
+          "raw_value": 5.59813e-06,
+          "source_time": "2014-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-08-01",
+          "value": 5.15144e-06,
+          "raw_value": 5.15144e-06,
+          "source_time": "2014-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-09-01",
+          "value": 9.41725e-06,
+          "raw_value": 9.41725e-06,
+          "source_time": "2014-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-10-01",
+          "value": 1.54442e-05,
+          "raw_value": 1.54442e-05,
+          "source_time": "2014-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-11-01",
+          "value": 2.40146e-05,
+          "raw_value": 2.40146e-05,
+          "source_time": "2014-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-12-01",
+          "value": 3.5083e-05,
+          "raw_value": 3.5083e-05,
+          "source_time": "2014-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-01-01",
+          "value": 4.61226e-05,
+          "raw_value": 4.61226e-05,
+          "source_time": "2015-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-02-01",
+          "value": 4.72943e-05,
+          "raw_value": 4.72943e-05,
+          "source_time": "2015-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-03-01",
+          "value": 4.04378e-05,
+          "raw_value": 4.04378e-05,
+          "source_time": "2015-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-04-01",
+          "value": 2.50113e-05,
+          "raw_value": 2.50113e-05,
+          "source_time": "2015-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-05-01",
+          "value": 1.08936e-05,
+          "raw_value": 1.08936e-05,
+          "source_time": "2015-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-06-01",
+          "value": 6.90696e-06,
+          "raw_value": 6.90696e-06,
+          "source_time": "2015-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-07-01",
+          "value": 6.59746e-06,
+          "raw_value": 6.59746e-06,
+          "source_time": "2015-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-08-01",
+          "value": 1.01969e-05,
+          "raw_value": 1.01969e-05,
+          "source_time": "2015-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-09-01",
+          "value": 6.64706e-06,
+          "raw_value": 6.64706e-06,
+          "source_time": "2015-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-10-01",
+          "value": 1.22351e-05,
+          "raw_value": 1.22351e-05,
+          "source_time": "2015-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-11-01",
+          "value": 2.48518e-05,
+          "raw_value": 2.48518e-05,
+          "source_time": "2015-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-12-01",
+          "value": 4.02843e-05,
+          "raw_value": 4.02843e-05,
+          "source_time": "2015-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-01-01",
+          "value": 5.40206e-05,
+          "raw_value": 5.40206e-05,
+          "source_time": "2016-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-02-01",
+          "value": 5.4738e-05,
+          "raw_value": 5.4738e-05,
+          "source_time": "2016-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-03-01",
+          "value": 4.21839e-05,
+          "raw_value": 4.21839e-05,
+          "source_time": "2016-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-04-01",
+          "value": 2.50912e-05,
+          "raw_value": 2.50912e-05,
+          "source_time": "2016-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-05-01",
+          "value": 1.4561e-05,
+          "raw_value": 1.4561e-05,
+          "source_time": "2016-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-06-01",
+          "value": 9.79158e-06,
+          "raw_value": 9.79158e-06,
+          "source_time": "2016-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-07-01",
+          "value": 7.66705e-06,
+          "raw_value": 7.66705e-06,
+          "source_time": "2016-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-08-01",
+          "value": 8.17763e-06,
+          "raw_value": 8.17763e-06,
+          "source_time": "2016-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-09-01",
+          "value": 1.20814e-05,
+          "raw_value": 1.20814e-05,
+          "source_time": "2016-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-10-01",
+          "value": 2.08292e-05,
+          "raw_value": 2.08292e-05,
+          "source_time": "2016-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-11-01",
+          "value": 3.36921e-05,
+          "raw_value": 3.36921e-05,
+          "source_time": "2016-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-12-01",
+          "value": 3.80534e-05,
+          "raw_value": 3.80534e-05,
+          "source_time": "2016-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-01-01",
+          "value": 3.92709e-05,
+          "raw_value": 3.92709e-05,
+          "source_time": "2017-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-02-01",
+          "value": 3.37142e-05,
+          "raw_value": 3.37142e-05,
+          "source_time": "2017-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-03-01",
+          "value": 4.376e-05,
+          "raw_value": 4.376e-05,
+          "source_time": "2017-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-04-01",
+          "value": 2.34799e-05,
+          "raw_value": 2.34799e-05,
+          "source_time": "2017-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-05-01",
+          "value": 1.17385e-05,
+          "raw_value": 1.17385e-05,
+          "source_time": "2017-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-06-01",
+          "value": 8.96331e-06,
+          "raw_value": 8.96331e-06,
+          "source_time": "2017-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-07-01",
+          "value": 6.46305e-06,
+          "raw_value": 6.46305e-06,
+          "source_time": "2017-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-08-01",
+          "value": 4.57542e-06,
+          "raw_value": 4.57542e-06,
+          "source_time": "2017-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-09-01",
+          "value": 5.75995e-06,
+          "raw_value": 5.75995e-06,
+          "source_time": "2017-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-10-01",
+          "value": 1.43621e-05,
+          "raw_value": 1.43621e-05,
+          "source_time": "2017-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-11-01",
+          "value": 1.5804e-05,
+          "raw_value": 1.5804e-05,
+          "source_time": "2017-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-12-01",
+          "value": 2.60083e-05,
+          "raw_value": 2.60083e-05,
+          "source_time": "2017-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-01-01",
+          "value": 3.76509e-05,
+          "raw_value": 3.76509e-05,
+          "source_time": "2018-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-02-01",
+          "value": 4.01467e-05,
+          "raw_value": 4.01467e-05,
+          "source_time": "2018-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-03-01",
+          "value": 2.35281e-05,
+          "raw_value": 2.35281e-05,
+          "source_time": "2018-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-04-01",
+          "value": 1.68299e-05,
+          "raw_value": 1.68299e-05,
+          "source_time": "2018-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-05-01",
+          "value": 8.90778e-06,
+          "raw_value": 8.90778e-06,
+          "source_time": "2018-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-06-01",
+          "value": 4.5957e-06,
+          "raw_value": 4.5957e-06,
+          "source_time": "2018-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-07-01",
+          "value": 2.31272e-06,
+          "raw_value": 2.31272e-06,
+          "source_time": "2018-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-08-01",
+          "value": 3.02455e-06,
+          "raw_value": 3.02455e-06,
+          "source_time": "2018-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-09-01",
+          "value": 9.12977e-06,
+          "raw_value": 9.12977e-06,
+          "source_time": "2018-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-10-01",
+          "value": 2.11668e-05,
+          "raw_value": 2.11668e-05,
+          "source_time": "2018-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-11-01",
+          "value": 3.86871e-05,
+          "raw_value": 3.86871e-05,
+          "source_time": "2018-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-12-01",
+          "value": 3.81556e-05,
+          "raw_value": 3.81556e-05,
+          "source_time": "2018-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-01-01",
+          "value": 4.08976e-05,
+          "raw_value": 4.08976e-05,
+          "source_time": "2019-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-02-01",
+          "value": 3.47149e-05,
+          "raw_value": 3.47149e-05,
+          "source_time": "2019-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-03-01",
+          "value": 2.85471e-05,
+          "raw_value": 2.85471e-05,
+          "source_time": "2019-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-04-01",
+          "value": 2.3672e-05,
+          "raw_value": 2.3672e-05,
+          "source_time": "2019-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-05-01",
+          "value": 1.37871e-05,
+          "raw_value": 1.37871e-05,
+          "source_time": "2019-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-06-01",
+          "value": 8.30125e-06,
+          "raw_value": 8.30125e-06,
+          "source_time": "2019-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-07-01",
+          "value": 7.24076e-06,
+          "raw_value": 7.24076e-06,
+          "source_time": "2019-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-08-01",
+          "value": 4.87231e-06,
+          "raw_value": 4.87231e-06,
+          "source_time": "2019-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-09-01",
+          "value": 7.20557e-06,
+          "raw_value": 7.20557e-06,
+          "source_time": "2019-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-10-01",
+          "value": 1.29406e-05,
+          "raw_value": 1.29406e-05,
+          "source_time": "2019-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-11-01",
+          "value": 3.72465e-05,
+          "raw_value": 3.72465e-05,
+          "source_time": "2019-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-12-01",
+          "value": 3.14585e-05,
+          "raw_value": 3.14585e-05,
+          "source_time": "2019-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-01-01",
+          "value": 4.58651e-05,
+          "raw_value": 4.58651e-05,
+          "source_time": "2020-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-02-01",
+          "value": 4.1173e-05,
+          "raw_value": 4.1173e-05,
+          "source_time": "2020-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-03-01",
+          "value": 3.39246e-05,
+          "raw_value": 3.39246e-05,
+          "source_time": "2020-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-04-01",
+          "value": 1.85287e-05,
+          "raw_value": 1.85287e-05,
+          "source_time": "2020-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-05-01",
+          "value": 7.48249e-06,
+          "raw_value": 7.48249e-06,
+          "source_time": "2020-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-06-01",
+          "value": 3.92574e-06,
+          "raw_value": 3.92574e-06,
+          "source_time": "2020-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-07-01",
+          "value": 3.54006e-06,
+          "raw_value": 3.54006e-06,
+          "source_time": "2020-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-08-01",
+          "value": 2.65988e-06,
+          "raw_value": 2.65988e-06,
+          "source_time": "2020-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-09-01",
+          "value": 4.63449e-06,
+          "raw_value": 4.63449e-06,
+          "source_time": "2020-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-10-01",
+          "value": 7.56695e-06,
+          "raw_value": 7.56695e-06,
+          "source_time": "2020-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-11-01",
+          "value": 1.95886e-05,
+          "raw_value": 1.95886e-05,
+          "source_time": "2020-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-12-01",
+          "value": 2.40926e-05,
+          "raw_value": 2.40926e-05,
+          "source_time": "2020-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-01-01",
+          "value": 3.56226e-05,
+          "raw_value": 3.56226e-05,
+          "source_time": "2021-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-02-01",
+          "value": 3.51332e-05,
+          "raw_value": 3.51332e-05,
+          "source_time": "2021-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-03-01",
+          "value": 3.8683e-05,
+          "raw_value": 3.8683e-05,
+          "source_time": "2021-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-04-01",
+          "value": 2.21477e-05,
+          "raw_value": 2.21477e-05,
+          "source_time": "2021-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-05-01",
+          "value": 1.20247e-05,
+          "raw_value": 1.20247e-05,
+          "source_time": "2021-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-06-01",
+          "value": 6.36238e-06,
+          "raw_value": 6.36238e-06,
+          "source_time": "2021-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-07-01",
+          "value": 5.90862e-06,
+          "raw_value": 5.90862e-06,
+          "source_time": "2021-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-08-01",
+          "value": 3.92003e-06,
+          "raw_value": 3.92003e-06,
+          "source_time": "2021-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-09-01",
+          "value": 6.46954e-06,
+          "raw_value": 6.46954e-06,
+          "source_time": "2021-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-10-01",
+          "value": 1.07934e-05,
+          "raw_value": 1.07934e-05,
+          "source_time": "2021-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-11-01",
+          "value": 2.63745e-05,
+          "raw_value": 2.63745e-05,
+          "source_time": "2021-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-12-01",
+          "value": 2.57833e-05,
+          "raw_value": 2.57833e-05,
+          "source_time": "2021-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-01-01",
+          "value": 2.81474e-05,
+          "raw_value": 2.81474e-05,
+          "source_time": "2022-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-02-01",
+          "value": 2.99991e-05,
+          "raw_value": 2.99991e-05,
+          "source_time": "2022-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-03-01",
+          "value": 2.58353e-05,
+          "raw_value": 2.58353e-05,
+          "source_time": "2022-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-04-01",
+          "value": 1.62674e-05,
+          "raw_value": 1.62674e-05,
+          "source_time": "2022-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-05-01",
+          "value": 8.80136e-06,
+          "raw_value": 8.80136e-06,
+          "source_time": "2022-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-06-01",
+          "value": 4.31318e-06,
+          "raw_value": 4.31318e-06,
+          "source_time": "2022-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-07-01",
+          "value": 3.91936e-06,
+          "raw_value": 3.91936e-06,
+          "source_time": "2022-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-08-01",
+          "value": 4.28369e-06,
+          "raw_value": 4.28369e-06,
+          "source_time": "2022-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-09-01",
+          "value": 6.72745e-06,
+          "raw_value": 6.72745e-06,
+          "source_time": "2022-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-10-01",
+          "value": 1.39906e-05,
+          "raw_value": 1.39906e-05,
+          "source_time": "2022-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-11-01",
+          "value": 2.4687e-05,
+          "raw_value": 2.4687e-05,
+          "source_time": "2022-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-12-01",
+          "value": 2.91981e-05,
+          "raw_value": 2.91981e-05,
+          "source_time": "2022-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-01-01",
+          "value": 2.67571e-05,
+          "raw_value": 2.67571e-05,
+          "source_time": "2023-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-02-01",
+          "value": 3.75388e-05,
+          "raw_value": 3.75388e-05,
+          "source_time": "2023-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-03-01",
+          "value": 2.75854e-05,
+          "raw_value": 2.75854e-05,
+          "source_time": "2023-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-04-01",
+          "value": 1.87064e-05,
+          "raw_value": 1.87064e-05,
+          "source_time": "2023-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-05-01",
+          "value": 1.03446e-05,
+          "raw_value": 1.03446e-05,
+          "source_time": "2023-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-06-01",
+          "value": 5.24758e-06,
+          "raw_value": 5.24758e-06,
+          "source_time": "2023-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-07-01",
+          "value": 4.57966e-06,
+          "raw_value": 4.57966e-06,
+          "source_time": "2023-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-08-01",
+          "value": 4.43245e-06,
+          "raw_value": 4.43245e-06,
+          "source_time": "2023-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-09-01",
+          "value": 6.34291e-06,
+          "raw_value": 6.34291e-06,
+          "source_time": "2023-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-10-01",
+          "value": 8.78243e-06,
+          "raw_value": 8.78243e-06,
+          "source_time": "2023-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-11-01",
+          "value": 1.6533e-05,
+          "raw_value": 1.6533e-05,
+          "source_time": "2023-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-12-01",
+          "value": 3.70858e-05,
+          "raw_value": 3.70858e-05,
+          "source_time": "2023-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-01-01",
+          "value": 4.07804e-05,
+          "raw_value": 4.07804e-05,
+          "source_time": "2024-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-02-01",
+          "value": 3.65611e-05,
+          "raw_value": 3.65611e-05,
+          "source_time": "2024-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-03-01",
+          "value": 3.87664e-05,
+          "raw_value": 3.87664e-05,
+          "source_time": "2024-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-04-01",
+          "value": 1.59081e-05,
+          "raw_value": 1.59081e-05,
+          "source_time": "2024-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-05-01",
+          "value": 1.05578e-05,
+          "raw_value": 1.05578e-05,
+          "source_time": "2024-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-06-01",
+          "value": 6.22135e-06,
+          "raw_value": 6.22135e-06,
+          "source_time": "2024-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-07-01",
+          "value": 3.63086e-06,
+          "raw_value": 3.63086e-06,
+          "source_time": "2024-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-08-01",
+          "value": 5.00921e-06,
+          "raw_value": 5.00921e-06,
+          "source_time": "2024-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-09-01",
+          "value": 8.77453e-06,
+          "raw_value": 8.77453e-06,
+          "source_time": "2024-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-10-01",
+          "value": 2.12846e-05,
+          "raw_value": 2.12846e-05,
+          "source_time": "2024-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-11-01",
+          "value": 2.41915e-05,
+          "raw_value": 2.41915e-05,
+          "source_time": "2024-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-12-01",
+          "value": 4.00121e-05,
+          "raw_value": 4.00121e-05,
+          "source_time": "2024-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        }
+      ],
+      "fetched_at": "2026-11-15T14:47:52.375200+00:00",
+      "coverage": {
+        "expected_count": 300,
+        "valid_count": 300,
+        "missing_count": 0
+      },
+      "metadata": {
+        "csv_header": {
+          "prod_name": "GLDAS_NOAH025_M.2.1",
+          "doi": "10.5067/SXAVCZFAQLNO",
+          "param_short_name": "Evap_tavg",
+          "param_name": "Evapotranspiration",
+          "unit": "kg m-2 s-1",
+          "undef": "-9999",
+          "begin_time": "2000-01-01 00:00:00",
+          "end_time": "2024-12-01 00:00:00",
+          "lat": "-27.875",
+          "lon": "-64.375",
+          "lat_resolution": "0.25",
+          "lon_resolution": "0.25",
+          "mean": "2.0142e-05",
+          "Request_time": "2026-11-15 14:47:51"
+        },
+        "qa_policy": "native-monthly-giovanni-csv-v1",
+        "effective_coordinates": {
+          "latitude": -27.875,
+          "longitude": -64.375
+        },
+        "precision_note": "Decimal values exactly as delivered by Giovanni CSV; may be rounded compared with native NetCDF.",
+        "access_method": "NASA Earthdata Giovanni in the Cloud",
+        "monthly_semantics": "Native monthly model/product values; no accumulation performed."
+      },
+      "provenance": {
+        "source_urls": [
+          "https://api.giovanni.earthdata.nasa.gov/timeseries?data=GLDAS_NOAH025_M_2_1_Evap_tavg&location=%5B-27.7876388167204%2C-64.2596955067656%5D&time=2000-01-01T00%3A00%3A00%2F2024-12-31T23%3A59%3A59",
+          "https://doi.org/10.5067/SXAVCZFAQLNO"
+        ],
+        "origin": "remote",
+        "date_semantics": "Native monthly timestamps from CSV, without resampling."
+      },
+      "analysis": {
+        "enabled": false,
+        "reason": "Native series; methodology must be approved before new analyses or Radar membership."
+      }
+    },
+    "sha256": "476a9267e4ce001d13a2b55bf5f6326348c55e67ab64355a9426cfd1b99c08f0"
+  },
+  "location": {
+    "id": "santiago-del-estero",
+    "name": "Santiago del Estero",
+    "province": "Santiago del Estero",
+    "province_id": "86",
+    "region": "NOA",
+    "country": "Argentina",
+    "country_code": "AR",
+    "latitude": -27.7876388167204,
+    "longitude": -64.2596955067656,
+    "coordinate_source": {
+      "name": "GeoRef Argentina",
+      "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+      "method": "POST",
+      "query": {
+        "nombre": "Santiago del Estero",
+        "provincia": "Santiago del Estero",
+        "max": 50
+      },
+      "entity": "localidades_censales",
+      "entity_id": "86049110",
+      "coordinate_field": "centroide",
+      "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+      "record": {
+        "categoria": "Componente de localidad compuesta",
+        "centroide": {
+          "lat": -27.7876388167204,
+          "lon": -64.2596955067656
+        },
+        "departamento": {
+          "id": "86049",
+          "nombre": "Capital"
+        },
+        "funcion": null,
+        "id": "86049110",
+        "municipio": {
+          "id": null,
+          "nombre": null
+        },
+        "nombre": "Santiago del Estero",
+        "provincia": {
+          "id": "86",
+          "nombre": "Santiago del Estero"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,298 @@
+{
+  "schema_version": 1,
+  "query": {
+    "provider": "gpm",
+    "product": "GPM_3IMERGM",
+    "cache_version": "07-giovanni-csv-v1",
+    "variable": "precipitation",
+    "city_id": "mendoza",
+    "latitude": -32.8985811304419,
+    "longitude": -68.8464060446987,
+    "start_year": 2024,
+    "end_year": 2024,
+    "processing": "native-monthly-giovanni-csv-v1"
+  },
+  "fetched_at": "2026-11-15T14:51:18.931474+00:00",
+  "data": {
+    "record": {
+      "schema_version": "earthlens.scientific-series.v1",
+      "provider": "gpm",
+      "product": "GPM_3IMERGM",
+      "product_version": "07",
+      "cache_version": "07-giovanni-csv-v1",
+      "variable": "precipitation",
+      "unit": "mm/hr",
+      "location": {
+        "id": "mendoza",
+        "name": "Mendoza",
+        "province": "Mendoza",
+        "province_id": "50",
+        "region": "Cuyo",
+        "country": "Argentina",
+        "country_code": "AR",
+        "latitude": -32.8985811304419,
+        "longitude": -68.8464060446987,
+        "coordinate_source": {
+          "name": "GeoRef Argentina",
+          "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+          "method": "POST",
+          "query": {
+            "nombre": "Mendoza",
+            "provincia": "Mendoza",
+            "max": 50
+          },
+          "entity": "localidades_censales",
+          "entity_id": "50007010",
+          "coordinate_field": "centroide",
+          "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+          "record": {
+            "categoria": "Componente de localidad compuesta",
+            "centroide": {
+              "lat": -32.8985811304419,
+              "lon": -68.8464060446987
+            },
+            "departamento": {
+              "id": "50007",
+              "nombre": "Capital"
+            },
+            "funcion": null,
+            "id": "50007010",
+            "municipio": {
+              "id": "500007",
+              "nombre": "Mendoza"
+            },
+            "nombre": "Mendoza",
+            "provincia": {
+              "id": "50",
+              "nombre": "Mendoza"
+            }
+          }
+        }
+      },
+      "period": {
+        "start_year": 2024,
+        "end_year": 2024
+      },
+      "frequency": "monthly",
+      "spatial_resolution": {
+        "latitude_degrees": 0.1,
+        "longitude_degrees": 0.1,
+        "extraction": "nearest_native_grid_cell"
+      },
+      "series": [
+        {
+          "date": "2024-01-01",
+          "value": 0.052,
+          "raw_value": 0.052,
+          "source_time": "2024-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-02-01",
+          "value": 0.075,
+          "raw_value": 0.075,
+          "source_time": "2024-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-03-01",
+          "value": 0.028,
+          "raw_value": 0.028,
+          "source_time": "2024-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-04-01",
+          "value": 0.025,
+          "raw_value": 0.025,
+          "source_time": "2024-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-05-01",
+          "value": 0.026,
+          "raw_value": 0.026,
+          "source_time": "2024-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-06-01",
+          "value": 0.02,
+          "raw_value": 0.02,
+          "source_time": "2024-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-07-01",
+          "value": 0.007,
+          "raw_value": 0.007,
+          "source_time": "2024-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-08-01",
+          "value": 0.042,
+          "raw_value": 0.042,
+          "source_time": "2024-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-09-01",
+          "value": 0.006,
+          "raw_value": 0.006,
+          "source_time": "2024-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-10-01",
+          "value": 0.11,
+          "raw_value": 0.11,
+          "source_time": "2024-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-11-01",
+          "value": 0.01,
+          "raw_value": 0.01,
+          "source_time": "2024-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-12-01",
+          "value": 0.032,
+          "raw_value": 0.032,
+          "source_time": "2024-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        }
+      ],
+      "fetched_at": "2026-11-15T14:51:18.931474+00:00",
+      "coverage": {
+        "expected_count": 12,
+        "valid_count": 12,
+        "missing_count": 0
+      },
+      "metadata": {
+        "csv_header": {
+          "prod_name": "GPM_3IMERGM.07",
+          "doi": "10.5067/GPM/IMERG/3B-MONTH/07",
+          "param_short_name": "/Grid/precipitation",
+          "param_name": "Merged satellite-gauge precipitation estimate - Final Run (recommended for general use)",
+          "unit": "mm/hr",
+          "undef": "-9999.9",
+          "begin_time": "2024-01-01 00:00:00",
+          "end_time": "2024-12-01 00:00:00",
+          "lat": "-32.85",
+          "lon": "-68.85",
+          "lat_resolution": "0.1",
+          "lon_resolution": "0.1",
+          "mean": "3.6083e-02",
+          "Request_time": "2026-11-15 14:51:17"
+        },
+        "qa_policy": "native-monthly-giovanni-csv-v1",
+        "effective_coordinates": {
+          "latitude": -32.85,
+          "longitude": -68.85
+        },
+        "precision_note": "Decimal values exactly as delivered by Giovanni CSV; may be rounded compared with native NetCDF.",
+        "access_method": "NASA Earthdata Giovanni in the Cloud",
+        "monthly_semantics": "Native monthly model/product values; no accumulation performed."
+      },
+      "provenance": {
+        "source_urls": [
+          "https://api.giovanni.earthdata.nasa.gov/timeseries?data=GPM_3IMERGM_07_precipitation&location=%5B-32.8985811304419%2C-68.8464060446987%5D&time=2024-01-01T00%3A00%3A00%2F2024-12-31T23%3A59%3A59",
+          "https://doi.org/10.5067/GPM/IMERG/3B-MONTH/07"
+        ],
+        "origin": "remote",
+        "date_semantics": "Native monthly timestamps from CSV, without resampling."
+      },
+      "analysis": {
+        "enabled": false,
+        "reason": "Native series; methodology must be approved before new analyses or Radar membership."
+      }
+    },
+    "sha256": "c45adaf9e5eee4b5db9515def6e266629f881c21fceb9acf719139dff5abe331"
+  },
+  "location": {
+    "id": "mendoza",
+    "name": "Mendoza",
+    "province": "Mendoza",
+    "province_id": "50",
+    "region": "Cuyo",
+    "country": "Argentina",
+    "country_code": "AR",
+    "latitude": -32.8985811304419,
+    "longitude": -68.8464060446987,
+    "coordinate_source": {
+      "name": "GeoRef Argentina",
+      "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+      "method": "POST",
+      "query": {
+        "nombre": "Mendoza",
+        "provincia": "Mendoza",
+        "max": 50
+      },
+      "entity": "localidades_censales",
+      "entity_id": "50007010",
+      "coordinate_field": "centroide",
+      "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+      "record": {
+        "categoria": "Componente de localidad compuesta",
+        "centroide": {
+          "lat": -32.8985811304419,
+          "lon": -68.8464060446987
+        },
+        "departamento": {
+          "id": "50007",
+          "nombre": "Capital"
+        },
+        "funcion": null,
+        "id": "50007010",
+        "municipio": {
+          "id": "500007",
+          "nombre": "Mendoza"
+        },
+        "nombre": "Mendoza",
+        "provincia": {
+          "id": "50",
+          "nombre": "Mendoza"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,3178 @@
+{
+  "schema_version": 1,
+  "query": {
+    "provider": "gldas",
+    "product": "GLDAS_NOAH025_M",
+    "cache_version": "2.1-giovanni-csv-v1",
+    "variable": "SoilMoi100_200cm_inst",
+    "city_id": "formosa",
+    "latitude": -26.1852113386808,
+    "longitude": -58.1743535107885,
+    "start_year": 2000,
+    "end_year": 2024,
+    "processing": "native-monthly-giovanni-csv-v1"
+  },
+  "fetched_at": "2026-11-15T14:48:49.650662+00:00",
+  "data": {
+    "record": {
+      "schema_version": "earthlens.scientific-series.v1",
+      "provider": "gldas",
+      "product": "GLDAS_NOAH025_M",
+      "product_version": "2.1",
+      "cache_version": "2.1-giovanni-csv-v1",
+      "variable": "SoilMoi100_200cm_inst",
+      "unit": "kg m-2",
+      "location": {
+        "id": "formosa",
+        "name": "Formosa",
+        "province": "Formosa",
+        "province_id": "34",
+        "region": "NEA",
+        "country": "Argentina",
+        "country_code": "AR",
+        "latitude": -26.1852113386808,
+        "longitude": -58.1743535107885,
+        "coordinate_source": {
+          "name": "GeoRef Argentina",
+          "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+          "method": "POST",
+          "query": {
+            "nombre": "Formosa",
+            "provincia": "Formosa",
+            "max": 50
+          },
+          "entity": "localidades_censales",
+          "entity_id": "34014020",
+          "coordinate_field": "centroide",
+          "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+          "record": {
+            "categoria": "Localidad simple",
+            "centroide": {
+              "lat": -26.1852113386808,
+              "lon": -58.1743535107885
+            },
+            "departamento": {
+              "id": "34014",
+              "nombre": "Formosa"
+            },
+            "funcion": null,
+            "id": "34014020",
+            "municipio": {
+              "id": "340028",
+              "nombre": "Formosa"
+            },
+            "nombre": "Formosa",
+            "provincia": {
+              "id": "34",
+              "nombre": "Formosa"
+            }
+          }
+        }
+      },
+      "period": {
+        "start_year": 2000,
+        "end_year": 2024
+      },
+      "frequency": "monthly",
+      "spatial_resolution": {
+        "latitude_degrees": 0.25,
+        "longitude_degrees": 0.25,
+        "extraction": "nearest_native_grid_cell"
+      },
+      "series": [
+        {
+          "date": "2000-01-01",
+          "value": 254.839,
+          "raw_value": 254.839,
+          "source_time": "2000-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-02-01",
+          "value": 273.724,
+          "raw_value": 273.724,
+          "source_time": "2000-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-03-01",
+          "value": 286.902,
+          "raw_value": 286.902,
+          "source_time": "2000-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-04-01",
+          "value": 297.402,
+          "raw_value": 297.402,
+          "source_time": "2000-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-05-01",
+          "value": 348.112,
+          "raw_value": 348.112,
+          "source_time": "2000-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-06-01",
+          "value": 348.704,
+          "raw_value": 348.704,
+          "source_time": "2000-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-07-01",
+          "value": 335.06,
+          "raw_value": 335.06,
+          "source_time": "2000-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-08-01",
+          "value": 319.236,
+          "raw_value": 319.236,
+          "source_time": "2000-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-09-01",
+          "value": 307.449,
+          "raw_value": 307.449,
+          "source_time": "2000-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-10-01",
+          "value": 317.49,
+          "raw_value": 317.49,
+          "source_time": "2000-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-11-01",
+          "value": 345.992,
+          "raw_value": 345.992,
+          "source_time": "2000-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2000-12-01",
+          "value": 327.904,
+          "raw_value": 327.904,
+          "source_time": "2000-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-01-01",
+          "value": 332.941,
+          "raw_value": 332.941,
+          "source_time": "2001-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-02-01",
+          "value": 353.417,
+          "raw_value": 353.417,
+          "source_time": "2001-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-03-01",
+          "value": 336.367,
+          "raw_value": 336.367,
+          "source_time": "2001-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-04-01",
+          "value": 355.35,
+          "raw_value": 355.35,
+          "source_time": "2001-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-05-01",
+          "value": 332.547,
+          "raw_value": 332.547,
+          "source_time": "2001-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-06-01",
+          "value": 333.31,
+          "raw_value": 333.31,
+          "source_time": "2001-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-07-01",
+          "value": 319.798,
+          "raw_value": 319.798,
+          "source_time": "2001-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-08-01",
+          "value": 295.213,
+          "raw_value": 295.213,
+          "source_time": "2001-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-09-01",
+          "value": 288.007,
+          "raw_value": 288.007,
+          "source_time": "2001-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-10-01",
+          "value": 302.473,
+          "raw_value": 302.473,
+          "source_time": "2001-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-11-01",
+          "value": 293.782,
+          "raw_value": 293.782,
+          "source_time": "2001-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2001-12-01",
+          "value": 295.849,
+          "raw_value": 295.849,
+          "source_time": "2001-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-01-01",
+          "value": 283.853,
+          "raw_value": 283.853,
+          "source_time": "2002-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-02-01",
+          "value": 325.853,
+          "raw_value": 325.853,
+          "source_time": "2002-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-03-01",
+          "value": 343.073,
+          "raw_value": 343.073,
+          "source_time": "2002-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-04-01",
+          "value": 382.673,
+          "raw_value": 382.673,
+          "source_time": "2002-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-05-01",
+          "value": 372.226,
+          "raw_value": 372.226,
+          "source_time": "2002-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-06-01",
+          "value": 335.056,
+          "raw_value": 335.056,
+          "source_time": "2002-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-07-01",
+          "value": 338.74,
+          "raw_value": 338.74,
+          "source_time": "2002-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-08-01",
+          "value": 318.438,
+          "raw_value": 318.438,
+          "source_time": "2002-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-09-01",
+          "value": 313.2,
+          "raw_value": 313.2,
+          "source_time": "2002-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-10-01",
+          "value": 306.082,
+          "raw_value": 306.082,
+          "source_time": "2002-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-11-01",
+          "value": 333.631,
+          "raw_value": 333.631,
+          "source_time": "2002-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2002-12-01",
+          "value": 345.085,
+          "raw_value": 345.085,
+          "source_time": "2002-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-01-01",
+          "value": 343.564,
+          "raw_value": 343.564,
+          "source_time": "2003-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-02-01",
+          "value": 350.859,
+          "raw_value": 350.859,
+          "source_time": "2003-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-03-01",
+          "value": 358.808,
+          "raw_value": 358.808,
+          "source_time": "2003-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-04-01",
+          "value": 325.721,
+          "raw_value": 325.721,
+          "source_time": "2003-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-05-01",
+          "value": 303.706,
+          "raw_value": 303.706,
+          "source_time": "2003-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-06-01",
+          "value": 286.52,
+          "raw_value": 286.52,
+          "source_time": "2003-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-07-01",
+          "value": 283.267,
+          "raw_value": 283.267,
+          "source_time": "2003-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-08-01",
+          "value": 278.753,
+          "raw_value": 278.753,
+          "source_time": "2003-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-09-01",
+          "value": 275.314,
+          "raw_value": 275.314,
+          "source_time": "2003-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-10-01",
+          "value": 279.243,
+          "raw_value": 279.243,
+          "source_time": "2003-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-11-01",
+          "value": 275.943,
+          "raw_value": 275.943,
+          "source_time": "2003-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2003-12-01",
+          "value": 328.94,
+          "raw_value": 328.94,
+          "source_time": "2003-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-01-01",
+          "value": 331.061,
+          "raw_value": 331.061,
+          "source_time": "2004-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-02-01",
+          "value": 292.516,
+          "raw_value": 292.516,
+          "source_time": "2004-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-03-01",
+          "value": 282.221,
+          "raw_value": 282.221,
+          "source_time": "2004-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-04-01",
+          "value": 276.06,
+          "raw_value": 276.06,
+          "source_time": "2004-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-05-01",
+          "value": 285.534,
+          "raw_value": 285.534,
+          "source_time": "2004-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-06-01",
+          "value": 278.214,
+          "raw_value": 278.214,
+          "source_time": "2004-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-07-01",
+          "value": 279.284,
+          "raw_value": 279.284,
+          "source_time": "2004-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-08-01",
+          "value": 275.719,
+          "raw_value": 275.719,
+          "source_time": "2004-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-09-01",
+          "value": 264.15,
+          "raw_value": 264.15,
+          "source_time": "2004-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-10-01",
+          "value": 260.816,
+          "raw_value": 260.816,
+          "source_time": "2004-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-11-01",
+          "value": 306.883,
+          "raw_value": 306.883,
+          "source_time": "2004-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2004-12-01",
+          "value": 352.321,
+          "raw_value": 352.321,
+          "source_time": "2004-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-01-01",
+          "value": 323.815,
+          "raw_value": 323.815,
+          "source_time": "2005-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-02-01",
+          "value": 291.906,
+          "raw_value": 291.906,
+          "source_time": "2005-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-03-01",
+          "value": 273.763,
+          "raw_value": 273.763,
+          "source_time": "2005-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-04-01",
+          "value": 309.898,
+          "raw_value": 309.898,
+          "source_time": "2005-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-05-01",
+          "value": 338.982,
+          "raw_value": 338.982,
+          "source_time": "2005-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-06-01",
+          "value": 350.127,
+          "raw_value": 350.127,
+          "source_time": "2005-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-07-01",
+          "value": 339.307,
+          "raw_value": 339.307,
+          "source_time": "2005-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-08-01",
+          "value": 306.262,
+          "raw_value": 306.262,
+          "source_time": "2005-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-09-01",
+          "value": 285.858,
+          "raw_value": 285.858,
+          "source_time": "2005-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-10-01",
+          "value": 278.544,
+          "raw_value": 278.544,
+          "source_time": "2005-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-11-01",
+          "value": 285.472,
+          "raw_value": 285.472,
+          "source_time": "2005-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2005-12-01",
+          "value": 278.055,
+          "raw_value": 278.055,
+          "source_time": "2005-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-01-01",
+          "value": 267.185,
+          "raw_value": 267.185,
+          "source_time": "2006-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-02-01",
+          "value": 263.076,
+          "raw_value": 263.076,
+          "source_time": "2006-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-03-01",
+          "value": 259.845,
+          "raw_value": 259.845,
+          "source_time": "2006-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-04-01",
+          "value": 274.972,
+          "raw_value": 274.972,
+          "source_time": "2006-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-05-01",
+          "value": 270.985,
+          "raw_value": 270.985,
+          "source_time": "2006-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-06-01",
+          "value": 269.909,
+          "raw_value": 269.909,
+          "source_time": "2006-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-07-01",
+          "value": 263.086,
+          "raw_value": 263.086,
+          "source_time": "2006-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-08-01",
+          "value": 254.383,
+          "raw_value": 254.383,
+          "source_time": "2006-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-09-01",
+          "value": 249.515,
+          "raw_value": 249.515,
+          "source_time": "2006-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-10-01",
+          "value": 289.59,
+          "raw_value": 289.59,
+          "source_time": "2006-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-11-01",
+          "value": 319.222,
+          "raw_value": 319.222,
+          "source_time": "2006-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2006-12-01",
+          "value": 333.834,
+          "raw_value": 333.834,
+          "source_time": "2006-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-01-01",
+          "value": 335.333,
+          "raw_value": 335.333,
+          "source_time": "2007-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-02-01",
+          "value": 344.213,
+          "raw_value": 344.213,
+          "source_time": "2007-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-03-01",
+          "value": 345.34,
+          "raw_value": 345.34,
+          "source_time": "2007-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-04-01",
+          "value": 371.634,
+          "raw_value": 371.634,
+          "source_time": "2007-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-05-01",
+          "value": 347.536,
+          "raw_value": 347.536,
+          "source_time": "2007-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-06-01",
+          "value": 322.336,
+          "raw_value": 322.336,
+          "source_time": "2007-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-07-01",
+          "value": 310.061,
+          "raw_value": 310.061,
+          "source_time": "2007-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-08-01",
+          "value": 299.543,
+          "raw_value": 299.543,
+          "source_time": "2007-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-09-01",
+          "value": 289.105,
+          "raw_value": 289.105,
+          "source_time": "2007-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-10-01",
+          "value": 296.802,
+          "raw_value": 296.802,
+          "source_time": "2007-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-11-01",
+          "value": 317.364,
+          "raw_value": 317.364,
+          "source_time": "2007-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2007-12-01",
+          "value": 300.7,
+          "raw_value": 300.7,
+          "source_time": "2007-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-01-01",
+          "value": 314.216,
+          "raw_value": 314.216,
+          "source_time": "2008-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-02-01",
+          "value": 306.809,
+          "raw_value": 306.809,
+          "source_time": "2008-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-03-01",
+          "value": 308.182,
+          "raw_value": 308.182,
+          "source_time": "2008-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-04-01",
+          "value": 299.236,
+          "raw_value": 299.236,
+          "source_time": "2008-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-05-01",
+          "value": 296.402,
+          "raw_value": 296.402,
+          "source_time": "2008-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-06-01",
+          "value": 278.341,
+          "raw_value": 278.341,
+          "source_time": "2008-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-07-01",
+          "value": 276.088,
+          "raw_value": 276.088,
+          "source_time": "2008-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-08-01",
+          "value": 278.004,
+          "raw_value": 278.004,
+          "source_time": "2008-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-09-01",
+          "value": 274.042,
+          "raw_value": 274.042,
+          "source_time": "2008-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-10-01",
+          "value": 271.252,
+          "raw_value": 271.252,
+          "source_time": "2008-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-11-01",
+          "value": 308.066,
+          "raw_value": 308.066,
+          "source_time": "2008-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2008-12-01",
+          "value": 287.235,
+          "raw_value": 287.235,
+          "source_time": "2008-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-01-01",
+          "value": 278.496,
+          "raw_value": 278.496,
+          "source_time": "2009-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-02-01",
+          "value": 284.908,
+          "raw_value": 284.908,
+          "source_time": "2009-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-03-01",
+          "value": 276.413,
+          "raw_value": 276.413,
+          "source_time": "2009-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-04-01",
+          "value": 264.076,
+          "raw_value": 264.076,
+          "source_time": "2009-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-05-01",
+          "value": 261.429,
+          "raw_value": 261.429,
+          "source_time": "2009-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-06-01",
+          "value": 270.163,
+          "raw_value": 270.163,
+          "source_time": "2009-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-07-01",
+          "value": 289.828,
+          "raw_value": 289.828,
+          "source_time": "2009-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-08-01",
+          "value": 305.869,
+          "raw_value": 305.869,
+          "source_time": "2009-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-09-01",
+          "value": 305.43,
+          "raw_value": 305.43,
+          "source_time": "2009-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-10-01",
+          "value": 309.745,
+          "raw_value": 309.745,
+          "source_time": "2009-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-11-01",
+          "value": 328.575,
+          "raw_value": 328.575,
+          "source_time": "2009-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2009-12-01",
+          "value": 355.542,
+          "raw_value": 355.542,
+          "source_time": "2009-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-01-01",
+          "value": 370.073,
+          "raw_value": 370.073,
+          "source_time": "2010-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-02-01",
+          "value": 325.359,
+          "raw_value": 325.359,
+          "source_time": "2010-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-03-01",
+          "value": 340.336,
+          "raw_value": 340.336,
+          "source_time": "2010-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-04-01",
+          "value": 332.216,
+          "raw_value": 332.216,
+          "source_time": "2010-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-05-01",
+          "value": 356.179,
+          "raw_value": 356.179,
+          "source_time": "2010-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-06-01",
+          "value": 352.861,
+          "raw_value": 352.861,
+          "source_time": "2010-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-07-01",
+          "value": 354.433,
+          "raw_value": 354.433,
+          "source_time": "2010-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-08-01",
+          "value": 338.977,
+          "raw_value": 338.977,
+          "source_time": "2010-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-09-01",
+          "value": 320.617,
+          "raw_value": 320.617,
+          "source_time": "2010-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-10-01",
+          "value": 310.145,
+          "raw_value": 310.145,
+          "source_time": "2010-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-11-01",
+          "value": 290.896,
+          "raw_value": 290.896,
+          "source_time": "2010-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2010-12-01",
+          "value": 291.457,
+          "raw_value": 291.457,
+          "source_time": "2010-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-01-01",
+          "value": 279.3,
+          "raw_value": 279.3,
+          "source_time": "2011-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-02-01",
+          "value": 313.314,
+          "raw_value": 313.314,
+          "source_time": "2011-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-03-01",
+          "value": 321.341,
+          "raw_value": 321.341,
+          "source_time": "2011-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-04-01",
+          "value": 311.043,
+          "raw_value": 311.043,
+          "source_time": "2011-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-05-01",
+          "value": 328.555,
+          "raw_value": 328.555,
+          "source_time": "2011-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-06-01",
+          "value": 310.613,
+          "raw_value": 310.613,
+          "source_time": "2011-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-07-01",
+          "value": 318.708,
+          "raw_value": 318.708,
+          "source_time": "2011-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-08-01",
+          "value": 316.539,
+          "raw_value": 316.539,
+          "source_time": "2011-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-09-01",
+          "value": 300.658,
+          "raw_value": 300.658,
+          "source_time": "2011-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-10-01",
+          "value": 306.615,
+          "raw_value": 306.615,
+          "source_time": "2011-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-11-01",
+          "value": 305.015,
+          "raw_value": 305.015,
+          "source_time": "2011-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2011-12-01",
+          "value": 296.481,
+          "raw_value": 296.481,
+          "source_time": "2011-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-01-01",
+          "value": 278.927,
+          "raw_value": 278.927,
+          "source_time": "2012-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-02-01",
+          "value": 275.464,
+          "raw_value": 275.464,
+          "source_time": "2012-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-03-01",
+          "value": 267.146,
+          "raw_value": 267.146,
+          "source_time": "2012-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-04-01",
+          "value": 282.617,
+          "raw_value": 282.617,
+          "source_time": "2012-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-05-01",
+          "value": 302.329,
+          "raw_value": 302.329,
+          "source_time": "2012-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-06-01",
+          "value": 296.496,
+          "raw_value": 296.496,
+          "source_time": "2012-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-07-01",
+          "value": 293.444,
+          "raw_value": 293.444,
+          "source_time": "2012-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-08-01",
+          "value": 288.711,
+          "raw_value": 288.711,
+          "source_time": "2012-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-09-01",
+          "value": 284.994,
+          "raw_value": 284.994,
+          "source_time": "2012-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-10-01",
+          "value": 270.653,
+          "raw_value": 270.653,
+          "source_time": "2012-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-11-01",
+          "value": 266.059,
+          "raw_value": 266.059,
+          "source_time": "2012-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2012-12-01",
+          "value": 283.705,
+          "raw_value": 283.705,
+          "source_time": "2012-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-01-01",
+          "value": 283.442,
+          "raw_value": 283.442,
+          "source_time": "2013-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-02-01",
+          "value": 268.985,
+          "raw_value": 268.985,
+          "source_time": "2013-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-03-01",
+          "value": 268.23,
+          "raw_value": 268.23,
+          "source_time": "2013-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-04-01",
+          "value": 265.051,
+          "raw_value": 265.051,
+          "source_time": "2013-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-05-01",
+          "value": 289.494,
+          "raw_value": 289.494,
+          "source_time": "2013-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-06-01",
+          "value": 315.736,
+          "raw_value": 315.736,
+          "source_time": "2013-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-07-01",
+          "value": 328.756,
+          "raw_value": 328.756,
+          "source_time": "2013-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-08-01",
+          "value": 311.857,
+          "raw_value": 311.857,
+          "source_time": "2013-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-09-01",
+          "value": 310.561,
+          "raw_value": 310.561,
+          "source_time": "2013-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-10-01",
+          "value": 296.32,
+          "raw_value": 296.32,
+          "source_time": "2013-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-11-01",
+          "value": 305.651,
+          "raw_value": 305.651,
+          "source_time": "2013-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2013-12-01",
+          "value": 315.482,
+          "raw_value": 315.482,
+          "source_time": "2013-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-01-01",
+          "value": 294.794,
+          "raw_value": 294.794,
+          "source_time": "2014-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-02-01",
+          "value": 279.994,
+          "raw_value": 279.994,
+          "source_time": "2014-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-03-01",
+          "value": 301.159,
+          "raw_value": 301.159,
+          "source_time": "2014-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-04-01",
+          "value": 365.316,
+          "raw_value": 365.316,
+          "source_time": "2014-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-05-01",
+          "value": 358.562,
+          "raw_value": 358.562,
+          "source_time": "2014-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-06-01",
+          "value": 325.343,
+          "raw_value": 325.343,
+          "source_time": "2014-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-07-01",
+          "value": 338.03,
+          "raw_value": 338.03,
+          "source_time": "2014-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-08-01",
+          "value": 328.077,
+          "raw_value": 328.077,
+          "source_time": "2014-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-09-01",
+          "value": 312.771,
+          "raw_value": 312.771,
+          "source_time": "2014-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-10-01",
+          "value": 305.87,
+          "raw_value": 305.87,
+          "source_time": "2014-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-11-01",
+          "value": 321.55,
+          "raw_value": 321.55,
+          "source_time": "2014-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2014-12-01",
+          "value": 313.84,
+          "raw_value": 313.84,
+          "source_time": "2014-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-01-01",
+          "value": 311.515,
+          "raw_value": 311.515,
+          "source_time": "2015-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-02-01",
+          "value": 309.556,
+          "raw_value": 309.556,
+          "source_time": "2015-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-03-01",
+          "value": 308.434,
+          "raw_value": 308.434,
+          "source_time": "2015-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-04-01",
+          "value": 312.218,
+          "raw_value": 312.218,
+          "source_time": "2015-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-05-01",
+          "value": 352.758,
+          "raw_value": 352.758,
+          "source_time": "2015-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-06-01",
+          "value": 340.84,
+          "raw_value": 340.84,
+          "source_time": "2015-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-07-01",
+          "value": 352.424,
+          "raw_value": 352.424,
+          "source_time": "2015-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-08-01",
+          "value": 324.711,
+          "raw_value": 324.711,
+          "source_time": "2015-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-09-01",
+          "value": 302.077,
+          "raw_value": 302.077,
+          "source_time": "2015-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-10-01",
+          "value": 278.51,
+          "raw_value": 278.51,
+          "source_time": "2015-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-11-01",
+          "value": 296.82,
+          "raw_value": 296.82,
+          "source_time": "2015-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2015-12-01",
+          "value": 345.722,
+          "raw_value": 345.722,
+          "source_time": "2015-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-01-01",
+          "value": 360.471,
+          "raw_value": 360.471,
+          "source_time": "2016-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-02-01",
+          "value": 356.766,
+          "raw_value": 356.766,
+          "source_time": "2016-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-03-01",
+          "value": 332.094,
+          "raw_value": 332.094,
+          "source_time": "2016-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-04-01",
+          "value": 331.321,
+          "raw_value": 331.321,
+          "source_time": "2016-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-05-01",
+          "value": 313.463,
+          "raw_value": 313.463,
+          "source_time": "2016-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-06-01",
+          "value": 295.726,
+          "raw_value": 295.726,
+          "source_time": "2016-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-07-01",
+          "value": 307.587,
+          "raw_value": 307.587,
+          "source_time": "2016-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-08-01",
+          "value": 288.334,
+          "raw_value": 288.334,
+          "source_time": "2016-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-09-01",
+          "value": 284.469,
+          "raw_value": 284.469,
+          "source_time": "2016-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-10-01",
+          "value": 284.591,
+          "raw_value": 284.591,
+          "source_time": "2016-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-11-01",
+          "value": 324.665,
+          "raw_value": 324.665,
+          "source_time": "2016-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2016-12-01",
+          "value": 336.048,
+          "raw_value": 336.048,
+          "source_time": "2016-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-01-01",
+          "value": 298.698,
+          "raw_value": 298.698,
+          "source_time": "2017-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-02-01",
+          "value": 282.62,
+          "raw_value": 282.62,
+          "source_time": "2017-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-03-01",
+          "value": 289.494,
+          "raw_value": 289.494,
+          "source_time": "2017-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-04-01",
+          "value": 335.465,
+          "raw_value": 335.465,
+          "source_time": "2017-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-05-01",
+          "value": 371.618,
+          "raw_value": 371.618,
+          "source_time": "2017-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-06-01",
+          "value": 364.853,
+          "raw_value": 364.853,
+          "source_time": "2017-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-07-01",
+          "value": 319.197,
+          "raw_value": 319.197,
+          "source_time": "2017-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-08-01",
+          "value": 297.161,
+          "raw_value": 297.161,
+          "source_time": "2017-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-09-01",
+          "value": 285.355,
+          "raw_value": 285.355,
+          "source_time": "2017-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-10-01",
+          "value": 278.037,
+          "raw_value": 278.037,
+          "source_time": "2017-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-11-01",
+          "value": 288.451,
+          "raw_value": 288.451,
+          "source_time": "2017-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2017-12-01",
+          "value": 275.517,
+          "raw_value": 275.517,
+          "source_time": "2017-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-01-01",
+          "value": 288.303,
+          "raw_value": 288.303,
+          "source_time": "2018-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-02-01",
+          "value": 327.219,
+          "raw_value": 327.219,
+          "source_time": "2018-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-03-01",
+          "value": 293.42,
+          "raw_value": 293.42,
+          "source_time": "2018-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-04-01",
+          "value": 286.354,
+          "raw_value": 286.354,
+          "source_time": "2018-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-05-01",
+          "value": 281.558,
+          "raw_value": 281.558,
+          "source_time": "2018-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-06-01",
+          "value": 282.801,
+          "raw_value": 282.801,
+          "source_time": "2018-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-07-01",
+          "value": 269.224,
+          "raw_value": 269.224,
+          "source_time": "2018-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-08-01",
+          "value": 259.328,
+          "raw_value": 259.328,
+          "source_time": "2018-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-09-01",
+          "value": 257.22,
+          "raw_value": 257.22,
+          "source_time": "2018-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-10-01",
+          "value": 274.559,
+          "raw_value": 274.559,
+          "source_time": "2018-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-11-01",
+          "value": 306.333,
+          "raw_value": 306.333,
+          "source_time": "2018-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2018-12-01",
+          "value": 303.698,
+          "raw_value": 303.698,
+          "source_time": "2018-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-01-01",
+          "value": 327.43,
+          "raw_value": 327.43,
+          "source_time": "2019-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-02-01",
+          "value": 314.113,
+          "raw_value": 314.113,
+          "source_time": "2019-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-03-01",
+          "value": 318.736,
+          "raw_value": 318.736,
+          "source_time": "2019-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-04-01",
+          "value": 351.09,
+          "raw_value": 351.09,
+          "source_time": "2019-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-05-01",
+          "value": 380.853,
+          "raw_value": 380.853,
+          "source_time": "2019-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-06-01",
+          "value": 333.139,
+          "raw_value": 333.139,
+          "source_time": "2019-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-07-01",
+          "value": 307.682,
+          "raw_value": 307.682,
+          "source_time": "2019-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-08-01",
+          "value": 306.524,
+          "raw_value": 306.524,
+          "source_time": "2019-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-09-01",
+          "value": 301.169,
+          "raw_value": 301.169,
+          "source_time": "2019-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-10-01",
+          "value": 279.916,
+          "raw_value": 279.916,
+          "source_time": "2019-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-11-01",
+          "value": 270.466,
+          "raw_value": 270.466,
+          "source_time": "2019-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2019-12-01",
+          "value": 263.017,
+          "raw_value": 263.017,
+          "source_time": "2019-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-01-01",
+          "value": 262.448,
+          "raw_value": 262.448,
+          "source_time": "2020-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-02-01",
+          "value": 280.548,
+          "raw_value": 280.548,
+          "source_time": "2020-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-03-01",
+          "value": 282.481,
+          "raw_value": 282.481,
+          "source_time": "2020-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-04-01",
+          "value": 271.023,
+          "raw_value": 271.023,
+          "source_time": "2020-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-05-01",
+          "value": 265.257,
+          "raw_value": 265.257,
+          "source_time": "2020-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-06-01",
+          "value": 259.119,
+          "raw_value": 259.119,
+          "source_time": "2020-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-07-01",
+          "value": 257.391,
+          "raw_value": 257.391,
+          "source_time": "2020-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-08-01",
+          "value": 253.316,
+          "raw_value": 253.316,
+          "source_time": "2020-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-09-01",
+          "value": 248.967,
+          "raw_value": 248.967,
+          "source_time": "2020-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-10-01",
+          "value": 245.826,
+          "raw_value": 245.826,
+          "source_time": "2020-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-11-01",
+          "value": 245.33,
+          "raw_value": 245.33,
+          "source_time": "2020-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2020-12-01",
+          "value": 248.822,
+          "raw_value": 248.822,
+          "source_time": "2020-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-01-01",
+          "value": 253.687,
+          "raw_value": 253.687,
+          "source_time": "2021-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-02-01",
+          "value": 307.683,
+          "raw_value": 307.683,
+          "source_time": "2021-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-03-01",
+          "value": 292.381,
+          "raw_value": 292.381,
+          "source_time": "2021-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-04-01",
+          "value": 320.973,
+          "raw_value": 320.973,
+          "source_time": "2021-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-05-01",
+          "value": 306.746,
+          "raw_value": 306.746,
+          "source_time": "2021-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-06-01",
+          "value": 287.688,
+          "raw_value": 287.688,
+          "source_time": "2021-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-07-01",
+          "value": 281.227,
+          "raw_value": 281.227,
+          "source_time": "2021-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-08-01",
+          "value": 268.066,
+          "raw_value": 268.066,
+          "source_time": "2021-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-09-01",
+          "value": 258.171,
+          "raw_value": 258.171,
+          "source_time": "2021-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-10-01",
+          "value": 264.446,
+          "raw_value": 264.446,
+          "source_time": "2021-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-11-01",
+          "value": 267.396,
+          "raw_value": 267.396,
+          "source_time": "2021-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2021-12-01",
+          "value": 277.405,
+          "raw_value": 277.405,
+          "source_time": "2021-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-01-01",
+          "value": 264.487,
+          "raw_value": 264.487,
+          "source_time": "2022-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-02-01",
+          "value": 260.279,
+          "raw_value": 260.279,
+          "source_time": "2022-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-03-01",
+          "value": 259.021,
+          "raw_value": 259.021,
+          "source_time": "2022-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-04-01",
+          "value": 278.423,
+          "raw_value": 278.423,
+          "source_time": "2022-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-05-01",
+          "value": 277.693,
+          "raw_value": 277.693,
+          "source_time": "2022-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-06-01",
+          "value": 284.648,
+          "raw_value": 284.648,
+          "source_time": "2022-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-07-01",
+          "value": 275.105,
+          "raw_value": 275.105,
+          "source_time": "2022-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-08-01",
+          "value": 262.355,
+          "raw_value": 262.355,
+          "source_time": "2022-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-09-01",
+          "value": 253.19,
+          "raw_value": 253.19,
+          "source_time": "2022-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-10-01",
+          "value": 248.538,
+          "raw_value": 248.538,
+          "source_time": "2022-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-11-01",
+          "value": 260.791,
+          "raw_value": 260.791,
+          "source_time": "2022-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2022-12-01",
+          "value": 262.777,
+          "raw_value": 262.777,
+          "source_time": "2022-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-01-01",
+          "value": 253.844,
+          "raw_value": 253.844,
+          "source_time": "2023-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-02-01",
+          "value": 249.762,
+          "raw_value": 249.762,
+          "source_time": "2023-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-03-01",
+          "value": 249.034,
+          "raw_value": 249.034,
+          "source_time": "2023-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-04-01",
+          "value": 252.738,
+          "raw_value": 252.738,
+          "source_time": "2023-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-05-01",
+          "value": 252.297,
+          "raw_value": 252.297,
+          "source_time": "2023-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-06-01",
+          "value": 253.111,
+          "raw_value": 253.111,
+          "source_time": "2023-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-07-01",
+          "value": 246.426,
+          "raw_value": 246.426,
+          "source_time": "2023-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-08-01",
+          "value": 240.626,
+          "raw_value": 240.626,
+          "source_time": "2023-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-09-01",
+          "value": 247.251,
+          "raw_value": 247.251,
+          "source_time": "2023-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-10-01",
+          "value": 245.043,
+          "raw_value": 245.043,
+          "source_time": "2023-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-11-01",
+          "value": 252.887,
+          "raw_value": 252.887,
+          "source_time": "2023-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2023-12-01",
+          "value": 292.788,
+          "raw_value": 292.788,
+          "source_time": "2023-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-01-01",
+          "value": 313.076,
+          "raw_value": 313.076,
+          "source_time": "2024-01-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-02-01",
+          "value": 288.135,
+          "raw_value": 288.135,
+          "source_time": "2024-02-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-03-01",
+          "value": 304.85,
+          "raw_value": 304.85,
+          "source_time": "2024-03-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-04-01",
+          "value": 332.826,
+          "raw_value": 332.826,
+          "source_time": "2024-04-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-05-01",
+          "value": 349.614,
+          "raw_value": 349.614,
+          "source_time": "2024-05-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-06-01",
+          "value": 312.798,
+          "raw_value": 312.798,
+          "source_time": "2024-06-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-07-01",
+          "value": 294.748,
+          "raw_value": 294.748,
+          "source_time": "2024-07-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-08-01",
+          "value": 283.196,
+          "raw_value": 283.196,
+          "source_time": "2024-08-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-09-01",
+          "value": 274.763,
+          "raw_value": 274.763,
+          "source_time": "2024-09-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-10-01",
+          "value": 271.623,
+          "raw_value": 271.623,
+          "source_time": "2024-10-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-11-01",
+          "value": 265.289,
+          "raw_value": 265.289,
+          "source_time": "2024-11-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        },
+        {
+          "date": "2024-12-01",
+          "value": 283.387,
+          "raw_value": 283.387,
+          "source_time": "2024-12-01 00:00",
+          "quality": {
+            "missing": false,
+            "reason": null
+          }
+        }
+      ],
+      "fetched_at": "2026-11-15T14:48:49.650662+00:00",
+      "coverage": {
+        "expected_count": 300,
+        "valid_count": 300,
+        "missing_count": 0
+      },
+      "metadata": {
+        "csv_header": {
+          "prod_name": "GLDAS_NOAH025_M.2.1",
+          "doi": "10.5067/SXAVCZFAQLNO",
+          "param_short_name": "SoilMoi100_200cm_inst",
+          "param_name": "Soil moisture content (100 - 200 cm underground)",
+          "unit": "kg m-2",
+          "undef": "-9999",
+          "begin_time": "2000-01-01 00:00:00",
+          "end_time": "2024-12-01 00:00:00",
+          "lat": "-26.125",
+          "lon": "-58.125",
+          "lat_resolution": "0.25",
+          "lon_resolution": "0.25",
+          "mean": "2.9991e+02",
+          "Request_time": "2026-11-15 14:48:48"
+        },
+        "qa_policy": "native-monthly-giovanni-csv-v1",
+        "effective_coordinates": {
+          "latitude": -26.125,
+          "longitude": -58.125
+        },
+        "precision_note": "Decimal values exactly as delivered by Giovanni CSV; may be rounded compared with native NetCDF.",
+        "access_method": "NASA Earthdata Giovanni in the Cloud",
+        "monthly_semantics": "Native monthly model/product values; no accumulation performed."
+      },
+      "provenance": {
+        "source_urls": [
+          "https://api.giovanni.earthdata.nasa.gov/timeseries?data=GLDAS_NOAH025_M_2_1_SoilMoi100_200cm_inst&location=%5B-26.1852113386808%2C-58.1743535107885%5D&time=2000-01-01T00%3A00%3A00%2F2024-12-31T23%3A59%3A59",
+          "https://doi.org/10.5067/SXAVCZFAQLNO"
+        ],
+        "origin": "remote",
+        "date_semantics": "Native monthly timestamps from CSV, without resampling."
+      },
+      "analysis": {
+        "enabled": false,
+        "reason": "Native series; methodology must be approved before new analyses or Radar membership."
+      }
+    },
+    "sha256": "ecfac31a5247559d21a9289dfcc00300cf25ce263cf71247da2f902a31f090b7"
+  },
+  "location": {
+    "id": "formosa",
+    "name": "Formosa",
+    "province": "Formosa",
+    "province_id": "34",
+    "region": "NEA",
+    "country": "Argentina",
+    "country_code": "AR",
+    "latitude": -26.1852113386808,
+    "longitude": -58.1743535107885,
+    "coordinate_source": {
+      "name": "GeoRef Argentina",
+      "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+      "method": "POST",
+      "query": {
+        "nombre": "Formosa",
+        "provincia": "Formosa",
+        "max": 50
+      },
+      "entity": "localidades_censales",
+      "entity_id": "34014020",
+      "coordinate_field": "centroide",
+      "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+      "record": {
+        "categoria": "Localidad simple",
+        "centroide": {
+          "lat": -26.1852113386808,
+          "lon": -58.1743535107885
+        },
+        "departamento": {
+          "id": "34014",
+          "nombre": "Formosa"
+        },
+        "funcion": null,
+        "id": "34014020",
+        "municipio": {
+          "id": "340028",
+          "nombre": "Formosa"
+        },
+        "nombre": "Formosa",
+        "provincia": {
+          "id": "34",
+          "nombre": "Formosa"
+        }
+      }
+    }
+  }
+}

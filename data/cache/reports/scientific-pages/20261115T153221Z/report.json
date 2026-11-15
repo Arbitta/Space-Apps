@@ -1,0 +1,16 @@
+{
+  "checks": [
+    "Cinco interfaces existentes: panel cerrado, sin consultas científicas adicionales",
+    "GLDAS: 300 meses reales con unidad y metadatos de origen",
+    "Recorrido histórico local: cero peticiones adicionales",
+    "Comparación POWER–IMERG: conversión explícita, originales intactos",
+    "MODIS: 23 compuestos, QA y huecos conservados en gráfico y tabla",
+    "SWOT: 31 pasos reales, geometría, incertidumbre y banderas sin aceptación automática",
+    "Vista de 390 px sin desborde horizontal",
+    "Respuesta tardía real descartada después de cambiar la selección",
+    "Hashes de 25 cachés POWER, Radar y motor conservados"
+  ],
+  "page_errors": [],
+  "scientific_http_requests": 7,
+  "report": "data\\cache\\reports\\scientific-pages\\20261115T153221Z"
+}

@@ -1,0 +1,236 @@
+{
+  "schema_version": 1,
+  "query": {
+    "kind": "opendap-netcdf3",
+    "url": "https://opendap.earthdata.nasa.gov/collections/C1342986036-GES_DISC/granules/GLDAS_NOAH025_M.2.1%3AGLDAS_NOAH025_M.A202404.021.nc4.nc?lat[130],lon[496],time[0],SoilMoi0_10cm_inst[0][130][496],SoilMoi10_40cm_inst[0][130][496],SoilMoi40_100cm_inst[0][130][496],SoilMoi100_200cm_inst[0][130][496],Evap_tavg[0][130][496]"
+  },
+  "fetched_at": "2026-11-15T14:33:54.943945+00:00",
+  "data": {
+    "attributes": {
+      "missing_value": -9999.0,
+      "tavg_definition_": "past 3-hour average",
+      "acc_definition_": "past 3-hour accumulation",
+      "inst_definition_": "instantaneous",
+      "title": "GLDAS2.1 LIS land surface model output monthly mean",
+      "institution": "NASA GSFC",
+      "source": "Noah_v3.6 forced with GDAS-AGRMET-GPCPv13rA1_202404",
+      "history": "2026-11-15 14:33:53 GMT hyrax-1.18.0-166 https://opendap.earthdata.nasa.gov/collections/C1342986036-GES_DISC/granules/GLDAS_NOAH025_M.2.1%3AGLDAS_NOAH025_M.A202404.021.nc4.nc?lat%5B130%5D,lon%5B496%5D,time%5B0%5D,SoilMoi0_10cm_inst%5B0%5D%5B130%5D%5B496%5D,SoilMoi10_40cm_inst%5B0%5D%5B130%5D%5B496%5D,SoilMoi40_100cm_inst%5B0%5D%5B130%5D%5B496%5D,SoilMoi100_200cm_inst%5B0%5D%5B130%5D%5B496%5D,Evap_tavg%5B0%5D%5B130%5D%5B496%5D\n",
+      "references": "Rodell_etal_BAMS_2004, Kumar_etal_EMS_2006, Peters-Lidard_etal_ISSE_2007",
+      "conventions": "CF-1.6",
+      "comment": "website: https://ldas.gsfc.nasa.gov/gldas, https://lis.gsfc.nasa.gov/",
+      "MAP_PROJECTION": "EQUIDISTANT CYLINDRICAL",
+      "SOUTH_WEST_CORNER_LAT": -59.875,
+      "SOUTH_WEST_CORNER_LON": -179.875,
+      "DX": 0.25,
+      "DY": 0.25,
+      "build_dmrpp_metadata.build_dmrpp": "3.21.0-272",
+      "build_dmrpp_metadata.bes": "3.21.0-272",
+      "build_dmrpp_metadata.libdap": "libdap-3.21.0-70",
+      "build_dmrpp_metadata.configuration": "\n# TheBESKeys::get_as_config()\nAllowedHosts=^https?:\\/\\/\nBES.Catalog.catalog.FollowSymLinks=Yes\nBES.Catalog.catalog.RootDirectory=/tmp/tmppvm8dhvm/\nBES.Catalog.catalog.TypeMatch=dmrpp:.*\\.(dmrpp)$;\nBES.Catalog.catalog.TypeMatch+=h5:.*(\\.bz2|\\.gz|\\.Z)?$;\nBES.Data.RootDirectory=/dev/null\nBES.LogName=./bes.log\nBES.UncompressCache.dir=/tmp/hyrax_ux\nBES.UncompressCache.prefix=ux_\nBES.UncompressCache.size=500\nBES.module.cmd=/usr/lib64/bes/libdap_xml_module.so\nBES.module.dap=/usr/lib64/bes/libdap_module.so\nBES.module.dmrpp=/usr/lib64/bes/libdmrpp_module.so\nBES.module.fonc=/usr/lib64/bes/libfonc_module.so\nBES.module.h5=/usr/lib64/bes/libhdf5_module.so\nBES.module.nc=/usr/lib64/bes/libnc_module.so\nBES.modules=dap,cmd,h5,dmrpp,nc,fonc\nFONc.ClassicModel=false\nFONc.NoGlobalAttrs=true\nH5.EnableCF=false\nH5.EnableCheckNameClashing=true\n",
+      "build_dmrpp_metadata.invocation": "build_dmrpp -c /tmp/bes_conf_7ken -f /tmp/tmppvm8dhvm//GLDAS_NOAH025_M.A202404.021.nc4 -r /tmp/dmr__I6kMaV -u OPeNDAP_DMRpp_DATA_ACCESS_URL -M",
+      "history_json": "[{\"$schema\":\"https:\\/\\/harmony.earthdata.nasa.gov\\/schemas\\/history\\/0.1.0\\/history-0.1.0.json\",\"date_time\":\"2026-11-15T14:33:53.251+0000\",\"program\":\"hyrax\",\"version\":\"1.18.0-166\",\"parameters\":[{\"request_url\":\"https:\\/\\/opendap.earthdata.nasa.gov\\/collections\\/C1342986036-GES_DISC\\/granules\\/GLDAS_NOAH025_M.2.1%3AGLDAS_NOAH025_M.A202404.021.nc4.nc?lat%5B130%5D,lon%5B496%5D,time%5B0%5D,SoilMoi0_10cm_inst%5B0%5D%5B130%5D%5B496%5D,SoilMoi10_40cm_inst%5B0%5D%5B130%5D%5B496%5D,SoilMoi40_100cm_inst%5B0%5D%5B130%5D%5B496%5D,SoilMoi100_200cm_inst%5B0%5D%5B130%5D%5B496%5D,Evap_tavg%5B0%5D%5B130%5D%5B496%5D\"},{\"decoded_constraint\":\"lat[130],lon[496],time[0],SoilMoi0_10cm_inst[0][130][496],SoilMoi10_40cm_inst[0][130][496],SoilMoi40_100cm_inst[0][130][496],SoilMoi100_200cm_inst[0][130][496],Evap_tavg[0][130][496]\"}]}]"
+    },
+    "variables": {
+      "lon": {
+        "dimensions": [
+          "lon"
+        ],
+        "shape": [
+          1
+        ],
+        "data": [
+          -55.875
+        ],
+        "attributes": {
+          "units": "degrees_east",
+          "standard_name": "longitude",
+          "long_name": "longitude",
+          "scale_factor": 1.0,
+          "add_offset": 0.0,
+          "missing_value": -9999.0,
+          "_FillValue": -9999.0,
+          "vmin": -179.875,
+          "vmax": 179.875
+        }
+      },
+      "time": {
+        "dimensions": [
+          "time"
+        ],
+        "shape": [
+          1
+        ],
+        "data": [
+          8857.0
+        ],
+        "attributes": {
+          "units": "days since 2000-01-01 00:00:00",
+          "long_name": "time",
+          "time_increment": "one month",
+          "begin_date": "20240401",
+          "begin_time": "000000",
+          "end_date": "20240430",
+          "end_time": "210000",
+          "bounds": "time_bnds"
+        }
+      },
+      "lat": {
+        "dimensions": [
+          "lat"
+        ],
+        "shape": [
+          1
+        ],
+        "data": [
+          -27.375
+        ],
+        "attributes": {
+          "units": "degrees_north",
+          "standard_name": "latitude",
+          "long_name": "latitude",
+          "scale_factor": 1.0,
+          "add_offset": 0.0,
+          "missing_value": -9999.0,
+          "_FillValue": -9999.0,
+          "vmin": -59.875,
+          "vmax": 89.875
+        }
+      },
+      "SoilMoi10_40cm_inst": {
+        "dimensions": [
+          "time",
+          "lat",
+          "lon"
+        ],
+        "shape": [
+          1,
+          1,
+          1
+        ],
+        "data": [
+          101.08385467529297
+        ],
+        "attributes": {
+          "units": "kg m-2",
+          "standard_name": "soil_moisture_content",
+          "long_name": "Soil moisture",
+          "cell_methods": "time: mean",
+          "scale_factor": 1.0,
+          "add_offset": 0.0,
+          "missing_value": -9999.0,
+          "_FillValue": -9999.0,
+          "vmin": 6.053117275238037,
+          "vmax": 299.9999694824219
+        }
+      },
+      "SoilMoi40_100cm_inst": {
+        "dimensions": [
+          "time",
+          "lat",
+          "lon"
+        ],
+        "shape": [
+          1,
+          1,
+          1
+        ],
+        "data": [
+          206.18316650390625
+        ],
+        "attributes": {
+          "units": "kg m-2",
+          "standard_name": "soil_moisture_content",
+          "long_name": "Soil moisture",
+          "cell_methods": "time: mean",
+          "scale_factor": 1.0,
+          "add_offset": 0.0,
+          "missing_value": -9999.0,
+          "_FillValue": -9999.0,
+          "vmin": 12.910316467285156,
+          "vmax": 599.9999389648438
+        }
+      },
+      "SoilMoi0_10cm_inst": {
+        "dimensions": [
+          "time",
+          "lat",
+          "lon"
+        ],
+        "shape": [
+          1,
+          1,
+          1
+        ],
+        "data": [
+          33.37427520751953
+        ],
+        "attributes": {
+          "units": "kg m-2",
+          "standard_name": "soil_moisture_content",
+          "long_name": "Soil moisture",
+          "cell_methods": "time: mean",
+          "scale_factor": 1.0,
+          "add_offset": 0.0,
+          "missing_value": -9999.0,
+          "_FillValue": -9999.0,
+          "vmin": 1.9999998807907104,
+          "vmax": 100.0
+        }
+      },
+      "Evap_tavg": {
+        "dimensions": [
+          "time",
+          "lat",
+          "lon"
+        ],
+        "shape": [
+          1,
+          1,
+          1
+        ],
+        "data": [
+          2.843397123797331e-05
+        ],
+        "attributes": {
+          "units": "kg m-2 s-1",
+          "standard_name": "water_evaporation_flux",
+          "long_name": "Evapotranspiration",
+          "cell_methods": "time: mean",
+          "scale_factor": 1.0,
+          "add_offset": 0.0,
+          "missing_value": -9999.0,
+          "_FillValue": -9999.0,
+          "vmin": 2.20499035696875e-10,
+          "vmax": 7.124397234292701e-05
+        }
+      },
+      "SoilMoi100_200cm_inst": {
+        "dimensions": [
+          "time",
+          "lat",
+          "lon"
+        ],
+        "shape": [
+          1,
+          1,
+          1
+        ],
+        "data": [
+          369.717041015625
+        ],
+        "attributes": {
+          "units": "kg m-2",
+          "standard_name": "soil_moisture_content",
+          "long_name": "Soil moisture",
+          "cell_methods": "time: mean",
+          "scale_factor": 1.0,
+          "add_offset": 0.0,
+          "missing_value": -9999.0,
+          "_FillValue": -9999.0,
+          "vmin": 24.827821731567383,
+          "vmax": 1000.0
+        }
+      }
+    }
+  }
+}

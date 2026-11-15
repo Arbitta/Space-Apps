@@ -1,0 +1,134 @@
+{
+  "provider": "modis",
+  "started_at": "2026-11-15T13:05:41.434395+00:00",
+  "period": {
+    "start_year": 2024,
+    "end_year": 2024
+  },
+  "results": [
+    {
+      "city_id": "mendoza",
+      "status": "ok",
+      "series": 2,
+      "records": 46,
+      "valid": 4,
+      "missing": 42,
+      "variables": [
+        {
+          "variable": "NDVI",
+          "product": "MOD13Q1",
+          "product_version": null,
+          "cache_version": "unreported-v1-86a20af06265",
+          "unit": "NDVI ratio - No units",
+          "frequency": "16-day composite",
+          "coverage": {
+            "expected_count": 23,
+            "valid_count": 2,
+            "missing_count": 21
+          },
+          "fetched_at": "2026-11-15T12:55:41.785762+00:00"
+        },
+        {
+          "variable": "EVI",
+          "product": "MOD13Q1",
+          "product_version": null,
+          "cache_version": "unreported-v1-86a20af06265",
+          "unit": "EVI ratio - No units",
+          "frequency": "16-day composite",
+          "coverage": {
+            "expected_count": 23,
+            "valid_count": 2,
+            "missing_count": 21
+          },
+          "fetched_at": "2026-11-15T12:55:41.785762+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "comodoro-rivadavia",
+      "status": "ok",
+      "series": 2,
+      "records": 46,
+      "valid": 14,
+      "missing": 32,
+      "variables": [
+        {
+          "variable": "NDVI",
+          "product": "MOD13Q1",
+          "product_version": null,
+          "cache_version": "unreported-v1-86a20af06265",
+          "unit": "NDVI ratio - No units",
+          "frequency": "16-day composite",
+          "coverage": {
+            "expected_count": 23,
+            "valid_count": 7,
+            "missing_count": 16
+          },
+          "fetched_at": "2026-11-15T13:00:26.462755+00:00"
+        },
+        {
+          "variable": "EVI",
+          "product": "MOD13Q1",
+          "product_version": null,
+          "cache_version": "unreported-v1-86a20af06265",
+          "unit": "EVI ratio - No units",
+          "frequency": "16-day composite",
+          "coverage": {
+            "expected_count": 23,
+            "valid_count": 7,
+            "missing_count": 16
+          },
+          "fetched_at": "2026-11-15T13:00:26.462755+00:00"
+        }
+      ]
+    },
+    {
+      "city_id": "posadas",
+      "status": "ok",
+      "series": 2,
+      "records": 46,
+      "valid": 38,
+      "missing": 8,
+      "variables": [
+        {
+          "variable": "NDVI",
+          "product": "MOD13Q1",
+          "product_version": null,
+          "cache_version": "unreported-v1-86a20af06265",
+          "unit": "NDVI ratio - No units",
+          "frequency": "16-day composite",
+          "coverage": {
+            "expected_count": 23,
+            "valid_count": 19,
+            "missing_count": 4
+          },
+          "fetched_at": "2026-11-15T13:02:00.708644+00:00"
+        },
+        {
+          "variable": "EVI",
+          "product": "MOD13Q1",
+          "product_version": null,
+          "cache_version": "unreported-v1-86a20af06265",
+          "unit": "EVI ratio - No units",
+          "frequency": "16-day composite",
+          "coverage": {
+            "expected_count": 23,
+            "valid_count": 19,
+            "missing_count": 4
+          },
+          "fetched_at": "2026-11-15T13:02:00.708644+00:00"
+        }
+      ]
+    }
+  ],
+  "finished_at": "2026-11-15T13:05:41.568877+00:00",
+  "summary": {
+    "requested": 3,
+    "succeeded": 3,
+    "failed": 0,
+    "series": 6,
+    "records": 138,
+    "valid": 56,
+    "missing": 82
+  }
+}

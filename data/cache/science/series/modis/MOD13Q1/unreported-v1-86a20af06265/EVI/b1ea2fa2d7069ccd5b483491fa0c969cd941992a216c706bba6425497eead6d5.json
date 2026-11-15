@@ -1,0 +1,626 @@
+{
+  "schema_version": 1,
+  "query": {
+    "provider": "modis",
+    "product": "MOD13Q1",
+    "cache_version": "unreported-v1-86a20af06265",
+    "variable": "EVI",
+    "city_id": "comodoro-rivadavia",
+    "latitude": -45.8806237030771,
+    "longitude": -67.5194575718113,
+    "start_year": 2024,
+    "end_year": 2024,
+    "processing": "good-reliability-modland-no-cloud-snow-shadow-v1"
+  },
+  "fetched_at": "2026-11-15T13:00:26.462755+00:00",
+  "data": {
+    "record": {
+      "schema_version": "earthlens.scientific-series.v1",
+      "provider": "modis",
+      "product": "MOD13Q1",
+      "product_version": null,
+      "cache_version": "unreported-v1-86a20af06265",
+      "variable": "EVI",
+      "unit": "EVI ratio - No units",
+      "location": {
+        "id": "comodoro-rivadavia",
+        "name": "Comodoro Rivadavia",
+        "province": "Chubut",
+        "province_id": "26",
+        "region": "Patagonia",
+        "country": "Argentina",
+        "country_code": "AR",
+        "latitude": -45.8806237030771,
+        "longitude": -67.5194575718113,
+        "coordinate_source": {
+          "name": "GeoRef Argentina",
+          "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+          "method": "POST",
+          "query": {
+            "nombre": "Comodoro Rivadavia",
+            "provincia": "Chubut",
+            "max": 50
+          },
+          "entity": "localidades_censales",
+          "entity_id": "26021030",
+          "coordinate_field": "centroide",
+          "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+          "record": {
+            "categoria": "Localidad simple",
+            "centroide": {
+              "lat": -45.8806237030771,
+              "lon": -67.5194575718113
+            },
+            "departamento": {
+              "id": "26021",
+              "nombre": "Escalante"
+            },
+            "funcion": null,
+            "id": "26021030",
+            "municipio": {
+              "id": "260049",
+              "nombre": "Comodoro Rivadavia"
+            },
+            "nombre": "Comodoro Rivadavia",
+            "provincia": {
+              "id": "26",
+              "nombre": "Chubut"
+            }
+          }
+        }
+      },
+      "period": {
+        "start_year": 2024,
+        "end_year": 2024
+      },
+      "frequency": "16-day composite",
+      "spatial_resolution": {
+        "nominal_meters": 250,
+        "grid_cellsize_meters": 231.656358264,
+        "extraction": "single_native_pixel",
+        "projection": "MODIS sinusoidal"
+      },
+      "series": [
+        {
+          "date": "2024-01-01",
+          "value": null,
+          "raw_value": 1055,
+          "quality": {
+            "pixel_reliability": 1,
+            "vi_quality": 4369,
+            "modland": 1,
+            "land_water_mask": 2,
+            "accepted": false,
+            "reasons": [
+              "reliability_not_good",
+              "modland_not_good",
+              "adjacent_cloud"
+            ]
+          },
+          "tile": "h13v13",
+          "processing_date": "2024022131526"
+        },
+        {
+          "date": "2024-01-17",
+          "value": null,
+          "raw_value": 1118,
+          "quality": {
+            "pixel_reliability": 1,
+            "vi_quality": 4168,
+            "modland": 0,
+            "land_water_mask": 2,
+            "accepted": false,
+            "reasons": [
+              "reliability_not_good"
+            ]
+          },
+          "tile": "h13v13",
+          "processing_date": "2024038042639"
+        },
+        {
+          "date": "2024-02-02",
+          "value": null,
+          "raw_value": 984,
+          "quality": {
+            "pixel_reliability": 1,
+            "vi_quality": 4168,
+            "modland": 0,
+            "land_water_mask": 2,
+            "accepted": false,
+            "reasons": [
+              "reliability_not_good"
+            ]
+          },
+          "tile": "h13v13",
+          "processing_date": "2024051232251"
+        },
+        {
+          "date": "2024-02-18",
+          "value": 0.094,
+          "raw_value": 940,
+          "quality": {
+            "pixel_reliability": 0,
+            "vi_quality": 4168,
+            "modland": 0,
+            "land_water_mask": 2,
+            "accepted": true,
+            "reasons": []
+          },
+          "tile": "h13v13",
+          "processing_date": "2024066071553"
+        },
+        {
+          "date": "2024-03-05",
+          "value": 0.12050000000000001,
+          "raw_value": 1205,
+          "quality": {
+            "pixel_reliability": 0,
+            "vi_quality": 4164,
+            "modland": 0,
+            "land_water_mask": 2,
+            "accepted": true,
+            "reasons": []
+          },
+          "tile": "h13v13",
+          "processing_date": "2024085182045"
+        },
+        {
+          "date": "2024-03-21",
+          "value": null,
+          "raw_value": 977,
+          "quality": {
+            "pixel_reliability": 1,
+            "vi_quality": 4373,
+            "modland": 1,
+            "land_water_mask": 2,
+            "accepted": false,
+            "reasons": [
+              "reliability_not_good",
+              "modland_not_good",
+              "adjacent_cloud"
+            ]
+          },
+          "tile": "h13v13",
+          "processing_date": "2024099104947"
+        },
+        {
+          "date": "2024-04-06",
+          "value": 0.11860000000000001,
+          "raw_value": 1186,
+          "quality": {
+            "pixel_reliability": 0,
+            "vi_quality": 4168,
+            "modland": 0,
+            "land_water_mask": 2,
+            "accepted": true,
+            "reasons": []
+          },
+          "tile": "h13v13",
+          "processing_date": "2024115195059"
+        },
+        {
+          "date": "2024-04-22",
+          "value": null,
+          "raw_value": 867,
+          "quality": {
+            "pixel_reliability": 1,
+            "vi_quality": 4241,
+            "modland": 1,
+            "land_water_mask": 2,
+            "accepted": false,
+            "reasons": [
+              "reliability_not_good",
+              "modland_not_good"
+            ]
+          },
+          "tile": "h13v13",
+          "processing_date": "2024133221539"
+        },
+        {
+          "date": "2024-05-08",
+          "value": null,
+          "raw_value": 1341,
+          "quality": {
+            "pixel_reliability": 1,
+            "vi_quality": 4241,
+            "modland": 1,
+            "land_water_mask": 2,
+            "accepted": false,
+            "reasons": [
+              "reliability_not_good",
+              "modland_not_good"
+            ]
+          },
+          "tile": "h13v13",
+          "processing_date": "2024153222238"
+        },
+        {
+          "date": "2024-05-24",
+          "value": null,
+          "raw_value": 630,
+          "quality": {
+            "pixel_reliability": 1,
+            "vi_quality": 37149,
+            "modland": 1,
+            "land_water_mask": 2,
+            "accepted": false,
+            "reasons": [
+              "reliability_not_good",
+              "modland_not_good",
+              "adjacent_cloud",
+              "shadow"
+            ]
+          },
+          "tile": "h13v13",
+          "processing_date": "2024162174248"
+        },
+        {
+          "date": "2024-06-09",
+          "value": null,
+          "raw_value": 2379,
+          "quality": {
+            "pixel_reliability": 3,
+            "vi_quality": 4118,
+            "modland": 2,
+            "land_water_mask": 2,
+            "accepted": false,
+            "reasons": [
+              "reliability_not_good",
+              "modland_not_good"
+            ]
+          },
+          "tile": "h13v13",
+          "processing_date": "2024181211258"
+        },
+        {
+          "date": "2024-06-25",
+          "value": null,
+          "raw_value": 1235,
+          "quality": {
+            "pixel_reliability": 3,
+            "vi_quality": 5150,
+            "modland": 2,
+            "land_water_mask": 2,
+            "accepted": false,
+            "reasons": [
+              "reliability_not_good",
+              "modland_not_good",
+              "mixed_cloud"
+            ]
+          },
+          "tile": "h13v13",
+          "processing_date": "2024195022420"
+        },
+        {
+          "date": "2024-07-11",
+          "value": null,
+          "raw_value": 676,
+          "quality": {
+            "pixel_reliability": 1,
+            "vi_quality": 4313,
+            "modland": 1,
+            "land_water_mask": 2,
+            "accepted": false,
+            "reasons": [
+              "reliability_not_good",
+              "modland_not_good"
+            ]
+          },
+          "tile": "h13v13",
+          "processing_date": "2024212093213"
+        },
+        {
+          "date": "2024-07-27",
+          "value": null,
+          "raw_value": 1642,
+          "quality": {
+            "pixel_reliability": 1,
+            "vi_quality": 4241,
+            "modland": 1,
+            "land_water_mask": 2,
+            "accepted": false,
+            "reasons": [
+              "reliability_not_good",
+              "modland_not_good"
+            ]
+          },
+          "tile": "h13v13",
+          "processing_date": "2024228024228"
+        },
+        {
+          "date": "2024-08-12",
+          "value": 0.1615,
+          "raw_value": 1615,
+          "quality": {
+            "pixel_reliability": 0,
+            "vi_quality": 4168,
+            "modland": 0,
+            "land_water_mask": 2,
+            "accepted": true,
+            "reasons": []
+          },
+          "tile": "h13v13",
+          "processing_date": "2024247141532"
+        },
+        {
+          "date": "2024-08-28",
+          "value": null,
+          "raw_value": 1879,
+          "quality": {
+            "pixel_reliability": 1,
+            "vi_quality": 4373,
+            "modland": 1,
+            "land_water_mask": 2,
+            "accepted": false,
+            "reasons": [
+              "reliability_not_good",
+              "modland_not_good",
+              "adjacent_cloud"
+            ]
+          },
+          "tile": "h13v13",
+          "processing_date": "2024258125437"
+        },
+        {
+          "date": "2024-09-13",
+          "value": null,
+          "raw_value": 1598,
+          "quality": {
+            "pixel_reliability": 3,
+            "vi_quality": 4174,
+            "modland": 2,
+            "land_water_mask": 2,
+            "accepted": false,
+            "reasons": [
+              "reliability_not_good",
+              "modland_not_good"
+            ]
+          },
+          "tile": "h13v13",
+          "processing_date": "2024275122235"
+        },
+        {
+          "date": "2024-09-29",
+          "value": null,
+          "raw_value": 1665,
+          "quality": {
+            "pixel_reliability": 1,
+            "vi_quality": 4369,
+            "modland": 1,
+            "land_water_mask": 2,
+            "accepted": false,
+            "reasons": [
+              "reliability_not_good",
+              "modland_not_good",
+              "adjacent_cloud"
+            ]
+          },
+          "tile": "h13v13",
+          "processing_date": "2024290024859"
+        },
+        {
+          "date": "2024-10-15",
+          "value": 0.1126,
+          "raw_value": 1126,
+          "quality": {
+            "pixel_reliability": 0,
+            "vi_quality": 4164,
+            "modland": 0,
+            "land_water_mask": 2,
+            "accepted": true,
+            "reasons": []
+          },
+          "tile": "h13v13",
+          "processing_date": "2024306180653"
+        },
+        {
+          "date": "2024-10-31",
+          "value": 0.12290000000000001,
+          "raw_value": 1229,
+          "quality": {
+            "pixel_reliability": 0,
+            "vi_quality": 4164,
+            "modland": 0,
+            "land_water_mask": 2,
+            "accepted": true,
+            "reasons": []
+          },
+          "tile": "h13v13",
+          "processing_date": "2024326213738"
+        },
+        {
+          "date": "2024-11-16",
+          "value": 0.1165,
+          "raw_value": 1165,
+          "quality": {
+            "pixel_reliability": 0,
+            "vi_quality": 4164,
+            "modland": 0,
+            "land_water_mask": 2,
+            "accepted": true,
+            "reasons": []
+          },
+          "tile": "h13v13",
+          "processing_date": "2025005223105"
+        },
+        {
+          "date": "2024-12-02",
+          "value": null,
+          "raw_value": 1312,
+          "quality": {
+            "pixel_reliability": 1,
+            "vi_quality": 4369,
+            "modland": 1,
+            "land_water_mask": 2,
+            "accepted": false,
+            "reasons": [
+              "reliability_not_good",
+              "modland_not_good",
+              "adjacent_cloud"
+            ]
+          },
+          "tile": "h13v13",
+          "processing_date": "2024358222347"
+        },
+        {
+          "date": "2024-12-18",
+          "value": null,
+          "raw_value": 1215,
+          "quality": {
+            "pixel_reliability": 1,
+            "vi_quality": 4168,
+            "modland": 0,
+            "land_water_mask": 2,
+            "accepted": false,
+            "reasons": [
+              "reliability_not_good"
+            ]
+          },
+          "tile": "h13v13",
+          "processing_date": "2025003234710"
+        }
+      ],
+      "fetched_at": "2026-11-15T13:00:26.462755+00:00",
+      "coverage": {
+        "expected_count": 23,
+        "valid_count": 7,
+        "missing_count": 16
+      },
+      "metadata": {
+        "product": {
+          "product": "MOD13Q1",
+          "description": "MODIS/Terra Vegetation Indices (NDVI/EVI) 16-Day L3 Global 250m SIN Grid",
+          "frequency": "16-Day",
+          "resolution_meters": 250
+        },
+        "band": {
+          "band": "250m_16_days_EVI",
+          "description": "16 day EVI average",
+          "units": "EVI ratio - No units",
+          "valid_range": "-2000 to 10000",
+          "fill_value": "-3000",
+          "scale_factor": "0.0001",
+          "add_offset": "0"
+        },
+        "qa_bands": [
+          {
+            "band": "250m_16_days_pixel_reliability",
+            "description": "Quality reliability of VI pixel",
+            "units": "rank",
+            "valid_range": "0 to 3",
+            "fill_value": "-1"
+          },
+          {
+            "band": "250m_16_days_VI_Quality",
+            "description": "VI quality indicators",
+            "units": "bit field",
+            "valid_range": "0 to 65534",
+            "fill_value": "-1"
+          }
+        ],
+        "grid": {
+          "xllcorner": "-5226630.74",
+          "yllcorner": "-5101767.98",
+          "cellsize": 231.656358264,
+          "nrows": 1,
+          "ncols": 1
+        },
+        "qa_policy": "good-reliability-modland-no-cloud-snow-shadow-v1",
+        "scale_applied": 0.0001,
+        "offset_applied": 0.0,
+        "collection_version_verified": false,
+        "collection_version_note": "ORNL REST does not identify the collection in this response.",
+        "source_date_count": 23,
+        "first_composite": "2024-01-01",
+        "last_composite": "2024-12-18"
+      },
+      "provenance": {
+        "origin": "remote",
+        "source_urls": [
+          "https://modis.ornl.gov/rst/api/v1/products",
+          "https://modis.ornl.gov/rst/api/v1/MOD13Q1/bands",
+          "https://modis.ornl.gov/rst/api/v1/MOD13Q1/dates?latitude=-45.8806237030771&longitude=-67.5194575718113",
+          "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=-45.8806237030771&longitude=-67.5194575718113&startDate=A2024001&endDate=A2024017&kmAboveBelow=0&kmLeftRight=0",
+          "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=-45.8806237030771&longitude=-67.5194575718113&startDate=A2024033&endDate=A2024049&kmAboveBelow=0&kmLeftRight=0",
+          "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=-45.8806237030771&longitude=-67.5194575718113&startDate=A2024065&endDate=A2024081&kmAboveBelow=0&kmLeftRight=0",
+          "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=-45.8806237030771&longitude=-67.5194575718113&startDate=A2024097&endDate=A2024113&kmAboveBelow=0&kmLeftRight=0",
+          "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=-45.8806237030771&longitude=-67.5194575718113&startDate=A2024129&endDate=A2024145&kmAboveBelow=0&kmLeftRight=0",
+          "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=-45.8806237030771&longitude=-67.5194575718113&startDate=A2024161&endDate=A2024177&kmAboveBelow=0&kmLeftRight=0",
+          "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=-45.8806237030771&longitude=-67.5194575718113&startDate=A2024193&endDate=A2024209&kmAboveBelow=0&kmLeftRight=0",
+          "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=-45.8806237030771&longitude=-67.5194575718113&startDate=A2024225&endDate=A2024241&kmAboveBelow=0&kmLeftRight=0",
+          "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=-45.8806237030771&longitude=-67.5194575718113&startDate=A2024257&endDate=A2024273&kmAboveBelow=0&kmLeftRight=0",
+          "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=-45.8806237030771&longitude=-67.5194575718113&startDate=A2024289&endDate=A2024305&kmAboveBelow=0&kmLeftRight=0",
+          "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=-45.8806237030771&longitude=-67.5194575718113&startDate=A2024321&endDate=A2024337&kmAboveBelow=0&kmLeftRight=0",
+          "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=-45.8806237030771&longitude=-67.5194575718113&startDate=A2024353&endDate=A2024353&kmAboveBelow=0&kmLeftRight=0"
+        ],
+        "request_fetched_at": [
+          "2026-11-15T12:28:42.683988+00:00",
+          "2026-11-15T12:56:17.557759+00:00",
+          "2026-11-15T12:56:48.873992+00:00",
+          "2026-11-15T12:57:16.925174+00:00",
+          "2026-11-15T12:57:58.060389+00:00",
+          "2026-11-15T12:58:30.942058+00:00",
+          "2026-11-15T12:58:49.962557+00:00",
+          "2026-11-15T12:59:21.112580+00:00",
+          "2026-11-15T12:59:43.489285+00:00",
+          "2026-11-15T12:59:58.356748+00:00",
+          "2026-11-15T13:00:11.749497+00:00",
+          "2026-11-15T13:00:26.462755+00:00"
+        ],
+        "quality_guide": "https://modis-land.gsfc.nasa.gov/pdf/MOD13_User_Guide_V61.pdf"
+      },
+      "analysis": {
+        "enabled": false,
+        "reason": "Native series; methodology must be approved before new analyses or Radar membership."
+      }
+    },
+    "sha256": "f1256f9a507784e88d2c0e48af783012bec3388e856bac20b54a342530451f19"
+  },
+  "location": {
+    "id": "comodoro-rivadavia",
+    "name": "Comodoro Rivadavia",
+    "province": "Chubut",
+    "province_id": "26",
+    "region": "Patagonia",
+    "country": "Argentina",
+    "country_code": "AR",
+    "latitude": -45.8806237030771,
+    "longitude": -67.5194575718113,
+    "coordinate_source": {
+      "name": "GeoRef Argentina",
+      "url": "https://apis.datos.gob.ar/georef/api/localidades-censales",
+      "method": "POST",
+      "query": {
+        "nombre": "Comodoro Rivadavia",
+        "provincia": "Chubut",
+        "max": 50
+      },
+      "entity": "localidades_censales",
+      "entity_id": "26021030",
+      "coordinate_field": "centroide",
+      "retrieved_at": "2026-11-14T17:39:11.912111+00:00",
+      "record": {
+        "categoria": "Localidad simple",
+        "centroide": {
+          "lat": -45.8806237030771,
+          "lon": -67.5194575718113
+        },
+        "departamento": {
+          "id": "26021",
+          "nombre": "Escalante"
+        },
+        "funcion": null,
+        "id": "26021030",
+        "municipio": {
+          "id": "260049",
+          "nombre": "Comodoro Rivadavia"
+        },
+        "nombre": "Comodoro Rivadavia",
+        "provincia": {
+          "id": "26",
+          "nombre": "Chubut"
+        }
+      }
+    }
+  }
+}

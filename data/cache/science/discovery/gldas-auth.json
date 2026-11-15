@@ -1,0 +1,11 @@
+{
+  "fetched_at": "2026-11-15T12:31:48.314830+00:00",
+  "request_url": "https://opendap.earthdata.nasa.gov/collections/C1342986036-GES_DISC/granules/GLDAS_NOAH025_M.2.1%3AGLDAS_NOAH025_M.A200001.021.nc4.dds",
+  "final_host": "urs.earthdata.nasa.gov",
+  "http_status": 401,
+  "content_type": "text/html; charset=utf-8",
+  "redirect_statuses": [
+    302,
+    302
+  ]
+}

@@ -1,0 +1,269 @@
+{
+  "url": "https://pub-ceb2c39205d5401cac3cf448cff9518d.r2.dev/tiles/reach_search_index.json",
+  "fetched_at": "2026-11-15T14:46:31.244030+00:00",
+  "source_sha256": "c62648983769105d40c793d26dc7af861fc361089b09ac734821b53813725c2e",
+  "total_index_records": 248673,
+  "records": [
+    {
+      "reach_id": "65341000016",
+      "river_name": "Rio Chubut",
+      "lon": -65.066708,
+      "lat": -43.307013,
+      "bbox": [
+        -65.067812,
+        -43.307141,
+        -65.065603,
+        -43.306831
+      ],
+      "continent_id": "sa"
+    },
+    {
+      "reach_id": "65341000023",
+      "river_name": "Rio Chubut",
+      "lon": -65.085519,
+      "lat": -43.305429,
+      "bbox": [
+        -65.102954,
+        -43.307433,
+        -65.067812,
+        -43.303688
+      ],
+      "continent_id": "sa"
+    },
+    {
+      "reach_id": "65341000031",
+      "river_name": "Rio Chubut",
+      "lon": -65.143253,
+      "lat": -43.295826,
+      "bbox": [
+        -65.19354,
+        -43.307614,
+        -65.102954,
+        -43.282409
+      ],
+      "continent_id": "sa"
+    },
+    {
+      "reach_id": "65341000041",
+      "river_name": "Rio Chubut",
+      "lon": -65.228531,
+      "lat": -43.279554,
+      "bbox": [
+        -65.270871,
+        -43.286138,
+        -65.193443,
+        -43.270855
+      ],
+      "continent_id": "sa"
+    },
+    {
+      "reach_id": "65341000051",
+      "river_name": "Rio Chubut",
+      "lon": -65.3231,
+      "lat": -43.298796,
+      "bbox": [
+        -65.370365,
+        -43.31634,
+        -65.270871,
+        -43.272778
+      ],
+      "continent_id": "sa"
+    },
+    {
+      "reach_id": "65341000061",
+      "river_name": "Rio Chubut",
+      "lon": -65.441432,
+      "lat": -43.303947,
+      "bbox": [
+        -65.51131,
+        -43.315924,
+        -65.370365,
+        -43.285706
+      ],
+      "continent_id": "sa"
+    },
+    {
+      "reach_id": "65341000071",
+      "river_name": "Rio Chubut",
+      "lon": -65.569243,
+      "lat": -43.33691,
+      "bbox": [
+        -65.645778,
+        -43.355427,
+        -65.51131,
+        -43.297895
+      ],
+      "continent_id": "sa"
+    },
+    {
+      "reach_id": "65341000081",
+      "river_name": "Rio Chubut",
+      "lon": -65.727843,
+      "lat": -43.351549,
+      "bbox": [
+        -65.810001,
+        -43.359824,
+        -65.645778,
+        -43.346941
+      ],
+      "continent_id": "sa"
+    },
+    {
+      "reach_id": "65341000091",
+      "river_name": "Rio Chubut",
+      "lon": -65.85315,
+      "lat": -43.363616,
+      "bbox": [
+        -65.895922,
+        -43.375505,
+        -65.810001,
+        -43.355931
+      ],
+      "continent_id": "sa"
+    },
+    {
+      "reach_id": "65341000101",
+      "river_name": "Rio Chubut",
+      "lon": -65.933467,
+      "lat": -43.399992,
+      "bbox": [
+        -65.940654,
+        -43.444376,
+        -65.895922,
+        -43.375449
+      ],
+      "continent_id": "sa"
+    },
+    {
+      "reach_id": "65341000114",
+      "river_name": "Rio Chubut",
+      "lon": -65.942637,
+      "lat": -43.445514,
+      "bbox": [
+        -65.94467,
+        -43.446164,
+        -65.940654,
+        -43.444376
+      ],
+      "continent_id": "sa"
+    },
+    {
+      "reach_id": "65341000121",
+      "river_name": "Rio Chubut",
+      "lon": -65.969313,
+      "lat": -43.452765,
+      "bbox": [
+        -66.000294,
+        -43.462559,
+        -65.943399,
+        -43.446164
+      ],
+      "continent_id": "sa"
+    },
+    {
+      "reach_id": "65341000131",
+      "river_name": "Rio Chubut",
+      "lon": -66.041617,
+      "lat": -43.498751,
+      "bbox": [
+        -66.091629,
+        -43.522022,
+        -66.000294,
+        -43.461317
+      ],
+      "continent_id": "sa"
+    },
+    {
+      "reach_id": "65341000141",
+      "river_name": "Rio Chubut",
+      "lon": -66.141231,
+      "lat": -43.545369,
+      "bbox": [
+        -66.193786,
+        -43.557974,
+        -66.091629,
+        -43.522022
+      ],
+      "continent_id": "sa"
+    },
+    {
+      "reach_id": "65341000151",
+      "river_name": "Rio Chubut",
+      "lon": -66.236429,
+      "lat": -43.570023,
+      "bbox": [
+        -66.275067,
+        -43.588355,
+        -66.193786,
+        -43.5524
+      ],
+      "continent_id": "sa"
+    },
+    {
+      "reach_id": "65341000161",
+      "river_name": "Rio Chubut",
+      "lon": -66.313593,
+      "lat": -43.59747,
+      "bbox": [
+        -66.364781,
+        -43.60211,
+        -66.27241,
+        -43.58478
+      ],
+      "continent_id": "sa"
+    },
+    {
+      "reach_id": "65341000171",
+      "river_name": "Rio Chubut",
+      "lon": -66.380163,
+      "lat": -43.630727,
+      "bbox": [
+        -66.391764,
+        -43.653481,
+        -66.364781,
+        -43.599796
+      ],
+      "continent_id": "sa"
+    },
+    {
+      "reach_id": "65341000181",
+      "river_name": "Rio Chubut",
+      "lon": -66.434309,
+      "lat": -43.67782,
+      "bbox": [
+        -66.480644,
+        -43.700028,
+        -66.391764,
+        -43.653087
+      ],
+      "continent_id": "sa"
+    },
+    {
+      "reach_id": "65341000194",
+      "river_name": "Rio Chubut",
+      "lon": -66.483266,
+      "lat": -43.699653,
+      "bbox": [
+        -66.485867,
+        -43.70009,
+        -66.480644,
+        -43.699645
+      ],
+      "continent_id": "sa"
+    },
+    {
+      "reach_id": "65341000203",
+      "river_name": "Rio Chubut",
+      "lon": -66.499015,
+      "lat": -43.750617,
+      "bbox": [
+        -66.528974,
+        -43.797074,
+        -66.44973,
+        -43.698346
+      ],
+      "continent_id": "sa"
+    }
+  ],
+  "note": "River-name candidates only; requires separate Argentine jurisdiction verification."
+}
