@@ -210,17 +210,23 @@ class EarthLensUnifiedHandler(BaseHTTPRequestHandler):
         self._send_json({"error": "Endpoint no encontrado"}, 404)
 
 
+# Instancia WSGI de nivel superior para plataformas Serverless (Vercel / Gunicorn)
+try:
+    app = create_app()
+except ImportError:
+    app = None
+
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     host = os.environ.get("HOST", "127.0.0.1")
     url = f"http://127.0.0.1:{port}/"
     threading.Timer(0.8, lambda: webbrowser.open(url)).start()
 
-    try:
-        flask_app = create_app()
-        print(f"🌍 EarthLens Unificado (Flask + SciPy) corriendo en {url}")
-        flask_app.run(host=host, port=port, debug=False)
-    except ImportError:
+    if app is not None:
+        print(f"🌍 EarthLens Unificado (Flask) corriendo en {url}")
+        app.run(host=host, port=port, debug=False)
+    else:
         print(f"🌍 EarthLens Unificado (Servidor integrado) corriendo en {url}")
         server = ThreadingHTTPServer((host, port), EarthLensUnifiedHandler)
         server.serve_forever()
