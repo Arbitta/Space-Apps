@@ -16,6 +16,7 @@ from typing import Any, Dict, Tuple
 
 from services.datasets import get_mission_by_id, get_missions_list, get_variables_catalog
 from services.power import fetch_nasa_power_series
+from services.radar import analyze_radar
 from services.trend_analysis import (
     VARIABLES_CATALOG,
     analyze_series,
@@ -240,6 +241,22 @@ def register_api_routes(app: Any) -> None:
         payload = request.get_json(silent=True) or {}
         resp, status = handle_compare_request(payload)
         return jsonify(resp), status
+
+    @app.route("/api/radar", methods=["GET"])
+    def api_radar():
+        try:
+            live_arg = request.args.get("live")
+            result = analyze_radar(
+                variable=request.args.get("variable", "T2M"),
+                start_year=int(request.args.get("start_year", 2000)),
+                end_year=int(request.args.get("end_year", 2024)),
+                region=request.args.get("region") or None,
+                limit=int(request.args["limit"]) if request.args.get("limit") else None,
+                live=None if live_arg is None else live_arg.lower() in {"1", "true", "yes"},
+            )
+        except (TypeError, ValueError) as error:
+            return jsonify({"error": str(error)}), 400
+        return jsonify(result), 200
 
     @app.route("/api/missions", methods=["GET"])
     def api_missions():

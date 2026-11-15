@@ -24,7 +24,7 @@ NASA_POWER_MONTHLY_URL = "https://power.larc.nasa.gov/api/temporal/monthly/point
 
 # Caché simple en memoria para evitar consultas repetidas (Página 3 del PDF)
 _MEMORY_CACHE: Dict[
-    Tuple[float, float, str, int, int],
+    Tuple[float, float, str, int, int, bool],
     Tuple[List[Dict[str, float]], str, bool, str],
 ] = {}
 
@@ -103,6 +103,7 @@ def fetch_nasa_power_series(
     start_year: int = 2000,
     end_year: int = 2024,
     timeout: float = 4.0,
+    live: Optional[bool] = None,
 ) -> Tuple[List[Dict[str, float]], str, bool, str]:
     """
     Consulta la API de NASA POWER (MERRA-2) y normaliza la serie anual.
@@ -118,13 +119,12 @@ def fetch_nasa_power_series(
     s_yr = int(start_year)
     e_yr = int(end_year)
 
-    cache_key = (lat_r, lon_r, var_code, s_yr, e_yr)
+    use_live = os.environ.get("EARTHLENS_LIVE_NASA", "0") == "1" if live is None else bool(live)
+    cache_key = (lat_r, lon_r, var_code, s_yr, e_yr, use_live)
     if cache_key in _MEMORY_CACHE:
         return _MEMORY_CACHE[cache_key]
 
     # Permitir forzar modo offline/muestra mediante variable de entorno (útil en tests y Docker sin red)
-    use_live = os.environ.get("EARTHLENS_LIVE_NASA", "0") == "1"
-
     if use_live:
         params = urllib.parse.urlencode(
             {

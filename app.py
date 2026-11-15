@@ -29,6 +29,7 @@ from routes.api_routes import (
 )
 from routes.missions_routes import handle_missions_get, register_missions_routes
 from services.datasets import get_mission_by_id, get_missions_list, get_variables_catalog
+from services.radar import analyze_radar
 
 BASE_DIR = Path(__file__).resolve().parent
 TEMPLATES_DIR = BASE_DIR / "templates"
@@ -86,6 +87,11 @@ def create_app() -> Any:
     @app.route("/compare.html")
     def compare_page():
         return send_file(str(_resolve_page_file("compare.html")))
+
+    @app.route("/radar")
+    @app.route("/radar.html")
+    def radar_page():
+        return send_file(str(_resolve_page_file("radar.html")))
 
     @app.route("/missions")
     @app.route("/missions.html")
@@ -154,6 +160,24 @@ class EarthLensUnifiedHandler(BaseHTTPRequestHandler):
                 end_year=qs.get("end_year", [2024])[0],
             )
             return self._send_json(resp, status)
+        if path == "/api/radar":
+            qs = parse_qs(parsed.query)
+            try:
+                resp = analyze_radar(
+                    variable=qs.get("variable", ["T2M"])[0],
+                    start_year=int(qs.get("start_year", [2000])[0]),
+                    end_year=int(qs.get("end_year", [2024])[0]),
+                    region=qs.get("region", [None])[0] or None,
+                    limit=int(qs["limit"][0]) if qs.get("limit") else None,
+                    live=(
+                        None
+                        if not qs.get("live")
+                        else qs["live"][0].lower() in {"1", "true", "yes"}
+                    ),
+                )
+                return self._send_json(resp, 200)
+            except (TypeError, ValueError) as error:
+                return self._send_json({"error": str(error)}, 400)
         if path == "/api/missions":
             return self._send_json({"missions": get_missions_list()}, 200)
         missions_resp = handle_missions_get(path, parse_qs(parsed.query))
@@ -183,6 +207,8 @@ class EarthLensUnifiedHandler(BaseHTTPRequestHandler):
             return self._send_file(_resolve_page_file("results.html"))
         if path in ("/compare", "/compare.html", "/templates/compare.html"):
             return self._send_file(_resolve_page_file("compare.html"))
+        if path in ("/radar", "/radar.html", "/templates/radar.html"):
+            return self._send_file(_resolve_page_file("radar.html"))
         if path in ("/missions", "/missions.html", "/templates/missions.html"):
             return self._send_file(_resolve_page_file("missions.html"))
         if path in ("/about", "/about.html", "/templates/about.html"):

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Earth Radar - EarthLens</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/styles.css"><link rel="stylesheet" href="/static/css/radar.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark el-navbar sticky-top"><div class="container"><a class="navbar-brand el-brand" href="/">EarthLens <span class="el-brand-badge">NASA Space Apps 2026</span></a><div class="navbar-nav ms-auto"><a class="nav-link" href="/">Inicio</a><a class="nav-link" href="/explorer">Explorador</a><a class="nav-link" href="/results">Resultados</a><a class="nav-link active" href="/radar">Earth Radar</a><a class="nav-link" href="/missions">Modo detective</a></div></div></nav>
+  <main class="container py-4">
+    <section class="radar-hero mb-4"><span class="eyebrow">EARTH RADAR</span><h1 class="display-6 fw-bold">Señales ambientales de Argentina</h1><p class="lead mb-0">Detecta ciudades con tendencias estadisticamente significativas usando NASA POWER / MERRA-2.</p></section>
+    <section class="card border-0 shadow-sm mb-4"><div class="card-body"><div class="row g-3 align-items-end">
+      <div class="col-md-3"><label class="form-label" for="radarVariable">Variable</label><select id="radarVariable" class="form-select"><option value="T2M">Temperatura media</option><option value="PRECTOTCORR">Precipitaciones</option><option value="RH2M">Humedad relativa</option><option value="WS2M">Viento</option><option value="T2M_MAX">Temperatura maxima</option><option value="T2M_MIN">Temperatura minima</option></select></div>
+      <div class="col-md-2"><label class="form-label" for="radarStart">Desde</label><input id="radarStart" class="form-control" type="number" value="2000" min="1981"></div><div class="col-md-2"><label class="form-label" for="radarEnd">Hasta</label><input id="radarEnd" class="form-control" type="number" value="2024" max="2026"></div>
+      <div class="col-md-3"><label class="form-label" for="radarRegion">Region</label><select id="radarRegion" class="form-select"><option value="">Todas las regiones</option><option>Patagonia</option><option>Centro y region pampeana</option><option>Cuyo</option><option>NOA</option><option>NEA</option></select></div><div class="col-md-2 d-grid"><button id="radarRun" class="btn btn-primary">Detectar señales</button></div>
+    </div><div class="radar-actions mt-3"><label class="form-check-label"><input id="radarLive" class="form-check-input me-2" type="checkbox">Consultar NASA POWER en vivo (puede tardar)</label><button id="radarExport" class="btn btn-outline-secondary btn-sm">Exportar señales CSV</button><span id="radarSaved" class="small text-muted">Expedientes guardados: 0</span></div></div></section>
+    <div id="radarStatus" class="alert alert-secondary">Preparando analisis...</div>
+    <section class="card border-0 shadow-sm mb-4"><div class="card-body"><div id="radarMap" class="radar-map"></div><div class="radar-legend small text-muted mt-2"><span class="legend-dot increasing"></span> Ascendente <span class="legend-dot decreasing ms-3"></span> Descendente <span class="legend-dot inconclusive ms-3"></span> Inconclusa</div></div></section>
+    <section id="radarSummary" class="row g-3 mb-4"></section><section class="card border-0 shadow-sm"><div class="card-body"><h2 class="h5 fw-bold">Ranking de ciudades</h2><div class="table-responsive"><table class="table align-middle"><thead><tr><th>Ciudad</th><th>Region</th><th>Señal</th><th>Cambio/decada</th><th>p-valor</th><th></th></tr></thead><tbody id="radarRows"></tbody></table></div></div></section>
+    <section class="alert alert-light border mt-4 small"><strong>Nota metodologica:</strong> Radar agrega la serie mensual a valores anuales y aplica regresion lineal. Una señal significativa describe una tendencia estadistica, no demuestra causalidad. El modo offline usa muestras o series sinteticas reproducibles; activa NASA POWER en vivo para consultar la fuente remota. La cobertura, los supuestos y el p-valor deben revisarse antes de usar el resultado como evidencia cientifica final.</section>
+  </main><footer class="el-footer py-3 mt-5"><div class="container"><strong>EarthLens</strong> - NASA Space Apps Challenge 2026</div></footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="/static/js/radar.js"></script>
+</body></html>
