@@ -31,13 +31,21 @@
   --tm-edge-offset: clamp(8px, 1.1vmin, 12px);
 }
 
-/* Cuerpo e inmersión a pantalla completa */
+/* Cuerpo e inmersión a pantalla completa (corrige min-height: 100vh en Chrome móvil iOS/Android) */
+html,
 .tm-viewport-body {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: var(--app-height, 100dvh);
+  min-height: 0 !important;
+  max-height: var(--app-height, 100dvh);
+  margin: 0;
+  padding: 0;
   background: var(--tm-bg-deep);
   color: var(--tm-text-primary);
   overflow: hidden;
-  height: 100vh;
-  height: 100dvh;
+  overscroll-behavior: none;
   display: flex;
   flex-direction: column;
 }
@@ -96,13 +104,17 @@
   flex: 1;
   min-height: 0;
   width: 100%;
+  height: 100%;
   overflow: hidden;
   background: var(--tm-bg-deep);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: var(--tm-edge-offset);
-  padding: var(--tm-edge-offset);
+  padding: calc(var(--tm-edge-offset) + env(safe-area-inset-top, 0px))
+    calc(var(--tm-edge-offset) + env(safe-area-inset-right, 0px))
+    calc(var(--tm-edge-offset) + env(safe-area-inset-bottom, 0px))
+    calc(var(--tm-edge-offset) + env(safe-area-inset-left, 0px));
 }
 
 /* Mapa satelital ocupando todo el lienzo */
@@ -1207,24 +1219,36 @@
 }
 
 @media (max-width: 767.98px) {
+  .tm-stage-wrapper {
+    padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+  }
   .tm-bottom-bar {
     width: 100%;
-    margin-bottom: 0;
+    margin-bottom: 2px;
   }
   .tm-bottom-panel {
-    padding: 0.35rem 0.55rem;
+    padding: 0.32rem 0.5rem;
     border-radius: var(--tm-radius-md);
+  }
+  .tm-bottom-topstrip {
+    padding-bottom: 0.16rem;
+    margin-bottom: 0.2rem;
   }
   .tm-timeline-main {
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: 0.32rem;
+  }
+  .tm-year-readout {
+    font-size: 1.05rem;
   }
   .tm-readout-block {
     order: 1;
+    gap: 0.4rem;
   }
   .tm-transport-group {
     order: 2;
     margin-left: auto;
+    gap: 0.22rem;
   }
   .tm-speed-group {
     order: 3;
@@ -1233,6 +1257,14 @@
     order: 4;
     flex: 1 1 100%;
     width: 100%;
+    margin-top: 2px;
+  }
+  /* Elevar controles de capas/zoom de Leaflet en móvil para que no queden tapados por el timeline inferior */
+  .leaflet-bottom.leaflet-right {
+    bottom: 112px !important;
+  }
+  .leaflet-control-attribution {
+    display: none !important;
   }
   .tm-icon-btn::after,
   .tm-rail-handle::after {
