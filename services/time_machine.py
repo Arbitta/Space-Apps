@@ -146,31 +146,31 @@ def _format_anomaly_description(variable: str, point: Dict[str, Any], unit_disp:
 
     if var_code in ("T2M", "T2M_MAX", "T2M_MIN"):
         if z > 0:
-            badge = "🔥 Anomalía Cálida Extrema" if is_extreme else "🌡️ Anomalía Cálida Moderada"
+            badge = "Anomalía Cálida Extrema" if is_extreme else "Anomalía Cálida Moderada"
             desc = f"En {yr} se registró un pico térmico de {val:.2f} {unit_disp} ({sign}{anom:.2f} {unit_disp} sobre la media, z = {z:+.2f})."
         else:
-            badge = "❄️ Anomalía Fría Extrema" if is_extreme else "🧊 Anomalía Fría Moderada"
+            badge = "Anomalía Fría Extrema" if is_extreme else "Anomalía Fría Moderada"
             desc = f"En {yr} se registró un enfriamiento de {val:.2f} {unit_disp} ({sign}{anom:.2f} {unit_disp} respecto a la media, z = {z:+.2f})."
     elif var_code == "PRECTOTCORR":
         if z > 0:
-            badge = "🌧️ Exceso Hídrico Extremo" if is_extreme else "🌦️ Año Húmedo Anómalo"
+            badge = "Exceso Hídrico Extremo" if is_extreme else "Año Húmedo Anómalo"
             desc = f"En {yr} la precipitación alcanzó {val:.2f} {unit_disp} ({sign}{anom:.2f} {unit_disp} sobre la media, z = {z:+.2f})."
         else:
-            badge = "🏜️ Déficit Hídrico Severo" if is_extreme else "☀️ Año Seco Anómalo"
+            badge = "Déficit Hídrico Severo" if is_extreme else "Año Seco Anómalo"
             desc = f"En {yr} la precipitación cayó a {val:.2f} {unit_disp} ({sign}{anom:.2f} {unit_disp} bajo la media, z = {z:+.2f})."
     elif var_code == "RH2M":
         if z > 0:
-            badge = "💧 Humedad Atmosférica Alta"
+            badge = "Humedad Atmosférica Alta"
             desc = f"En {yr} la humedad relativa subió a {val:.1f} {unit_disp} ({sign}{anom:.1f} {unit_disp}, z = {z:+.2f})."
         else:
-            badge = "🌵 Aridez Atmosférica Anómala"
+            badge = "Aridez Atmosférica Anómala"
             desc = f"En {yr} la humedad relativa descendió a {val:.1f} {unit_disp} ({sign}{anom:.1f} {unit_disp}, z = {z:+.2f})."
     else:
         if z > 0:
-            badge = "💨 Intensificación Eólica"
+            badge = "Intensificación Eólica"
             desc = f"En {yr} el viento medio alcanzó {val:.2f} {unit_disp} ({sign}{anom:.2f} {unit_disp}, z = {z:+.2f})."
         else:
-            badge = "🍃 Calma Eólica Anómala"
+            badge = "Calma Eólica Anómala"
             desc = f"En {yr} el viento medio disminuyó a {val:.2f} {unit_disp} ({sign}{anom:.2f} {unit_disp}, z = {z:+.2f})."
 
     return {"badge": badge, "description": desc}
@@ -183,13 +183,17 @@ def build_spatial_zone_grid(
     timeline: List[Dict[str, Any]],
     mean_val: float,
     std_val: float,
+    lat_span: float = 1.5,
+    lon_span: float = 1.875,
 ) -> Dict[str, Any]:
     """
-    Construye una grilla zonal de 3×3 celdas MERRA-2 (0.5° lat × 0.625° lon) alrededor de la ubicación
-    seleccionada para que el control Slide-Zoom muestre cómo evoluciona espacialmente el color en la zona.
+    Construye una grilla zonal de 3×3 sub-sectores alrededor de la ubicación o rectángulo
+    seleccionado (achicable o expandible) para mostrar cómo evoluciona espacialmente el campo.
     """
-    lat_step = 0.5
-    lon_step = 0.625
+    eff_lat_span = max(0.3, min(30.0, float(lat_span or 1.5)))
+    eff_lon_span = max(0.3, min(36.0, float(lon_span or 1.875)))
+    lat_step = round(eff_lat_span / 3.0, 4)
+    lon_step = round(eff_lon_span / 3.0, 4)
     var_code = variable.upper()
 
     cells: List[Dict[str, Any]] = []
@@ -445,6 +449,12 @@ def build_time_machine_payload(payload: Dict[str, Any]) -> Tuple[Dict[str, Any],
         split_year=split_year,
     )
 
+    try:
+        lat_span = float(payload.get("lat_span", 1.5) or 1.5)
+        lon_span = float(payload.get("lon_span", 1.875) or 1.875)
+    except (TypeError, ValueError):
+        lat_span, lon_span = 1.5, 1.875
+
     spatial_zone = build_spatial_zone_grid(
         center_lat=latitude,
         center_lon=longitude,
@@ -452,6 +462,8 @@ def build_time_machine_payload(payload: Dict[str, Any]) -> Tuple[Dict[str, Any],
         timeline=anom_bundle["timeline"],
         mean_val=anom_bundle["mean"],
         std_val=anom_bundle["std_dev"],
+        lat_span=lat_span,
+        lon_span=lon_span,
     )
 
     include_regional = bool(payload.get("include_regional", True))

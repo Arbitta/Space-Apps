@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Earth Time Machine · Visor Satelital Meteorológico · EarthLens</title>
+  <title>Earth Time Machine · Telemetría Satelital · EarthLens</title>
 
   <!-- Google Fonts (Inter + JetBrains Mono) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -32,11 +32,15 @@
   <link rel="stylesheet" href="../static/css/time_machine.css" />
 </head>
 <body class="tm-viewport-body">
-  <!-- Barra de Navegación Principal -->
+  <!-- Barra de Navegación Principal (sin emojis, estética técnica sobria) -->
   <nav class="navbar navbar-expand-lg navbar-dark el-navbar sticky-top">
     <div class="container-fluid px-3">
-      <a class="navbar-brand el-brand" href="/">
-        <span>🌍 EarthLens</span>
+      <a class="navbar-brand el-brand d-flex align-items-center gap-2" href="/">
+        <svg class="tm-svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M3.6 9h16.8M3.6 15h16.8M12 3a14.5 14.5 0 0 0 0 18M12 3a14.5 14.5 0 0 1 0 18"></path>
+        </svg>
+        <span>EarthLens</span>
         <span class="el-brand-badge">NASA Space Apps 2026</span>
       </a>
       <button
@@ -54,10 +58,10 @@
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-1">
           <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
           <li class="nav-item"><a class="nav-link" href="/explorer">Explorador</a></li>
-          <li class="nav-item"><a class="nav-link" href="/results">Resultados</a></li>
-          <li class="nav-item"><a class="nav-link" href="/compare">Comparador</a></li>
+          <li class="nav-item"><a class="nav-link" id="navLinkResults" href="/results">Resultados</a></li>
+          <li class="nav-item"><a class="nav-link" id="navLinkCompare" href="/compare">Comparador</a></li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/time-machine">⏳ Time Machine</a>
+            <a class="nav-link active" aria-current="page" href="/time-machine">Time Machine</a>
           </li>
           <li class="nav-item"><a class="nav-link" href="/missions">Modo detective</a></li>
           <li class="nav-item"><a class="nav-link" href="/about">Nosotros y metodología</a></li>
@@ -66,35 +70,39 @@
     </div>
   </nav>
 
-  <!-- ESCENARIO PRINCIPAL: MAPA SATELITAL METEOROLÓGICO + CONTROLES ALREDEDOR -->
+  <!-- ESCENARIO PRINCIPAL: MAPA SATELITAL + BARRA TÉCNICA SUPERIOR + ICONOS CON TOOLTIP + SLIDER INFERIOR -->
   <main class="tm-stage-wrapper">
     <!-- Mapa Leaflet de pantalla completa -->
     <div id="timeMachineMap" role="application" aria-label="Mapa satelital meteorológico interactivo"></div>
 
-    <!-- HUD SUPERIOR: Selector de ciudad, variable, vista satelital y enlaces -->
+    <!-- BARRA TÉCNICA SUPERIOR (Sincronizada con sessionStorage, URL y controles) -->
     <header class="tm-hud-top">
-      <div class="tm-hud-glass d-flex flex-wrap align-items-center justify-content-between gap-2 w-100">
-        <!-- Título de ubicación + Estado -->
-        <div class="d-flex align-items-center gap-2 flex-wrap">
-          <span class="tm-live-pill">
-            <span class="tm-live-dot"></span> SATÉLITE MERRA-2
+      <div class="tm-hud-panel d-flex flex-wrap align-items-center justify-content-between gap-2 w-100">
+        <!-- Indicador de estado y lectura de ubicación sincronizada -->
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+          <span class="tm-telemetry-tag">
+            <span class="tm-telemetry-dot"></span> MERRA-2
           </span>
           <div>
-            <div class="fw-bold text-white lh-sm" style="font-size: 0.96rem;">
+            <div class="fw-bold text-light lh-sm" style="font-size: 0.92rem;">
               <span id="tmTitleLocation">Comodoro Rivadavia, Chubut</span>
             </div>
-            <div class="text-white-50" style="font-size: 0.73rem;">
-              <span id="tmVariableBadge">Temperatura media (T2M)</span> ·
-              <span id="tmRegionBadge">Patagonia</span> ·
-              <span id="tmCoordsText">Lat: -45.86° · Lon: -67.50°</span>
+            <div class="tm-meta-subline">
+              <span id="tmVariableBadge">Temperatura media (T2M)</span>
+              <span class="mx-1">|</span>
+              <span id="tmRegionBadge">Patagonia</span>
+              <span class="mx-1">|</span>
+              <span id="tmCoordsText">Lat: -45.88° · Lon: -67.52°</span>
+              <span class="mx-1">|</span>
+              <span id="tmBoxSpanText">Cuadrante: 1.50° × 1.88°</span>
             </div>
           </div>
-          <span id="tmLoadingSpinner" class="spinner-border spinner-border-sm text-info d-none ms-1" role="status"></span>
+          <span id="tmLoadingSpinner" class="spinner-border spinner-border-sm text-secondary d-none ms-1" role="status"></span>
         </div>
 
-        <!-- Controles rápidos de Ciudad, Variable y Vista Satelital -->
+        <!-- Selectores sincronizados (autocomplete="off" para evitar desincronización al cambiar de pestaña) -->
         <div class="d-flex flex-wrap align-items-center gap-2">
-          <select id="tmCitySelect" class="form-select form-select-sm tm-hud-select" aria-label="Ciudad o Zona">
+          <select id="tmCitySelect" class="form-select form-select-sm tm-hud-select" autocomplete="off" aria-label="Ciudad o Zona">
             <optgroup label="Patagonia">
               <option value="comodoro-rivadavia" data-lat="-45.8806" data-lon="-67.5195" selected>Comodoro Rivadavia, Chubut</option>
               <option value="bariloche" data-lat="-41.1335" data-lon="-71.3101">San Carlos de Bariloche, Río Negro</option>
@@ -132,143 +140,244 @@
             </optgroup>
           </select>
 
-          <select id="tmVariableSelect" class="form-select form-select-sm tm-hud-select" aria-label="Variable Satelital">
-            <option value="T2M" selected>🌡️ Temperatura Media (T2M)</option>
-            <option value="PRECTOTCORR">🌧️ Precipitación Satelital (PRECTOTCORR)</option>
-            <option value="RH2M">💧 Humedad Relativa (RH2M)</option>
-            <option value="WS2M">💨 Viento Superficial (WS2M)</option>
-            <option value="T2M_MAX">🔥 Temperatura Máxima (T2M_MAX)</option>
-            <option value="T2M_MIN">❄️ Temperatura Mínima (T2M_MIN)</option>
+          <select id="tmVariableSelect" class="form-select form-select-sm tm-hud-select" autocomplete="off" aria-label="Variable Satelital">
+            <option value="T2M" selected>T2M · Temperatura media (°C)</option>
+            <option value="PRECTOTCORR">PRECTOTCORR · Precipitación (mm/día)</option>
+            <option value="RH2M">RH2M · Humedad relativa (%)</option>
+            <option value="WS2M">WS2M · Viento superficial (m/s)</option>
+            <option value="T2M_MAX">T2M_MAX · Temperatura máxima (°C)</option>
+            <option value="T2M_MIN">T2M_MIN · Temperatura mínima (°C)</option>
           </select>
 
-          <select id="tmMapModeSelect" class="form-select form-select-sm tm-hud-select" aria-label="Modo de cámara satelital">
-            <option value="zone" selected>🛰️ Cámara Zonal (Foco Local)</option>
-            <option value="national">🇦🇷 Cámara Nacional (25 Ciudades)</option>
+          <select id="tmMapModeSelect" class="form-select form-select-sm tm-hud-select" autocomplete="off" aria-label="Modo de cobertura">
+            <option value="zone" selected>Cuadrante Zonal Editable</option>
+            <option value="national">Red Nacional (25 Estaciones)</option>
           </select>
 
-          <!-- Rango oculto / desplegable compacto -->
+          <!-- Selector de Período -->
           <div class="dropdown">
             <button class="btn btn-sm tm-hud-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              📅 <span id="tmPeriodBadge">2000–2024</span>
+              <span id="tmPeriodBadge">2000–2024</span>
             </button>
-            <div class="dropdown-menu dropdown-menu-end dropdown-menu-dark p-3 shadow-lg" style="min-width: 240px;">
-              <div class="small fw-bold text-info mb-2">Período de análisis (1981–2024)</div>
+            <div class="dropdown-menu dropdown-menu-end tm-dropdown-panel p-3" style="min-width: 240px;">
+              <div class="small fw-semibold text-light mb-2">Período de análisis (1981–2024)</div>
               <div class="row g-2 mb-2">
                 <div class="col-6">
-                  <label for="tmStartYear" class="form-label small mb-1">Inicio</label>
-                  <input type="number" id="tmStartYear" class="form-control form-control-sm bg-dark text-white border-secondary" value="2000" min="1981" max="2021" />
+                  <label for="tmStartYear" class="form-label small text-secondary mb-1">Inicio</label>
+                  <input type="number" id="tmStartYear" class="form-control form-control-sm tm-input-dark" autocomplete="off" value="2000" min="1981" max="2021" />
                 </div>
                 <div class="col-6">
-                  <label for="tmEndYear" class="form-label small mb-1">Fin</label>
-                  <input type="number" id="tmEndYear" class="form-control form-control-sm bg-dark text-white border-secondary" value="2024" min="1984" max="2024" />
+                  <label for="tmEndYear" class="form-label small text-secondary mb-1">Fin</label>
+                  <input type="number" id="tmEndYear" class="form-control form-control-sm tm-input-dark" autocomplete="off" value="2024" min="1984" max="2024" />
                 </div>
               </div>
-              <button id="btnLoadTimeMachine" type="button" class="btn btn-info btn-sm w-100 fw-semibold">
-                🔄 Actualizar Período
+              <button id="btnLoadTimeMachine" type="button" class="btn btn-sm tm-action-btn w-100">
+                Aplicar período
               </button>
             </div>
           </div>
-
-          <a id="tmLinkToResults" href="/results" class="btn btn-sm tm-hud-btn" title="Ir al Dashboard de Resultados">
-            📊 Resultados
-          </a>
-          <a id="tmLinkToCompare" href="/compare" class="btn btn-sm tm-hud-btn" title="Ir al Comparador">
-            ⚖️ Comparar
-          </a>
-          <button id="btnExportTimeMachineCSV" type="button" class="btn btn-sm tm-hud-btn" title="Descargar CSV">
-            ⬇ CSV
-          </button>
         </div>
       </div>
     </header>
 
-    <!-- BOTONES FLOTANTES ALREDEDOR DEL MAPA (ABREN VENTANITAS FLOTANTES SIN CAMBIAR DE PÁGINA) -->
-    <aside class="tm-floating-dock tm-dock-left" aria-label="Ventanas de análisis estadístico">
-      <div class="tm-dock-label">📊 ANÁLISIS CIENTÍFICO</div>
-
+    <!-- DOCK IZQUIERDO: BOTONES DE SOLO ICONO CON TOOLTIP EXPLICATIVO AL PASAR EL PUNTERO -->
+    <aside class="tm-icon-rail tm-rail-left" aria-label="Ventanas de análisis estadístico">
+      <!-- 1. Serie anual, tendencia OLS y cursor del año activo -->
       <button
         type="button"
-        class="tm-dock-btn"
+        class="tm-icon-btn"
         data-window-target="winTrend"
-        title="Abrir ventana: Serie anual, tendencia OLS y cursor del año activo"
+        data-tooltip="Serie anual, tendencia OLS y cursor del año activo"
+        aria-label="Serie anual, tendencia OLS y cursor del año activo"
       >
-        <span class="tm-dock-icon">📈</span>
-        <span class="tm-dock-text">
-          <strong>Serie Anual y Tendencia OLS</strong>
-          <small>Evolución y cursor del año activo</small>
-        </span>
+        <svg class="tm-svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 3v18h18"></path>
+          <path d="M7 15l4-4 4 2 5-6"></path>
+          <circle cx="20" cy="7" r="2"></circle>
+        </svg>
       </button>
 
+      <!-- 2. Desviación y anomalías respecto a la media -->
       <button
         type="button"
-        class="tm-dock-btn"
+        class="tm-icon-btn"
         data-window-target="winAnomaliesBar"
-        title="Abrir ventana: Desviación y anomalías respecto a la media"
+        data-tooltip="Desviación y anomalías respecto a la media"
+        aria-label="Desviación y anomalías respecto a la media"
       >
-        <span class="tm-dock-icon">📊</span>
-        <span class="tm-dock-text">
-          <strong>Desviación vs. Media</strong>
-          <small>Anomalías anuales (Δ = y − ȳ)</small>
-        </span>
+        <svg class="tm-svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 12h18"></path>
+          <rect x="5" y="6" width="3" height="6"></rect>
+          <rect x="10.5" y="12" width="3" height="6"></rect>
+          <rect x="16" y="4" width="3" height="8"></rect>
+        </svg>
       </button>
 
+      <!-- 3. Detector de anomalías -->
       <button
         type="button"
-        class="tm-dock-btn"
+        class="tm-icon-btn"
         data-window-target="winAnomalyDetector"
-        title="Abrir ventana: Detector de anomalías y comparación de épocas"
+        data-tooltip="Detector de anomalías y comparador de épocas"
+        aria-label="Detector de anomalías y comparador de épocas"
       >
-        <span class="tm-dock-icon">🚨</span>
-        <span class="tm-dock-text">
-          <strong>Detector de Anomalías</strong>
-          <small>Eventos extremos y Épocas A/B</small>
-        </span>
-        <span id="tmDockAnomalyCount" class="badge rounded-pill bg-danger ms-auto">0</span>
+        <svg class="tm-svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"></circle>
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 3v3M12 18v3M3 12h3M18 12h3"></path>
+        </svg>
+        <span id="tmDockAnomalyCount" class="tm-icon-counter">0</span>
+      </button>
+
+      <!-- 4. Matriz histórica anual -->
+      <button
+        type="button"
+        class="tm-icon-btn"
+        data-window-target="winMatrix"
+        data-tooltip="Matriz histórica anual (2000–2024)"
+        aria-label="Matriz histórica anual"
+      >
+        <svg class="tm-svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="16" rx="1"></rect>
+          <path d="M3 9h18M3 14h18M9 4v16M15 4v16"></path>
+        </svg>
+      </button>
+
+      <div class="tm-rail-divider"></div>
+
+      <!-- Navegación rápida sincronizada con otras vistas y exportación -->
+      <a
+        id="tmLinkToResults"
+        href="/results"
+        class="tm-icon-btn"
+        data-tooltip="Abrir esta zona en el Dashboard de Resultados"
+        aria-label="Ir al Dashboard de Resultados"
+      >
+        <svg class="tm-svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+      </a>
+
+      <a
+        id="tmLinkToCompare"
+        href="/compare"
+        class="tm-icon-btn"
+        data-tooltip="Comparar esta zona con otra ubicación"
+        aria-label="Ir al Comparador"
+      >
+        <svg class="tm-svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M16 3h5v5M8 21H3v-5M21 3l-7 7M3 21l7-7"></path>
+        </svg>
+      </a>
+
+      <button
+        id="btnExportTimeMachineCSV"
+        type="button"
+        class="tm-icon-btn"
+        data-tooltip="Exportar serie temporal completa en CSV"
+        aria-label="Exportar CSV"
+      >
+        <svg class="tm-svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+      </button>
+    </aside>
+
+    <!-- DOCK DERECHO: CONTROLES DEL CUADRANTE EDITABLE (ACHICAR / EXPANDIR) Y LEYENDA ESPECTRAL -->
+    <aside class="tm-icon-rail tm-rail-right" aria-label="Control de cuadrante y escala satelital">
+      <button
+        type="button"
+        id="btnShrinkBox"
+        class="tm-icon-btn"
+        data-tooltip="Achicar cuadrante de análisis (focalizar área concreta)"
+        data-tooltip-pos="left"
+        aria-label="Achicar cuadrante de análisis"
+      >
+        <svg class="tm-svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="7" y="7" width="10" height="10"></rect>
+          <path d="M4 4l3 3M20 4l-3 3M4 20l3-3M20 20l-3-3"></path>
+        </svg>
       </button>
 
       <button
         type="button"
-        class="tm-dock-btn"
-        data-window-target="winMatrix"
-        title="Abrir ventana: Matriz histórica anual completa"
+        id="btnExpandBox"
+        class="tm-icon-btn"
+        data-tooltip="Expandir cuadrante de análisis (abarcar mayor región)"
+        data-tooltip-pos="left"
+        aria-label="Expandir cuadrante de análisis"
       >
-        <span class="tm-dock-icon">📋</span>
-        <span class="tm-dock-text">
-          <strong>Matriz Histórica Anual</strong>
-          <small>Tabla completa año por año</small>
-        </span>
+        <svg class="tm-svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="6" y="6" width="12" height="12"></rect>
+          <path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6"></path>
+        </svg>
+      </button>
+
+      <button
+        type="button"
+        id="btnResetBox"
+        class="tm-icon-btn"
+        data-tooltip="Restablecer cuadrante estándar MERRA-2 (1.5° × 1.88°)"
+        data-tooltip-pos="left"
+        aria-label="Restablecer cuadrante"
+      >
+        <svg class="tm-svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+          <path d="M3 3v5h5"></path>
+        </svg>
+      </button>
+
+      <div class="tm-rail-divider"></div>
+
+      <button
+        type="button"
+        id="btnSlideZoomZone"
+        class="tm-icon-btn"
+        data-tooltip="Enfocar cámara en el cuadrante activo"
+        data-tooltip-pos="left"
+        aria-label="Enfocar cuadrante"
+      >
+        <svg class="tm-svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M3 7V3h4M17 3h4v4M21 17v4h-4M7 21H3v-4"></path>
+        </svg>
+      </button>
+
+      <button
+        type="button"
+        id="btnSlideZoomArg"
+        class="tm-icon-btn"
+        data-tooltip="Vista general de la Red Nacional Argentina (25 ciudades)"
+        data-tooltip-pos="left"
+        aria-label="Vista general Argentina"
+      >
+        <svg class="tm-svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+          <line x1="8" y1="2" x2="8" y2="18"></line>
+          <line x1="16" y1="6" x2="16" y2="22"></line>
+        </svg>
       </button>
     </aside>
 
-    <!-- CONTROLES DE CÁMARA Y LEYENDA METEOROLÓGICA (DERECHA DEL MAPA) -->
-    <aside class="tm-floating-dock tm-dock-right" aria-label="Cámara y leyenda satelital">
-      <div class="tm-weather-tv-card">
-        <div class="text-uppercase text-info fw-bold" style="font-size: 0.65rem; letter-spacing: 0.08em;">
-          📡 CAPA METEOROLÓGICA ACTIVA
-        </div>
-        <div id="tmWeatherTvTitle" class="fw-bold text-white small mt-1">
-          Infrarrojo Térmico Satelital
-        </div>
-        <div class="d-flex align-items-center justify-content-between gap-2 mt-2">
-          <span id="tmScaleMinText" class="small text-white-50 font-monospace" style="font-size: 0.72rem;">Frío (-2σ)</span>
-          <div id="tmColorScaleBar" class="tm-color-scale-bar tm-scale-thermal flex-grow-1"></div>
-          <span id="tmScaleMaxText" class="small text-white-50 font-monospace" style="font-size: 0.72rem;">Cálido (+2σ)</span>
-        </div>
-        <div id="tmCellHudInfo" class="text-white-50 mt-1" style="font-size: 0.7rem;">
-          Barrido continuo MERRA-2
-        </div>
-        <div class="d-flex gap-1 mt-2">
-          <button type="button" id="btnSlideZoomZone" class="btn btn-outline-info btn-sm py-0 px-2 flex-fill" style="font-size: 0.73rem;">
-            🎯 Foco Zonal
-          </button>
-          <button type="button" id="btnSlideZoomArg" class="btn btn-outline-light btn-sm py-0 px-2 flex-fill" style="font-size: 0.73rem;">
-            🇦🇷 País
-          </button>
-        </div>
+    <!-- LEYENDA ESPECTRAL SATELITAL COMPACTA (ESQUINA INFERIOR DERECHA SOBRE EL SLIDER) -->
+    <div class="tm-spectral-legend" aria-label="Escala espectral satelital">
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <span id="tmWeatherTvTitle" class="tm-legend-title">Espectro Térmico IR (T2M)</span>
+        <span id="tmCellHudInfo" class="tm-legend-meta">Arrastra los vértices del cuadro para ajustar zona</span>
       </div>
-    </aside>
+      <div class="d-flex align-items-center gap-2">
+        <span id="tmScaleMinText" class="tm-legend-bound">-2σ</span>
+        <div id="tmColorScaleBar" class="tm-color-scale-bar tm-scale-thermal flex-grow-1"></div>
+        <span id="tmScaleMaxText" class="tm-legend-bound">+2σ</span>
+      </div>
+    </div>
 
-    <!-- VENTANITAS FLOTANTES (POPUP OVERLAYS SOBRE EL MAPA) -->
+    <!-- VENTANITAS FLOTANTES (SOBRE EL MAPA, BORDES RECTOS/TÉCNICOS, SIN RECARGAR PÁGINA) -->
     <!-- Ventanita 1: Serie anual, tendencia OLS y cursor del año activo -->
     <section
       id="winTrend"
@@ -278,17 +387,17 @@
     >
       <div class="tm-popup-header">
         <div>
-          <span class="badge bg-info text-dark me-1">Gráfico 1</span>
-          <strong id="winTrendTitle" class="text-white">Serie Anual, Tendencia OLS y Cursor del Año Activo</strong>
+          <span class="tm-window-tag">MÓDULO 01</span>
+          <strong id="winTrendTitle" class="text-light">Serie Anual, Tendencia OLS y Cursor del Año Activo</strong>
         </div>
         <div class="d-flex align-items-center gap-2">
-          <span id="tmSlopeBadge" class="badge bg-dark border border-secondary text-info font-monospace">Pendiente: --</span>
+          <span id="tmSlopeBadge" class="tm-stat-pill">Pendiente: --</span>
           <button type="button" class="btn-close btn-close-white tm-window-close" data-close-window="winTrend" aria-label="Cerrar"></button>
         </div>
       </div>
       <div class="tm-popup-body">
-        <p class="text-white-50 small mb-2">
-          Evolución interanual observada por satélite y recta de tendencia por Mínimos Cuadrados Ordinarios (OLS). Haz clic en cualquier punto para viajar a ese año en el mapa.
+        <p class="tm-popup-desc mb-2">
+          Serie temporal observada en el cuadrante seleccionado junto a la recta de ajuste lineal por Mínimos Cuadrados Ordinarios (OLS). Haz clic en cualquier año para sincronizar el mapa satelital.
         </p>
         <div class="tm-chart-box">
           <canvas id="tmTrendChart"></canvas>
@@ -305,17 +414,17 @@
     >
       <div class="tm-popup-header">
         <div>
-          <span class="badge bg-warning text-dark me-1">Gráfico 2</span>
-          <strong id="winAnomaliesBarTitle" class="text-white">Desviación y Anomalías Respecto a la Media (Δ = y − ȳ)</strong>
+          <span class="tm-window-tag">MÓDULO 02</span>
+          <strong id="winAnomaliesBarTitle" class="text-light">Desviación y Anomalías Respecto a la Media (Δ = y − ȳ)</strong>
         </div>
         <div class="d-flex align-items-center gap-2">
-          <span id="tmMeanBadge" class="badge bg-dark border border-secondary text-warning font-monospace">Media: --</span>
+          <span id="tmMeanBadge" class="tm-stat-pill">Media: --</span>
           <button type="button" class="btn-close btn-close-white tm-window-close" data-close-window="winAnomaliesBar" aria-label="Cerrar"></button>
         </div>
       </div>
       <div class="tm-popup-body">
-        <p class="text-white-50 small mb-2">
-          Desviación de cada año frente al promedio histórico del período. Colores intensos indican mayor apartamiento estadístico (z-score). Haz clic en una barra para ver ese año en el mapa.
+        <p class="tm-popup-desc mb-2">
+          Apartamiento anual respecto al promedio histórico del período. Cada barra utiliza la misma codificación espectral del barrido satelital.
         </p>
         <div class="tm-chart-box">
           <canvas id="tmAnomalyBarChart"></canvas>
@@ -332,11 +441,11 @@
     >
       <div class="tm-popup-header">
         <div>
-          <span class="badge bg-danger me-1">Alerta Científica</span>
-          <strong id="winAnomalyDetectorTitle" class="text-white">Detector de Anomalías y Cambio entre Épocas</strong>
+          <span class="tm-window-tag">MÓDULO 03</span>
+          <strong id="winAnomalyDetectorTitle" class="text-light">Detector de Anomalías y Contraste entre Épocas</strong>
         </div>
         <div class="d-flex align-items-center gap-2">
-          <span id="tmAnomalyListCount" class="badge bg-danger">0 eventos</span>
+          <span id="tmAnomalyListCount" class="tm-stat-pill">0 eventos</span>
           <button type="button" class="btn-close btn-close-white tm-window-close" data-close-window="winAnomalyDetector" aria-label="Cerrar"></button>
         </div>
       </div>
@@ -344,58 +453,55 @@
         <div class="row g-3">
           <!-- Columna izquierda: Eventos anómalos y récords -->
           <div class="col-lg-6">
-            <div class="small fw-bold text-uppercase text-info mb-2">
-              🏆 Récords Extremos del Período
-            </div>
+            <div class="tm-section-caption mb-2">Récords Históricos del Período</div>
             <div class="row g-2 mb-3">
               <div class="col-6">
-                <div class="p-2 rounded bg-dark border border-secondary d-flex justify-content-between align-items-center">
+                <div class="tm-subpanel d-flex justify-content-between align-items-center">
                   <div>
-                    <div class="text-white-50" style="font-size: 0.68rem;">MÁXIMO HISTÓRICO</div>
-                    <div id="tmMaxRecordVal" class="fw-bold text-white small">--</div>
-                    <div id="tmMaxRecordYr" class="text-danger fw-semibold small">Año --</div>
+                    <div class="tm-micro-label">MÁXIMO REGISTRADO</div>
+                    <div id="tmMaxRecordVal" class="fw-bold text-light small">--</div>
+                    <div id="tmMaxRecordYr" class="tm-accent-warm small">Año --</div>
                   </div>
-                  <button type="button" id="btnJumpMaxRecord" class="btn btn-outline-danger btn-sm py-0 px-2">
-                    Ir ↗
+                  <button type="button" id="btnJumpMaxRecord" class="btn btn-sm tm-hud-btn py-0 px-2">
+                    Ver
                   </button>
                 </div>
               </div>
               <div class="col-6">
-                <div class="p-2 rounded bg-dark border border-secondary d-flex justify-content-between align-items-center">
+                <div class="tm-subpanel d-flex justify-content-between align-items-center">
                   <div>
-                    <div class="text-white-50" style="font-size: 0.68rem;">MÍNIMO HISTÓRICO</div>
-                    <div id="tmMinRecordVal" class="fw-bold text-white small">--</div>
-                    <div id="tmMinRecordYr" class="text-info fw-semibold small">Año --</div>
+                    <div class="tm-micro-label">MÍNIMO REGISTRADO</div>
+                    <div id="tmMinRecordVal" class="fw-bold text-light small">--</div>
+                    <div id="tmMinRecordYr" class="tm-accent-cool small">Año --</div>
                   </div>
-                  <button type="button" id="btnJumpMinRecord" class="btn btn-outline-info btn-sm py-0 px-2">
-                    Ir ↗
+                  <button type="button" id="btnJumpMinRecord" class="btn btn-sm tm-hud-btn py-0 px-2">
+                    Ver
                   </button>
                 </div>
               </div>
             </div>
 
-            <div class="small fw-bold text-uppercase text-warning mb-2">
-              🚨 Años con Anomalía Estadística (|z| ≥ 1.5)
-            </div>
+            <div class="tm-section-caption mb-2">Años con Anomalía Estadística (|z| ≥ 1.5)</div>
             <div id="tmAnomaliesContainer" class="d-flex flex-column gap-2" style="max-height: 230px; overflow-y: auto;"></div>
           </div>
 
           <!-- Columna derecha: Comparador de Épocas (Welch t-test) -->
           <div class="col-lg-6">
             <div class="d-flex justify-content-between align-items-center mb-2">
-              <span class="small fw-bold text-uppercase text-info">⚖️ Comparador de Épocas (A vs B)</span>
-              <span id="tmEpochShiftBadge" class="badge rounded-pill badge-sig-yes">Cambio significativo</span>
+              <span class="tm-section-caption">Contraste Estadístico de Épocas (A vs B)</span>
+              <span id="tmEpochShiftBadge" class="tm-stat-pill">Evaluando</span>
             </div>
 
-            <div class="p-2 rounded bg-dark border border-secondary mb-2">
-              <div class="d-flex justify-content-between align-items-center small text-white-50 mb-1">
+            <div class="tm-subpanel mb-2">
+              <div class="d-flex justify-content-between align-items-center small text-secondary mb-1">
                 <span>Año de corte:</span>
-                <span id="tmSplitYearLabel" class="badge bg-primary">Corte en 2012</span>
+                <span id="tmSplitYearLabel" class="font-monospace text-light">Corte en 2012</span>
               </div>
               <input
                 type="range"
                 id="tmSplitYearSlider"
                 class="form-range"
+                autocomplete="off"
                 min="2003"
                 max="2022"
                 step="1"
@@ -405,33 +511,33 @@
 
             <div class="row g-2 mb-2">
               <div class="col-6">
-                <div class="p-2 rounded bg-dark border-start border-4 border-primary">
-                  <div class="small text-info fw-bold">Época Base (A)</div>
-                  <div id="tmEpochPeriodA" class="text-white-50" style="font-size: 0.72rem;">2000–2011</div>
-                  <div id="tmEpochMeanA" class="fs-5 fw-bold text-white">--</div>
-                  <div id="tmEpochStatsA" class="text-white-50" style="font-size: 0.72rem;">σ: --</div>
+                <div class="tm-subpanel tm-border-left-cool">
+                  <div class="tm-micro-label">ÉPOCA BASE (A)</div>
+                  <div id="tmEpochPeriodA" class="text-secondary" style="font-size: 0.72rem;">2000–2011</div>
+                  <div id="tmEpochMeanA" class="fs-5 fw-bold text-light">--</div>
+                  <div id="tmEpochStatsA" class="text-secondary" style="font-size: 0.72rem;">σ: --</div>
                 </div>
               </div>
               <div class="col-6">
-                <div class="p-2 rounded bg-dark border-start border-4 border-danger">
-                  <div class="small text-warning fw-bold">Época Reciente (B)</div>
-                  <div id="tmEpochPeriodB" class="text-white-50" style="font-size: 0.72rem;">2012–2024</div>
-                  <div id="tmEpochMeanB" class="fs-5 fw-bold text-white">--</div>
-                  <div id="tmEpochStatsB" class="text-white-50" style="font-size: 0.72rem;">σ: --</div>
+                <div class="tm-subpanel tm-border-left-warm">
+                  <div class="tm-micro-label">ÉPOCA RECIENTE (B)</div>
+                  <div id="tmEpochPeriodB" class="text-secondary" style="font-size: 0.72rem;">2012–2024</div>
+                  <div id="tmEpochMeanB" class="fs-5 fw-bold text-light">--</div>
+                  <div id="tmEpochStatsB" class="text-secondary" style="font-size: 0.72rem;">σ: --</div>
                 </div>
               </div>
             </div>
 
-            <div class="p-2 rounded bg-dark border border-info border-opacity-50">
+            <div class="tm-subpanel">
               <div class="d-flex justify-content-between align-items-center">
-                <span class="small text-white-50 fw-semibold"> Salto entre épocas (B − A):</span>
-                <span id="tmEpochPValue" class="small font-monospace text-info">p = --</span>
+                <span class="tm-micro-label">DIFERENCIA NETA (B − A)</span>
+                <span id="tmEpochPValue" class="small font-monospace text-light">p = --</span>
               </div>
               <div class="d-flex align-items-baseline gap-2 my-1">
-                <span id="tmEpochDeltaMean" class="fs-5 fw-bold text-info">--</span>
-                <span id="tmEpochDeltaPct" class="small text-white-50">(--%)</span>
+                <span id="tmEpochDeltaMean" class="fs-5 fw-bold text-light">--</span>
+                <span id="tmEpochDeltaPct" class="small text-secondary">(--%)</span>
               </div>
-              <p id="tmEpochSummaryText" class="small text-white-50 mb-0" style="font-size: 0.76rem;"></p>
+              <p id="tmEpochSummaryText" class="small text-secondary mb-0" style="font-size: 0.75rem;"></p>
             </div>
           </div>
         </div>
@@ -447,17 +553,17 @@
     >
       <div class="tm-popup-header">
         <div>
-          <span class="badge bg-secondary me-1">Datos NASA POWER</span>
-          <strong id="winMatrixTitle" class="text-white">Matriz Histórica Anual Completa</strong>
+          <span class="tm-window-tag">MÓDULO 04</span>
+          <strong id="winMatrixTitle" class="text-light">Matriz Histórica Anual</strong>
         </div>
         <div class="d-flex align-items-center gap-2">
-          <span class="small text-white-50">Clic en una fila para ver ese año en el mapa</span>
+          <span class="small text-secondary">Selecciona una fila para posicionar el año en el mapa</span>
           <button type="button" class="btn-close btn-close-white tm-window-close" data-close-window="winMatrix" aria-label="Cerrar"></button>
         </div>
       </div>
       <div class="tm-popup-body">
         <div class="table-responsive" style="max-height: 330px; overflow-y: auto;">
-          <table class="table table-sm table-dark table-hover align-middle mb-0">
+          <table class="table table-sm table-dark table-hover align-middle mb-0 tm-matrix-table">
             <thead class="sticky-top">
               <tr>
                 <th>Año</th>
@@ -465,7 +571,7 @@
                 <th>Tendencia OLS</th>
                 <th>Anomalía (Δ)</th>
                 <th>Z-Score</th>
-                <th>Estado</th>
+                <th>Condición</th>
               </tr>
             </thead>
             <tbody id="tmTimelineTableBody"></tbody>
@@ -474,20 +580,20 @@
       </div>
     </section>
 
-    <!-- BARRA INFERIOR DE SLIDE TEMPORAL (ESTILO NOTICIERO METEOROLÓGICO SATELITAL) -->
+    <!-- BARRA INFERIOR DE SLIDE TEMPORAL -->
     <footer class="tm-bottom-bar" aria-label="Barra de control temporal satelital">
-      <div class="tm-bottom-glass">
+      <div class="tm-bottom-panel">
         <div class="row g-2 align-items-center">
-          <!-- Año gigante y pastilla de estado (sin exceso de números) -->
+          <!-- Año activo y lectura puntual sobria -->
           <div class="col-lg-3 col-md-4 d-flex align-items-center gap-3">
             <div id="tmActiveYearDisplay" class="tm-year-readout">2000</div>
             <div class="lh-sm">
               <div class="d-flex align-items-center gap-2 flex-wrap">
-                <span id="tmActiveValue" class="fw-bold text-white fs-5">-- °C</span>
-                <span id="tmActiveAnomaly" class="badge rounded-pill bg-secondary">--</span>
+                <span id="tmActiveValue" class="fw-bold text-light fs-5">-- °C</span>
+                <span id="tmActiveAnomaly" class="tm-anom-pill">--</span>
               </div>
               <div class="mt-1">
-                <span id="tmActiveLevelBadge" class="badge rounded-pill bg-info text-dark" style="font-size: 0.68rem;">Normal</span>
+                <span id="tmActiveLevelBadge" class="tm-condition-label">Condición normal</span>
                 <span id="tmActiveSubtext" class="d-none"></span>
               </div>
             </div>
@@ -496,27 +602,54 @@
           <!-- Controles de reproducción + Barra de Slide + Franjas satelitales -->
           <div class="col-lg-9 col-md-8">
             <div class="d-flex align-items-center gap-2">
-              <button id="btnPrevYear" type="button" class="btn btn-outline-light btn-sm px-2 py-1" title="Año anterior">
-                ⏮
+              <button
+                id="btnPrevYear"
+                type="button"
+                class="tm-transport-btn"
+                title="Año anterior (Flecha izquierda)"
+                aria-label="Año anterior"
+              >
+                <svg class="tm-svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                  <polygon points="19 20 9 12 19 4 19 20"></polygon>
+                  <line x1="5" y1="19" x2="5" y2="5"></line>
+                </svg>
               </button>
-              <button id="btnPlayPause" type="button" class="tm-play-btn" title="Reproducir / Pausar barrido satelital">
-                ▶
+              <button
+                id="btnPlayPause"
+                type="button"
+                class="tm-play-btn"
+                title="Reproducir / Pausar secuencia anual (Espacio)"
+                aria-label="Reproducir o pausar"
+              >
+                <svg id="tmPlayIconSvg" class="tm-svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                  <polygon points="6 4 20 12 6 20 6 4" fill="currentColor"></polygon>
+                </svg>
               </button>
-              <button id="btnNextYear" type="button" class="btn btn-outline-light btn-sm px-2 py-1" title="Año siguiente">
-                ⏭
+              <button
+                id="btnNextYear"
+                type="button"
+                class="tm-transport-btn"
+                title="Año siguiente (Flecha derecha)"
+                aria-label="Año siguiente"
+              >
+                <svg class="tm-svg-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                  <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                  <line x1="19" y1="5" x2="19" y2="19"></line>
+                </svg>
               </button>
 
               <!-- Barra deslizante central -->
               <div class="tm-slider-wrapper flex-grow-1 mx-2">
-                <div class="d-flex justify-content-between align-items-center text-white-50" style="font-size: 0.72rem;">
+                <div class="d-flex justify-content-between align-items-center tm-slider-caption">
                   <span id="tmSliderMinLabel">2000</span>
-                  <span class="text-info fw-semibold">Desliza la línea de tiempo para ver la imagen satelital de cada año</span>
+                  <span>LÍNEA DE TIEMPO SATELITAL · DESLIZA PARA COMPARAR AÑOS</span>
                   <span id="tmSliderMaxLabel">2024</span>
                 </div>
                 <input
                   type="range"
                   id="tmYearSlider"
                   class="tm-year-slider"
+                  autocomplete="off"
                   min="2000"
                   max="2024"
                   step="1"
@@ -531,9 +664,9 @@
 
               <!-- Velocidad -->
               <div class="btn-group btn-group-sm d-none d-sm-inline-flex" role="group" aria-label="Velocidad">
-                <button type="button" class="btn btn-outline-info tm-speed-btn" data-speed="1300">0.5x</button>
-                <button type="button" class="btn btn-outline-info tm-speed-btn active" data-speed="700">1x</button>
-                <button type="button" class="btn btn-outline-info tm-speed-btn" data-speed="320">2x</button>
+                <button type="button" class="btn tm-speed-btn" data-speed="1300">0.5x</button>
+                <button type="button" class="btn tm-speed-btn active" data-speed="700">1x</button>
+                <button type="button" class="btn tm-speed-btn" data-speed="320">2x</button>
               </div>
             </div>
           </div>

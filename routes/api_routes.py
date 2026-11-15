@@ -265,6 +265,8 @@ def register_api_routes(app: Any) -> None:
                 "split_year": request.args.get("split_year"),
                 "location_name": request.args.get("location_name") or request.args.get("location"),
                 "region": request.args.get("region"),
+                "lat_span": request.args.get("lat_span", 1.5),
+                "lon_span": request.args.get("lon_span", 1.875),
                 "include_regional": request.args.get("include_regional", "1") != "0",
             }
         resp, status = handle_time_machine_request(payload)

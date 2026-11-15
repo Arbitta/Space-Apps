@@ -169,6 +169,8 @@ class EarthLensUnifiedHandler(BaseHTTPRequestHandler):
                 "split_year": qs.get("split_year", [None])[0],
                 "location_name": qs.get("location_name", qs.get("location", [None]))[0],
                 "region": qs.get("region", [None])[0],
+                "lat_span": qs.get("lat_span", [1.5])[0],
+                "lon_span": qs.get("lon_span", [1.875])[0],
                 "include_regional": qs.get("include_regional", ["1"])[0] != "0",
             }
             resp, status = handle_time_machine_request(payload)
