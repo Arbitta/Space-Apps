@@ -463,6 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const spinner = document.getElementById('tmLoadingSpinner');
     spinner?.classList.remove('d-none');
     const notice = document.getElementById('tmDataNotice');
+    window.EarthLensForecast?.setData(null);
     notice.textContent='Consultando la ciudad y el período seleccionados…';
     syncTopBarControlsWithState();
     persistStateToStorageAndURL();
@@ -474,7 +475,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const value = await res.json();
       if (!res.ok || value.status !== 'ok') throw new Error(value.error?.message || 'No hay datos verificados para esta seleccion.');
       if (mySeq !== requestSeq) return;
-      notice.textContent = 'Datos reales de ciudades verificadas. Analisis exploratorio provisional; sin pronosticos ni cuadrantes simulados.';
+      notice.textContent = 'Datos reales de ciudades verificadas. Analisis exploratorio provisional; proyecciones exploratorias separadas del historico.';
       notice.dataset.error = 'false';
       mapMode='national';
       const mode=document.getElementById('tmMapModeSelect');if(mode)mode.value='national';
@@ -541,6 +542,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderExtremeRecords(data.anomalies, unitDisp);
     renderAnomalyCards(data.anomalies, unitDisp);
     renderTimelineTable(data.timeline, unitDisp, data.variable);
+    window.EarthLensForecast?.setData(data);
 
     rebuildMapLayers(data, !options.preserveZoom);
     setActiveYear(activeYear);
@@ -1207,6 +1209,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     openWindowId = windowId;
 
+    if(windowId === 'winForecast')setTimeout(()=>window.EarthLensForecast?.render(),40);
     if (currentData && (windowId === 'winTrend' || windowId === 'winAnomaliesBar')) {
       setTimeout(() => renderSynchronizedCharts(currentData, activeYear), 40);
     }

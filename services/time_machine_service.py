@@ -6,6 +6,7 @@ from services.api_service import ServiceError
 from services.cities import list_cities
 from services.bulk import DEFAULT_START_YEAR, DEFAULT_END_YEAR
 from services.trend_analysis import compute_annual_anomalies, compare_time_periods
+from services.forecast_service import forecast_from_analysis,FORECAST_FIELDS
 
 
 def get_argentina_cities(region=None):
@@ -39,7 +40,7 @@ class TimeMachineService:
         return result,bundle
 
     def build(self,payload):
-        allowed={'city_id','variable','start_year','end_year','split_year','include_regional','region'}
+        allowed={'city_id','variable','start_year','end_year','split_year','include_regional','region'}|FORECAST_FIELDS
         if not isinstance(payload,dict) or set(payload)-allowed:
             raise ServiceError('invalid_request','Usar ciudad del catálogo y período; coordenadas libres y cuadrantes no están habilitados.')
         selection=self.analysis.selection({k:v for k,v in payload.items() if k in {'city_id','variable','start_year','end_year'}})
@@ -88,7 +89,8 @@ class TimeMachineService:
                 'anomaly_baseline':'Media y desviación de los años válidos del período seleccionado',
                 'period_comparison':'compare_time_periods del motor del equipo (Welch bilateral)',
                 'validation_status':'pending_methodological_review'}},
-            'capabilities':{'free_coordinates':False,'spatial_resize':False,'forecast':False},
+            'forecast':forecast_from_analysis(base,payload),
+            'capabilities':{'free_coordinates':False,'spatial_resize':False,'forecast':True},
             'conclusion':'Análisis exploratorio provisional. '+base['conclusion'],
             'limitations':[*base['method']['limitations'],'Anomalías relativas a la media del período elegido; no se atribuye causalidad.',
                 'Comparación de épocas del motor de main, pendiente de revisión metodológica. No amplía la familia de Radar.']}

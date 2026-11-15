@@ -489,6 +489,13 @@ El usuario confirmó que Earth Connections todavía no existe. La extensión de
 Time Machine a las otras fuentes depende de su metodología y contrato; Connections
 depende de disponer de su código.
 
+La actualización `4157789` incorpora el modelo `services/forecast.py`, adaptado
+en `services/forecast_service.py` a históricos POWER cacheados por ciudad.
+Son extrapolaciones OLS/t de Student provisionales, no TimesFM ni observaciones
+futuras. Conservar unidades, procedencia y separación del histórico; no aceptar
+series arbitrarias del cliente ni presentar causalidad o heurísticas de confianza
+como validación científica. Ver `docs/merge-forecast.md`.
+
 `scripts/audit_science.py` audita las cachés sin red, agrupando versiones, vías
 de acceso y períodos para evitar contabilizar pilotos y proyecciones dos veces.
 `scripts/check_scientific_pages.py` verifica con Chrome real las cinco interfaces,

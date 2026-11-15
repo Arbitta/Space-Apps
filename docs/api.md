@@ -628,3 +628,24 @@ de épocas sigue pendiente; no amplía Radar ni confirma descubrimientos.
 `spatial_zone.enabled` es `false`, `spatial_zone.cells` está vacío y
 `capabilities` deshabilita coordenadas libres, redimensionamiento espacial y
 pronósticos. La grilla artificial de la versión anterior no está habilitada.
+
+### Actualización de main: POST `/api/forecast`
+
+```json
+{"city_id":"mendoza","variable":"T2M","start_year":2000,"end_year":2024,"forecast_start":2025,"forecast_end":2030,"custom_threshold":20.0,"custom_direction":"above"}
+```
+
+Se usan exclusivamente históricos cacheados: cinco años válidos como mínimo,
+ciudad del catálogo y variable POWER. Los años futuros son enteros posteriores
+al último dato, hasta 30 años de horizonte. `forecast_horizon` es opcional;
+el umbral debe ser finito y su dirección `above` o `below`. No se aceptan series,
+coordenadas, unidades sobreescritas ni campos extra. Errores: 400 por parámetros,
+422 por cobertura insuficiente y 503 por caché ausente, sin descargas ni muestras.
+
+El sobre común contiene la proyección en `data`: `years`, `history`, `window`,
+`model`, `summary`, `conclusions`, ciudad, unidades, metadata y procedencia.
+Se identifica como `record_type: "model_projection"`, científicamente
+`provisional`, con validación pendiente. No se mezcla con las observaciones,
+no atribuye causalidad y la heurística de confianza no se presenta como validación.
+Time Machine ahora incluye `forecast` y habilita esa capacidad; sigue sin áreas
+simuladas ni coordenadas libres. No es TimesFM ni un modelo climático físico.

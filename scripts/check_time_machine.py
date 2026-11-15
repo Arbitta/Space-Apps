@@ -23,7 +23,7 @@ def main():
         page.wait_for_function("document.querySelectorAll('#tmTimelineTableBody tr').length===25")
         assert page.locator('#tmDataNotice').get_attribute('data-error')=='false'
         assert page.locator('#btnShrinkBox').is_disabled()
-        assert page.evaluate("Array.from(document.querySelectorAll('canvas')).every(c=>Chart.getChart(c))")
+        assert page.evaluate("['tmTrendChart','tmAnomalyBarChart'].every(id=>Chart.getChart(document.getElementById(id)))")
         checks.append('25 años reales; dos gráficos; sin cuadrantes simulados')
         count=len(calls)
         page.locator('#tmYearSlider').fill('2010')

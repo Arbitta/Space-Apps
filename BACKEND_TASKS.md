@@ -670,3 +670,19 @@ Verificación final de la combinación:
 - Se bloquea el caso degenerado de dos épocas constantes distintas: el helper
   heredado devuelve un p-valor fijo allí, y el adaptador devuelve 422 en vez de
   publicarlo como significancia calculada. No se modificó el motor del compañero.
+
+## Actualización de main — proyecciones y Gunicorn
+
+El usuario confirmó el merge anterior en `9c1ee9f` y autorizó completar el nuevo
+merge de `origin/main` `4157789`, sin push. Se resolvieron seis conflictos.
+Se incorporan `services/forecast.py`, adaptador de caché por ciudad, endpoint
+`/api/forecast`, panel predictivo y arranque Gunicorn respetando `PORT`.
+Las proyecciones son OLS/t de Student provisionales; no TimesFM ni observaciones
+NASA futuras. No se usan series arbitrarias del cliente ni inferencias causales;
+la revisión y calibración siguen pendientes de B06.
+
+Resultado: **210 pruebas descubiertas, 209 aprobadas y una de red omitida**;
+Gunicorn health 200 y dependencias sanas. Una comprobación breve del panel y
+recálculo pasó sin errores JavaScript, sin repetir suites largas de navegador.
+POWER/Radar se recuperaron de copias locales verificadas, sin descargas nuevas.
+Las 542 cachés/reportes previos se conservaron. Detalles: [merge-forecast.md](docs/merge-forecast.md).

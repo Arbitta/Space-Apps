@@ -1276,3 +1276,197 @@ html,
 .tm-data-notice{position:fixed;bottom:150px;left:16px;max-width:min(650px,calc(100vw - 32px));z-index:1100;background:#fff;color:#17334a;padding:8px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px;box-shadow:0 2px 8px #0002}
 .tm-data-notice[data-error=true]{color:#9b1c1c;border-color:#dc2626}
 .tm-source-link{position:fixed;left:16px;bottom:225px;z-index:1101;background:#fff;padding:6px 10px;border-radius:6px}
+
+
+
+
+/* ============================================================================
+   Módulo 05: Proyección, Probabilidades de Anomalías y Conclusiones
+   ============================================================================ */
+.tm-popup-window-wide {
+  width: min(920px, 100%);
+}
+
+.tm-counter-danger {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.tm-stat-pill.is-success {
+  border-color: rgba(16, 185, 129, 0.5);
+  color: #6ee7b7;
+}
+.tm-stat-pill.is-warning {
+  border-color: rgba(245, 158, 11, 0.55);
+  color: #fcd34d;
+}
+.tm-stat-pill.is-danger {
+  border-color: rgba(239, 68, 68, 0.55);
+  color: #fca5a5;
+}
+
+.tm-fc-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  align-items: flex-end;
+  background: rgba(19, 28, 46, 0.72);
+  border: 1px solid var(--tm-border-subtle);
+  border-radius: var(--tm-radius-sm);
+  padding: 0.45rem 0.65rem;
+}
+
+.tm-fc-ctrl-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.tm-fc-year-in {
+  width: 74px;
+}
+
+.tm-fc-thr-in {
+  width: 78px;
+}
+
+.tm-fc-dir-sel {
+  width: auto;
+  min-width: 118px;
+}
+
+.tm-fc-quick.active {
+  background: rgba(56, 189, 248, 0.22);
+  border-color: rgba(56, 189, 248, 0.6);
+  color: #ffffff;
+}
+
+.tm-fc-status {
+  font-size: 0.74rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: var(--tm-radius-sm);
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #bae6fd;
+}
+.tm-fc-status.is-error {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.45);
+  color: #fecaca;
+}
+
+.tm-fc-chart-box {
+  height: clamp(150px, 24dvh, 220px);
+}
+
+.tm-fc-prob-table {
+  font-size: 0.72rem;
+}
+.tm-fc-prob-table th {
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--tm-text-muted);
+  border-bottom-color: var(--tm-border-subtle);
+}
+.tm-fc-prob-table td {
+  border-bottom-color: rgba(148, 163, 184, 0.12);
+  padding: 0.32rem 0.4rem;
+}
+
+.tm-fc-event-name {
+  font-weight: 600;
+  color: var(--tm-text-primary);
+  line-height: 1.2;
+}
+
+.tm-fc-event-thr {
+  font-size: 0.64rem;
+  color: var(--tm-text-muted);
+}
+
+.tm-fc-prob-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 0.72rem;
+}
+
+.tm-fc-bar {
+  width: 64px;
+  height: 5px;
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+.tm-fc-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+}
+.tm-fc-bar-fill.is-warm {
+  background: linear-gradient(90deg, #f59e0b, #dc2626);
+}
+.tm-fc-bar-fill.is-cool {
+  background: linear-gradient(90deg, #38bdf8, #2563eb);
+}
+.tm-fc-bar-fill.is-neutral {
+  background: linear-gradient(90deg, #64748b, #38bdf8);
+}
+
+.tm-fc-rr {
+  display: inline-block;
+  padding: 0.08rem 0.35rem;
+  border-radius: 4px;
+  background: rgba(148, 163, 184, 0.14);
+  font-size: 0.68rem;
+}
+.tm-fc-rr.is-danger {
+  background: rgba(239, 68, 68, 0.22);
+  color: #fca5a5;
+}
+.tm-fc-rr.is-warning {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
+}
+.tm-fc-rr.is-success {
+  background: rgba(16, 185, 129, 0.18);
+  color: #6ee7b7;
+}
+
+.tm-fc-conclusions-list {
+  max-height: 270px;
+  overflow-y: auto;
+}
+
+.tm-fc-conclusion {
+  background: rgba(19, 28, 46, 0.78);
+  border: 1px solid var(--tm-border-subtle);
+  border-left: 3px solid var(--tm-accent-cyan);
+  border-radius: var(--tm-radius-sm);
+  padding: 0.4rem 0.55rem;
+}
+.tm-fc-conclusion.is-danger {
+  border-left-color: #ef4444;
+  background: rgba(127, 29, 29, 0.2);
+}
+.tm-fc-conclusion.is-warning {
+  border-left-color: #f59e0b;
+  background: rgba(120, 53, 15, 0.18);
+}
+.tm-fc-conclusion.is-success {
+  border-left-color: #10b981;
+}
+
+.tm-fc-conclusion-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--tm-text-primary);
+  margin-bottom: 0.12rem;
+}
+
+.tm-fc-conclusion-text {
+  font-size: 0.7rem;
+  color: var(--tm-text-muted);
+  line-height: 1.35;
+}

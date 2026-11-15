@@ -17,6 +17,7 @@ from services.scientific import ScientificService
 from services.hydrology import HydrologyService
 from api.scientific import scientific_api
 from services.time_machine_service import TimeMachineService
+from services.forecast_service import ForecastService
 
 
 def create_app(config=None):
@@ -46,6 +47,7 @@ def create_app(config=None):
     app.extensions["earthlens_hydrology"] = HydrologyService(Path(app.config["CACHE_DIR"]).parent / "science")
     app.extensions["earthlens_analysis"] = AnalysisService(app.extensions["earthlens_service"])
     app.extensions["earthlens_time_machine"] = TimeMachineService(app.extensions["earthlens_analysis"],app.extensions["earthlens_science"])
+    app.extensions["earthlens_forecast"] = ForecastService(app.extensions["earthlens_time_machine"])
     app.extensions["earthlens_fingerprint"] = FingerprintService(app.extensions["earthlens_analysis"])
     radar_path = app.config["RADAR_ARTIFACT_PATH"] or Path(app.config["CACHE_DIR"]).parent / DEFAULT_ARTIFACT_NAME
     app.extensions["earthlens_radar"] = RadarService(app.extensions["earthlens_analysis"], radar_path)

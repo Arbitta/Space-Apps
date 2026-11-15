@@ -10,6 +10,14 @@ from services.api_service import ServiceError
 api = Blueprint("api", __name__, url_prefix="/api")
 
 
+@api.post('/forecast')
+def forecast():
+    query_parameters()
+    if not request.is_json:raise UnsupportedMediaType()
+    result=current_app.extensions['earthlens_forecast'].build(request.get_json())
+    return success(result,meta={'scientific_status':'provisional','record_type':'model_projection','origin':'cache'})
+
+
 @api.post('/time-machine')
 @api.get('/time-machine')
 def time_machine():
