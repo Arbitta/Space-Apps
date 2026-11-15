@@ -53,12 +53,12 @@ def main():
             return response.json()["data"]
 
         def radar_ready(count):
-            page.wait_for_function("n => document.querySelector('#radar-status').classList.contains('is-success') && document.querySelectorAll('.result-card').length === n", arg=count)
+            page.wait_for_function("n => document.querySelector('#radar-status')?.classList.contains('is-success') && document.querySelectorAll('.result-card').length === n", arg=count)
             assert page.locator("#radar-test-count").inner_text() == "150"
             assert page.locator(".leaflet-interactive").count() == 25
 
         def fingerprint_ready(title, datasets=1):
-            page.wait_for_function("name => !document.querySelector('#fingerprint-output').hidden && document.querySelector('#fingerprint-title').textContent === name", arg=title)
+            page.wait_for_function("name => document.querySelector('#fingerprint-output') && !document.querySelector('#fingerprint-output').hidden && document.querySelector('#fingerprint-title').textContent === name", arg=title)
             assert page.locator(".fingerprint-card").count() == 6
             assert page.locator("canvas").count() == 6
             assert page.evaluate("Array.from(document.querySelectorAll('canvas')).every(canvas => Chart.getChart(canvas).data.datasets.length === " + str(datasets) + ")")

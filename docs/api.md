@@ -591,4 +591,40 @@ configuración remota en el cuerpo.
 unidades y gráficos nativos. El deslizador recorre la respuesta ya recibida.
 Cerrar el panel evita cargar su catálogo. La familia estadística de Radar y los
 indicadores de Fingerprint mantienen su contrato POWER previo. Time Machine y
-Connections todavía no consumen estos endpoints en sus interfaces.
+Connections todavía no consumen estos endpoints en sus interfaces. Time Machine
+usa el contrato POWER específico documentado debajo; las otras fuentes se
+consultan mediante su enlace a `/sources`.
+
+## Earth Time Machine: GET/POST `/api/time-machine`
+
+La página vive en `/time-machine`; también se conservan los alias con guion bajo
+y extensión `.html`. No sustituye la portada ni las páginas anteriores.
+
+```json
+{"city_id":"mendoza","variable":"T2M","start_year":2000,"end_year":2024,"split_year":2012,"include_regional":true}
+```
+
+Ciudad obligatoria del catálogo argentino; variable POWER admitida; años enteros
+no futuros, al menos cuatro años; corte opcional con al menos dos años por época.
+`include_regional` es booleano, por defecto `true`; `region` es un filtro opcional.
+No se admiten campos extra, coordenadas, áreas, configuraciones del motor ni `force`.
+GET admite esos mismos filtros como query; `include_regional` acepta `true/false`
+o `1/0` y la ciudad por defecto es Comodoro Rivadavia.
+
+La respuesta usa el sobre común. `data` contiene `location`, `period`, `variable`,
+`unit`, `source`, `timeline`, `statistics`, `completeness`, `anomalies`,
+`period_comparison`, `regional_cities`, `regional_errors`, `metadata`, `provenance`
+y `scientific_status: "provisional"`. La línea temporal incluye valores anuales,
+anomalías relativas a la media del período y colores calculados por el motor del
+equipo. `provenance.source_period` identifica el histórico cacheado del que se
+seleccionaron las fechas, conservando la fecha original de obtención.
+
+El acceso es **sólo caché**: no descarga al navegar, animar o consultar ciudades.
+La falta de caché de la ciudad principal devuelve 503 `cache_unavailable`, sin
+muestras ni valores generados. Los fallos regionales se informan por ciudad sin
+presentarlos como observaciones. La revisión científica de anomalías/comparación
+de épocas sigue pendiente; no amplía Radar ni confirma descubrimientos.
+
+`spatial_zone.enabled` es `false`, `spatial_zone.cells` está vacío y
+`capabilities` deshabilita coordenadas libres, redimensionamiento espacial y
+pronósticos. La grilla artificial de la versión anterior no está habilitada.

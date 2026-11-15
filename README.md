@@ -16,6 +16,12 @@ Earth Radar: **http://127.0.0.1:5000/radar**. Earth Fingerprint:
 **http://127.0.0.1:5000/fingerprint**. Usan los datos reales de 2000–2024;
 las señales son provisionales y no tienen ajuste por comparaciones múltiples.
 
+Earth Time Machine: **http://127.0.0.1:5000/time-machine**, incorporado de `main`
+y conectado a las cachés POWER por ciudad. Conserva la interfaz del equipo y sus
+análisis exploratorios; no utiliza muestras de respaldo, coordenadas libres ni
+ajustes artificiales de cuadrantes. El Inicio y las herramientas anteriores se
+conservan. Decisiones del merge: [integración de main](docs/merge-main.md).
+
 - [Ejecución y pruebas en Docker](docs/docker.md)
 - [Contrato de la API](docs/api.md)
 - [Radar y Fingerprint provisionales](docs/products.md)

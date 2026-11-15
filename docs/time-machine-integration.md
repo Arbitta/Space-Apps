@@ -1,4 +1,20 @@
-# Adaptación pendiente de Earth Time Machine
+# Earth Time Machine: integración y límites
+
+Actualización del merge autorizado de `origin/main` ce9a1e2: `/time-machine` está
+integrado en Flask y GET/POST `/api/time-machine` usa el sobre común y sólo ciudades
+del catálogo. `services/time_machine_service.py` obtiene POWER desde caché, filtra
+el período solicitado, conserva unidades/metadatos y reutiliza el motor del equipo.
+El histórico y el mapa de ciudades son reales; los resultados son provisionales.
+No hay muestras de respaldo, valores ajustados artificialmente, coordenadas libres
+ni cuadrantes activados. Los nuevos helpers estadísticos provienen de main; el
+núcleo anterior del motor permanece intacto. Ver [decisiones del merge](merge-main.md).
+
+Queda pendiente extender esta interfaz a GLDAS, MODIS, GPM y SWOT con su método y
+frecuencia adecuados, además de la revisión metodológica, límites territoriales
+y observaciones espaciales. El enlace a `/sources` ofrece las series nativas de
+esas fuentes. No se afirma que sus análisis estén incorporados a Time Machine.
+
+## Historial del contrato anterior al merge
 
 Se inspeccionó `origin/feature/earth-time-machine`, commit `8a39937`, sin fusionar
 ni modificar sus archivos. La interfaz existe en esa rama; no se creó un reemplazo.

@@ -199,3 +199,18 @@ Compose activa `EARTHLENS_TEMPLATES_AUTO_RELOAD=true` para recargar Jinja durant
 el desarrollo manteniendo desactivado el depurador interactivo. Los gráficos
 del panel se crean sólo al consultar; los paneles cerrados no agregan lienzos
 ni consultas a las interfaces originales.
+
+## Integración de main
+
+La configuración activa sigue siendo `compose.yaml`. Si se necesita el alias
+recibido del esquema anterior, usar `docker compose -f compose.legacy.yaml`;
+ambos describen el mismo backend con caché persistente, sin otro contenedor.
+Time Machine está disponible en `/time-machine` y usa sólo cachés verificadas.
+Sus pruebas de navegador se ejecutan con:
+
+```powershell
+.\venv\Scripts\python.exe -B -m scripts.check_time_machine
+```
+
+La configuración Vercel/Cloud Run de main no fue desplegada ni verificada en
+producción. No copiar cachés o credenciales al contexto de publicación.

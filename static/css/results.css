@@ -1,48 +1,19 @@
 /* ==========================================================================
    EarthLens — Rol 03: Resultados y Comparador (results.css)
    NASA Space Apps Challenge 2026 · Be An Earth System Trend Detective!
+   Complementa static/css/styles.css (Rol 01)
    ========================================================================== */
 
 :root {
-  --el-bg: #0b132b;
-  --el-surface: #1c2541;
-  --el-surface-light: #243056;
   --el-card: #ffffff;
   --el-text: #1e293b;
   --el-muted: #64748b;
-  --el-primary: #0b3d91;      /* NASA Blue */
-  --el-accent: #fc3d21;       /* NASA Red */
+  --el-nasa-blue: #0b3d91;
+  --el-nasa-red: #fc3d21;
   --el-teal: #0ea5e9;
   --el-emerald: #10b981;
   --el-amber: #f59e0b;
   --el-border: #e2e8f0;
-  --el-bg-page: #f4f7fb;
-}
-
-body {
-  background-color: var(--el-bg-page);
-  color: var(--el-text);
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Navbar común compatible con el resto de pantallas */
-.el-navbar {
-  background: linear-gradient(90deg, var(--el-bg) 0%, var(--el-surface) 100%);
-  border-bottom: 2px solid rgba(14, 165, 233, 0.25);
-}
-
-.el-brand-badge {
-  background-color: var(--el-accent);
-  color: #fff;
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-weight: 700;
 }
 
 /* Banner de estado de datos (Datos de prueba vs API NASA real) */
@@ -118,13 +89,13 @@ body {
 .conclusion-box {
   background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
   border: 1px solid #bfdbfe;
-  border-left: 5px solid var(--el-primary);
+  border-left: 5px solid var(--el-nasa-blue);
   border-radius: 0.75rem;
   padding: 1.25rem 1.5rem;
 }
 
 .conclusion-box.significant-increasing {
-  border-left-color: var(--el-accent);
+  border-left-color: var(--el-nasa-red);
   background: linear-gradient(135deg, #fff5f5 0%, #fef2f2 100%);
   border-color: #fecaca;
 }

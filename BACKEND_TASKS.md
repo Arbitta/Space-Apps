@@ -27,7 +27,8 @@ tienen históricos reales 2000–2024 de las 25 ciudades. MODIS tiene un piloto
 verificado de tres ciudades y órdenes históricas en procesamiento; SWOT tiene
 un tramo argentino con observaciones reales. El panel de fuentes está conectado
 al Explorador, Comparador, Radar, Fingerprint y Modo detective, sin ampliar sus
-métodos estadísticos. Time Machine sigue pendiente de adaptar. El usuario confirmó
+métodos estadísticos. Time Machine se incorporó posteriormente desde main para
+POWER por ciudad, con resultados provisionales y sin cuadrantes simulados. El usuario confirmó
 que Earth Connections todavía no existe. Las secciones de diagnóstico conservan
 sus estados históricos; el cierre de fuentes al final refleja el estado vigente.
 
@@ -610,3 +611,62 @@ Después, coordinar la adaptación de Time Machine y la metodología de nuevas
 variables con B06. Lagos SWOT requieren identificadores oficiales y consultas reales.
 Connections depende de su implementación. B18, CI, MERRA-2 directo, TimesFM y el
 despliegue productivo siguen pendientes; no se presentan como trabajos terminados.
+
+## Merge autorizado de origin/main — 15/11/2026
+
+Se combinaron `feature/backend-api` `80925bf` y `origin/main` `ce9a1e2`, con
+19 conflictos resueltos. El merge se prepara **sin commit ni push** por la
+restricción vigente. Respaldo: `backup/backend-before-main-20261115-133944`.
+Decisiones y comandos: [docs/merge-main.md](docs/merge-main.md).
+
+- Se mantienen Application Factory, Blueprints, API, proveedores, dependencias
+  verificadas, Docker, puerto 5000 y todas las vistas anteriores. Los cambios
+  de main que eliminaban Resultados/Comparador no se aplican sobre esas vistas.
+- El motor incorpora las funciones aditivas del compañero; todo el código
+  anterior se conserva sin cambios. Radar mantiene 150 pruebas y Fingerprint
+  sus seis indicadores. No se implementa otra regresión ni se amplía su familia.
+- Time Machine: `/time-machine`, GET/POST `/api/time-machine`, adaptador
+  `services/time_machine_service.py`, cachés POWER por ciudad y período, metadata,
+  procedencia, mapa regional e interpretación provisional. Sin consultas NASA al
+  navegar, muestras, coordenadas libres ni ajustes artificiales de cuadrantes.
+- Las muestras y suites del servidor anterior se conservan como referencias de
+  migración en `tests/statistics_fixtures/main_legacy/`; no se contabilizan como
+  pruebas aprobadas del nuevo servidor. Se agregan ocho pruebas Flask del
+  contrato integrado y un verificador de navegador `scripts/check_time_machine.py`.
+- `compose.yaml` continúa como configuración activa; `compose.legacy.yaml` es un
+  alias opcional del mismo servicio. Los descriptores Cloud Run/Vercel recibidos
+  no implican despliegue verificado ni autorización para publicar.
+
+Antes del merge se respaldaron 515 archivos locales, sin POWER ni Radar. Sus
+hashes se conservaron. Se apartaron las cachés entrantes y se validaron 25 POWER
+2000–2024: 150 series, 45.000 registros válidos, cero faltantes. Los 516 valores
+solapados con las proyecciones locales coinciden exactamente; se recuperaron
+esas copias sin solicitudes nuevas a NASA y permanecen fuera de Git.
+Informe: `data/cache/reports/main-power-cache-validation.json`.
+Radar se regeneró cache-only: 150 análisis provisionales, 48 señales nominales,
+cero descubrimientos confirmados. GLDAS, GPM y MODIS originales se conservaron.
+
+La ampliación de Time Machine a fuentes nuevas, áreas reales y coordenadas libres
+sigue pendiente de contrato/metodología y B18. B06, Connections, entrega MODIS y
+despliegue productivo conservan sus dependencias previas. `services/geography.py`
+no se modificó durante este merge.
+
+Verificación final de la combinación:
+
+- Docker: **201 pruebas descubiertas, 200 aprobadas y una NASA de red optativa
+  omitida**. `pip check` sin conflictos. Se conservan las 193 pruebas anteriores.
+- Chrome: 10 grupos del flujo anterior, 9 de Radar/Fingerprint, 9 del panel
+  científico y 5 de Time Machine, sin errores JavaScript. La prueba de Time
+  Machine comprueba respuesta real, dos gráficos, cambio de ciudad, móvil,
+  deslizador sin nuevas solicitudes y 503 sin respaldo.
+- Los 515 archivos anteriores conservan sus hashes al cierre. Una proyección
+  POWER equivalente creada durante la verificación se restauró desde el respaldo
+  para conservar también su procedencia original; las series y unidades coincidían.
+- Radar/Fingerprint: `data/cache/reports/interfaces-phase1/20261115T170911757725Z/`.
+  Panel científico: `data/cache/reports/scientific-pages/20261115T171023Z/report.json`.
+  Capturas Time Machine: `data/cache/reports/time-machine-merge-{desktop,mobile}.png`.
+- Cero archivos de caché añadidos al índice; cero conflictos Git pendientes.
+  No se hizo commit, push ni despliegue. La confirmación del merge sigue pendiente.
+- Se bloquea el caso degenerado de dos épocas constantes distintas: el helper
+  heredado devuelve un p-valor fijo allí, y el adaptador devuelve 422 en vez de
+  publicarlo como significancia calculada. No se modificó el motor del compañero.

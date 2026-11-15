@@ -9,3 +9,4 @@ __pycache__/
 # Variables de entorno y credenciales
 .env
 .env.local
+.env.*

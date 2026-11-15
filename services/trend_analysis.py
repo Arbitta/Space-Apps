@@ -507,3 +507,301 @@ def compare_two_locations(
         },
         "comparison_conclusion": comparison_conclusion,
     }
+
+
+def get_variable_color(variable: str, z_score: float) -> str:
+    """
+    Retorna el color hexadecimal en la paleta científica divergente correspondiente a la variable
+    y al z-score de la observación anual.
+    """
+    var_code = (variable or "T2M").upper()
+    z = float(z_score or 0.0)
+
+    if var_code == "PRECTOTCORR":
+        if z <= -2.0:
+            return "#92400e"
+        if z <= -1.2:
+            return "#d97706"
+        if z <= -0.4:
+            return "#fcd34d"
+        if z < 0.4:
+            return "#e2e8f0"
+        if z < 1.2:
+            return "#38bdf8"
+        if z < 2.0:
+            return "#0284c7"
+        return "#0369a1"
+
+    if var_code == "RH2M":
+        if z <= -2.0:
+            return "#b45309"
+        if z <= -1.2:
+            return "#f59e0b"
+        if z <= -0.4:
+            return "#fde68a"
+        if z < 0.4:
+            return "#e2e8f0"
+        if z < 1.2:
+            return "#34d399"
+        if z < 2.0:
+            return "#10b981"
+        return "#047857"
+
+    if var_code == "WS2M":
+        if z <= -2.0:
+            return "#0284c7"
+        if z <= -1.2:
+            return "#38bdf8"
+        if z <= -0.4:
+            return "#bae6fd"
+        if z < 0.4:
+            return "#e2e8f0"
+        if z < 1.2:
+            return "#818cf8"
+        if z < 2.0:
+            return "#6366f1"
+        return "#7e22ce"
+
+    # Variables térmicas (T2M, T2M_MAX, T2M_MIN)
+    if z <= -2.0:
+        return "#1e3a8a"
+    if z <= -1.2:
+        return "#2563eb"
+    if z <= -0.4:
+        return "#93c5fd"
+    if z < 0.4:
+        return "#e2e8f0"
+    if z < 1.2:
+        return "#fbbf24"
+    if z < 2.0:
+        return "#f97316"
+    return "#dc2626"
+
+
+def compute_annual_anomalies(
+    series: List[Dict[str, float]],
+    variable: str = "T2M",
+    statistics: Optional[Dict[str, Any]] = None,
+    anomaly_z_threshold: float = 1.5,
+) -> Dict[str, Any]:
+    """
+    Calcula para cada año el valor ajustado OLS, intervalo de confianza puntual,
+    anomalía absoluta (y_t - media), z-score, percentil, nivel de anomalía y color.
+    """
+    clean = [
+        {"year": int(d["year"]), "value": float(d["value"])}
+        for d in series
+        if isinstance(d, dict) and d.get("year") is not None and is_valid_observation(d.get("value"))
+    ]
+    clean.sort(key=lambda item: item["year"])
+    n = len(clean)
+    if n == 0:
+        return {
+            "timeline": [],
+            "mean": 0.0,
+            "std_dev": 0.0,
+            "anomalies": {"threshold_z": anomaly_z_threshold, "count": 0, "max_record": None, "min_record": None, "events": []},
+        }
+
+    stats = statistics or (compute_linear_trend(clean) if n >= 3 else {})
+    xs = [float(d["year"]) for d in clean]
+    ys = [float(d["value"]) for d in clean]
+
+    mean_x = sum(xs) / n
+    mean_y = sum(ys) / n
+    variance_y = sum((y - mean_y) ** 2 for y in ys) / (n - 1) if n > 1 else 0.0
+    std_y = math.sqrt(variance_y) if variance_y > 0 else 0.0
+
+    slope = float(stats.get("slope", 0.0))
+    intercept = float(stats.get("intercept", mean_y - slope * mean_x))
+
+    ss_xx = sum((x - mean_x) ** 2 for x in xs)
+    residuals_sq = sum((y - (intercept + slope * x)) ** 2 for x, y in zip(xs, ys))
+    s_err_resid = math.sqrt(residuals_sq / (n - 2)) if n > 2 else 0.0
+    t_crit = _student_t_critical_95(max(1, n - 2))
+
+    sorted_vals = sorted(ys)
+    timeline: List[Dict[str, Any]] = []
+    anomaly_events: List[Dict[str, Any]] = []
+
+    for d in clean:
+        yr = d["year"]
+        val = d["value"]
+        y_hat = intercept + slope * yr
+        se_fit = s_err_resid * math.sqrt(1.0 / n + ((yr - mean_x) ** 2) / ss_xx) if (n > 2 and ss_xx > 0) else 0.0
+        margin = t_crit * se_fit
+
+        anom = val - mean_y
+        z = anom / std_y if std_y > 1e-9 else 0.0
+
+        rank_count = sum(1 for v in sorted_vals if v <= val)
+        percentile = round((rank_count / n) * 100.0, 1)
+
+        abs_z = abs(z)
+        if abs_z >= 2.0:
+            level = "extreme_high" if z > 0 else "extreme_low"
+        elif abs_z >= anomaly_z_threshold:
+            level = "moderate_high" if z > 0 else "moderate_low"
+        elif abs_z >= 1.0:
+            level = "mild_high" if z > 0 else "mild_low"
+        else:
+            level = "normal"
+
+        is_anom = bool(abs_z >= anomaly_z_threshold)
+        color = get_variable_color(variable, z)
+
+        point = {
+            "year": yr,
+            "value": round(val, 4),
+            "trend_value": round(y_hat, 4),
+            "ci_low": round(y_hat - margin, 4),
+            "ci_high": round(y_hat + margin, 4),
+            "anomaly": round(anom, 4),
+            "z_score": round(z, 3),
+            "percentile": percentile,
+            "anomaly_level": level,
+            "is_anomaly": is_anom,
+            "color": color,
+        }
+        timeline.append(point)
+        if is_anom:
+            anomaly_events.append(point)
+
+    max_point = max(timeline, key=lambda item: item["value"])
+    min_point = min(timeline, key=lambda item: item["value"])
+
+    return {
+        "timeline": timeline,
+        "mean": round(mean_y, 4),
+        "std_dev": round(std_y, 4),
+        "anomalies": {
+            "threshold_z": anomaly_z_threshold,
+            "count": len(anomaly_events),
+            "max_record": max_point,
+            "min_record": min_point,
+            "events": sorted(anomaly_events, key=lambda item: abs(item["z_score"]), reverse=True),
+        },
+    }
+
+
+def compare_time_periods(
+    series: List[Dict[str, float]],
+    variable: str = "T2M",
+    split_year: Optional[int] = None,
+) -> Dict[str, Any]:
+    """
+    Divide la serie temporal en dos sub-períodos (Época A: start..split_year-1 vs Época B: split_year..end)
+    y calcula la diferencia de medias, cambio porcentual y prueba t de Welch bilateral.
+    """
+    clean = [
+        {"year": int(d["year"]), "value": float(d["value"])}
+        for d in series
+        if isinstance(d, dict) and d.get("year") is not None and is_valid_observation(d.get("value"))
+    ]
+    clean.sort(key=lambda item: item["year"])
+    if len(clean) < 4:
+        raise ValueError("Se requieren al menos 4 años válidos para comparar dos sub-períodos.")
+
+    years = [d["year"] for d in clean]
+    min_yr, max_yr = years[0], years[-1]
+
+    if split_year is None or int(split_year) <= min_yr + 1 or int(split_year) > max_yr - 1:
+        eff_split = min_yr + (max_yr - min_yr + 1) // 2
+    else:
+        eff_split = int(split_year)
+
+    group_a = [d for d in clean if d["year"] < eff_split]
+    group_b = [d for d in clean if d["year"] >= eff_split]
+
+    if len(group_a) < 2 or len(group_b) < 2:
+        mid_idx = len(clean) // 2
+        group_a = clean[:mid_idx]
+        group_b = clean[mid_idx:]
+        eff_split = group_b[0]["year"]
+
+    vals_a = [d["value"] for d in group_a]
+    vals_b = [d["value"] for d in group_b]
+    n_a, n_b = len(vals_a), len(vals_b)
+
+    mean_a = sum(vals_a) / n_a
+    mean_b = sum(vals_b) / n_b
+    var_a = sum((v - mean_a) ** 2 for v in vals_a) / (n_a - 1) if n_a > 1 else 0.0
+    var_b = sum((v - mean_b) ** 2 for v in vals_b) / (n_b - 1) if n_b > 1 else 0.0
+    std_a = math.sqrt(var_a)
+    std_b = math.sqrt(var_b)
+
+    delta_mean = mean_b - mean_a
+    delta_pct = (delta_mean / abs(mean_a)) * 100.0 if abs(mean_a) > 1e-9 else 0.0
+
+    se_diff_sq = (var_a / n_a) + (var_b / n_b)
+    if se_diff_sq > 1e-12:
+        t_stat = delta_mean / math.sqrt(se_diff_sq)
+        num_df = se_diff_sq ** 2
+        den_df = ((var_a / n_a) ** 2) / max(1, n_a - 1) + ((var_b / n_b) ** 2) / max(1, n_b - 1)
+        df_welch = max(1, int(round(num_df / den_df))) if den_df > 0 else (n_a + n_b - 2)
+        if HAS_SCIPY and scipy_stats is not None:
+            p_val = float(scipy_stats.t.sf(abs(t_stat), df_welch) * 2.0)
+        else:
+            p_val = _Fallback_two_sided_t_pvalue(t_stat, df_welch)
+    else:
+        t_stat = 0.0
+        p_val = 1.0 if abs(delta_mean) <= 1e-9 else 0.0001
+
+    slope_a = compute_linear_trend(group_a)["change_per_decade"] if len(group_a) >= 3 else 0.0
+    slope_b = compute_linear_trend(group_b)["change_per_decade"] if len(group_b) >= 3 else 0.0
+
+    var_code = (variable or "T2M").upper()
+    var_meta = VARIABLES_CATALOG.get(var_code, {"name": var_code, "display_unit": ""})
+    unit_disp = var_meta.get("display_unit") or var_meta.get("unit", "")
+    significant_shift = bool(p_val < 0.05 and abs(delta_mean) > 1e-5)
+
+    label_a = f"{group_a[0]['year']}–{group_a[-1]['year']}"
+    label_b = f"{group_b[0]['year']}–{group_b[-1]['year']}"
+    sign_str = "+" if delta_mean >= 0 else ""
+    p_str = "< 0.0001" if p_val < 0.0001 else f"{p_val:.4f}"
+
+    if significant_shift:
+        summary = (
+            f"Al contrastar la época reciente ({label_b}) frente a la época base ({label_a}), "
+            f"se registra un cambio estadísticamente significativo de {sign_str}{delta_mean:.2f} {unit_disp} "
+            f"({sign_str}{delta_pct:.1f}%, p = {p_str} < 0.05)."
+        )
+    else:
+        summary = (
+            f"Entre la época base ({label_a}) y la época reciente ({label_b}), la diferencia media es de "
+            f"{sign_str}{delta_mean:.2f} {unit_disp} ({sign_str}{delta_pct:.1f}%, p = {p_str} ≥ 0.05), "
+            f"compatible con la variabilidad interanual del período."
+        )
+
+    return {
+        "split_year": eff_split,
+        "period_a": {
+            "label": label_a,
+            "start_year": group_a[0]["year"],
+            "end_year": group_a[-1]["year"],
+            "n_years": n_a,
+            "mean": round(mean_a, 3),
+            "std_dev": round(std_a, 3),
+            "min": round(min(vals_a), 3),
+            "max": round(max(vals_a), 3),
+            "change_per_decade": round(float(slope_a), 4),
+        },
+        "period_b": {
+            "label": label_b,
+            "start_year": group_b[0]["year"],
+            "end_year": group_b[-1]["year"],
+            "n_years": n_b,
+            "mean": round(mean_b, 3),
+            "std_dev": round(std_b, 3),
+            "min": round(min(vals_b), 3),
+            "max": round(max(vals_b), 3),
+            "change_per_decade": round(float(slope_b), 4),
+        },
+        "delta_mean": round(delta_mean, 3),
+        "delta_percent": round(delta_pct, 2),
+        "t_stat": round(t_stat, 4),
+        "p_value": round(p_val, 5),
+        "significant_shift": significant_shift,
+        "summary": summary,
+    }
+

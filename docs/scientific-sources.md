@@ -353,11 +353,11 @@ transformaron las misiones ni se calcularon estadísticas nuevas. La ampliación
 de métodos requiere acordar agregación, QA, estacionalidad, compatibilidad espacial,
 cobertura y familia estadística con el responsable del motor.
 
-Time Machine está en `origin/feature/earth-time-machine` (8a39937) y todavía
-no está integrado en este servidor. Su interfaz espera otro contrato, llama
-funciones ausentes del motor local y conserva muestras de respaldo y coordenadas
-libres. No se fusionó ese servidor ni se activaron esos caminos. Debe adaptarse
-a este contrato y coordinar los campos estadísticos con su responsable.
+Time Machine se incorporó posteriormente desde `origin/main` ce9a1e2 mediante
+un adaptador Flask a cachés POWER reales y funciones del motor del equipo. No
+se activaron muestras, coordenadas libres ni ajustes espaciales artificiales.
+La ampliación a estas otras fuentes sigue pendiente de contrato y metodología.
+Ver [integración de Time Machine](time-machine-integration.md).
 El usuario confirmó que Earth Connections aún no existe. Los endpoints nativos
 quedan preparados para conectarla cuando esté disponible. MERRA-2 directo y
 TimesFM tampoco están integrados; no hay pronósticos ni modelos verificados.

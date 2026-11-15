@@ -16,6 +16,7 @@ from services.radar import DEFAULT_ARTIFACT_NAME, RadarService
 from services.scientific import ScientificService
 from services.hydrology import HydrologyService
 from api.scientific import scientific_api
+from services.time_machine_service import TimeMachineService
 
 
 def create_app(config=None):
@@ -44,6 +45,7 @@ def create_app(config=None):
     app.extensions["earthlens_science"] = ScientificService(app.extensions["earthlens_service"])
     app.extensions["earthlens_hydrology"] = HydrologyService(Path(app.config["CACHE_DIR"]).parent / "science")
     app.extensions["earthlens_analysis"] = AnalysisService(app.extensions["earthlens_service"])
+    app.extensions["earthlens_time_machine"] = TimeMachineService(app.extensions["earthlens_analysis"],app.extensions["earthlens_science"])
     app.extensions["earthlens_fingerprint"] = FingerprintService(app.extensions["earthlens_analysis"])
     radar_path = app.config["RADAR_ARTIFACT_PATH"] or Path(app.config["CACHE_DIR"]).parent / DEFAULT_ARTIFACT_NAME
     app.extensions["earthlens_radar"] = RadarService(app.extensions["earthlens_analysis"], radar_path)
@@ -53,6 +55,9 @@ def create_app(config=None):
     register_error_handlers(app)
     return app
 
+
+# Entrada WSGI para la configuración Vercel recibida de main; sin consultas al importar.
+app = create_app()
 
 if __name__ == "__main__":
     create_app().run(host="127.0.0.1", port=5000, debug=False)

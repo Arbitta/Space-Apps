@@ -21,3 +21,5 @@ htmlcov
 docs
 *.md
 *.log
+*.pdf
+*.docx

@@ -10,6 +10,27 @@ from services.api_service import ServiceError
 api = Blueprint("api", __name__, url_prefix="/api")
 
 
+@api.post('/time-machine')
+@api.get('/time-machine')
+def time_machine():
+    if request.method=='GET':
+        payload=query_parameters(('city_id','variable','start_year','end_year','split_year','include_regional','region'))
+        payload.setdefault('city_id','comodoro-rivadavia')
+        try:
+            for field in ('start_year','end_year','split_year'):
+                if field in payload:payload[field]=int(payload[field])
+            if 'include_regional' in payload:
+                payload['include_regional']={'true':True,'false':False,'1':True,'0':False}[payload['include_regional'].lower()]
+        except (ValueError,KeyError):
+            raise ServiceError('invalid_request','Años o include_regional inválidos.') from None
+    else:
+        query_parameters()
+        if not request.is_json:raise UnsupportedMediaType()
+        payload=request.get_json()
+    result=current_app.extensions['earthlens_time_machine'].build(payload)
+    return success(result,meta={'scientific_status':'provisional','origin':'cache','spatial_resize_enabled':False})
+
+
 def service():
     return current_app.extensions["earthlens_service"]
 

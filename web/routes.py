@@ -5,6 +5,14 @@ from flask import Blueprint, render_template
 web = Blueprint("web", __name__)
 
 
+@web.get('/time-machine')
+@web.get('/time-machine.html')
+@web.get('/time_machine')
+@web.get('/time_machine.html')
+def time_machine():
+    return render_template('time_machine.html')
+
+
 @web.get('/sources')
 def scientific_sources():
     return render_template('scientific.html',science_open=True)

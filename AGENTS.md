@@ -476,11 +476,18 @@ los gráficos respetan fechas nativas, huecos y unidades. El recorrido históric
 del deslizador no hace consultas nuevas. No sustituye los análisis o misiones
 existentes ni crea relaciones causales.
 
-Time Machine existe en `origin/feature/earth-time-machine` (8a39937), no en las
-rutas locales. Su contrato usa funciones ausentes del motor local y un recurso
-de muestras de respaldo: no fusionarlo ni habilitar ese respaldo automáticamente.
-El usuario confirmó que Earth Connections todavía no existe. La integración de
-esas interfaces sigue pendiente de resolver sus contratos y disponer de su código.
+Time Machine se incorporó desde `origin/main` ce9a1e2 durante el merge autorizado.
+`/time-machine` y `/api/time-machine` usan `services/time_machine_service.py`,
+cachés POWER verificadas y funciones aditivas del motor del equipo. El núcleo
+anterior del motor se conserva sin cambios. La interpretación es provisional;
+la familia de Radar no se amplía. No habilitar muestras de respaldo, ajustes
+espaciales artificiales, coordenadas libres ni cuadrantes sin datos/validación.
+El código anterior que dependía del servidor alternativo y sus muestras queda
+como referencia de migración en `tests/statistics_fixtures/main_legacy/`, fuera
+del flujo de producción. Ver `docs/merge-main.md` y `docs/time-machine-integration.md`.
+El usuario confirmó que Earth Connections todavía no existe. La extensión de
+Time Machine a las otras fuentes depende de su metodología y contrato; Connections
+depende de disponer de su código.
 
 `scripts/audit_science.py` audita las cachés sin red, agrupando versiones, vías
 de acceso y períodos para evitar contabilizar pilotos y proyecciones dos veces.
