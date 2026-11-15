@@ -214,3 +214,9 @@ Sus pruebas de navegador se ejecutan con:
 
 La configuración Vercel/Cloud Run de main no fue desplegada ni verificada en
 producción. No copiar cachés o credenciales al contexto de publicación.
+
+## Reestructuración: eventos y monitoreo
+
+SQLite persistente en `./data/runtime`, meteorolog?a horaria y un servicio opcional
+`monitor` se incorporaron en Compose. Gu?a y condiciones de producci?n:
+[ejecuci?n del espacio geotemporal](workspace.md). Contin?a en localhost:5000.

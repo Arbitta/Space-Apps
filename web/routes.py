@@ -10,7 +10,31 @@ web = Blueprint("web", __name__)
 @web.get('/time_machine')
 @web.get('/time_machine.html')
 def time_machine():
+    return render_template('workspace.html')
+
+
+@web.get('/time-machine/legacy')
+def time_machine_legacy():
     return render_template('time_machine.html')
+
+
+@web.get('/cities')
+@web.get('/cities/<city_id>')
+def city_profiles(city_id=None):
+    if city_id:
+        from flask import current_app
+        current_app.extensions['earthlens_service'].get_city(city_id)
+    return render_template('workspace.html',workspace_panel='profile',workspace_city=city_id)
+
+
+@web.get('/my-space')
+def my_space():
+    return render_template('workspace.html',workspace_panel='events')
+
+
+@web.get('/laboratory')
+def laboratory():
+    return render_template('laboratory.html')
 
 
 @web.get('/sources')
@@ -21,7 +45,7 @@ def scientific_sources():
 @web.get("/")
 @web.get("/index.html")
 def index():
-    return render_template("index.html")
+    return render_template('workspace.html')
 
 
 @web.get("/explorer")

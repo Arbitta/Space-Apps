@@ -18,6 +18,19 @@ class ModisOrderTests(unittest.TestCase):
         self.city=get_city('mendoza')
         self.dates=[{'modis_date':'A2024001','calendar_date':'2024-01-01'}]
 
+    def test_poll_discovers_original_combined_csv_from_child_index(self):
+        city=self.city;path=self.service.path(city,2024,2024);path.parent.mkdir(parents=True)
+        base='https://modis.ornl.gov/subsetdata/software-test-order/'
+        doc={'state':'submitted','result_url':base.rstrip('/'),'uid':'software','city_id':city['id']}
+        path.write_text(json.dumps(doc),encoding='utf-8')
+        parent=Mock(status_code=200,text='<a href="'+base+'csv/">CSV</a><a href="filtered_scaled_NDVI.csv">derived</a>')
+        child=Mock(status_code=200,text='<a href="../MOD13Q1.csv">Original</a><a href="../statistics_NDVI.csv">Statistics</a>')
+        scientific=Mock(status_code=200,text='synthetic_software_test_only',content=b'synthetic_software_test_only')
+        with patch('scripts.order_modis.requests.get',side_effect=[parent,child,scientific]) as network,patch.object(self.service,'import_csv'):
+            result=self.service.poll(path)
+        self.assertEqual(result['state'],'ready')
+        self.assertEqual(network.call_args.args[0],base+'MOD13Q1.csv')
+
     def test_submission_uses_contact_only_in_request_and_does_not_repeat(self):
         response=Mock();response.status_code=200;response.json.return_value={'order_id':'15Nov2026_15:00:00_software-test-order','email':'software@example.invalid'}
         with patch.object(self.service.provider,'_json',return_value={'response':{'dates':self.dates}}),patch('scripts.order_modis.requests.get',return_value=response) as network:

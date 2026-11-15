@@ -49,6 +49,7 @@ README.md
 Thumbs.db
 docker-compose.yml
 data/cache/
+data/runtime/
 .env
 .env.*
 

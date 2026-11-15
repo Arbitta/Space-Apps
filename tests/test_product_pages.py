@@ -37,7 +37,9 @@ class ProductPageTests(unittest.TestCase):
                 self.assertIn('href="/fingerprint"', html)
                 self.assertIn('aria-label="Navegación principal"', html)
                 if page == "/":
-                    self.assertIn('nav-link js-go-explorer-link', html)
+                    self.assertIn('/static/js/workspace.js', html)
+                    self.assertIn('id="scrubber"', html)
+                    self.assertNotIn('home-location-map', html)
 
     def test_product_assets_are_served(self):
         for asset in ("js/products.js", "js/radar.js", "js/fingerprint.js", "css/products.css"):

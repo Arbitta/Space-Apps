@@ -8,6 +8,11 @@ from services.api_service import ServiceError
 
 
 SERVICE_STATUS = {
+    'authentication_required':401,
+    'csrf_invalid':403,
+    'event_not_found':404,
+    'account_conflict':409,
+    'rate_limited':429,
     "water_feature_not_found": 404,
     "provider_auth_required": 503,
     "provider_not_verified": 503,

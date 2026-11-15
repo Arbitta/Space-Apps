@@ -103,6 +103,16 @@ class ModisOrders:
         base=doc['result_url']+'/'
         links=sorted({urljoin(base,href) for href in parser.links})
         links=[url for url in links if url.startswith(base) and not urlparse(url).query and not urlparse(url).fragment]
+        # Las órdenes actuales enlazan un índice csv/ con varios derivados. Sólo
+        # el CSV combinado original permite verificar gránulos, colección y QA.
+        originals=[url for url in links if urlparse(url).path.rsplit('/',1)[-1]==PRODUCT+'.csv']
+        if not originals and ('href="'+base+'csv/"' in index.text or 'href="csv/"' in index.text):
+            child=requests.get(base+'csv/',timeout=(10,60))
+            if child.status_code==200:
+                child_parser=ResultLinks();child_parser.feed(child.text)
+                candidates={urljoin(base+'csv/',href) for href in child_parser.links}
+                originals=sorted(url for url in candidates if url==base+PRODUCT+'.csv')
+        if originals:links=originals
         if len(links)!=1:
             doc['result_discovery']='CSV link absent or ambiguous';write_json_atomic(path,doc);return doc
         url=links[0]
@@ -115,6 +125,7 @@ class ModisOrders:
         # La respuesta científica se valida antes de publicarla.
         self.import_csv(doc,response.text,url,utc_now())
         rawpath.write_text(response.text,encoding='utf-8')
+        doc.pop('result_discovery',None)
         doc.update(state='ready',retrieved_at=utc_now(),raw_csv=str(rawpath));write_json_atomic(path,doc)
         return doc
 

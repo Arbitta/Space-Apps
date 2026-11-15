@@ -1,5 +1,14 @@
 # EarthLens — contrato de API REST, versión 1
 
+La selección geotemporal unificada usa ahora `GET /api/workspace/frame`;
+ver [contrato y aceptación de la corrección](time-machine-correction.md).
+La entrada `/` es Time Machine; las APIs anteriores siguen disponibles.
+
+La reestructuración agrega meteorología, perfiles, eventos privados, notificaciones
+e informes sin retirar los endpoints anteriores. Consultar
+[la API geotemporal](workspace.md#api-nueva) para rutas, autenticación, CSRF,
+licencias y límites. Estado: [roadmap](../EARTHLENS_ROADMAP.md).
+
 API para el equipo de frontend de Patagonia Prime. Alcance exclusivo: **Argentina**.
 Sólo se admiten ciudades del catálogo verificado. El motor del equipo está integrado
 para análisis y comparación; Radar y Fingerprint están disponibles con resultados

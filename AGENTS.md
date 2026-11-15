@@ -1,5 +1,66 @@
 # EarthLens — contexto e instrucciones del proyecto
 
+## Corrección prioritaria de interfaz — vigente
+
+**EarthLens es Time Machine.** `/`, `/index.html` y `/time-machine` deben abrir
+directamente el mapa completo con una única timeline inferior. No restaurar una
+landing ni navegación separada hacia pasado/futuro. Paneles laterales flotantes,
+cerrados al iniciar y desplegados a pedido; calendario, eventos, perfiles y avisos
+comparten ciudad/fecha con la herramienta. La timeline mantiene un viewport
+independiente del rango de análisis y de los límites del proveedor.
+
+`services/time_navigation.py` y `GET /api/workspace/frame` resuelven el producto
+según fecha/variable/escala, reutilizando servicios existentes. No arrastrar valores
+antiguos a fechas futuras, no ocultar nulos y no convertir un fallo de proveedor
+en climatología. Meteorología, históricos y referencia climatológica se distinguen.
+
+TimesFM 3.0 **no está implementado**: capacidades deshabilitadas y arnés de
+backtesting no equivalen a inferencia. Auditoría: `scripts/audit_timesfm.py`.
+El pronóstico operativo debe funcionar independientemente de ese modelo.
+
+La aceptación vigente es `scripts/check_time_machine_acceptance.py`: Chrome real,
+datos reales A–F y simulación G sólo en base temporal. H no se aprueba con mocks.
+Informe, capturas, archivos y límites: [docs/time-machine-correction.md](docs/time-machine-correction.md).
+
+## Reestructuración vigente — 15/11/2026
+
+El usuario autorizó una plataforma profesional de inteligencia ambiental y
+geográfica para investigación y planificación, exclusiva de Argentina. Eslogan:
+**EarthLens — Comprendé el pasado. Anticipá el futuro.** El trabajo se hace en
+`feature/backend-api`, sin commits ni push. Este alcance amplía las etapas antiguas
+sin eliminar proveedores, motor o interfaces del equipo. Estado comprobado y
+pendientes: [EARTHLENS_ROADMAP.md](EARTHLENS_ROADMAP.md).
+Contrato y operación: [docs/workspace.md](docs/workspace.md).
+
+- `/time-machine`: `workspace.html`, mapa/timeline/calendario/eventos sincronizados.
+  La interfaz anterior sigue en `/time-machine/legacy`.
+- Navegación principal: Inicio, Time Machine, Ciudades, Laboratorio, Mi espacio,
+  Fuentes científicas. Las herramientas originales siguen en el Laboratorio.
+- POWER Daily, Open-Meteo Forecast y ERA5 horario tienen pilotos reales de
+  Comodoro. El acceso gratuito Open-Meteo es no comercial; las empresas requieren
+  suscripción/configuración comercial. No guardar API keys en Git.
+- SQLite (`data/runtime/earthlens.sqlite3`) conserva usuarios/eventos, preferencias,
+  versiones meteorológicas, evaluaciones, notificaciones y ejecuciones. CSRF y
+  permisos por propietario son obligatorios. No hay usuario compartido global.
+- `scripts.monitor_events.py` funciona independientemente de Flask; perfil Compose
+  `monitoring`. No enviar avisos externos sin consentimiento y configuración.
+- Compatibilidad con umbrales explícitos del usuario. Sin criterios o datos,
+  insuficiencia. SMN desconocido no equivale a ausencia de alertas. Una evaluación
+  favorable no garantiza seguridad; no introducir puntuaciones arbitrarias.
+- Los ejes Z climatológicos y Connections/Twins son descriptivos, separados de
+  tendencias y de índices de riesgo/salud. No expanden la familia de Radar.
+- TimesFM 3.0 descargable restringe uso comercial/productivo. Sigue deshabilitado;
+  no confundir baselines ni OLS heredado con TimesFM validado.
+- Earth Impact es parcial: fuentes de Comodoro documentadas, sin DEM/calles/
+  susceptibilidad operativos. No inventar impactos ni mapas de riesgo.
+- Los polígonos de interfaz seleccionan centroides del catálogo; no validan
+  territorio ni habilitan sitios exactos/recorridos libres sin límites oficiales.
+- Base y cachés necesitan persistencia. Cloud Run local es efímero: no declarar
+  producción lista sin DB externa, secretos estables, almacenamiento y licencias.
+
+Las secciones siguientes conservan contexto y contratos anteriores. Para el
+estado actual consultar los documentos de reestructuración y la evidencia del código.
+
 Este archivo aplica a todo el repositorio. Describe el contexto y las reglas de
 trabajo; el estado de las tareas y sus dependencias se mantiene en
 [BACKEND_TASKS.md](BACKEND_TASKS.md). Revisar el código antes de dar una tarea por

@@ -24,7 +24,7 @@ COPY data/cities.json ./data/cities.json
 COPY data/water_features.json ./data/water_features.json
 COPY data/missions.json data/variables.json ./data/
 COPY data/guided_missions.json data/mission_variables.json ./data/
-RUN mkdir -p /app/data/cache/power \
+RUN mkdir -p /app/data/cache/power /app/data/runtime \
     && chown -R earthlens:earthlens /app
 
 USER earthlens

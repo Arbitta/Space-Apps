@@ -1,5 +1,71 @@
 # EarthLens — estado y tareas del backend
 
+## Corrección prioritaria: Time Machine como aplicación
+
+Estado vigente de interfaz: [informe y capturas A–H](docs/time-machine-correction.md).
+Se conserva la rama `feature/backend-api`, sin commits ni push.
+
+- `/` abre directamente Time Machine. Mapa completo, timeline inferior única,
+  paneles flotantes cerrables y barra compacta; sin landing como entrada.
+- Fecha compartida por cursor, reproducción, calendario, perfil, acontecimientos,
+  eventos y notificaciones. Navegar no se detiene al terminar el rango histórico.
+- Nuevo adaptador de selección temporal sobre los servicios existentes; conserva
+  variable y elige histórico/pronóstico/climatología verificados. Nulos y variables
+  sin datos futuros explícitos; fallos HTTP no se hacen pasar por climatología.
+- Avisos con cambios anteriores/actuales y viaje al evento; perfil con radial
+  visible, formulario de evento plegable y pronóstico primero. Persistencia y
+  privacidad anteriores conservadas.
+- Docker: **248 pruebas descubiertas, 247 aprobadas y una NASA live omitida**.
+  A–F aprobadas en Chrome con datos reales; G aprobada como simulación aislada;
+  H bloqueada/no implementada. Móvil y cobertura adicional comprobados. Sin
+  errores JavaScript; capturas inspeccionadas, no sólo contadas.
+- TimesFM sin dependencias/pesos/inferencia/predicciones. Restricción de licencia
+  para el uso previsto y archivo F32 de 1.322.898.824 bytes frente a 1 GiB del backend.
+  El backtest existente es de baselines y no valida TimesFM.
+
+Pendientes: vía licenciada/recursos/validación TimesFM; acceso oficial SMN; capas
+territoriales para impactos; límites oficiales para coordenadas libres; entregas
+MODIS y revisión metodológica ya señaladas. No se presentan como completados.
+
+## Reestructuración profesional — estado vigente 15/11/2026
+
+Trabajo en `feature/backend-api`, sin commits ni push. Estado detallado por fase:
+[EARTHLENS_ROADMAP.md](EARTHLENS_ROADMAP.md). Contrato, comandos, metodología,
+licencias y límites: [docs/workspace.md](docs/workspace.md). Las entradas antiguas
+siguientes conservan su fecha y dependencias.
+
+Comprobado en esta etapa:
+
+- Time Machine unificado, timeline/calendario compartidos, selección de puntos,
+  interfaz anterior conservada y perfiles dinámicos. Climatología, Fingerprint de
+  tendencias, radial Z documentado y Connections/Twins exploratorios.
+- POWER Daily, Open-Meteo Forecast y ERA5 con pilotos reales de Comodoro,
+  contratos y caché independientes de los históricos mensuales.
+- SQLite/migración, cuentas privadas con CSRF/permisos, CRUD de eventos,
+  compatibilidad por preferencias, alternativas por fecha/hora y guardado explícito.
+- Monitoreo CLI independiente, snapshots/versiones, lease, fallos y notificaciones
+  internas deduplicadas, gráfico por variable/hora; contenedor independiente activo.
+- PDF científico con comparación de ciudades y épocas, PDF privado y CSV/JSON.
+- Elevación GLO-90 de 25 centroides y 12 fotografías ilustrativas geolocalizadas,
+  con autor/licencia/enlace de Wikimedia; 13 accesos fotográficos fallaron.
+- MODIS ampliado a nueve ciudades: 18 series colección 061, 10.296 registros,
+  2.006 aceptados por QA y 8.290 excluidos/nulos, sin imputaciones.
+- 462 archivos científicos originales comparados por SHA-256 sin cambios ni
+  faltantes; POWER 45.000, GLDAS 37.500 y GPM 7.500 mensuales conservados.
+- Docker construido y saludable; `pip check` correcto. Suite ampliada:
+  **237 descubiertas, 236 aprobadas y una de red optativa omitida**.
+- Chrome: ocho grupos aprobados y cero errores JavaScript. Demos históricas y de
+  planificación con datos reales y base privada temporal. Cambio de pronóstico
+  para probar notificaciones únicamente simulado en pruebas aisladas de software.
+
+Pendientes/bloqueos: acceso oficial SMN (401), suscripción comercial Open-Meteo,
+TimesFM 3.0 con vía licenciada y validación, quince órdenes MODIS sin entrega y
+enlace de Mendoza, capas Earth Impact/límites oficiales, sitios/rutas exactos,
+fuente censal de población, completar fotografías donde el acceso falló,
+validación científica y producción con DB externa/secretos/scheduler.
+**No están científicamente validados** Radar, nuevas asociaciones, similitud o
+perfiles Z por disponer de una interfaz. La revisión conjunta sigue pendiente.
+
 Actualización: **15 de noviembre de 2026**. Equipo: **Patagonia Prime**.
 Desafío: **Earth System Trend Detective**, NASA Space Apps Challenge 2026.
 

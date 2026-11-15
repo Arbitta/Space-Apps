@@ -101,7 +101,10 @@ class ForecastHttpTest(unittest.TestCase):
         self.network.start();self.addCleanup(self.network.stop)
 
     def test_page_and_forecast_contract_use_cached_verified_city(self):
-        self.assertIn(b'tm_forecast.js',self.client.get('/time-machine').data)
+        # La reestructuración conserva la proyección anual en la interfaz original;
+        # la vista nueva presenta pronósticos operativos con un contrato separado.
+        self.assertIn(b'tm_forecast.js',self.client.get('/time-machine/legacy').data)
+        self.assertIn(b'workspace.js',self.client.get('/time-machine').data)
         result=self.client.post('/api/forecast',json=self.body)
         self.assertEqual(result.status_code,200)
         record=result.get_json()['data']
