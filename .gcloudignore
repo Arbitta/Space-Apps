@@ -1,0 +1,50 @@
+# ============================================================================
+# EarthLens — .gcloudignore (Optimizado para Google Cloud Run con costo $0)
+# Excluye historial Git, entornos locales, tests y documentos pesados para que
+# el contexto de Cloud Build y la imagen en Artifact Registry pesen lo mínimo.
+#
+# RECORDATORIO DE DESPLIEGUE SEGURO (CERO CONSUMO DE CRÉDITOS):
+# gcloud run deploy earthlens \
+#   --source . \
+#   --region us-central1 \
+#   --allow-unauthenticated \
+#   --min-instances=0 \
+#   --max-instances=2 \
+#   --cpu=1 \
+#   --memory=256Mi \
+#   --concurrency=80 \
+#   --timeout=60s \
+#   --cpu-throttling
+# ============================================================================
+
+.gcloudignore
+.git/
+.gitignore
+.github/
+
+# Cachés de Python y entornos virtuales
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+.venv/
+venv/
+env/
+
+# Suite de tests (no necesaria dentro del contenedor en producción)
+tests/
+
+# Documentación y archivos de planificación pesados
+*.pdf
+*.docx
+PLANIFICACION_*.md
+README.md
+
+# Archivos locales de desarrollo y editores
+.vscode/
+.idea/
+*.log
+.DS_Store
+Thumbs.db
+docker-compose.yml
