@@ -1,3 +1,7 @@
+> **Versi?n vigente:** [abrir EarthLens](https://earthlens-pp-224139449590.us-central1.run.app/).
+> El despliegue autom?tico de `main` utiliza el servicio `earthlens-pp`.
+> [Restauraci?n y verificaciones](docs/restore-main.md).
+
 # EarthLens — Patagonia Prime
 
 NASA Space Apps Challenge 2026 · Earth System Trend Detective.
