@@ -8,6 +8,3 @@ env/
 .coverage
 *.log
 .DS_Store
-.pdf
-.md
-.docx
