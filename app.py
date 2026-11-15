@@ -50,36 +50,39 @@ def _resolve_page_file(page_slug: str) -> Path:
 
 def create_app() -> Any:
     """Crea y configura la aplicación Flask de EarthLens (centrada en Earth Time Machine)."""
-    from flask import Flask, send_file, send_from_directory  # type: ignore
+    try:
+        from flask import Flask, send_file, send_from_directory  # type: ignore
+    except ImportError:
+        return None
 
-    app = Flask(
+    flask_app = Flask(
         __name__,
         template_folder=str(TEMPLATES_DIR),
         static_folder=str(STATIC_DIR),
         static_url_path="/static",
     )
 
-    register_api_routes(app)
-    register_missions_routes(app)
+    register_api_routes(flask_app)
+    register_missions_routes(flask_app)
 
-    @app.route("/")
-    @app.route("/index")
-    @app.route("/index.html")
-    @app.route("/time-machine")
-    @app.route("/time-machine.html")
-    @app.route("/time_machine")
-    @app.route("/time_machine.html")
+    @flask_app.route("/")
+    @flask_app.route("/index")
+    @flask_app.route("/index.html")
+    @flask_app.route("/time-machine")
+    @flask_app.route("/time-machine.html")
+    @flask_app.route("/time_machine")
+    @flask_app.route("/time_machine.html")
     def time_machine_page():
         return send_file(str(TEMPLATES_DIR / "time_machine.html"))
 
-    @app.route("/templates/<path:filename>")
+    @flask_app.route("/templates/<path:filename>")
     def templates_passthrough(filename: str):
         target = TEMPLATES_DIR / filename
         if target.is_file():
             return send_from_directory(str(TEMPLATES_DIR), filename)
         return send_file(str(TEMPLATES_DIR / "time_machine.html"))
 
-    return app
+    return flask_app
 
 
 class EarthLensUnifiedHandler(BaseHTTPRequestHandler):
@@ -210,11 +213,13 @@ class EarthLensUnifiedHandler(BaseHTTPRequestHandler):
         self._send_json({"error": "Endpoint no encontrado"}, 404)
 
 
-# Instancia WSGI de nivel superior para plataformas Serverless (Vercel / Gunicorn)
-try:
-    app = create_app()
-except ImportError:
-    app = None
+# Instancia WSGI de nivel superior (requerido fuera de bloques try/except por el AST parser de Vercel)
+app = create_app()
+
+
+class handler(EarthLensUnifiedHandler):
+    """Manejador HTTP de nivel superior compatible con Vercel Python runtime."""
+    pass
 
 
 if __name__ == "__main__":
