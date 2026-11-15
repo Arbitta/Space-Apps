@@ -123,6 +123,9 @@ class TimeMachineHttpAndConcurrencyTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
+        proxy_handler = request.ProxyHandler({})
+        opener = request.build_opener(proxy_handler)
+        request.install_opener(opener)
         cls.server = ThreadingHTTPServer(("127.0.0.1", 0), EarthLensUnifiedHandler)
         cls.port = cls.server.server_address[1]
         cls.base_url = f"http://127.0.0.1:{cls.port}"
