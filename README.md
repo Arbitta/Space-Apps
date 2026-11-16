@@ -6,7 +6,7 @@ Environmental and geospatial intelligence platform developed by **Patagonia Prim
 
 [![Open EarthLens](https://img.shields.io/badge/Live%20Demo-Open%20EarthLens-00897B?style=for-the-badge)](https://earthlens-pp-224139449590.us-central1.run.app/)
 
-**[Live application](https://earthlens-pp-224139449590.us-central1.run.app/)** · [NASA Space Apps project](https://www.spaceappschallenge.org/2026/find-a-team/patagonia-prime/?tab=project) · [Challenge](https://www.spaceappschallenge.org/2026/challenges/earth-system-trend-detective/)
+**[Live application](https://earthleans.earth/)** · [NASA Space Apps project](https://www.spaceappschallenge.org/2026/find-a-team/patagonia-prime/?tab=project) · [Challenge](https://www.spaceappschallenge.org/2026/challenges/earth-system-trend-detective/)
 
 ---
 
